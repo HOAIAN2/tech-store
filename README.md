@@ -4,4 +4,4 @@
 * `cd tech-store`
 * Run `prepare.bat` to generate .env file and install libs for server and client.
 ### Build
-* Run `product.bat` to build ReactJS and start server
+* Run `build-product.bat` to build ReactJS and start server

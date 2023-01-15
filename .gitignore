@@ -11,6 +11,7 @@ client/.pnp
 
 # production
 /client/build
+/server/public/*
 
 # misc
 /server/.env
