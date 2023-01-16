@@ -4,7 +4,7 @@ const express = require('express')
 
 const routes = require('./routes')
 const app = express()
-const SERVER_PORT = process.env['SERVER_PORT']
+const SERVER_PORT = parseInt(process.env['SERVER_PORT'])
 const IPAdress = getIPAddress()
 
 app.use(express.static('public'))
