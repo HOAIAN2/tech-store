@@ -14,9 +14,15 @@ app.use(express.static('public'))
 app.use(cors({
     origin: 'http://localhost:3000'
 }))
-
+// routing api and init fetch data from database
 routes(app)
 initializeData()
+// route everything else to React
+app.get('*', (req, res) => {
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+    console.log(`${ip} connected at ${new Date}`)
+    res.sendFile(`${__dirname}/public/index.html`)
+})
 
 function getIPAddress() {
     const nets = networkInterfaces()
