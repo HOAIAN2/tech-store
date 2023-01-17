@@ -1,15 +1,22 @@
 const { networkInterfaces } = require('os')
 require('dotenv').config()
 const express = require('express')
-
+const cors = require('cors')
+const { initializeData } = require('./cache')
 const routes = require('./routes')
+
 const app = express()
 const SERVER_PORT = parseInt(process.env['SERVER_PORT'])
 const IPAdress = getIPAddress()
 
 app.use(express.static('public'))
+// remove cors on production because server anh client will running on the same port
+app.use(cors({
+    origin: 'http://localhost:3000'
+}))
 
 routes(app)
+initializeData()
 
 function getIPAddress() {
     const nets = networkInterfaces()
