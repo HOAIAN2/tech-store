@@ -16,7 +16,6 @@ app.use(cors({
 }))
 // routing api and init fetch data from database
 routes(app)
-initializeData()
 // route everything else to React
 app.get('*', (req, res) => {
     const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
@@ -40,12 +39,14 @@ function getIPAddress() {
     }
     return results
 }
-
-app.listen(SERVER_PORT || 3000, () => {
-    console.log('\x1b[32m%s\x1b[0m', `Server is running: http://localhost:${SERVER_PORT}`)
-    Object.keys(IPAdress).forEach(key => {
-        IPAdress[key].forEach(IP => {
-            console.log('\x1b[32m%s\x1b[0m', `On your network: http://${IP}:${SERVER_PORT}`)
+// Init data from database and start server
+initializeData().then(() => {
+    app.listen(SERVER_PORT || 3000, () => {
+        console.log('\x1b[32m%s\x1b[0m', `Server is running: http://localhost:${SERVER_PORT}`)
+        Object.keys(IPAdress).forEach(key => {
+            IPAdress[key].forEach(IP => {
+                console.log('\x1b[32m%s\x1b[0m', `On your network: http://${IP}:${SERVER_PORT}`)
+            })
         })
     })
 })
