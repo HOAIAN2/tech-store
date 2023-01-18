@@ -1,9 +1,15 @@
+import { Routes, Route } from 'react-router-dom'
+import NotFound from './components/errors/NotFound'
+import Home from './components/Home'
 import './App.scss';
 
 function App() {
   return (
     <div className="App">
-      <a href="/api/user">API HERE</a>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='*' element={<NotFound />} />
+      </Routes>
     </div>
   );
 }

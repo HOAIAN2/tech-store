@@ -1,0 +1,17 @@
+.not-found {
+    width: 100%;
+    height: 100%;
+
+    &__contents {
+        font-size: 22px;
+        text-align: center;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        a {
+            text-decoration: none;
+        }
+    }
+}
