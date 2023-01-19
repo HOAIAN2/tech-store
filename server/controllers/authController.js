@@ -40,6 +40,18 @@ async function login(req, res) {
         else res.status(404).json(null)
     }
 }
+function reCreateToken(req, res) {
+    const token = req.body.refreshToken
+    const index = refreshTokens.indexOf(token)
+    if (!index) res.sendStatus(404)
+    else {
+        const user = jwt.decode(token, process.env['REFRESH_TOKEN_SERCET'])
+        const newToken = createToken(user)
+        refreshTokens.slice(index, 1)
+        refreshTokens.push(newToken.refreshToken)
+        res.json(newToken)
+    }
+}
 // [POST logout]
 function logout(req, res) {
     const refreshToken = req.body.refreshToken
@@ -51,6 +63,27 @@ function logout(req, res) {
     else {
         res.status(404).json({ message: 'can not logout' })
     }
+}
+// Middleware auth
+function authenticateToken(req, res, next) {
+    const authorizationHeader = req.headers['authorization']
+    if (!authorizationHeader) res.sendStatus(401)
+    else {
+        const token = authorizationHeader.split(' ')[1]
+        if (!token) res.sendStatus(401)
+        else {
+            try {
+                jwt.verify(token, process.env['ACCESS_TOKEN_SECRET'])
+                next()
+            } catch (error) {
+                console.log('\x1b[31m%s\x1b[0m', error.message)
+                res.sendStatus(403)
+            }
+        }
+    }
+}
+function readAccessToken(token) {
+    return jwt.decode(token, process.env['ACCESS_TOKEN_SECRET'])
 }
 function isCorrectPassword(password, hashedPassword) {
     try {
@@ -65,5 +98,8 @@ function isCorrectPassword(password, hashedPassword) {
 
 module.exports = {
     login,
-    logout
+    logout,
+    authenticateToken,
+    readAccessToken,
+    reCreateToken
 }
