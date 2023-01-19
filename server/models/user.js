@@ -1,8 +1,10 @@
 class User {
-    constructor(name, isDev, country) {
-        this.name = name
-        this.isDev = isDev
-        this.country = country
+    constructor(id, username, firstName, lastName, hashedPassword) {
+        this.id = id
+        this.username = username
+        this.firstName = firstName
+        this.lastName = lastName
+        this.hashedPassword = hashedPassword
     }
 }
 

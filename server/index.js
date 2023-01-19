@@ -10,6 +10,7 @@ const SERVER_PORT = parseInt(process.env['SERVER_PORT'])
 const IPAdress = getIPAddress()
 
 app.use(express.static('public'))
+app.use(express.json())
 // remove cors on production because server anh client will running on the same port
 app.use(cors({
     origin: 'http://localhost:3000'
