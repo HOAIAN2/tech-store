@@ -10,6 +10,7 @@ function createToken(user) {
     }
     function signAccessToken(user) {
         const token = jwt.sign(JSON.stringify({
+            iat: Math.floor(Date.now() / 1000),
             exp: Math.floor(Date.now() / 1000) + (60 * 60),
             id: user.id,
             username: user.username
@@ -18,7 +19,9 @@ function createToken(user) {
     }
     function signRefreshToken(user) {
         const token = jwt.sign(JSON.stringify({
-            id: user.id, username: user.username
+            iat: Math.floor(Date.now() / 1000),
+            id: user.id,
+            username: user.username
         }), process.env['REFRESH_TOKEN_SERCET'])
         return token
     }
@@ -43,7 +46,7 @@ async function login(req, res) {
 function reCreateToken(req, res) {
     const token = req.body.refreshToken
     const index = refreshTokens.indexOf(token)
-    if (!index) res.sendStatus(404)
+    if (index === -1) res.status(404).json({ message: 'invalid token' })
     else {
         const user = jwt.decode(token, process.env['REFRESH_TOKEN_SERCET'])
         const newToken = createToken(user)
@@ -56,7 +59,7 @@ function reCreateToken(req, res) {
 function logout(req, res) {
     const refreshToken = req.body.refreshToken
     const index = refreshTokens.indexOf(refreshToken)
-    if (index !== 0) {
+    if (index !== -1) {
         refreshTokens.splice(index, 1)
         res.json({ message: 'success' })
     }
