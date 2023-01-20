@@ -1,5 +1,5 @@
 {
-  "name": "api-sample",
+  "name": "tech-store-server",
   "version": "1.0.0",
   "description": "simple setup for express API server",
   "main": "index.js",
