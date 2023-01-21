@@ -9,7 +9,7 @@ ECHO DB_NAME="store">> .\server\.env
 ECHO ACCESS_TOKEN_SECRET="Your SECRET ACCESS TOKEN">> .\server\.env
 ECHO REFRESH_TOKEN_SERCET="Your REFRESH TOKEN SERCET">> .\server\.env
 CD server
-CALL npm i
+( CALL yarn install ) || ( CALL npm i )
 CD ..
 CD client
-CALL npm i
+( CALL yarn install)  || ( CALL npm i )
