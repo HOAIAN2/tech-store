@@ -19,8 +19,8 @@ app.use(cors({
 routes(app)
 // route everything else to React
 app.get('*', (req, res) => {
-    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
-    console.log(`${ip} connected at ${new Date}`)
+    // const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress
+    // console.log(`${ip} connected at ${new Date}`)
     res.sendFile(`${__dirname}/public/index.html`)
 })
 
