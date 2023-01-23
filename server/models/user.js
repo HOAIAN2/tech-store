@@ -6,6 +6,14 @@ class User {
         this.lastName = lastName
         this.hashedPassword = hashedPassword
     }
+    ignoreProps() {
+        const object = { ...this }
+        const ignoreProps = Array.from(arguments)
+        ignoreProps.forEach(key => {
+            object[key] = undefined
+        })
+        return object
+    }
 }
 
 module.exports = User
