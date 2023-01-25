@@ -13,7 +13,8 @@ async function findUser(username) {
     let user = users.find(user => user.username === username)
     if (!user) {
         try {
-            const data = await pool.query(`SELECT * FROM user WHERE username = '${username}'`)
+            // Preventing SQL injection in Node.js with placeholder
+            const data = await pool.query('SELECT * FROM user WHERE username = ?', [username])
             if (data[0][0]) {
                 const id = data[0][0]['id']
                 const username = data[0][0]['username']
