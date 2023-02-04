@@ -10,6 +10,5 @@ ECHO ACCESS_TOKEN_SECRET="Your SECRET ACCESS TOKEN">> .\server\.env
 ECHO REFRESH_TOKEN_SERCET="Your REFRESH TOKEN SERCET">> .\server\.env
 CD server
 ( CALL yarn install ) || ( CALL npm i )
-CD ..
-CD client
+CD ../client
 ( CALL yarn install)  || ( CALL npm i )
