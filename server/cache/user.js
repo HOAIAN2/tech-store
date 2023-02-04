@@ -14,13 +14,14 @@ async function findUser(username) {
     if (!user) {
         try {
             // Preventing SQL injection in Node.js with placeholder
-            const data = await pool.query('SELECT * FROM user WHERE username = ?', [username])
-            if (data[0][0]) {
-                const id = data[0][0]['id']
-                const username = data[0][0]['username']
-                const firstName = data[0][0]['first_name']
-                const lastName = data[0][0]['last_name']
-                const hashedPassword = data[0][0]['hashed_password']
+            const queryString = 'SELECT * FROM user WHERE username = ?'
+            const [rows] = await pool.query(queryString, [username])
+            if (rows[0]) {
+                const id = rows[0]['id']
+                const username = rows[0]['username']
+                const firstName = rows[0]['first_name']
+                const lastName = rows[0]['last_name']
+                const hashedPassword = rows[0]['hashed_password']
                 user = new User(id, username, firstName, lastName, hashedPassword)
                 users.push(user)
                 return user
@@ -33,9 +34,27 @@ async function findUser(username) {
     }
     return user
 }
+async function createUser(user) {
+    try {
+        const queryString =
+            'INSERT INTO users (username, first_name, last_name, email, phone_number, address, hashed_password) '
+            + 'VALUES (?, ?, ?, ?, ?, ?, ?)'
+        await pool.query(queryString, [
+            user.username,
+            user.firstName,
+            user.lastName,
+            user.email,
+            user.phoneNumber,
+            user.hashedPassword
+        ])
+    } catch (error) {
+        console.log('\x1b[31m%s\x1b[0m', error.message)
+    }
+}
 
 module.exports = {
     findUser,
+    createUser,
     initializeUser,
     users,
     refreshTokens

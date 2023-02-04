@@ -1,8 +1,65 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 require('dotenv').config()
-const { refreshTokens, findUser } = require('../cache')
+const { refreshTokens, findUser, createUser } = require('../cache')
 
+/// API routes
+// [POST login]
+async function login(req, res) {
+    const username = req.body.username
+    const user = await findUser(username)
+    if (!user) res.status(404).json(null)
+    else {
+        if (isCorrectPassword(req.body.password, user.hashedPassword)) {
+            const token = createToken(user)
+            refreshTokens.push(token.refreshToken)
+            res.json(token)
+        }
+        else res.status(404).json(null)
+    }
+}
+// [POST logout]
+function logout(req, res) {
+    const refreshToken = req.body.refreshToken
+    const index = refreshTokens.indexOf(refreshToken)
+    if (index !== -1) {
+        refreshTokens.splice(index, 1)
+        res.json({ message: 'success' })
+    }
+    else {
+        res.status(404).json({ message: 'can not logout' })
+    }
+}
+// [POST register]
+async function register(req, res) {
+    const username = req.body.username
+    const password = req.body.password
+    const firstName = req.body.firstName
+    const lastName = req.body.lastName
+    const email = req.body.email
+    const phoneNumber = req.body.phoneNumber
+    const address = req.body.address
+    if (await findUser(username)) res.status(404).send('user exists')
+    else {
+        try {
+            const hashedPassword = bcrypt.hashSync(password)
+            await createUser({
+                username: username,
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                phoneNumber: phoneNumber,
+                address: address,
+                hashedPassword: hashedPassword
+            })
+            res.json({ message: 'success' })
+        } catch (error) {
+            console.log('\x1b[31m%s\x1b[0m', error.message)
+            res.status(500).json({ message: 'error' })
+        }
+    }
+}
+/// Middlewares, etc...
 function createToken(user) {
     const token = {
         accessToken: '',
@@ -29,20 +86,6 @@ function createToken(user) {
     token.refreshToken = signRefreshToken(user)
     return token
 }
-// [POST login]
-async function login(req, res) {
-    const username = req.body.username
-    const user = await findUser(username)
-    if (!user) res.status(404).json(null)
-    else {
-        if (isCorrectPassword(req.body.password, user.hashedPassword)) {
-            const token = createToken(user)
-            refreshTokens.push(token.refreshToken)
-            res.json(token)
-        }
-        else res.status(404).json(null)
-    }
-}
 function reCreateToken(req, res) {
     const token = req.body.refreshToken
     const index = refreshTokens.indexOf(token)
@@ -55,16 +98,17 @@ function reCreateToken(req, res) {
         res.json(newToken)
     }
 }
-// [POST logout]
-function logout(req, res) {
-    const refreshToken = req.body.refreshToken
-    const index = refreshTokens.indexOf(refreshToken)
-    if (index !== -1) {
-        refreshTokens.splice(index, 1)
-        res.json({ message: 'success' })
-    }
-    else {
-        res.status(404).json({ message: 'can not logout' })
+function readAccessToken(token) {
+    return jwt.decode(token, process.env['ACCESS_TOKEN_SECRET'])
+}
+function isCorrectPassword(password, hashedPassword) {
+    try {
+        const isCorrect = bcrypt.compareSync(password, hashedPassword)
+        if (isCorrect) return true
+        else return false
+    } catch (error) {
+        console.log('\x1b[31m%s\x1b[0m', error.message)
+        return false
     }
 }
 // Middleware auth
@@ -85,23 +129,11 @@ function authenticateToken(req, res, next) {
         }
     }
 }
-function readAccessToken(token) {
-    return jwt.decode(token, process.env['ACCESS_TOKEN_SECRET'])
-}
-function isCorrectPassword(password, hashedPassword) {
-    try {
-        const isCorrect = bcrypt.compareSync(password, hashedPassword)
-        if (isCorrect) return true
-        else return false
-    } catch (error) {
-        console.log('\x1b[31m%s\x1b[0m', error.message)
-        return false
-    }
-}
 
 module.exports = {
     login,
     logout,
+    register,
     authenticateToken,
     readAccessToken,
     reCreateToken
