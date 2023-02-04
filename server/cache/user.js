@@ -36,9 +36,10 @@ async function findUser(username) {
 }
 async function createUser(user) {
     try {
-        const queryString =
-            'INSERT INTO users (username, first_name, last_name, email, phone_number, address, hashed_password) '
-            + 'VALUES (?, ?, ?, ?, ?, ?, ?)'
+        const queryString = [
+            'INSERT INTO users (username, first_name, last_name, email, phone_number, address, hashed_password)',
+            'VALUES (?, ?, ?, ?, ?, ?, ?)'
+        ].join(' ')
         await pool.query(queryString, [
             user.username,
             user.firstName,

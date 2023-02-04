@@ -5,7 +5,7 @@
 * Run `prepare.bat` to generate .env file and install libs for server and client.
 * `npm start`
 ## Build
-* Run `build-product.bat` to build ReactJS and start server
+* Run `build.bat` to build ReactJS and start server
 ## API
 ### Auth routes: /api/auth/
 [POST] login
