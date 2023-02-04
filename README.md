@@ -7,11 +7,64 @@
 ## Build
 * Run `build-product.bat` to build ReactJS and start server
 ## API
-### Auth routes
-* /api//auth/
-
-| ROUTE          |      Input               | Output                         |
-|----------------|--------------------------|--------------------------------|
-| POST: /login   |```{username,password}``` |```{accessToken,refreshToken}```|
-| POST: /logout  |```{refreshToken}```      |```{message}```                 |
-| POST: /refresh |```{refreshToken}```      |```{accessToken,refreshToken}```|
+### Auth routes: /api/auth/
+[POST] login
+* Request
+```json
+{
+    "username": "username",
+    "password": "password"
+}
+```
+* Respone
+```json
+{
+    "accessToken": "string",
+    "refreshToken": "string"
+}
+```
+[POST] logout
+* Request
+```json
+{
+    "refreshToken": "string"
+}
+```
+* Respone
+```json
+{
+    "message": "message"
+}
+```
+[POST] register
+* Request
+```json
+{
+    "username": "username",
+    "firstName": "first name",
+    "lastName": "last name",
+    "email": "username@email.com",
+    "phoneNumber": "+84....", // phone number in Vietnam
+    "address": "province, city, etc",
+    "password": "password"
+}
+```
+* Respone
+```json
+{
+    "message": "message"
+}
+```
+[POST] refresh
+* Request
+```json
+{
+    "refreshToken": "string"
+}
+```
+* Respone
+```json
+{
+    "message": "message"
+}
+```
