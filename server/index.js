@@ -41,13 +41,17 @@ function getIPAddress() {
     return results
 }
 // Init data from database and start server
-initializeData().then(() => {
-    app.listen(SERVER_PORT || 3000, () => {
-        console.log('\x1b[32m%s\x1b[0m', `Server is running: http://localhost:${SERVER_PORT}`)
-        Object.keys(IPAdress).forEach(key => {
-            IPAdress[key].forEach(IP => {
-                console.log('\x1b[32m%s\x1b[0m', `On your network: http://${IP}:${SERVER_PORT}`)
+initializeData()
+    .then(() => {
+        app.listen(SERVER_PORT || 3000, () => {
+            console.log('\x1b[32m%s\x1b[0m', `Server is running: http://localhost:${SERVER_PORT}`)
+            Object.keys(IPAdress).forEach(key => {
+                IPAdress[key].forEach(IP => {
+                    console.log('\x1b[32m%s\x1b[0m', `On your network: http://${IP}:${SERVER_PORT}`)
+                })
             })
         })
     })
-})
+    .catch(error => {
+        console.log('\x1b[31m%s\x1b[0m', `Fail to starting server: ${error.message}`)
+    })
