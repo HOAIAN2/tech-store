@@ -6,8 +6,14 @@ const refreshTokens = []
 
 async function initializeUser() {
     console.log('\x1b[1m%s\x1b[0m', 'Initializing users data...')
-    const user = new User(1, 'hoaian_admin', 'Hoài Ân', 'Lê', '$2a$10$kFM0WGYP4jN52ZJw1bafPeK/kF0RVN30iKyteLxC/vnGjqEP83DI6')
-    users.push(user)
+    try {
+        // Write query and push to products array here
+        const user = new User(1, 'hoaian_admin', 'Hoài Ân', 'Lê', '$2a$10$kFM0WGYP4jN52ZJw1bafPeK/kF0RVN30iKyteLxC/vnGjqEP83DI6')
+        users.push(user)
+    } catch (error) {
+        console.log('\x1b[31m%s\x1b[0m', `Fail to initialize user data: ${error.message}`)
+        throw new Error(`Line16 user.js: Fail to initialize user data: ${error.message}`)
+    }
 }
 async function findUser(username) {
     let user = users.find(user => user.username === username)
