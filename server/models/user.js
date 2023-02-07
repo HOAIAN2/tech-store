@@ -1,10 +1,16 @@
 class User {
-    constructor(id, username, firstName, lastName, hashedPassword) {
-        this.id = id
-        this.username = username
-        this.firstName = firstName
-        this.lastName = lastName
-        this.hashedPassword = hashedPassword
+    constructor(userID, role, username, firstName, lastName,
+        birthDate, address, email, phoneNumber, hashedPassword) {
+        this.userID = userID,
+            this.role = role,
+            this.username = username,
+            this.firstName = firstName,
+            this.lastName = lastName,
+            this.birthDate = new Date(birthDate),
+            this.address = address,
+            this.email = email,
+            this.phoneNumber = phoneNumber,
+            this.hashedPassword = hashedPassword
     }
     ignoreProps() {
         const object = { ...this }
