@@ -1,14 +1,19 @@
 # Tech-store
+## Prerequisites
+* Nodejs v 18.11.0 or later (yarn or npm)
+* MySQL
 ## Installation
 * `git clone https://github.com/HOAIAN2/tech-store.git`
 * `cd tech-store`
 * Run `prepare.bat` to generate .env file and install libs for server and client.
-* `npm start`
+* `yarn start` or `npm start`
 ## Build
 * Run `build.bat` to build ReactJS and start server
+## Database Diagram (beta)
+![](store_db_diagram.png)
 ## API
 ### Auth routes: /api/auth/
-[POST] login
+>[POST] login
 * Request
 ```json
 {
@@ -23,7 +28,7 @@
     "refreshToken": "string"
 }
 ```
-[POST] logout
+>[POST] logout
 * Request
 ```json
 {
@@ -36,7 +41,7 @@
     "message": "message"
 }
 ```
-[POST] register
+>[POST] register
 * Request
 ```json
 {
@@ -55,7 +60,7 @@
     "message": "message"
 }
 ```
-[POST] refresh
+>[POST] refresh
 * Request
 ```json
 {

@@ -4,7 +4,7 @@
   "description": "simple setup for express API server",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "node --watch .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -18,7 +18,5 @@
     "jsonwebtoken": "^9.0.0",
     "mysql2": "^3.1.0"
   },
-  "devDependencies": {
-    "nodemon": "^2.0.20"
-  }
+  "devDependencies": {}
 }
