@@ -28,6 +28,7 @@ async function initializeUser() {
             const user = new User(userID, role, username, firstName, lastName, birthDate, sex, address, email, phoneNumber, hashedPassword)
             users.push(user)
         })
+
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', `Fail to initialize user data: ${error.message}`)
         throw new Error(`Line16 user.js: Fail to initialize user data: ${error.message}`)
@@ -41,12 +42,18 @@ async function findUser(username) {
             const queryString = 'SELECT * FROM users WHERE username = ?'
             const [rows] = await pool.query(queryString, [username])
             if (rows[0]) {
-                const id = rows[0]['id']
+                const userID = rows[0]['user_id']
+                const role = rows[0]['role']
                 const username = rows[0]['username']
                 const firstName = rows[0]['first_name']
                 const lastName = rows[0]['last_name']
+                const birthDate = rows[0]['birth_date']
+                const sex = rows[0]['sex']
+                const address = rows[0]['address']
+                const email = rows[0]['email']
+                const phoneNumber = rows[0]['phone_number']
                 const hashedPassword = rows[0]['hashed_password']
-                user = new User(id, username, firstName, lastName, hashedPassword)
+                user = new User(userID, role, username, firstName, lastName, birthDate, sex, address, email, phoneNumber, hashedPassword)
                 users.push(user)
                 return user
             }
