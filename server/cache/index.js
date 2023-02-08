@@ -22,7 +22,7 @@ async function initializeData() {
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)
         // uncomment this line on production or have database
-        // throw new Error(`Fail to initialize data: ${error.message}`)
+        throw new Error(`Fail to initialize data: ${error.message}`)
     }
 }
 

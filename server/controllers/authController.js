@@ -36,20 +36,26 @@ async function register(req, res) {
     const password = req.body.password
     const firstName = req.body.firstName
     const lastName = req.body.lastName
+    const birthDate = req.body.birthDate
+    const sex = req.body.sex
+    const address = req.body.address
     const email = req.body.email
     const phoneNumber = req.body.phoneNumber
-    const address = req.body.address
-    if (await findUser(username)) res.status(404).send('user exists')
+    if (!validate(username, email)) res.status(404).json({ message: 'invalid username or email' })
+    if (await findUser(username)) res.status(404).json({ message: 'username exists' })
     else {
         try {
-            const hashedPassword = bcrypt.hashSync(password)
+            const hashedPassword = bcrypt.hashSync(password, 10)
+            const formatedBirthDate = formatDate(birthDate)
             await createUser({
                 username: username,
                 firstName: firstName,
                 lastName: lastName,
+                birthDate: formatedBirthDate,
+                sex: sex,
+                address: address,
                 email: email,
                 phoneNumber: phoneNumber,
-                address: address,
                 hashedPassword: hashedPassword
             })
             res.json({ message: 'success' })
@@ -60,6 +66,16 @@ async function register(req, res) {
     }
 }
 /// Middlewares, etc...
+function formatDate(date) {
+    const formatedDate = new Date(date)
+    return formatedDate.toISOString().split('T')[0]
+}
+function validate(username, email) {
+    const usernameRegex = /^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    if (username.match(usernameRegex) && email.match(emailRegex)) return true
+    return false
+}
 function createToken(user) {
     const token = {
         accessToken: '',

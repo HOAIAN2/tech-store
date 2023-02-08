@@ -1,7 +1,9 @@
 const { users } = require('../cache')
 
 function index(req, res) {
-    res.json(users[0].ignoreProps('hashedPassword'))
+    res.json(users.map(user=>{
+        return user.ignoreProps('hashedPassword')
+    }))
 }
 
 module.exports = {
