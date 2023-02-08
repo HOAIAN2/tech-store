@@ -10,7 +10,7 @@
 ## Build
 * Run `build.bat` to build ReactJS and start server
 ## Database Diagram (beta)
-![](store_db_diagram.png)
+![](/database/store_db_diagram.png)
 ## API
 ### Auth routes: /api/auth/
 >[POST] login

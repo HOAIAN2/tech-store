@@ -1,16 +1,21 @@
 class User {
+    static #checkSex(sex = 'M') {
+        if (sex.toLowerCase() === 'm') return 'male'
+        else return 'female'
+    }
     constructor(userID, role, username, firstName, lastName,
-        birthDate, address, email, phoneNumber, hashedPassword) {
-        this.userID = userID,
-            this.role = role,
-            this.username = username,
-            this.firstName = firstName,
-            this.lastName = lastName,
-            this.birthDate = new Date(birthDate),
-            this.address = address,
-            this.email = email,
-            this.phoneNumber = phoneNumber,
-            this.hashedPassword = hashedPassword
+        birthDate, sex, address, email, phoneNumber, hashedPassword) {
+        this.userID = userID
+        this.role = role
+        this.username = username
+        this.firstName = firstName
+        this.lastName = lastName
+        this.birthDate = new Date(birthDate)
+        this.sex = User.#checkSex(sex)
+        this.address = address
+        this.email = email
+        this.phoneNumber = phoneNumber
+        this.hashedPassword = hashedPassword
     }
     ignoreProps() {
         const object = { ...this }
