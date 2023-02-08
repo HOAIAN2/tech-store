@@ -1,4 +1,4 @@
-DROP DATABASE store;
+DROP DATABASE IF EXISTS store;
 CREATE DATABASE store;
 USE store;
 CREATE TABLE roles (
@@ -13,7 +13,7 @@ CREATE TABLE users (
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
     birth_date DATE NOT NULL,
-    sex CHAR(1),
+    sex CHAR(1) NOT NULL,
     address VARCHAR(255) NOT NULL,
     email VARCHAR(255),
     phone_number CHAR(12),
