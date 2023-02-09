@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import "./Header.scss"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
@@ -27,13 +28,13 @@ function Header() {
                 <div className="header_item1-2">
                     <div className="header_item_1-2_btn">
                         <div className="wrap_btn_login-logout">
-                            <a href="/">
+                            <Link to='/login'>
                                 <span>Login</span>
-                            </a>
+                            </Link>
                             <p>/</p>
-                            <a href="/">
-                                <span>Sign Up</span>
-                            </a>
+                            <Link to='/register'>
+                                <span>Sign up</span>
+                            </Link>
                         </div>
                     </div>
                     <div className="header_item_1-2_btn">

@@ -5,6 +5,7 @@ function Homelayout({ children }) {
     return (
         <div className="mainlayout">
             <Header/>
+            {children}
         </div>
     )
 }

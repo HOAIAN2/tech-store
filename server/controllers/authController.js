@@ -93,7 +93,7 @@ function createToken(user) {
         const token = jwt.sign(JSON.stringify({
             iat: Math.floor(Date.now() / 1000),
             exp: Math.floor(Date.now() / 1000) + (60 * 60),
-            id: user.id,
+            id: user.userID,
             username: user.username
         }), process.env['ACCESS_TOKEN_SECRET'])
         return token
@@ -101,7 +101,7 @@ function createToken(user) {
     function signRefreshToken(user) {
         const token = jwt.sign(JSON.stringify({
             iat: Math.floor(Date.now() / 1000),
-            id: user.id,
+            id: user.userID,
             username: user.username
         }), process.env['REFRESH_TOKEN_SERCET'])
         return token
