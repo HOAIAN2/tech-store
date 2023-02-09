@@ -1,12 +1,12 @@
-import "./Home_layout.scss"
-function Home_layout({children}) {
-    
-    return(
+import "./Header.scss"
+function Header() {
+
+    return (
         <div className="header">
             <div className="header_item1">
                 <div className="header_item1.1">
                     <div className="header_shoes">
-                        
+                        Header
                     </div>
                 </div>
                 <div className="header_item1.2"></div>
@@ -15,4 +15,4 @@ function Home_layout({children}) {
     )
 }
 
-export default Home_layout
+export default Header
