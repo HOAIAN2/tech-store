@@ -58,7 +58,10 @@ async function register(req, res) {
                 phoneNumber: phoneNumber,
                 hashedPassword: hashedPassword
             })
-            res.json({ message: 'success' })
+            const user = await findUser(username)
+            const token = createToken(user)
+            refreshTokens.push(token.refreshToken)
+            res.json(token)
         } catch (error) {
             console.log('\x1b[31m%s\x1b[0m', error.message)
             res.status(500).json({ message: 'error' })
@@ -73,7 +76,12 @@ function formatDate(date) {
 function validate(username, email) {
     const usernameRegex = /^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/
     const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-    if (username.match(usernameRegex) && email.match(emailRegex)) return true
+    if (email) {
+        if (username.match(usernameRegex) && email.match(emailRegex)) return true
+    }
+    else {
+        if (username.match(usernameRegex)) return true
+    }
     return false
 }
 function createToken(user) {

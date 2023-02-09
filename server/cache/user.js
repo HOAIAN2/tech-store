@@ -39,7 +39,11 @@ async function findUser(username) {
     if (!user) {
         try {
             // Preventing SQL injection in Node.js with placeholder
-            const queryString = 'SELECT * FROM users WHERE username = ?'
+            const queryString = [
+                'SELECT user_id, roles.name AS role, username, first_name, last_name, birth_date, sex, address, email, phone_number, hashed_password FROM users',
+                'JOIN roles ON users.role_id = roles.id',
+                'WHERE users.username = ?'
+            ].join(' ')
             const [rows] = await pool.query(queryString, [username])
             if (rows[0]) {
                 const userID = rows[0]['user_id']
