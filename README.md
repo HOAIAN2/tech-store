@@ -48,16 +48,19 @@
     "username": "username",
     "firstName": "first name",
     "lastName": "last name",
-    "email": "username@email.com",
-    "phoneNumber": "+84....", // phone number in Vietnam
+    "birthDate": "2023-02-09T01:18:02.135Z",
+    "sex": "M",
     "address": "province, city, etc",
+    "email": "username@email.com", // NULLABLE
+    "phoneNumber": "+84....", // phone number in Vietnam, CHAR(12) NULLABLE
     "password": "password"
 }
 ```
 * Respone
 ```json
 {
-    "message": "message"
+    "accessToken": "string",
+    "refreshToken": "string"
 }
 ```
 >[POST] refresh
