@@ -1,12 +1,31 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import request from '../../utils/api-config'
+import { useUserData, USER_ACTION } from '../../Context'
 import './Login.scss'
 
-function Login() {
+function Login(props) {
+    const [user, dispatchUser] = useUserData()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const navigate = useNavigate()
+    const prePage = props.path
+    function fetchUserData() {
+        const token = JSON.parse(localStorage.getItem('token'))
+        request.get('/user', {
+            headers: {
+                Authorization: `Bearer ${token.accessToken}`
+            }
+        })
+            .then(res => {
+                dispatchUser({ type: USER_ACTION.SET, payload: res.data })
+                console.log(res.data)
+                navigate(prePage || '/')
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
     function handleLogin(e) {
         e.preventDefault()
         request.post('/auth/login', {
@@ -14,16 +33,15 @@ function Login() {
             password: password
         })
             .then(res => {
-                console.log(res)
                 localStorage.setItem('token', JSON.stringify(res.data))
-                navigate('/')
+                fetchUserData()
             })
             .catch(error => {
                 console.error(error)
             })
     }
     useEffect(() => {
-        document.title = 'login'
+        document.title = 'Đăng nhập'
     })
     return (
         <div className="login">
