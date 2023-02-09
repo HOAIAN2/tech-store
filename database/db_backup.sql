@@ -214,7 +214,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `UQ_phone_number` (`phone_number`),
   KEY `role_id` (`role_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`),
-  CONSTRAINT `User_sex` CHECK (((`sex` = _utf8mb4'M') or (0 <> _utf8mb4'F')))
+  CONSTRAINT `User_sex` CHECK (((`sex` = _utf8mb4'M') or (`SEX` = _utf8mb4'F')))
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -224,7 +224,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,1,'hoaian_admin','Hoài Ân','Lê','2003-02-22','M','Tuy Hòa, Phú Yên, Việt Nam','lehoaian.d21ctc1@muce.edu.vn','+84355654134','$2y$10$FBWhNcfI3gdEgsc7KGiQYuuuEtDyAPgseDCkJ6NMsGgTDEYZuPiAq'),(2,1,'hungdung_admin','Hùng Dũng','Đặng','2003-06-01','M','Tuy Hòa, Phú Yên, Việt Nam','danghungdung.d21ctc1@muce.edu.vn',NULL,'$2y$10$AU103wg5KFk2GHhdEVNBIOGXftXVmH31OoL4rZPWPEGXtGE.fk4Ea'),(3,1,'vanthien_admin','Văn Thiện','Nguyễn','2003-06-01','M','Tuy Hòa, Phú Yên, Việt Nam','nguyenvanthien.d21ctc1@muce.edu.vn',NULL,'$2y$10$AnCZkPgKQN9nhlgkBzgztuB6QU0pbCCSjrkXZbs4ncDLl.A5Hh7DG'),(4,1,'khanhtrinh_admin','Khánh Trình','Lê','2003-06-01','M','Tuy Hòa, Phú Yên, Việt Nam','lekhanhtrinh.d21ctc1@muce.edu.vn',NULL,'$2y$10$Os7AHbkNKnzf4.VF8JZPIOw3iHUSfTMRTGHS5lZWZZjii3YVepAza'),(5,1,'huynhchi_admin','Huỳnh Chi','Phạm','2003-06-01','M','Tuy Hòa, Phú Yên, Việt Nam','phamhuynhchi.d21ctc1@muce.edu.vn',NULL,'$2y$10$hM74J0UBOSaVTILCnm9xu.Gx/GEWt2eZIkmF3H7ChBlh2kU4okd1K');
+INSERT INTO `users` VALUES (1,1,'hoaian_admin','Hoài Ân','Lê','2003-02-22','M','Tuy Hòa, Phú Yên, Việt Nam','lehoaian.d21ctc1@muce.edu.vn','+84355654134','$2b$10$HwWs7GJlFy9WmRj2SngHdeBytdRj4lTkuL82Qzk.avA4bATuajY/y'),(2,1,'hungdung_admin','Hùng Dũng','Đặng','2003-06-01','M','Tuy Hòa, Phú Yên, Việt Nam','danghungdung.d21ctc1@muce.edu.vn',NULL,'$2b$10$HYFkCk8clwYf8LZBJpVBdeQaigxTZ0elkaRlC5wT0JsTo7Mmec8bS'),(3,1,'vanthien_admin','Văn Thiện','Nguyễn','2003-06-01','M','Tuy Hòa, Phú Yên, Việt Nam','nguyenvanthien.d21ctc1@muce.edu.vn',NULL,'$2b$10$n51F2Uq0yk4vKRPguT/MwOt5Bg.TP4H2nHNDU5k4OZSj3xJjPMOwS'),(4,1,'khanhtrinh_admin','Khánh Trình','Lê','2003-06-01','M','Tuy Hòa, Phú Yên, Việt Nam','lekhanhtrinh.d21ctc1@muce.edu.vn',NULL,'$2b$10$/7eIcN/DMiNk/CgaYW7rbe6Yl20KtB4dPi9wEOh2nY6.2Z3xKvLb6'),(5,1,'huynhchi_admin','Huỳnh Chi','Phạm','2003-06-01','F','Tuy Hòa, Phú Yên, Việt Nam','phamhuynhchi.d21ctc1@muce.edu.vn',NULL,'$2b$10$W6r42rOL1zxCDGSGCD4pze0qyk1eRjJkvEv.E6GKiPBEbCRIq5jZO');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -264,4 +264,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-08 19:02:55
+-- Dump completed on 2023-02-09 10:24:10
