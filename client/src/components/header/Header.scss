@@ -1,10 +1,91 @@
 .header {
     background-color: black;
-    width: 100%;
     height: 150px;
 
-    &_item1 {
+    .header_item1 {
         height: 39px;
-        background-color: aqua;
+        background-color: rgb(252, 252, 252);
+        display: flex;
+        justify-content: space-between;
+        padding: 0 15px;
+
+        .header_item1-1 {
+            display: flex;
+
+            .header_item_1-1_btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all linear 0.2s;
+                padding: 0 10px;
+                svg{
+                    transform: translateY(2px);
+                    margin-left: 3px;
+                }
+
+                &:hover {
+                    background-color: rgb(207, 207, 207);
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .header_item1-2 {
+            display: flex;
+
+            .header_item_1-2_btn {
+                margin: 0 13px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                a{
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #050505;
+                    svg{
+                        font-size: 22px;
+                    }
+                }
+                &:hover{
+                    color: rgb(112, 112, 112);
+                    a{
+                        color: rgb(112, 112, 112);
+                    }
+                    cursor: pointer;
+                }
+
+                .text-thongbao {
+                    margin-right: 5px;
+                }
+
+                .thongbao-icon {
+                    font-size: 13px;
+                    // color: crimson;
+                    transform: translateY(2px);
+                }
+
+                .wrap_btn_login-logout {
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: red;
+                    color: aliceblue;
+                    border-radius: 3px;
+                    padding: 16px;
+
+                    span {
+                        margin: 0 2px;
+                        color: #fff;
+                        &:hover {
+                            text-decoration: underline;
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
