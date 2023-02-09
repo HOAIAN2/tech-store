@@ -1,6 +1,6 @@
 .header {
     background-color: black;
-    height: 150px;
+    height: 162px;
 
     .header_item1 {
         height: 39px;
@@ -83,6 +83,31 @@
                             text-decoration: underline;
                             cursor: pointer;
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    .header_item2{
+
+        .wrap_header_item2{
+            height: 86px;
+            background: linear-gradient(234deg, #fff 76%, black 75%);
+            .header_logo{
+                height: 100%;
+                width: 21%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                .wrap_logo{
+                    display: flex;
+                    .header_logo_item:nth-child(1){
+                        margin-right: 10px;
+                        color: red;
+                    }
+                    .header_logo_item:nth-child(2){
+                        color: #fff;
                     }
                 }
             }

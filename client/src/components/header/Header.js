@@ -63,6 +63,17 @@ function Header() {
 
             </div>
         </div>
+
+        <div className="header_item2">
+            <div className="wrap_header_item2">
+                <div className="header_logo">
+                    <a className="wrap_logo" href="/">
+                    <h1 className="header_logo_item">TECH</h1>
+                    <h1 className="header_logo_item">STORE</h1>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
     )
 }
