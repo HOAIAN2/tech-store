@@ -9,7 +9,7 @@ async function login(username = '', password = '') {
         })
         return res.data
     } catch (error) {
-        throw new Error(error)
+        throw new Error(error.response.data.message)
     }
 }
 async function fetchUserData() {
@@ -34,7 +34,7 @@ async function reGetToken() {
         })
         localStorage.setItem('token', JSON.stringify(res.data))
     } catch (error) {
-        throw new Error(error)
+        throw new Error(error.response.data.message)
     }
 }
 
