@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
+const updatePassword = require("../cache/user")
 require('dotenv').config()
 const { refreshTokens, findUser, createUser } = require('../cache')
 
@@ -154,11 +155,30 @@ function authenticateToken(req, res, next) {
     }
 }
 
+async function changePassword(rep, res) {
+    const user = await findUser(rep.body.username)?handleChangePassword():res.status(400).json({errorMessage: "username is not exist"})
+    async function handleChangePassword() {
+        if(isCorrectPassword(rep.oldPassword, user.hashed_password)){
+            const hashedPassword = await bcrypt.hashSync(rep.newPassword, 10)
+            const query = updatePassword.updatePassword(user.username,hashedPassword)
+            if(query.errorMessage){
+                res.status(200).json({errorMessage: "update password success"})
+            }
+        }
+        else{
+            res.status(400).json({errorMessage: "mật khẩu không đúng"})
+        }
+    }
+    
+}
+
+
 module.exports = {
     login,
     logout,
     register,
     authenticateToken,
     readAccessToken,
-    reCreateToken
+    reCreateToken,
+    changePassword
 }

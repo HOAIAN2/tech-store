@@ -91,10 +91,21 @@ async function createUser(user) {
     }
 }
 
+async function updatePassword(username,password) {
+    const queryString = ["UPDATE users SET hashed_password = ? WHERE username = ?;"]
+    try {
+        const [rows] = await pool.query(queryString, [password,username])
+        return {errorMessage: 0}
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 module.exports = {
     findUser,
     createUser,
     initializeUser,
+    updatePassword,
     users,
     refreshTokens
 }
