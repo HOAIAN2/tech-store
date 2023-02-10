@@ -11,14 +11,14 @@ function userReducer(state, action) {
             const birthDate = new Date(action.payload.birthDate)
             return { ...action.payload, birthDate: birthDate }
         case USER_ACTION.REMOVE:
-            return {}
+            return null
         default:
             break;
     }
 }
 
 function UserProvider({ children }) {
-    const [user, dispatchUser] = useReducer(userReducer, {})
+    const [user, dispatchUser] = useReducer(userReducer, null)
     return (
         <UserContext.Provider value={[user, dispatchUser]}>
             {children}
