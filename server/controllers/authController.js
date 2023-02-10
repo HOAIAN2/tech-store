@@ -8,14 +8,14 @@ const { refreshTokens, findUser, createUser } = require('../cache')
 async function login(req, res) {
     const username = req.body.username
     const user = await findUser(username)
-    if (!user) res.status(404).json(null)
+    if (!user) res.status(404).json({ message: 'cannot find username' })
     else {
         if (isCorrectPassword(req.body.password, user.hashedPassword)) {
             const token = createToken(user)
             refreshTokens.push(token.refreshToken)
             res.json(token)
         }
-        else res.status(404).json(null)
+        else res.status(404).json({ message: 'incorrect password' })
     }
 }
 // [POST logout]

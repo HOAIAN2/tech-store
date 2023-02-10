@@ -57,7 +57,10 @@ function Header() {
                             </a>
                         </div>
                         <div className="header_item_1-2_btn">
-                            <a href="/">
+                            <a
+                                target="_blank"
+                                rel="noreferrer"
+                                href="https://www.instagram.com/hoaian.2202/">
                                 <FontAwesomeIcon icon={faInstagram} />
                             </a>
                         </div>
@@ -81,7 +84,7 @@ function Header() {
                     </div>
                     <div className="header_search">
                         <div className='search'>
-                            <input placeholder='Search for products' className='search_input' ></input>
+                            <input placeholder='Tìm sản phẩm' className='search_input' ></input>
                         </div>
                         <div className="search_btn">
                             <div className="wrap_search-btn">

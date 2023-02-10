@@ -1,9 +1,9 @@
-class Suppliers{
-    constructor(supplier_id,supplier_name,address,email,phone_number,){
-        this.supplier_id = supplier_id;
-        this.supplier_name = supplier_name;
+class Supplier {
+    constructor(supplierId, supplierName, address, email, phoneNumber,) {
+        this.supplierId = supplierId;
+        this.supplierName = supplierName;
         this.address = address;
-        this.phone_number = phone_number;
+        this.phoneNumber = phoneNumber;
         this.email = email;
     }
     ignoreProps() {
@@ -15,3 +15,5 @@ class Suppliers{
         return object
     }
 }
+
+module.exports = Supplier
