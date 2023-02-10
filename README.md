@@ -9,7 +9,7 @@
 * `yarn start` or `npm start`
 ## Build
 * Run `build.bat` to build ReactJS and start server
-## Database Diagram (beta)
+## Database Diagram
 ![](/database/store_db_diagram.png)
 ## API
 ### Auth routes: /api/auth/

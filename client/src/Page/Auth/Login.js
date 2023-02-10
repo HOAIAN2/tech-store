@@ -8,7 +8,7 @@ function Login(props) {
     const [, dispatchUser] = useUserData()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [error, setError] = useState('Demo error')
+    const [error, setError] = useState('')
     const navigate = useNavigate()
     const prePage = props.path
     function handleLogin(e) {
@@ -23,8 +23,8 @@ function Login(props) {
                 navigate(prePage || '/')
             })
             .catch(error => {
-                // handle later
-                console.error(error)
+                console.error(error.message)
+                setError(error.message)
             })
     }
     // Trigger back have token or data refactor later
@@ -36,15 +36,19 @@ function Login(props) {
                 navigate(prePage || '/')
             })
             .catch(error => {
-                console.error(error)
+                console.error(error.message)
             })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     return (
         <div className="login">
+            <div className='login-title'>
+                <span>Đăng nhập</span>
+            </div>
             <form onSubmit={handleLogin}>
                 <div>
                     <input type='text' placeholder="Tên đăng nhập"
+                        autoFocus
                         value={username}
                         onInput={e => { setUsername(e.target.value) }} /> <br />
                 </div>
@@ -61,7 +65,14 @@ function Login(props) {
                 </div>
             </form>
             <div>
-                <Link role='button' to='/register'></Link>
+                <span>
+                    <Link to='#'>Quên mật khẩu</Link>
+                </span>
+            </div>
+            <div>
+                <span>
+                    Chưa có tài khoản? <Link role='button' to='/register'>Đăng ký</Link>
+                </span>
             </div>
         </div>
     )

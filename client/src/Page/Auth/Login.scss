@@ -1,19 +1,34 @@
+@use "../../colors";
 .login {
     width: 400px;
-    height: 350px;
-    border: 1px solid red;
-    border-radius: 5px;
+    height: 450px;
+    border-radius: 10px;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    background-color: white;
+    box-shadow: 0px 0px 3px colors.$shadow;
+
+    & .login-title {
+        height: 80px;
+
+        span {
+            font-size: 30px;
+            font-weight: bold;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
 
     & form {
         height: 250px;
 
         & div.error-login {
             width: 100%;
-            height: 20px;
+            height: 45px;
             color: red;
 
             & span {
@@ -36,22 +51,39 @@
                 padding-left: 20px;
                 outline: none;
                 margin-top: 20px;
-                border: 1px solid black;
+                border: 1px solid colors.$shadow;
                 border-radius: 5px;
                 position: relative;
                 left: 50%;
                 transform: translate(-50%);
+
+                &:hover,
+                :focus,
+                :active {
+                    box-shadow: 0px 0px 3px colors.$shadow;
+
+                }
             }
 
-            button {
-                font-size: 24px;
+            & button {
+                font-size: 20px;
                 font-weight: bold;
                 width: 350px;
                 height: 50px;
-                margin-top: 20px;
-                border: 1px solid black;
+                outline: none;
+                border: none;
+                color: white;
+                // background-color: $coler-btn);
+                background-color: colors.$coler-btn;
                 border-radius: 5px;
+                position: absolute;
+                left: 50%;
+                transform: translate(-50%);
                 cursor: pointer;
+
+                &:hover {
+                    box-shadow: 0px 0px 3px colors.$coler-btn;
+                }
             }
         }
 
@@ -59,45 +91,14 @@
 
     & div {
         width: 100%;
-        height: 50px;
+        height: 40px;
         position: relative;
 
-        & button {
-            font-size: 20px;
-            font-weight: bold;
-            width: 250px;
-            height: 50px;
-            outline: none;
-            border: 1px solid black;
-            color: white;
-            background-color: blue;
-            border-radius: 5px;
+        & span {
             position: absolute;
+            top: 50%;
             left: 50%;
-            transform: translate(-50%);
-            cursor: pointer;
-        }
-
-        & a {
-            display: block;
-            width: 250px;
-            height: 50px;
-            border: 1px solid black;
-            background-color: green;
-            border-radius: 5px;
-            position: absolute;
-            left: 50%;
-            transform: translate(-50%);
-
-            &::before {
-                content: 'Tạo tài khoản mới';
-                color: white;
-                width: 130px;
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-            }
+            transform: translate(-50%, -50%);
         }
     }
 }
