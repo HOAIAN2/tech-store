@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import "./Header.scss"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
@@ -7,11 +6,14 @@ import { faSquareYoutube } from "@fortawesome/free-brands-svg-icons"
 import { faFacebookF } from "@fortawesome/free-brands-svg-icons"
 import { faInstagram } from "@fortawesome/free-brands-svg-icons"
 import { faTwitter } from "@fortawesome/free-brands-svg-icons"
+import {faCartShopping} from "@fortawesome/free-solid-svg-icons" 
+import {faHouseChimney} from "@fortawesome/free-solid-svg-icons"
 function Header() {
 
     return (
         <div className="header">
             <div className="header_item1">
+                <div className="wrap-header-item1">
                 <div className="header_item1-1">
                     <div className="header_item_1-1_btn">
                         <span>Kênh Người Bán</span>
@@ -28,13 +30,13 @@ function Header() {
                 <div className="header_item1-2">
                     <div className="header_item_1-2_btn">
                         <div className="wrap_btn_login-logout">
-                            <Link to='/login'>
+                            <a href="/">
                                 <span>Login</span>
-                            </Link>
+                            </a>
                             <p>/</p>
-                            <Link to='/register'>
-                                <span>Sign up</span>
-                            </Link>
+                            <a href="/">
+                                <span>Sign Up</span>
+                            </a>
                         </div>
                     </div>
                     <div className="header_item_1-2_btn">
@@ -63,6 +65,7 @@ function Header() {
                     </div>
 
                 </div>
+                </div>
             </div>
 
             <div className="header_item2">
@@ -74,15 +77,41 @@ function Header() {
                         </a>
                     </div>
                     <div className="header_search">
-                        {/* <div className="search">
-                        <input className="search_input"></input>
-                    </div> */}
                         <div className='search'>
-                            {/* <div className="wrapiconsearch"><FontAwesomeIcon className='iconsearch' icon={faMagnifyingGlass} /></div> */}
-                            <input placeholder='Tìm kiếm bài hát, nghệ sĩ, lời bài hát...' className='search_input' ></input>
+                            <input placeholder='Search for products' className='search_input' ></input>
                         </div>
-                        <div className="search_btn"></div>
+                        <div className="search_btn">
+                            <div className="wrap_search-btn">
+                                <span>Search</span>
+                            </div>
+                        </div>
                     </div>
+                    <div className="cart-shopping">
+                       <FontAwesomeIcon icon={faCartShopping} />
+                       <div className="number-cart">
+                         <span>1</span>
+                       </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="header_item3">
+                <div className="wrap-header-item3">
+                <div className="header-option">
+                   <FontAwesomeIcon icon={faHouseChimney} />
+                   <span>Home</span>
+                   <FontAwesomeIcon icon={faCaretDown} className="icondow" />
+                </div>
+                <div className="header-option">
+                    <span>Products</span>
+                    <FontAwesomeIcon icon={faCaretDown} className="icondow" />
+                </div>
+                <div className="header-option">
+                    <span>Blog</span>
+                </div>
+                <div className="header-option">
+                    <span>Contact</span>
+                </div>
                 </div>
             </div>
         </div>
