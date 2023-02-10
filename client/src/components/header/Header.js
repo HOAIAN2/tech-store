@@ -9,7 +9,8 @@ import { faTwitter } from "@fortawesome/free-brands-svg-icons"
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons"
 import { faHouseChimney } from "@fortawesome/free-solid-svg-icons"
 import { faPhoneVolume } from "@fortawesome/free-solid-svg-icons"
-import {faEnvelope} from "@fortawesome/free-solid-svg-icons"
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons"
+import { Link } from "react-router-dom"
 function Header() {
 
     return (
@@ -32,13 +33,13 @@ function Header() {
                     <div className="header_item1-2">
                         <div className="header_item_1-2_btn">
                             <div className="wrap_btn_login-logout">
-                                <a href="/">
+                                <Link to='/login'>
                                     <span>Login</span>
-                                </a>
+                                </Link>
                                 <p>/</p>
-                                <a href="/">
-                                    <span>Sign Up</span>
-                                </a>
+                                <Link to='/register'>
+                                    <span>Sign up</span>
+                                </Link>
                             </div>
                         </div>
                         <div className="header_item_1-2_btn">
