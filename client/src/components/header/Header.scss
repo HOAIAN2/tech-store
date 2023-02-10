@@ -26,7 +26,7 @@
                     align-items: center;
                     justify-content: center;
                     transition: all linear 0.2s;
-                    padding: 0 10px;
+                    padding: 0 9px;
 
                     svg {
                         transform: translateY(2px);
@@ -107,10 +107,11 @@
     }
 
     .header_item2 {
-        background: linear-gradient(234deg, #fff 70%, black 67%);
         display: flex;
         align-items: center;
+        height: 96px;
         justify-content: center;
+        background-image: linear-gradient(45deg, #000000 30%, #fefefe 30%);
 
         .wrap_header_item2 {
             height: 100px;
@@ -240,34 +241,51 @@
             width: 1450px;
             height: 100%;
             display: flex;
+            justify-content: space-between;
             padding-left: 14px;
-            .header-option {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin-right: 15px;
-
-                svg {
-                    color: var(--text-color);
-                    margin-right: 5px;
+            .option-item{
+                 display: flex;
+                .header-option {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-right: 15px;
+    
+                    svg {
+                        color: var(--text-color);
+                        margin-right: 5px;
+                    }
+    
+                    span {
+                        color: var(--text-color);
+                    }
+    
+                    .icondow {
+                        margin-left: 5px;
+                        transform: translateY(2px);
+                    }
+    
+                    &:hover{
+                        cursor: pointer;
+                        svg{
+                            color: var(--coler-hover);
+                        }
+                        span{
+                            color: var(--coler-hover);
+                        }
+                    }
                 }
-
-                span {
-                    color: var(--text-color);
-                }
-
-                .icondow {
-                    margin-left: 5px;
-                    transform: translateY(2px);
-                }
-
-                &:hover{
-                    cursor: pointer;
+                .header-contact{
+                    display:  flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-left: 15px;
                     svg{
-                        color: var(--coler-hover);
+                        color: var(--coler-btn);
+                        margin-right: 5px;
                     }
                     span{
-                        color: var(--coler-hover);
+                        color: var(--text-color);
                     }
                 }
             }

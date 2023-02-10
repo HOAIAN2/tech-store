@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom"
 import "./Header.scss"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
@@ -9,6 +8,8 @@ import { faInstagram } from "@fortawesome/free-brands-svg-icons"
 import { faTwitter } from "@fortawesome/free-brands-svg-icons"
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons"
 import { faHouseChimney } from "@fortawesome/free-solid-svg-icons"
+import { faPhoneVolume } from "@fortawesome/free-solid-svg-icons"
+import {faEnvelope} from "@fortawesome/free-solid-svg-icons"
 function Header() {
 
     return (
@@ -31,13 +32,13 @@ function Header() {
                     <div className="header_item1-2">
                         <div className="header_item_1-2_btn">
                             <div className="wrap_btn_login-logout">
-                                <Link to='/login'>
+                                <a href="/">
                                     <span>Login</span>
-                                </Link>
+                                </a>
                                 <p>/</p>
-                                <Link to='/register'>
-                                    <span>Sign up</span>
-                                </Link>
+                                <a href="/">
+                                    <span>Sign Up</span>
+                                </a>
                             </div>
                         </div>
                         <div className="header_item_1-2_btn">
@@ -98,20 +99,32 @@ function Header() {
 
             <div className="header_item3">
                 <div className="wrap-header-item3">
-                    <div className="header-option">
-                        <FontAwesomeIcon icon={faHouseChimney} />
-                        <span>Home</span>
-                        <FontAwesomeIcon icon={faCaretDown} className="icondow" />
+                    <div className="option-item">
+                        <div className="header-option">
+                            <FontAwesomeIcon icon={faHouseChimney} />
+                            <span>Home</span>
+                            <FontAwesomeIcon icon={faCaretDown} className="icondow" />
+                        </div>
+                        <div className="header-option">
+                            <span>Products</span>
+                            <FontAwesomeIcon icon={faCaretDown} className="icondow" />
+                        </div>
+                        <div className="header-option">
+                            <span>Blog</span>
+                        </div>
+                        <div className="header-option">
+                            <span>Contact</span>
+                        </div>
                     </div>
-                    <div className="header-option">
-                        <span>Products</span>
-                        <FontAwesomeIcon icon={faCaretDown} className="icondow" />
-                    </div>
-                    <div className="header-option">
-                        <span>Blog</span>
-                    </div>
-                    <div className="header-option">
-                        <span>Contact</span>
+                    <div className="option-item">
+                        <div className="header-contact">
+                            <FontAwesomeIcon icon={faPhoneVolume} />
+                            <span>035 596 0156</span>
+                        </div>
+                        <div className="header-contact">
+                            <FontAwesomeIcon icon={faEnvelope} />
+                            <span>dungprof8.0@gmail.com</span>
+                        </div>
                     </div>
                 </div>
             </div>
