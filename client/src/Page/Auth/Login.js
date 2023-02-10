@@ -1,29 +1,29 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, Navigate } from 'react-router-dom'
 import request from '../../utils/api-config'
 import { useUserData, USER_ACTION } from '../../Context'
 import './Login.scss'
 
 function Login(props) {
-    const [, dispatchUser] = useUserData()
+    const [user, dispatchUser] = useUserData()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const navigate = useNavigate()
     const prePage = props.path
-    function fetchUserData() {
-        const token = JSON.parse(localStorage.getItem('token'))
-        request.get('/user', {
-            headers: {
-                Authorization: `Bearer ${token.accessToken}`
-            }
-        })
-            .then(res => {
-                dispatchUser({ type: USER_ACTION.SET, payload: res.data })
-                navigate(prePage || '/')
+    const token = JSON.parse(localStorage.getItem('token'))
+    async function fetchUserData() {
+        if (!token) return null
+        try {
+            const res = await request.get('/user', {
+                headers: {
+                    Authorization: `Bearer ${token.accessToken}`
+                }
             })
-            .catch(error => {
-                console.error(error)
-            })
+            return res.data
+        } catch (error) {
+            console.error(error)
+            return null
+        }
     }
     function handleLogin(e) {
         e.preventDefault()
@@ -33,7 +33,12 @@ function Login(props) {
         })
             .then(res => {
                 localStorage.setItem('token', JSON.stringify(res.data))
-                fetchUserData()
+                fetchUserData().then(data => {
+                    if (data) {
+                        dispatchUser({ type: USER_ACTION.SET, payload: data })
+                        navigate(prePage || '/')
+                    }
+                })
             })
             .catch(error => {
                 console.error(error)
@@ -41,7 +46,19 @@ function Login(props) {
     }
     useEffect(() => {
         document.title = 'Đăng nhập'
-    })
+    }, [])
+    /// Trigger back have token or data refactor later
+    if (user || token) {
+        if (!user) {
+            fetchUserData().then(data => {
+                if (data) {
+                    dispatchUser({ type: USER_ACTION.SET, payload: data })
+                    navigate(prePage || '/')
+                }
+            })
+        }
+        return <Navigate to={prePage || '/'} />
+    }
     return (
         <div className="login">
             <form onSubmit={handleLogin}>
