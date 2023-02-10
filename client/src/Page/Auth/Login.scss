@@ -11,6 +11,19 @@
     & form {
         height: 250px;
 
+        & div.error-login {
+            width: 100%;
+            height: 20px;
+            color: red;
+
+            & span {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
+
         & div {
             width: 100%;
             height: 60px;
