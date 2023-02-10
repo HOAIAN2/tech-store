@@ -8,7 +8,8 @@ const USER_ACTION = {
 function userReducer(state, action) {
     switch (action.type) {
         case USER_ACTION.SET:
-            return { ...action.payload }
+            const birthDate = new Date(action.payload.birthDate)
+            return { ...action.payload, birthDate: birthDate }
         case USER_ACTION.REMOVE:
             return {}
         default:

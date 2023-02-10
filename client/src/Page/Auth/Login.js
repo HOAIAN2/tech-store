@@ -5,7 +5,7 @@ import { useUserData, USER_ACTION } from '../../Context'
 import './Login.scss'
 
 function Login(props) {
-    const [user, dispatchUser] = useUserData()
+    const [, dispatchUser] = useUserData()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const navigate = useNavigate()
@@ -19,7 +19,6 @@ function Login(props) {
         })
             .then(res => {
                 dispatchUser({ type: USER_ACTION.SET, payload: res.data })
-                console.log(res.data)
                 navigate(prePage || '/')
             })
             .catch(error => {
