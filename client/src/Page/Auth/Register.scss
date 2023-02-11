@@ -1,0 +1,119 @@
+@use "../../colors";
+
+.register {
+    width: 500px;
+    height: 800px;
+    border-radius: 10px;
+    position: relative;
+    top: 5%;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    background-color: white;
+    box-shadow: 0px 0px 3px colors.$shadow;
+
+    & .register-title {
+        position: relative;
+        height: 80px;
+
+        & span {
+            font-size: 30px;
+            font-weight: bold;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+
+    & form {
+        height: 250px;
+
+        & div.error-register {
+            position: relative;
+            width: 100%;
+            height: 45px;
+            color: red;
+
+            & span {
+                width: 250px;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        & div {
+            width: 100%;
+            height: 60px;
+
+            & div {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                padding-left: 20px;
+                padding-right: 20px;
+
+                & label {
+                    font-size: 20px;
+                    margin-right: 20px;
+                }
+
+                & input,
+                & select {
+                    flex: 1;
+                    display: block;
+                    font-size: 22px;
+                    width: 70%;
+                    height: 50px;
+                    padding-left: 20px;
+                    outline: none;
+                    border: 1px solid colors.$shadow;
+                    border-radius: 5px;
+
+                    &:hover,
+                    :focus,
+                    :active {
+                        box-shadow: 0px 0px 3px colors.$shadow;
+
+                    }
+                }
+            }
+
+            & button {
+                font-size: 20px;
+                font-weight: bold;
+                width: 350px;
+                height: 50px;
+                outline: none;
+                border: none;
+                color: white;
+                // background-color: $coler-btn);
+                background-color: colors.$coler-btn;
+                border-radius: 5px;
+                position: absolute;
+                left: 50%;
+                transform: translate(-50%);
+                cursor: pointer;
+
+                &:hover {
+                    box-shadow: 0px 0px 3px colors.$coler-btn;
+                }
+            }
+        }
+
+    }
+
+    // & div {
+    //     width: 100%;
+    //     height: 40px;
+    //     position: relative;
+
+    //     & span {
+    //         position: absolute;
+    //         top: 50%;
+    //         left: 50%;
+    //         transform: translate(-50%, -50%);
+    //     }
+    // }
+}
