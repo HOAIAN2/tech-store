@@ -37,7 +37,10 @@ async function changePassword(req, res) {
     const newPassword = req.body.newPassword
     const user = await findUser(username)
     if (!user) res.status(404).json({ message: 'cannot find username' })
-    if (oldPassword === newPassword) res.json({ message: 'you are using the same password' })
+    if (oldPassword === newPassword) {
+        res.json({ message: 'you are using the same password' })
+        return
+    }
     if (!isCorrectPassword(oldPassword, user.hashedPassword)) {
         res.status(400).json({ message: 'incorrect password' })
     }
