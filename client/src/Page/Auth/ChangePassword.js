@@ -19,6 +19,7 @@ function ChangePassWord() {
         changePassword(username, oldPassword, newPassword)
             .then(data => {
                 console.log(data)
+                localStorage.removeItem('token')
                 navigate('/login')
             })
             .catch(error => {
@@ -26,10 +27,8 @@ function ChangePassWord() {
                 setError(error.message)
             })
     }
-    // Trigger back have token or data refactor later
     useEffect(() => {
         document.title = 'Đổi mật khẩu'
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     return (
         <div className="change-password">
@@ -65,16 +64,6 @@ function ChangePassWord() {
                     <button>Đổi mật khẩu</button>
                 </div>
             </form>
-            {/* <div>
-                <span>
-                    <Link to='#'>Quên mật khẩu</Link>
-                </span>
-            </div>
-            <div>
-                <span>
-                    Chưa có tài khoản? <Link role='button' to='/register'>Đăng ký</Link>
-                </span>
-            </div> */}
         </div>
     )
 }

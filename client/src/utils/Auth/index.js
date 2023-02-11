@@ -21,18 +21,23 @@ async function register(data = {}) {
             lastName: data.lastName,
             birthDate: data.birthDate,
             sex: data.sex,
-            address: data.address
+            address: data.address,
+            email: data.email,
+            phoneNumber: data.phoneNumber
         })
+        return res.data
     } catch (error) {
-
+        throw new Error(error.response.data.message)
     }
 }
 async function changePassword(username = '', oldPassword = '', newPassword) {
     try {
+        const refreshToken = JSON.parse(localStorage.getItem('token')).refreshToken
         const res = await request.post('/auth/change-password', {
             username: username,
             oldPassword: oldPassword,
-            newPassword: newPassword
+            newPassword: newPassword,
+            refreshToken: refreshToken
         })
         return res.data
     } catch (error) {
@@ -54,8 +59,8 @@ async function fetchUserData() {
     }
 }
 async function reGetToken() {
-    const token = JSON.parse(localStorage.getItem('token'))
     try {
+        const token = JSON.parse(localStorage.getItem('token'))
         const res = await request.post('/auth/refresh', {
             refreshToken: token.refreshToken
         })
@@ -68,6 +73,7 @@ async function reGetToken() {
 export {
     login,
     changePassword,
+    register,
     fetchUserData,
     reGetToken
 }

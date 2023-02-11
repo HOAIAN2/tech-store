@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { fetchUserData } from '../../utils/Auth'
+import { useUserData, USER_ACTION } from '../../Context'
+import { register } from '../../utils/Auth'
 import './Register.scss'
 
-function Register() {
+function Register(props) {
+    const [, dispatchUser] = useUserData()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [password1, setPassword1] = useState('')
@@ -13,14 +18,42 @@ function Register() {
     const [email, setEmail] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
     const [error, setError] = useState('')
+    const navigate = useNavigate()
+    const prePage = props.path
     function handleRegister(e) {
         e.preventDefault()
         if (password !== password1) {
             setError('Nhập lại mật khẩu không chính xác')
             return
         }
+        const formatedBirthDate = new Date(birthDate)
+        let formatedSex = 'M'
+        if (sex === 'Nữ') formatedSex = 'F'
+        const fortmatedPhoneNumber = phoneNumber.replace('0', '+84')
+        register({
+            username: username,
+            password: password,
+            firstName: firstName,
+            lastName: lastName,
+            birthDate: formatedBirthDate,
+            sex: formatedSex,
+            address: address,
+            email: email,
+            phoneNumber: fortmatedPhoneNumber
+        })
+            .then(data => {
+                localStorage.setItem('token', JSON.stringify(data))
+                return fetchUserData()
+            })
+            .then(data => {
+                dispatchUser({ type: USER_ACTION.SET, payload: data })
+                navigate(prePage || '/')
+            })
+            .catch(error => {
+                console.error(error.message)
+                setError(error.message)
+            })
     }
-    console.log(sex)
     useEffect(() => {
         document.title = 'Đăng ký'
     }, [])

@@ -7,13 +7,20 @@ const { refreshTokens, findUser, createUser, updatePassword } = require('../cach
 // [POST login]
 async function login(req, res) {
     const username = req.body.username
+    const password = req.body.password
+    const requireFields = [
+        username,
+        password
+    ]
+    requireFields.forEach(field => {
+        if (!field) return res.status(404).json({ message: `missing ${field}` })
+    })
     const user = await findUser(username)
     if (!user) {
-        res.status(404).json({ message: 'cannot find username' })
-        return
+        return res.status(404).json({ message: 'cannot find username' })
     }
     else {
-        if (isCorrectPassword(req.body.password, user.hashedPassword)) {
+        if (isCorrectPassword(password, user.hashedPassword)) {
             const token = createToken(user)
             refreshTokens.push(token.refreshToken)
             res.json(token)
@@ -38,27 +45,39 @@ async function changePassword(req, res) {
     const username = req.body.username
     const oldPassword = req.body.oldPassword
     const newPassword = req.body.newPassword
+    const refreshToken = req.body.refreshToken
+    const requireFields = [
+        username,
+        oldPassword,
+        newPassword,
+        refreshToken
+    ]
+    requireFields.forEach(field => {
+        if (!field) return res.status(404).json({ message: `missing ${field}` })
+    })
+    const index = refreshTokens.indexOf(refreshToken)
+    if (index === -1) return res.status(404).json({ message: 'invalid token' })
     const user = await findUser(username)
     if (!user) {
-        res.status(404).json({ message: 'cannot find username' })
-        return
+        return res.status(404).json({ message: 'cannot find username' })
     }
     if (oldPassword === newPassword) {
-        res.status(400).json({ message: 'you are using the same password' })
-        return
+        return res.status(400).json({ message: 'you are using the same password' })
     }
     if (!isCorrectPassword(oldPassword, user.hashedPassword)) {
-        res.status(400).json({ message: 'incorrect password' })
+        return res.status(400).json({ message: 'incorrect password' })
     }
     else {
+        if (newPassword.length < 8) return res.status(400).json({ message: 'password must have atleast 8 characters' })
         const hashedPassword = bcrypt.hashSync(newPassword, 10)
         try {
             await updatePassword(username, hashedPassword)
             user.setPassword(hashedPassword)
-            res.json({ message: 'success' })
+            refreshTokens.splice(index, 0)
+            return res.json({ message: 'success' })
         } catch (error) {
             console.log('\x1b[31m%s\x1b[0m', error.message)
-            res.status(500).json({ message: 'error' })
+            return res.status(500).json({ message: 'error' })
         }
     }
 }
@@ -73,16 +92,27 @@ async function register(req, res) {
     const address = req.body.address
     const email = req.body.email
     const phoneNumber = req.body.phoneNumber
+    const requireFields = [
+        username,
+        password,
+        firstName,
+        lastName,
+        birthDate,
+        sex,
+        address
+    ]
+    requireFields.forEach(field => {
+        if (!field) return res.status(404).json({ message: `missing ${field}` })
+    })
     if (!validate(username, email)) {
-        res.status(404).json({ message: 'invalid username or email' })
-        return
+        return res.status(404).json({ message: 'invalid username or email' })
     }
     if (await findUser(username)) {
-        res.status(404).json({ message: 'username exists' })
-        return
+        return res.status(404).json({ message: 'username exists' })
     }
     else {
         try {
+            if (password.length < 8) return res.status(400).json({ message: 'password must have atleast 8 characters' })
             const hashedPassword = bcrypt.hashSync(password, 10)
             const formatedBirthDate = formatDate(birthDate)
             await createUser({
@@ -99,10 +129,10 @@ async function register(req, res) {
             const user = await findUser(username)
             const token = createToken(user)
             refreshTokens.push(token.refreshToken)
-            res.json(token)
+            return res.json(token)
         } catch (error) {
             console.log('\x1b[31m%s\x1b[0m', error.message)
-            res.status(500).json({ message: 'error' })
+            return res.status(500).json({ message: 'error' })
         }
     }
 }
@@ -112,6 +142,7 @@ function formatDate(date) {
     return formatedDate.toISOString().split('T')[0]
 }
 function validate(username, email) {
+    if (!username) return
     const usernameRegex = /^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/
     const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     if (email) {
@@ -155,7 +186,7 @@ function reCreateToken(req, res) {
     else {
         const user = jwt.decode(token, process.env['REFRESH_TOKEN_SERCET'])
         const newToken = createToken(user)
-        refreshTokens.slice(index, 1)
+        refreshTokens.splice(index, 1)
         refreshTokens.push(newToken.refreshToken)
         res.json(newToken)
     }
