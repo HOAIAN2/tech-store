@@ -12,6 +12,21 @@ async function login(username = '', password = '') {
         throw new Error(error.response.data.message)
     }
 }
+async function register(data = {}) {
+    try {
+        const res = await request.post('/auth/register', {
+            username: data.username,
+            password: data.password,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            birthDate: data.birthDate,
+            sex: data.sex,
+            address: data.address
+        })
+    } catch (error) {
+
+    }
+}
 async function changePassword(username = '', oldPassword = '', newPassword) {
     try {
         const res = await request.post('/auth/change-password', {
