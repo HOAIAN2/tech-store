@@ -8,7 +8,10 @@ const { refreshTokens, findUser, createUser, updatePassword } = require('../cach
 async function login(req, res) {
     const username = req.body.username
     const user = await findUser(username)
-    if (!user) res.status(404).json({ message: 'cannot find username' })
+    if (!user) {
+        res.status(404).json({ message: 'cannot find username' })
+        return
+    }
     else {
         if (isCorrectPassword(req.body.password, user.hashedPassword)) {
             const token = createToken(user)
@@ -36,9 +39,12 @@ async function changePassword(req, res) {
     const oldPassword = req.body.oldPassword
     const newPassword = req.body.newPassword
     const user = await findUser(username)
-    if (!user) res.status(404).json({ message: 'cannot find username' })
+    if (!user) {
+        res.status(404).json({ message: 'cannot find username' })
+        return
+    }
     if (oldPassword === newPassword) {
-        res.json({ message: 'you are using the same password' })
+        res.status(400).json({ message: 'you are using the same password' })
         return
     }
     if (!isCorrectPassword(oldPassword, user.hashedPassword)) {
@@ -67,8 +73,14 @@ async function register(req, res) {
     const address = req.body.address
     const email = req.body.email
     const phoneNumber = req.body.phoneNumber
-    if (!validate(username, email)) res.status(404).json({ message: 'invalid username or email' })
-    if (await findUser(username)) res.status(404).json({ message: 'username exists' })
+    if (!validate(username, email)) {
+        res.status(404).json({ message: 'invalid username or email' })
+        return
+    }
+    if (await findUser(username)) {
+        res.status(404).json({ message: 'username exists' })
+        return
+    }
     else {
         try {
             const hashedPassword = bcrypt.hashSync(password, 10)

@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import './Home.scss'
+import Header from '../../components/header/Header'
 import { useUserData } from '../../Context'
 function Home() {
     const [user] = useUserData()
@@ -9,6 +10,7 @@ function Home() {
     })
     return (
         <div className='home'>
+            <Header />
         </div>
     )
 }
