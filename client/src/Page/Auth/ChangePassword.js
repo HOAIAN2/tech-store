@@ -4,7 +4,6 @@ import { changePassword } from '../../utils/Auth'
 import './ChangePassword.scss'
 
 function ChangePassWord() {
-    const [username, setUsername] = useState('')
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [newPassword1, setNewPassword1] = useState('')
@@ -16,7 +15,7 @@ function ChangePassWord() {
             setError('nhập lại mật khẩu không chính xác')
             return
         }
-        changePassword(username, oldPassword, newPassword)
+        changePassword(oldPassword, newPassword)
             .then(data => {
                 console.log(data)
                 localStorage.removeItem('token')
@@ -36,13 +35,6 @@ function ChangePassWord() {
                 <span>Đổi mật khẩu</span>
             </div>
             <form onSubmit={handleChangePassword}>
-                <div>
-                    <input type='text' placeholder="Tên đăng nhập"
-                        autoFocus
-                        required
-                        value={username}
-                        onInput={e => { setUsername(e.target.value) }} /> <br />
-                </div>
                 <div>
                     <input type='password' placeholder="Mật khẩu cũ"
                         required

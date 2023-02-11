@@ -42,7 +42,8 @@ function logout(req, res) {
 }
 // [POST changepass]
 async function changePassword(req, res) {
-    const username = req.body.username
+    const token = req.headers['authorization'].split(' ')[1]
+    const { username } = readAccessToken(token)
     const oldPassword = req.body.oldPassword
     const newPassword = req.body.newPassword
     const refreshToken = req.body.refreshToken

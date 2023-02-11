@@ -1,6 +1,26 @@
 import request from '../api-config'
 
-
+const LOGIN_MESSAGAE = {
+    "missing data": "Vui lòng gửi đủ dữ liệu",
+    "cannot find username": "Không tìm thấy tên người dùng",
+    "incorrect password": "Sai mật khẩu"
+}
+const REGISTER_MESSAGE = {
+    "missing data": "Vui lòng gửi đủ dữ liệu",
+    "invalid username or email": "Tên đăng nhập hoặc email không hợp lệ",
+    "username exists": "Tên đăng nhập đã tồn tại",
+    "password must have atleast 8 characters": "Mật khẩu phải có ít nhất 8 ký tự",
+    "error": "Server tạm thời không thể xử lý yêu cầu"
+}
+const CHANGE_PASSWORD_MESSAGE = {
+    "missing data": "Vui lòng gửi đủ dữ liệu",
+    "invalid token": "Token không hợp lệ",
+    "cannot find username": "Không tìm thấy tên người dùng",
+    "you are using the same password": "Mật khẩu không được trùng với mật khẩu cũ",
+    "incorrect password": "Sai mật khẩu",
+    "password must have atleast 8 characters": "Mật khẩu phải có ít nhất 8 ký tự",
+    "error": "Server tạm thời không thể xử lý yêu cầu"
+}
 async function login(username = '', password = '') {
     try {
         const res = await request.post('/auth/login', {
@@ -9,7 +29,9 @@ async function login(username = '', password = '') {
         })
         return res.data
     } catch (error) {
-        throw new Error(error.response.data.message)
+        if (!error.response) throw new Error(error.message)
+        const message = error.response.data.message
+        throw new Error(LOGIN_MESSAGAE[message])
     }
 }
 async function register(data = {}) {
@@ -27,21 +49,29 @@ async function register(data = {}) {
         })
         return res.data
     } catch (error) {
-        throw new Error(error.response.data.message)
+        if (!error.response) throw new Error(error.message)
+        const message = error.response.data.message
+        throw new Error(REGISTER_MESSAGE[message])
     }
 }
-async function changePassword(username = '', oldPassword = '', newPassword) {
+async function changePassword(oldPassword = '', newPassword) {
     try {
+        const token = JSON.parse(localStorage.getItem('token'))
         const refreshToken = JSON.parse(localStorage.getItem('token')).refreshToken
         const res = await request.post('/auth/change-password', {
-            username: username,
             oldPassword: oldPassword,
             newPassword: newPassword,
             refreshToken: refreshToken
+        }, {
+            headers: {
+                Authorization: `Bearer ${token.accessToken}`
+            }
         })
         return res.data
     } catch (error) {
-        throw new Error(error.response.data.message)
+        if (!error.response) throw new Error(error.message)
+        const message = error.response.data.message
+        throw new Error(CHANGE_PASSWORD_MESSAGE[message])
     }
 }
 async function fetchUserData() {
