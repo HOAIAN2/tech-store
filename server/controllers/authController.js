@@ -12,9 +12,9 @@ async function login(req, res) {
         username,
         password
     ]
-    requireFields.forEach(field => {
-        if (!field) return res.status(404).json({ message: `missing ${field}` })
-    })
+    if (requireFields.includes(undefined) || requireFields.includes(null)) {
+        return res.status(400).json({ message: 'missing data' })
+    }
     const user = await findUser(username)
     if (!user) {
         return res.status(404).json({ message: 'cannot find username' })
@@ -52,9 +52,9 @@ async function changePassword(req, res) {
         newPassword,
         refreshToken
     ]
-    requireFields.forEach(field => {
-        if (!field) return res.status(404).json({ message: `missing ${field}` })
-    })
+    if (requireFields.includes(undefined) || requireFields.includes(null)) {
+        return res.status(400).json({ message: 'missing data' })
+    }
     const index = refreshTokens.indexOf(refreshToken)
     if (index === -1) return res.status(404).json({ message: 'invalid token' })
     const user = await findUser(username)
@@ -101,9 +101,9 @@ async function register(req, res) {
         sex,
         address
     ]
-    requireFields.forEach(field => {
-        if (!field) return res.status(404).json({ message: `missing ${field}` })
-    })
+    if (requireFields.includes(undefined) || requireFields.includes(null)) {
+        return res.status(400).json({ message: 'missing data' })
+    }
     if (!validate(username, email)) {
         return res.status(404).json({ message: 'invalid username or email' })
     }
