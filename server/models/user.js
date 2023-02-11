@@ -17,6 +17,9 @@ class User {
         this.phoneNumber = phoneNumber
         this.hashedPassword = hashedPassword
     }
+    setPassword(hashedPassword) {
+        this.hashedPassword = hashedPassword
+    }
     ignoreProps() {
         const object = { ...this }
         const ignoreProps = Array.from(arguments)
