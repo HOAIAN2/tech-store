@@ -39,26 +39,30 @@ function ChangePassWord() {
                 <div>
                     <input type='text' placeholder="Tên đăng nhập"
                         autoFocus
+                        required
                         value={username}
                         onInput={e => { setUsername(e.target.value) }} /> <br />
                 </div>
                 <div>
                     <input type='password' placeholder="Mật khẩu cũ"
+                        required
                         value={oldPassword}
                         onInput={e => { setOldPassword(e.target.value) }} /> <br />
                 </div>
                 <div>
                     <input type='password' placeholder="Mật khẩu mới"
+                        required
                         value={newPassword}
                         onInput={e => { setNewPassword(e.target.value) }} /> <br />
                 </div>
                 <div>
                     <input type='password' placeholder="Nhập lại mật khẩu mới"
+                        required
                         value={newPassword1}
                         onInput={e => { setNewPassword1(e.target.value) }} /> <br />
                 </div>
                 <div className='error-login'>
-                    <span>{error}</span>
+                    <p>{error}</p>
                 </div>
                 <div>
                     <button>Đổi mật khẩu</button>

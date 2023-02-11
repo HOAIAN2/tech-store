@@ -13,6 +13,10 @@ function Login(props) {
     const prePage = props.path
     function handleLogin(e) {
         e.preventDefault()
+        if (password.length < 8) {
+            setError('Mật khẩu phải có ít nhất 8 ký tự')
+            return
+        }
         login(username, password)
             .then(data => {
                 localStorage.setItem('token', JSON.stringify(data))
@@ -49,16 +53,18 @@ function Login(props) {
                 <div>
                     <input type='text' placeholder="Tên đăng nhập"
                         autoFocus
+                        required
                         value={username}
                         onInput={e => { setUsername(e.target.value) }} /> <br />
                 </div>
                 <div>
                     <input type='password' placeholder="Mật khẩu"
+                        required
                         value={password}
                         onInput={e => { setPassword(e.target.value) }} /> <br />
                 </div>
                 <div className='error-login'>
-                    <span>{error}</span>
+                    <p>{error}</p>
                 </div>
                 <div>
                     <button>Login</button>

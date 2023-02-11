@@ -26,6 +26,14 @@ function Register(props) {
             setError('Nhập lại mật khẩu không chính xác')
             return
         }
+        if (username.length < 8) {
+            setError('Tên đăng nhập phải có ít nhất 8 ký tự')
+            return
+        }
+        if (username.length > 20) {
+            setError('Tên đăng nhập quá dài')
+            return
+        }
         const formatedBirthDate = new Date(birthDate)
         let formatedSex = 'M'
         if (sex === 'Nữ') formatedSex = 'F'
@@ -78,6 +86,7 @@ function Register(props) {
                         <input type='text'
                             id='register-username'
                             autoFocus
+                            required
                             value={username}
                             onInput={e => { setUsername(e.target.value) }} /> <br />
                     </div>
@@ -87,6 +96,7 @@ function Register(props) {
                         <label htmlFor='register-first-name'>Họ</label>
                         <input type='text'
                             id='register-first-name'
+                            required
                             value={lastName}
                             onInput={e => { setLastName(e.target.value) }} /> <br />
                     </div>
@@ -96,6 +106,7 @@ function Register(props) {
                         <label htmlFor='register-last-name'>Tên</label>
                         <input type='text'
                             id='register-last-name'
+                            required
                             value={firstName}
                             onInput={e => { setFirstName(e.target.value) }} /> <br />
                     </div>
@@ -105,6 +116,7 @@ function Register(props) {
                         <label htmlFor='register-birth-date'>Ngày sinh</label>
                         <input type='date'
                             id='register-birth-date'
+                            required
                             value={birthDate}
                             onInput={e => { setBirthDate(e.target.value) }} /> <br />
                     </div>
@@ -124,6 +136,7 @@ function Register(props) {
                         <label htmlFor='register-address'>Địa chỉ</label>
                         <input type='text'
                             id='register-address'
+                            required
                             value={address}
                             onInput={e => { setAddress(e.target.value) }} /> <br />
                     </div>

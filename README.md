@@ -41,6 +41,16 @@
     "message": "message"
 }
 ```
+>[POST] change-password
+* Request
+```json
+{
+    "oldPassword": "string",
+    "newPassword": "string",
+    "refreshToken": "string"
+}
+```
+* Respone
 >[POST] register
 * Request
 ```json
