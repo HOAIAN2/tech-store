@@ -1,8 +1,7 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-const updatePassword = require("../cache/user")
 require('dotenv').config()
-const { refreshTokens, findUser, createUser } = require('../cache')
+const { refreshTokens, findUser, createUser, updatePassword } = require('../cache')
 
 /// API routes
 // [POST login]
@@ -29,6 +28,29 @@ function logout(req, res) {
     }
     else {
         res.status(404).json({ message: 'can not logout' })
+    }
+}
+// [POST changepass]
+async function changePassword(req, res) {
+    const username = req.body.username
+    const oldPassword = req.body.oldPassword
+    const newPassword = req.body.newPassword
+    const user = await findUser(username)
+    if (!user) res.status(404).json({ message: 'cannot find username' })
+    if (oldPassword === newPassword) res.json({ message: 'you are using the same password' })
+    if (!isCorrectPassword(oldPassword, user.hashedPassword)) {
+        res.status(400).json({ message: 'incorrect password' })
+    }
+    else {
+        const hashedPassword = bcrypt.hashSync(newPassword, 10)
+        try {
+            await updatePassword(username, hashedPassword)
+            user.setPassword(hashedPassword)
+            res.json({ message: 'success' })
+        } catch (error) {
+            console.log('\x1b[31m%s\x1b[0m', error.message)
+            res.status(500).json({ message: 'error' })
+        }
     }
 }
 // [POST register]
@@ -154,24 +176,6 @@ function authenticateToken(req, res, next) {
         }
     }
 }
-
-async function changePassword(rep, res) {
-    const user = await findUser(rep.body.username)?handleChangePassword():res.status(400).json({errorMessage: "username is not exist"})
-    async function handleChangePassword() {
-        if(isCorrectPassword(rep.oldPassword, user.hashed_password)){
-            const hashedPassword = await bcrypt.hashSync(rep.newPassword, 10)
-            const query = updatePassword.updatePassword(user.username,hashedPassword)
-            if(query.errorMessage){
-                res.status(200).json({errorMessage: "update password success"})
-            }
-        }
-        else{
-            res.status(400).json({errorMessage: "mật khẩu không đúng"})
-        }
-    }
-    
-}
-
 
 module.exports = {
     login,

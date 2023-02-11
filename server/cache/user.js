@@ -88,16 +88,18 @@ async function createUser(user) {
         ])
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)
+        throw new Error(error.message)
     }
 }
 
-async function updatePassword(username,password) {
-    const queryString = ["UPDATE users SET hashed_password = ? WHERE username = ?;"]
+async function updatePassword(username, password) {
+    const queryString = ['UPDATE users SET hashed_password = ? WHERE username = ?'].join('')
     try {
-        const [rows] = await pool.query(queryString, [password,username])
-        return {errorMessage: 0}
+        const [rows] = await pool.query(queryString, [password, username])
+        // console.log(rows)
     } catch (error) {
-        console.log(error)
+        console.log('\x1b[31m%s\x1b[0m', error.message)
+        throw new Error(error.message)
     }
 }
 
