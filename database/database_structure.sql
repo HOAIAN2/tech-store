@@ -23,7 +23,7 @@ CREATE TABLE users (
     CONSTRAINT UQ_username UNIQUE (username),
     CONSTRAINT UQ_email UNIQUE (email),
     CONSTRAINT UQ_phone_number UNIQUE (phone_number),
-    CONSTRAINT User_sex CHECK (sex = 'M' OR 'F')
+    CONSTRAINT User_sex CHECK (sex = 'M' OR sex = 'F')
 );
 CREATE TABLE suppliers (
 	supplier_id INT NOT NULL AUTO_INCREMENT,
