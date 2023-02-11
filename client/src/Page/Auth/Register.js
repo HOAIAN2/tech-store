@@ -56,6 +56,15 @@ function Register(props) {
     }
     useEffect(() => {
         document.title = 'Đăng ký'
+        fetchUserData()
+            .then(data => {
+                dispatchUser({ type: USER_ACTION.SET, payload: data })
+                navigate(prePage || '/')
+            })
+            .catch(error => {
+                console.error(error.message)
+            })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     return (
         <div className="register">
