@@ -12,6 +12,18 @@ async function login(username = '', password = '') {
         throw new Error(error.response.data.message)
     }
 }
+async function changePassword(username = '', oldPassword = '', newPassword) {
+    try {
+        const res = await request.post('/auth/change-password', {
+            username: username,
+            oldPassword: oldPassword,
+            newPassword: newPassword
+        })
+        return res.data
+    } catch (error) {
+        throw new Error(error.response.data.message)
+    }
+}
 async function fetchUserData() {
     const token = JSON.parse(localStorage.getItem('token'))
     if (!token) throw new Error('no token')
@@ -40,6 +52,7 @@ async function reGetToken() {
 
 export {
     login,
+    changePassword,
     fetchUserData,
     reGetToken
 }
