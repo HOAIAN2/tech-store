@@ -91,8 +91,9 @@ async function register(req, res) {
     const birthDate = req.body.birthDate
     const sex = req.body.sex
     const address = req.body.address
-    const email = req.body.email
-    const phoneNumber = req.body.phoneNumber
+    /// re assign if email and phoneNUmber === ''
+    let email = req.body.email
+    let phoneNumber = req.body.phoneNumber
     const requireFields = [
         username,
         password,
@@ -116,6 +117,8 @@ async function register(req, res) {
             if (password.length < 8) return res.status(400).json({ message: 'password must have atleast 8 characters' })
             const hashedPassword = bcrypt.hashSync(password, 10)
             const formatedBirthDate = formatDate(birthDate)
+            if (email === '') email = undefined
+            if (phoneNumber === '') phoneNumber = undefined
             await createUser({
                 username: username,
                 firstName: firstName,
