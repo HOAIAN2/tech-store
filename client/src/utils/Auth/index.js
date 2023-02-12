@@ -21,6 +21,10 @@ const CHANGE_PASSWORD_MESSAGE = {
     "password must have atleast 8 characters": "Mật khẩu phải có ít nhất 8 ký tự",
     "error": "Server tạm thời không thể xử lý yêu cầu"
 }
+const LOGOUT_MESSAGE = {
+    "success": "Thành công",
+    "can not logout": "Có lỗi trong quá trình xử lý"
+}
 async function login(username = '', password = '') {
     try {
         const res = await request.post('/auth/login', {
@@ -32,6 +36,19 @@ async function login(username = '', password = '') {
         if (!error.response) throw new Error(error.message)
         const message = error.response.data.message
         throw new Error(LOGIN_MESSAGAE[message])
+    }
+}
+async function logout() {
+    try {
+        const refreshToken = JSON.parse(localStorage.getItem('token')).refreshToken
+        const res = await request.post('/auth/logout', {
+            refreshToken: refreshToken
+        })
+        return res.data
+    } catch (error) {
+        if (!error.response) throw new Error(error.message)
+        const message = error.response.data.message
+        throw new Error(LOGOUT_MESSAGE[message])
     }
 }
 async function register(data = {}) {
@@ -57,11 +74,10 @@ async function register(data = {}) {
 async function changePassword(oldPassword = '', newPassword) {
     try {
         const token = JSON.parse(localStorage.getItem('token'))
-        const refreshToken = JSON.parse(localStorage.getItem('token')).refreshToken
         const res = await request.post('/auth/change-password', {
             oldPassword: oldPassword,
             newPassword: newPassword,
-            refreshToken: refreshToken
+            refreshToken: token.refreshToken
         }, {
             headers: {
                 Authorization: `Bearer ${token.accessToken}`
@@ -102,6 +118,7 @@ async function reGetToken() {
 
 export {
     login,
+    logout,
     changePassword,
     register,
     fetchUserData,
