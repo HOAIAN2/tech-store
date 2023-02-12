@@ -1,68 +1,58 @@
 @use '../../colors';
 
-.header-account {
+.drop-list-main {
     width: 100%;
-    height: 100%;
     display: flex;
     align-items: center;
+    justify-content: center;
+}
 
+.drop-list-item {
+    right: 0;
+    position: absolute;
+    background-color: #fff;
+    padding-left: 0;
+    flex-direction: column;
+    padding: 5px 10px;
+    top: 115%;
+    display: none;
+    width: max-content;
+    z-index: 1;
+    list-style: none;
+    border-radius: 3px;
+    box-shadow: 0 0 3px #999;
+    transform-origin: calc(100% - 20px) top;
+    animation: hienlen ease 0.5s;
     span {
-        color: white;
+        color: black;
     }
-
-    & .login-btn {
-        width: 100px;
-        height: 90%;
-        background-color: colors.$coler-btn;
-        border-radius: 5px;
-        margin-right: 10px;
+    &::after{
+        content: "";
+        border: 20px solid;
+        position: absolute;
+        border-color: transparent transparent #fff transparent;
+        right: 12px;
+        top: -30px;
+        z-index: -3;
     }
-
-    & .register-btn {
-        width: 100px;
-        height: 90%;
-        background-color: colors.$coler-btn;
-        border-radius: 5px;
-    }
-
-    &.logon {
-        font-weight: bold;
+    &::before {
+        content: "";
+        position: absolute;
         width: 100%;
-        height: 90%;
-        border-radius: 5px;
-        background-color: colors.$coler-btn;
-        position: relative;
-        cursor: pointer;
-        padding: 10px;
-
-        &:hover .drop-list-item {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        & .drop-list-item {
-            opacity: 0;
-            visibility: hidden;
-            width: 100%;
-            background-color: colors.$coler-btn;
-            position: absolute;
-            left: 0px;
-            top: 100%;
-            z-index: 10;
-
-            & div {
-                & a {
-                    font-weight: bold;
-                    position: relative;
-                    width: 100%;
-                    height: 30px;
-                    background-color: white;
-
-                    &:hover {
-                        background-color: colors.$coler-btn;
-                    }
-                }
-            }
-        }
+        height: 30px;
+        right: 0;
+        left: 0;
+        bottom: 100%;
     }
 }
+
+@keyframes hienlen{
+    from{
+      opacity: 0;
+     transform: scale(0);
+    }
+    to{
+      opacity: 1;
+    transform:scale(1);
+    }
+  }
