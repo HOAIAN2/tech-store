@@ -51,7 +51,7 @@
                     align-items: center;
                     justify-content: center;
 
-                    a {
+                    & a {
                         display: flex;
                         align-items: center;
                         justify-content: center;
@@ -60,17 +60,18 @@
                         svg {
                             font-size: 22px;
                         }
-                    }
 
-                    &:hover {
-                        color: rgb(112, 112, 112);
-
-                        a {
+                        & :hover {
                             color: rgb(112, 112, 112);
-                        }
 
-                        cursor: pointer;
+                            a {
+                                color: rgb(112, 112, 112);
+                            }
+
+                            cursor: pointer;
+                        }
                     }
+
 
                     .text-thongbao {
                         margin-right: 5px;
