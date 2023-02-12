@@ -85,6 +85,14 @@ async function changePassword(oldPassword = '', newPassword) {
         })
         return res.data
     } catch (error) {
+        if (error.response.status === 403) {
+            try {
+                await reGetToken()
+                await fetchUserData()
+            } catch (error) {
+                throw new Error(error)
+            }
+        }
         if (!error.response) throw new Error(error.message)
         const message = error.response.data.message
         throw new Error(CHANGE_PASSWORD_MESSAGE[message])
@@ -101,6 +109,14 @@ async function fetchUserData() {
         })
         return res.data
     } catch (error) {
+        if (error.response.status === 403) {
+            try {
+                await reGetToken()
+                await fetchUserData()
+            } catch (error) {
+                throw new Error(error)
+            }
+        }
         throw new Error(error)
     }
 }
