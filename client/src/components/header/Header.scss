@@ -51,7 +51,7 @@
                     align-items: center;
                     justify-content: center;
 
-                    a {
+                    & a {
                         display: flex;
                         align-items: center;
                         justify-content: center;
@@ -60,17 +60,18 @@
                         svg {
                             font-size: 22px;
                         }
-                    }
 
-                    &:hover {
-                        color: rgb(112, 112, 112);
-
-                        a {
+                        & :hover {
                             color: rgb(112, 112, 112);
-                        }
 
-                        cursor: pointer;
+                            a {
+                                color: rgb(112, 112, 112);
+                            }
+
+                            cursor: pointer;
+                        }
                     }
+
 
                     .text-thongbao {
                         margin-right: 5px;
@@ -81,27 +82,27 @@
                         transform: translateY(2px);
                     }
 
-                    .wrap_btn_login-logout {
-                        width: 100%;
-                        height: 100%;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        background-color: colors.$coler-btn;
-                        color: colors.$text-color;
-                        border-radius: 3px;
-                        padding: 16px;
+                    // .wrap_btn_login-logout {
+                    //     width: 100%;
+                    //     height: 100%;
+                    //     display: flex;
+                    //     align-items: center;
+                    //     justify-content: center;
+                    //     background-color: colors.$coler-btn;
+                    //     color: colors.$text-color;
+                    //     border-radius: 3px;
+                    //     padding: 16px;
 
-                        span {
-                            margin: 0 2px;
-                            color: colors.$text-color;
+                    //     span {
+                    //         margin: 0 2px;
+                    //         color: colors.$text-color;
 
-                            &:hover {
-                                text-decoration: underline;
-                                cursor: pointer;
-                            }
-                        }
-                    }
+                    //         &:hover {
+                    //             text-decoration: underline;
+                    //             cursor: pointer;
+                    //         }
+                    //     }
+                    // }
                 }
             }
         }
