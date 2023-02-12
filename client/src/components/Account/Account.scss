@@ -1,10 +1,26 @@
 @use '../../colors';
 
+
 .drop-list-main {
     width: 100%;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: #fff;
+    svg{
+        color: #fff;
+        margin-right: 5px;
+    }
+    &:hover{
+        text-decoration: underline;
+        cursor: pointer;
+        .drop-list-item{
+            display: flex;
+        }
+
+    }
+
 }
 
 .drop-list-item {
@@ -14,7 +30,7 @@
     padding-left: 0;
     flex-direction: column;
     padding: 5px 10px;
-    top: 115%;
+    top: 162%;
     display: none;
     width: max-content;
     z-index: 1;
@@ -24,7 +40,12 @@
     transform-origin: calc(100% - 20px) top;
     animation: hienlen ease 0.5s;
     span {
-        color: black;
+        color: black !important;
+        margin: 5px;
+        &:hover{
+            text-decoration: underline;
+            cursor: pointer;
+        }
     }
     &::after{
         content: "";
@@ -42,7 +63,7 @@
         height: 30px;
         right: 0;
         left: 0;
-        bottom: 100%;
+        top: -17%;
     }
 }
 
