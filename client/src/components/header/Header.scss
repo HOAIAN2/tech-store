@@ -187,9 +187,11 @@
                         color: colors.$text-color;
                         justify-content: center;
                     }
-                    &:hover{
+
+                    &:hover {
                         cursor: pointer;
-                        span{
+
+                        span {
                             color: colors.$coler-hover;
                         }
                     }
@@ -225,7 +227,7 @@
                     }
                 }
 
-                &:hover{
+                &:hover {
                     cursor: pointer;
                 }
             }
@@ -245,48 +247,55 @@
             display: flex;
             justify-content: space-between;
             padding-left: 14px;
-            .option-item{
-                 display: flex;
+
+            .option-item {
+                display: flex;
+
                 .header-option {
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     margin-right: 15px;
-    
+
                     svg {
                         color: colors.$text-color;
                         margin-right: 5px;
                     }
-    
+
                     span {
                         color: colors.$text-color;
                     }
-    
+
                     .icondow {
                         margin-left: 5px;
                         transform: translateY(2px);
                     }
-    
-                    &:hover{
+
+                    &:hover {
                         cursor: pointer;
-                        svg{
+
+                        svg {
                             color: colors.$coler-hover;
                         }
-                        span{
+
+                        span {
                             color: colors.$coler-hover;
                         }
                     }
                 }
-                .header-contact{
-                    display:  flex;
+
+                .header-contact {
+                    display: flex;
                     align-items: center;
                     justify-content: center;
                     margin-left: 15px;
-                    svg{
+
+                    svg {
                         color: colors.$coler-btn;
                         margin-right: 5px;
                     }
-                    span{
+
+                    span {
                         color: colors.$text-color;
                     }
                 }
