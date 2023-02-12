@@ -33,7 +33,7 @@ function Header() {
 
                     <div className="header_item1-2">
                         <div className="header_item_1-2_btn">
-                            <div className="wrap_btn_login-logout">
+                            {/* <div className="wrap_btn_login-logout"> */}
                                 {/* <Link to='/login'>
                                     <span>Login</span>
                                 </Link>
@@ -42,7 +42,7 @@ function Header() {
                                     <span>Sign up</span>
                                 </Link> */}
                                 <Account />
-                            </div>
+                            {/* </div> */}
                         </div>
                         <div className="header_item_1-2_btn">
                             <span className="text-thongbao">Thông Báo</span>

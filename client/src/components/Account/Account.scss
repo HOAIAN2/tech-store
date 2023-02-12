@@ -1,17 +1,50 @@
 @use '../../colors';
 
-.drop-list-main {
+.header-account {
     width: 100%;
-}
-
-.drop-list-item {
-    width: 100%;
+    height: 100%;
     display: flex;
-    flex-direction: column;
+    align-items: center;
 
-    & span {
-        color: black;
-        font-weight: bold;
-        background-color: white;
+    span {
+        color: white;
+    }
+
+    & .login-btn {
+        width: 100px;
+        height: 90%;
+        background-color: colors.$coler-btn;
+        border-radius: 5px;
+        margin-right: 10px;
+    }
+
+    & .register-btn {
+        width: 100px;
+        height: 90%;
+        background-color: colors.$coler-btn;
+        border-radius: 5px;
+    }
+
+    &.logon {
+        width: 100%;
+        height: 100%;
+        background-color: colors.$coler-btn;
+        // display: flex;
+        // flex-direction: column;
+        position: relative;
+
+        & .drop-list-item {
+            width: 100%;
+            background-color: colors.$coler-btn;
+            position: absolute;
+            top: 100%;
+            z-index: 10;
+
+            & a {
+                width: 90%;
+                height: 30px;
+                background-color: colors.$coler-btn;
+            }
+        }
     }
 }
