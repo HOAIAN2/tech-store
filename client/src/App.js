@@ -1,13 +1,31 @@
+import { useState, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import NotFound from './Page/Errors/NotFound'
 import Home from './Page/Home/Home'
 import Login from './Page/Auth/Login'
 import ChangePassWord from './Page/Auth/ChangePassword'
 import Register from './Page/Auth/Register'
+import { fetchUserData } from './utils/Auth'
+import { useUserData, USER_ACTION } from './Context'
 import './App.scss';
 
 function App() {
-  return (
+  const [, dispatchUser] = useUserData()
+  const [isFirstLoad, setIsFirstLoad] = useState(true)
+  useEffect(() => {
+    fetchUserData()
+      .then(data => {
+        dispatchUser({ type: USER_ACTION.SET, payload: data })
+        setIsFirstLoad(false)
+      })
+      .catch(error => {
+        console.error(error.message)
+        setIsFirstLoad(false)
+      })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
+  if (isFirstLoad) return null
+  else return (
     <div className="App">
       <Routes>
         <Route path='/' element={<Home />} />
