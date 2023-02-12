@@ -6,27 +6,27 @@ function Account() {
     const [user, dispatchUser] = useUserData()
     console.log(user)
     if (user) return (
-        <>
+        <div className='header-account logon'>
             <div className='drop-list-main'>
                 <span>{user.username}</span>
             </div>
             <div className='drop-list-item'>
-                <span>Thông tin tài khoản</span>
-                <span>Đổi mật khẩu</span>
-                <span>Đăng xuất</span>
+                <div><Link to='#'>Tài khoản</Link></div>
+                <div><Link to='/change-password'>Đổi mật khẩu</Link></div>
+                <div>Đăng xuất</div>
             </div>
-        </>
+        </div>
     )
     else return (
-        <>
-            <Link to='/login'>
+        <div className='header-account'>
+            <Link className='login-btn' to='/login'>
                 <span>Đăng nhập</span>
             </Link>
-            <p>/</p>
-            <Link to='/register'>
+            {/* <p>/</p> */}
+            <Link className='register-btn' to='/register'>
                 <span>Đăng ký</span>
             </Link>
-        </>
+        </div>
     )
 }
 
