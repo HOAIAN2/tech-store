@@ -4,7 +4,7 @@ import { logout } from '../../utils/Auth'
 import './Account.scss'
 function Account() {
     // Fetch user Data when app first load
-    const [user, dispatchUser] = useUserData()
+    const [user] = useUserData()
     function handleLogout() {
         logout()
             .then(data => {
