@@ -8,9 +8,10 @@
 
     & a.login-btn,
     a.register-btn {
-        width: 100%;
+        width: max-content;
         height: 90%;
         display: flex;
+        padding: 0 12px;
         justify-content: center;
         align-items: center;
         border-radius: 5px;
