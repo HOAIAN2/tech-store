@@ -14,7 +14,7 @@ function Account() {
                 <span>{user.username}</span>
             </div>
             <div className='drop-list-item'>
-                <span>Tài Khoảng Của Tôi</span>
+                <span>Tài Khoản Của Tôi</span>
                 <span>Đổi Mật Khẩu</span>
                 <span>Đăng xuất</span>
             </div>
