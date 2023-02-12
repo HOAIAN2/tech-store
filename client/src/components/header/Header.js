@@ -31,18 +31,18 @@ function Header() {
                     </div>
 
                     <div className="header_item1-2">
-                        <div className="header_item_1-2_btn">
-                            {/* <div className="wrap_btn_login-logout"> */}
-                                {/* <Link to='/login'>
+                        {/* <div className="header_item_1-2_btn"> */}
+                        {/* <div className="wrap_btn_login-logout"> */}
+                        {/* <Link to='/login'>
                                     <span>Login</span>
                                 </Link>
                                 <p>/</p>
                                 <Link to='/register'>
                                     <span>Sign up</span>
                                 </Link> */}
-                                <Account />
-                            {/* </div> */}
-                        </div>
+                        {/* </div> */}
+                        {/* </div> */}
+                        <Account />
                         <div className="header_item_1-2_btn">
                             <span className="text-thongbao">Thông Báo</span>
                             <FontAwesomeIcon className="thongbao-icon" icon={faBell} />

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import NotFound from './Page/errors/NotFound'
+import NotFound from './Page/Errors/NotFound'
 import Home from './Page/Home/Home'
 import Login from './Page/Auth/Login'
 import ChangePassWord from './Page/Auth/ChangePassword'

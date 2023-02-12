@@ -1,79 +1,120 @@
 @use '../../colors';
 
-
-.drop-list-main {
+.header-account {
     width: 100%;
-    position: relative;
+    height: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
-    color: #fff;
-    svg{
-        color: #fff;
-        margin-right: 5px;
-    }
-    &:hover{
-        text-decoration: underline;
-        cursor: pointer;
-        .drop-list-item{
-            display: flex;
-        }
 
-    }
-
-}
-
-.drop-list-item {
-    right: 0;
-    position: absolute;
-    background-color: #fff;
-    padding-left: 0;
-    flex-direction: column;
-    padding: 5px 10px;
-    top: 162%;
-    display: none;
-    width: max-content;
-    z-index: 1;
-    list-style: none;
-    border-radius: 3px;
-    box-shadow: 0 0 3px #999;
-    transform-origin: calc(100% - 20px) top;
-    animation: hienlen ease 0.5s;
-    span {
-        color: black !important;
-        margin: 5px;
-        &:hover{
-            text-decoration: underline;
-            cursor: pointer;
-        }
-    }
-    &::after{
-        content: "";
-        border: 20px solid;
-        position: absolute;
-        border-color: transparent transparent #fff transparent;
-        right: 12px;
-        top: -30px;
-        z-index: -3;
-    }
-    &::before {
-        content: "";
-        position: absolute;
+    & a.login-btn,
+    a.register-btn {
         width: 100%;
-        height: 30px;
-        right: 0;
-        left: 0;
-        top: -17%;
+        height: 90%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px;
+        background-color: colors.$coler-btn;
+        margin-right: 10px;
+
+        span {
+            font-size: 14px;
+            color: white;
+            font-weight: bold;
+        }
+    }
+
+    &.logon {
+        .drop-list-main {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: colors.$coler-btn;
+            border-radius: 5px;
+            color: #fff;
+
+            svg {
+                color: #fff;
+                margin-right: 5px;
+            }
+
+            &:hover {
+                text-decoration: underline;
+                cursor: pointer;
+
+                .drop-list-item {
+                    display: flex;
+                }
+
+            }
+
+        }
+
+        .drop-list-item {
+            right: 0;
+            position: absolute;
+            background-color: #fff;
+            padding-left: 0;
+            flex-direction: column;
+            padding: 5px 10px;
+            top: 162%;
+            display: none;
+            width: max-content;
+            z-index: 1;
+            list-style: none;
+            border-radius: 3px;
+            box-shadow: 0 0 3px #999;
+            transform-origin: calc(100% - 20px) top;
+            animation: show ease 0.5s;
+
+            a {
+                color: black !important;
+                margin: 5px;
+                display: block;
+                height: 20px;
+
+                &:hover {
+                    text-decoration: underline;
+                    opacity: 0.9;
+                    cursor: pointer;
+                }
+            }
+
+            &::after {
+                content: "";
+                border: 20px solid;
+                position: absolute;
+                border-color: transparent transparent #fff transparent;
+                right: 12px;
+                top: -30px;
+                z-index: -3;
+            }
+
+            &::before {
+                content: "";
+                position: absolute;
+                width: 100%;
+                height: 30px;
+                right: 0;
+                left: 0;
+                top: -17%;
+            }
+        }
     }
 }
 
-@keyframes hienlen{
-    from{
-      opacity: 0;
-     transform: scale(0);
+
+@keyframes show {
+    from {
+        opacity: 0;
+        transform: scale(0);
     }
-    to{
-      opacity: 1;
-    transform:scale(1);
+
+    to {
+        opacity: 1;
+        transform: scale(1);
     }
-  }
+}
