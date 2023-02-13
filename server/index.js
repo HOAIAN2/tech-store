@@ -40,6 +40,10 @@ function getIPAddress() {
     }
     return results
 }
+
+
+
+
 // Init data from database and start server
 initializeData()
     .then(() => {

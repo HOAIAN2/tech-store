@@ -8,6 +8,9 @@ function Home() {
         document.title = 'Tech Store'
         // console.log(user)
     })
+
+
+
     return (
         <div className='home'>
             <Header />
