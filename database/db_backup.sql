@@ -51,6 +51,7 @@ CREATE TABLE `order_details` (
   `order_id` int NOT NULL,
   `product_id` int NOT NULL,
   `quantity` int NOT NULL,
+  `price` int DEFAULT NULL,
   KEY `order_id` (`order_id`),
   KEY `product_id` (`product_id`),
   CONSTRAINT `order_details_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
@@ -80,12 +81,15 @@ CREATE TABLE `orders` (
   `user_id` int NOT NULL,
   `order_date` datetime DEFAULT NULL,
   `voucher_id` varchar(60) DEFAULT NULL,
+  `paid_method_id` int DEFAULT NULL,
   `paid` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`order_id`),
   KEY `user_id` (`user_id`),
   KEY `voucher_id` (`voucher_id`),
+  KEY `paid_method_id` (`paid_method_id`),
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
-  CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`voucher_id`) REFERENCES `vouchers` (`voucher_id`)
+  CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`voucher_id`) REFERENCES `vouchers` (`voucher_id`),
+  CONSTRAINT `orders_ibfk_3` FOREIGN KEY (`paid_method_id`) REFERENCES `payment_methods` (`method_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -96,6 +100,30 @@ CREATE TABLE `orders` (
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `payment_methods`
+--
+
+DROP TABLE IF EXISTS `payment_methods`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `payment_methods` (
+  `method_id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`method_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `payment_methods`
+--
+
+LOCK TABLES `payment_methods` WRITE;
+/*!40000 ALTER TABLE `payment_methods` DISABLE KEYS */;
+INSERT INTO `payment_methods` VALUES (1,'Cash'),(2,'Electronic bank transfers');
+/*!40000 ALTER TABLE `payment_methods` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -215,7 +243,7 @@ CREATE TABLE `users` (
   KEY `role_id` (`role_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`),
   CONSTRAINT `User_sex` CHECK (((`sex` = _utf8mb4'M') or (`sex` = _utf8mb4'F')))
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -224,7 +252,6 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,1,'hoaian_admin','Hoài Ân','Lê','2003-02-22','M','Tuy Hòa, Phú Yên, Việt Nam','lehoaian.d21ctc1@muce.edu.vn','+84355654134','$2b$10$5OMpTFmnGjW9AWsWI6ADJu2pavuPTxiY/UlktI54BOfBlEJJWnt.y'),(2,1,'hungdung_admin','Hùng Dũng','Đặng','2006-06-01','M','Tuy Hòa, Phú Yên, Việt Nam','danghungdung.d21ctc1@muce.edu.vn',NULL,'$2b$10$e6S2xNUDTvqdpdohHZDBsup/oy3M64sn2WA12l6vnhKvalGZZenMS'),(3,1,'vanthien_admin','Văn Thiện','Nguyễn','2006-06-01','M','Tuy Hòa, Phú Yên, Việt Nam','nguyenvanthien.d21ctc1@muce.edu.vn',NULL,'$2b$10$zMKyWM5RO9JlETaXbQ4z8.NE0wFH/VCxFM0JjdA42kcJ/au2OhnHK'),(4,1,'khanhtrinh_admin','Khánh Trình','Lê','2006-06-01','M','Tuy Hòa, Phú Yên, Việt Nam','lekhanhtrinh.d21ctc1@muce.edu.vn',NULL,'$2b$10$p1ip8bc2sLgVRJZKaXkXAObP6k1DK7/zYYDoZJx/gGmp9aHRNSX1i'),(5,1,'huynhchi_admin','Huỳnh Chi','Phạm','2006-06-01','F','Tuy Hòa, Phú Yên, Việt Nam','phamhuynhchi.d21ctc1@muce.edu.vn',NULL,'$2b$10$DN6Z/aSrhDAm.FioQAQJwugYeuHqeXLaiOw6YQaE92iP6Q1q/9vWq');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -264,4 +291,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-11  9:55:14
+-- Dump completed on 2023-02-13 20:01:22
