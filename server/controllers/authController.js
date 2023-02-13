@@ -95,7 +95,7 @@ async function register(req, res) {
         try {
             if (data.password.length < 8) return res.status(400).json({ message: 'password must have atleast 8 characters' })
             const newData = fortmatData(data)
-            const hashedPassword = bcrypt.hashSync(password, 10)
+            const hashedPassword = bcrypt.hashSync(data.password, 10)
             const formatedBirthDate = formatDate(data.birthDate)
             await createUser({
                 username: newData.username,
@@ -108,7 +108,7 @@ async function register(req, res) {
                 phoneNumber: newData.phoneNumber,
                 hashedPassword: hashedPassword
             })
-            const user = await findUser(username)
+            const user = await findUser(data.username)
             const token = createToken(user)
             refreshTokens.push(token.refreshToken)
             return res.json(token)
