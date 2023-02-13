@@ -8,13 +8,15 @@ const { refreshTokens, findUser, createUser, updatePassword } = require('../cach
 async function login(req, res) {
     const username = req.body.username
     const password = req.body.password
-    const requireFields = [
-        username,
-        password
-    ]
+    const requireFields = {
+        username: username,
+        password: password
+    }
     /// Must be for or for in, because forEach cannot return    
-    for (const field of requireFields) {
-        if (!field || !isValidString(field)) return res.status(400).json({ message: 'missing data' })
+    for (const field in requireFields) {
+        if (field !== 'firstName' || field !== 'lastName' || field !== 'address') {
+            if (!field || !isValidString(field)) return res.status(400).json({ message: 'missing data' })
+        }
     }
     const user = await findUser(username)
     if (!user) {
@@ -48,15 +50,17 @@ async function changePassword(req, res) {
     const oldPassword = req.body.oldPassword
     const newPassword = req.body.newPassword
     const refreshToken = req.body.refreshToken
-    const requireFields = [
-        username,
-        oldPassword,
-        newPassword,
-        refreshToken
-    ]
+    const requireFields = {
+        username: username,
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+        refreshToken: refreshToken
+    }
     /// Must be for or for in, because forEach cannot return
-    for (const field of requireFields) {
-        if (!field || !isValidString(field)) return res.status(400).json({ message: 'missing data' })
+    for (const field in requireFields) {
+        if (field !== 'firstName' || field !== 'lastName' || field !== 'address') {
+            if (!field || !isValidString(field)) return res.status(400).json({ message: 'missing data' })
+        }
     }
     const index = refreshTokens.indexOf(refreshToken)
     if (index === -1) return res.status(404).json({ message: 'invalid token' })
@@ -96,18 +100,20 @@ async function register(req, res) {
     /// re assign if email and phoneNUmber === ''
     let email = req.body.email
     let phoneNumber = req.body.phoneNumber
-    const requireFields = [
-        username,
-        password,
-        firstName,
-        lastName,
-        birthDate,
-        sex,
-        address
-    ]
-    /// Must be for or for in, because forEach cannot return
-    for (const field of requireFields) {
-        if (!field || !isValidString(field)) return res.status(400).json({ message: 'missing data' })
+    const requireFields = {
+        username: username,
+        password: password,
+        firstName: firstName,
+        lastName: lastName,
+        birthDate: birthDate,
+        sex: sex,
+        address: address
+    }
+    /// Optimize fix later
+    for (const field in requireFields) {
+        if (field !== 'firstName' || field !== 'lastName' || field !== 'address') {
+            if (!field || !isValidString(field)) return res.status(400).json({ message: 'missing data' })
+        }
     }
     if (!validate(username, email)) {
         return res.status(404).json({ message: 'invalid username or email' })
