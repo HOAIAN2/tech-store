@@ -84,6 +84,7 @@ CREATE TABLE order_details (
 	order_id INT NOT NULL,
     product_id INT NOT NULL,
     quantity INT NOT NULL,
+    price INT DEFAULT NULL,
     FOREIGN KEY (order_id) REFERENCES orders(order_id),
     FOREIGN KEY (product_id) REFERENCES products(product_id),
     CONSTRAINT atleast_quantity CHECK (quantity > 0)
@@ -115,5 +116,6 @@ FOR EACH ROW
 UPDATE products JOIN order_details ON products.product_id = order_details.product_id
 JOIN orders ON order_details.order_id = NEW.order_id
 SET products.quantity = products.quantity - order_details.quantity,
-unit_in_order = unit_in_order - order_details.quantity
+unit_in_order = unit_in_order - order_details.quantity,
+order_details.price = products.price
 WHERE products.product_id = order_details.product_id;
