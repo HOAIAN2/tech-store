@@ -12,8 +12,9 @@ async function login(req, res) {
         username,
         password
     ]
-    if (requireFields.includes(undefined) || requireFields.includes(null)) {
-        return res.status(400).json({ message: 'missing data' })
+    /// Must be for or for in, because forEach cannot return
+    for (const field in requireFields) {
+        if (!field || isValidString(field)) return res.status(400).json({ message: 'missing data' })
     }
     const user = await findUser(username)
     if (!user) {
@@ -53,8 +54,9 @@ async function changePassword(req, res) {
         newPassword,
         refreshToken
     ]
-    if (requireFields.includes(undefined) || requireFields.includes(null)) {
-        return res.status(400).json({ message: 'missing data' })
+    /// Must be for or for in, because forEach cannot return
+    for (const field in requireFields) {
+        if (!field || isValidString(field)) return res.status(400).json({ message: 'missing data' })
     }
     const index = refreshTokens.indexOf(refreshToken)
     if (index === -1) return res.status(404).json({ message: 'invalid token' })
@@ -103,8 +105,9 @@ async function register(req, res) {
         sex,
         address
     ]
-    if (requireFields.includes(undefined) || requireFields.includes(null)) {
-        return res.status(400).json({ message: 'missing data' })
+    /// Must be for or for in, because forEach cannot return
+    for (const field in requireFields) {
+        if (!field || isValidString(field)) return res.status(400).json({ message: 'missing data' })
     }
     if (!validate(username, email)) {
         return res.status(404).json({ message: 'invalid username or email' })
@@ -141,6 +144,11 @@ async function register(req, res) {
     }
 }
 /// Middlewares, etc...
+function isValidString(string = '') {
+    const newString = string.replaceAll(' ', '')
+    if (newString.length === string.length) return true
+    else return false
+}
 function formatDate(date) {
     const formatedDate = new Date(date)
     return formatedDate.toISOString().split('T')[0]
