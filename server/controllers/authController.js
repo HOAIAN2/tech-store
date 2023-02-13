@@ -6,29 +6,21 @@ const { refreshTokens, findUser, createUser, updatePassword } = require('../cach
 /// API routes
 // [POST login]
 async function login(req, res) {
-    const username = req.body.username
-    const password = req.body.password
-    const requireFields = {
-        username: username,
-        password: password
+    const data = {
+        username: req.body.username,
+        password: req.body.password
     }
-    /// Must be for or for in, because forEach cannot return    
-    for (const field in requireFields) {
-        if (field !== 'firstName' || field !== 'lastName' || field !== 'address') {
-            if (!field || !isValidString(field)) return res.status(400).json({ message: 'missing data' })
-        }
-    }
-    const user = await findUser(username)
+    const user = await findUser(data.username)
     if (!user) {
         return res.status(404).json({ message: 'cannot find username' })
     }
     else {
-        if (isCorrectPassword(password, user.hashedPassword)) {
+        if (isCorrectPassword(data.password, user.hashedPassword)) {
             const token = createToken(user)
             refreshTokens.push(token.refreshToken)
             res.json(token)
         }
-        else res.status(404).json({ message: 'incorrect password' })
+        else res.status(400).json({ message: 'incorrect password' })
     }
 }
 // [POST logout]
@@ -47,38 +39,29 @@ function logout(req, res) {
 async function changePassword(req, res) {
     const token = req.headers['authorization'].split(' ')[1]
     const { username } = readAccessToken(token)
-    const oldPassword = req.body.oldPassword
-    const newPassword = req.body.newPassword
-    const refreshToken = req.body.refreshToken
-    const requireFields = {
+    const data = {
         username: username,
-        oldPassword: oldPassword,
-        newPassword: newPassword,
-        refreshToken: refreshToken
+        oldPassword: req.body.oldPassword,
+        newPassword: req.body.newPassword,
+        refreshToken: req.body.refreshToken
     }
-    /// Must be for or for in, because forEach cannot return
-    for (const field in requireFields) {
-        if (field !== 'firstName' || field !== 'lastName' || field !== 'address') {
-            if (!field || !isValidString(field)) return res.status(400).json({ message: 'missing data' })
-        }
-    }
-    const index = refreshTokens.indexOf(refreshToken)
+    const index = refreshTokens.indexOf(data.refreshToken)
     if (index === -1) return res.status(404).json({ message: 'invalid token' })
     const user = await findUser(username)
     if (!user) {
         return res.status(404).json({ message: 'cannot find username' })
     }
-    if (oldPassword === newPassword) {
+    if (data.oldPassword === data.newPassword) {
         return res.status(400).json({ message: 'you are using the same password' })
     }
-    if (!isCorrectPassword(oldPassword, user.hashedPassword)) {
+    if (!isCorrectPassword(data.oldPassword, user.hashedPassword)) {
         return res.status(400).json({ message: 'incorrect password' })
     }
     else {
-        if (newPassword.length < 8) return res.status(400).json({ message: 'password must have atleast 8 characters' })
-        const hashedPassword = bcrypt.hashSync(newPassword, 10)
+        if (data.newPassword.length < 8) return res.status(400).json({ message: 'password must have atleast 8 characters' })
+        const hashedPassword = bcrypt.hashSync(data.newPassword, 10)
         try {
-            await updatePassword(username, hashedPassword)
+            await updatePassword(data.username, hashedPassword)
             user.setPassword(hashedPassword)
             refreshTokens.splice(index, 0)
             return res.json({ message: 'success' })
@@ -90,53 +73,39 @@ async function changePassword(req, res) {
 }
 // [POST register]
 async function register(req, res) {
-    const username = req.body.username
-    const password = req.body.password
-    const firstName = req.body.firstName
-    const lastName = req.body.lastName
-    const birthDate = req.body.birthDate
-    const sex = req.body.sex
-    const address = req.body.address
-    /// re assign if email and phoneNUmber === ''
-    let email = req.body.email
-    let phoneNumber = req.body.phoneNumber
-    const requireFields = {
-        username: username,
-        password: password,
-        firstName: firstName,
-        lastName: lastName,
-        birthDate: birthDate,
-        sex: sex,
-        address: address
+    const data = {
+        username: req.body.username,
+        password: req.body.password,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        birthDate: req.body.birthDate,
+        sex: req.body.sex,
+        address: req.body.address,
+        email: req.body.email,
+        phoneNumber: req.body.phoneNumber
     }
-    /// Optimize fix later
-    for (const field in requireFields) {
-        if (field !== 'firstName' || field !== 'lastName' || field !== 'address') {
-            if (!field || !isValidString(field)) return res.status(400).json({ message: 'missing data' })
-        }
-    }
-    if (!validate(username, email)) {
+    if (data.password.includes(' ')) return res.status(400).json({ message: 'password must have no space character' })
+    if (!validate(data.username, data.email)) {
         return res.status(404).json({ message: 'invalid username or email' })
     }
-    if (await findUser(username)) {
+    if (await findUser(data.username)) {
         return res.status(404).json({ message: 'username exists' })
     }
     else {
         try {
-            if (password.length < 8) return res.status(400).json({ message: 'password must have atleast 8 characters' })
+            if (data.password.length < 8) return res.status(400).json({ message: 'password must have atleast 8 characters' })
+            const newData = fortmatData(data)
             const hashedPassword = bcrypt.hashSync(password, 10)
-            const formatedBirthDate = formatDate(birthDate)
-            if (email === '') email = undefined
-            if (phoneNumber === '') phoneNumber = undefined
+            const formatedBirthDate = formatDate(data.birthDate)
             await createUser({
-                username: username,
-                firstName: firstName,
-                lastName: lastName,
+                username: newData.username,
+                firstName: newData.firstName,
+                lastName: newData.lastName,
                 birthDate: formatedBirthDate,
-                sex: sex,
-                address: address,
-                email: email,
-                phoneNumber: phoneNumber,
+                sex: newData.sex,
+                address: newData.address,
+                email: newData.email,
+                phoneNumber: newData.phoneNumber,
                 hashedPassword: hashedPassword
             })
             const user = await findUser(username)
@@ -150,10 +119,17 @@ async function register(req, res) {
     }
 }
 /// Middlewares, etc...
-function isValidString(string = '') {
-    const newString = string.replaceAll(' ', '')
-    if (newString.length === string.length) return true
-    else return false
+function fortmatData(data = {}) {
+    const newData = { ...data }
+    for (const prop in newData) {
+        if (newData[prop].trim().length === 0) {
+            newData[prop] = undefined
+        }
+        else {
+            newData[prop] = newData[prop].trim()
+        }
+    }
+    return newData
 }
 function formatDate(date) {
     const formatedDate = new Date(date)
