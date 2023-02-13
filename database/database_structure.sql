@@ -70,15 +70,22 @@ CREATE TABLE vouchers (
     PRIMARY KEY (voucher_id),
     CONSTRAINT voucher_limit CHECK (voucher_discount > 0 AND voucher_discount < 1)
 );
+CREATE TABLE payment_methods (
+	method_id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255),
+    PRIMARY KEY (method_id)
+);
 CREATE TABLE orders (
 	order_id INT NOT NULL AUTO_INCREMENT,
     user_id INT NOT NULL,
     order_date DATETIME,
     voucher_id VARCHAR(60),
+    paid_method_id INT,
     paid BOOL NOT NULL DEFAULT 0,
     PRIMARY KEY (order_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (voucher_id) REFERENCES vouchers(voucher_id)
+    FOREIGN KEY (voucher_id) REFERENCES vouchers(voucher_id),
+    FOREIGN KEY (paid_method_id) REFERENCES payment_methods(method_id)
 );
 CREATE TABLE order_details (
 	order_id INT NOT NULL,
@@ -96,12 +103,15 @@ UPDATE products
 SET unit_in_order = unit_in_order + NEW.quantity
 WHERE NEW.product_id = products.product_id;
 --
+DELIMITER //
 CREATE TRIGGER before_order_detail_update
 BEFORE UPDATE ON order_details
 FOR EACH ROW
+IF(NEW.quantity <> OLD.quantity) THEN
 UPDATE products
-SET unit_in_order = (unit_in_order + (NEW.quantity - OLD.quantity))
-WHERE NEW.product_id = products.product_id;
+SET unit_in_order = unit_in_order + (NEW.quantity - OLD.quantity)
+WHERE NEW.product_id = products.product_id AND NEW.quantity <> OLD.quantity;
+END IF;
 --
 CREATE TRIGGER before_order_detail_delete
 BEFORE DELETE ON order_details
