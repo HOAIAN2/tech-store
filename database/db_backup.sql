@@ -205,7 +205,7 @@ CREATE TABLE `suppliers` (
   UNIQUE KEY `UQ_supplier_name` (`supplier_name`),
   UNIQUE KEY `UQ_supplier_email` (`email`),
   UNIQUE KEY `UQ_supplier_phone_number` (`phone_number`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -214,6 +214,7 @@ CREATE TABLE `suppliers` (
 
 LOCK TABLES `suppliers` WRITE;
 /*!40000 ALTER TABLE `suppliers` DISABLE KEYS */;
+INSERT INTO `suppliers` VALUES (1,'MSI','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(2,'Acer','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(3,'Asus','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(4,'HP','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(5,'Lenovo','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(6,'MSmart','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(7,'Gigabyte','Thành phố Hồ Chí Minh, Việt Nam',NULL,NULL),(8,'Dell','Thành phố Hồ Chí Minh, Việt Nam',NULL,NULL),(9,'Colorful','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(10,'Apple','Thành phố Đà Đẵng, Việt Nam',NULL,NULL),(11,'Hyper','Thành phố Đà Đẵng, Việt Nam',NULL,NULL),(12,'HyperDrive','Thành phố Hồ Chí Minh, Việt Nam',NULL,NULL),(13,'Innostyle','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(14,'UGREEN','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(15,'WIWU','Thành phố Đà Đẵng, Việt Nam',NULL,NULL),(16,'Samsung','Thành phố Đà Đẵng, Việt Nam',NULL,NULL),(17,'OPPO','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(18,'Xiaomi','Thành phố Đà Đẵng, Việt Nam',NULL,NULL),(19,'Tecno','Thành phố Hồ Chí Minh, Việt Nam',NULL,NULL),(20,'Nokia','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(21,'Itel','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(22,'Vivo','Thành phố Hồ Chí Minh, Việt Nam',NULL,NULL),(23,'Realme','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(24,'CAVARA','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(25,'Helios','Thành phố Đà Đẵng, Việt Nam',NULL,NULL),(26,'Vinaphone','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(27,'Tamayoko','Thành phố Đà Đẵng, Việt Nam',NULL,NULL),(28,'Yesido Just For You','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(29,'RAVPower','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(30,'PKCB','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(31,'SeaSy','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(32,'Logitech','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(33,'Hoco','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(34,'Mobifone','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(35,'Memo','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(36,'Selfiecom','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(37,'HXSJ','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(38,'Remax','Thành phố Đà Đẵng, Việt Nam',NULL,NULL);
 /*!40000 ALTER TABLE `suppliers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -291,4 +292,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-13 20:01:22
+-- Dump completed on 2023-02-14 10:33:47
