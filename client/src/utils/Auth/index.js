@@ -1,30 +1,5 @@
 import request from '../api-config'
 
-const LOGIN_MESSAGAE = {
-    "missing data": "Vui lòng gửi đủ dữ liệu",
-    "cannot find username": "Không tìm thấy tên người dùng",
-    "incorrect password": "Sai mật khẩu"
-}
-const REGISTER_MESSAGE = {
-    "missing data": "Vui lòng gửi đủ dữ liệu",
-    "invalid username or email": "Tên đăng nhập hoặc email không hợp lệ",
-    "username exists": "Tên đăng nhập đã tồn tại",
-    "password must have atleast 8 characters": "Mật khẩu phải có ít nhất 8 ký tự",
-    "error": "Server tạm thời không thể xử lý yêu cầu"
-}
-const CHANGE_PASSWORD_MESSAGE = {
-    "missing data": "Vui lòng gửi đủ dữ liệu",
-    "invalid token": "Token không hợp lệ",
-    "cannot find username": "Không tìm thấy tên người dùng",
-    "you are using the same password": "Mật khẩu không được trùng với mật khẩu cũ",
-    "incorrect password": "Sai mật khẩu",
-    "password must have atleast 8 characters": "Mật khẩu phải có ít nhất 8 ký tự",
-    "error": "Server tạm thời không thể xử lý yêu cầu"
-}
-const LOGOUT_MESSAGE = {
-    "success": "Thành công",
-    "can not logout": "Có lỗi trong quá trình xử lý"
-}
 async function login(username = '', password = '') {
     try {
         const res = await request.post('/auth/login', {
@@ -35,7 +10,7 @@ async function login(username = '', password = '') {
     } catch (error) {
         if (!error.response) throw new Error(error.message)
         const message = error.response.data.message
-        throw new Error(LOGIN_MESSAGAE[message])
+        throw new Error(message)
     }
 }
 async function logout() {
@@ -48,7 +23,7 @@ async function logout() {
     } catch (error) {
         if (!error.response) throw new Error(error.message)
         const message = error.response.data.message
-        throw new Error(LOGOUT_MESSAGE[message])
+        throw new Error(message)
     }
 }
 async function register(data = {}) {
@@ -68,7 +43,7 @@ async function register(data = {}) {
     } catch (error) {
         if (!error.response) throw new Error(error.message)
         const message = error.response.data.message
-        throw new Error(REGISTER_MESSAGE[message])
+        throw new Error(message)
     }
 }
 async function changePassword(oldPassword = '', newPassword) {
@@ -95,7 +70,7 @@ async function changePassword(oldPassword = '', newPassword) {
         }
         if (!error.response) throw new Error(error.message)
         const message = error.response.data.message
-        throw new Error(CHANGE_PASSWORD_MESSAGE[message])
+        throw new Error(message)
     }
 }
 async function fetchUserData() {

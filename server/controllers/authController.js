@@ -2,17 +2,21 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 require('dotenv').config()
 const { refreshTokens, findUser, createUser, updatePassword } = require('../cache')
+const errorMessage = require('./authMessage.json')
 
 /// API routes
 // [POST login]
 async function login(req, res) {
+    let error = errorMessage[0]
+    const language = req.headers["accept-language"]
+    if (language === 'vi') error = errorMessage[1]
     const data = {
         username: req.body.username,
         password: req.body.password
     }
     const user = await findUser(data.username)
     if (!user) {
-        return res.status(404).json({ message: 'cannot find username' })
+        return res.status(404).json({ message: error.au01 })
     }
     else {
         if (isCorrectPassword(data.password, user.hashedPassword)) {
@@ -20,11 +24,14 @@ async function login(req, res) {
             refreshTokens.push(token.refreshToken)
             res.json(token)
         }
-        else res.status(400).json({ message: 'incorrect password' })
+        else res.status(400).json({ message: error.au02 })
     }
 }
 // [POST logout]
 function logout(req, res) {
+    let error = errorMessage[0]
+    const language = req.headers["accept-language"]
+    if (language === 'vi') error = errorMessage[1]
     const refreshToken = req.body.refreshToken
     const index = refreshTokens.indexOf(refreshToken)
     if (index !== -1) {
@@ -32,11 +39,14 @@ function logout(req, res) {
         res.json({ message: 'success' })
     }
     else {
-        res.status(404).json({ message: 'can not logout' })
+        res.status(400).json({ message: error.au03 })
     }
 }
 // [POST changepass]
 async function changePassword(req, res) {
+    let error = errorMessage[0]
+    const language = req.headers["accept-language"]
+    if (language === 'vi') error = errorMessage[1]
     const token = req.headers['authorization'].split(' ')[1]
     const { username } = readAccessToken(token)
     const data = {
@@ -46,19 +56,19 @@ async function changePassword(req, res) {
         refreshToken: req.body.refreshToken
     }
     const index = refreshTokens.indexOf(data.refreshToken)
-    if (index === -1) return res.status(404).json({ message: 'invalid token' })
+    if (index === -1) return res.status(404).json({ message: error.au03 })
     const user = await findUser(username)
     if (!user) {
-        return res.status(404).json({ message: 'cannot find username' })
+        return res.status(404).json({ message: error.au01 })
     }
     if (data.oldPassword === data.newPassword) {
-        return res.status(400).json({ message: 'you are using the same password' })
+        return res.status(400).json({ message: error.au04 })
     }
     if (!isCorrectPassword(data.oldPassword, user.hashedPassword)) {
-        return res.status(400).json({ message: 'incorrect password' })
+        return res.status(400).json({ message: error.au02 })
     }
     else {
-        if (data.newPassword.length < 8) return res.status(400).json({ message: 'password must have atleast 8 characters' })
+        if (data.newPassword.length < 8) return res.status(400).json({ message: error.au05 })
         const hashedPassword = bcrypt.hashSync(data.newPassword, 10)
         try {
             await updatePassword(data.username, hashedPassword)
@@ -73,6 +83,9 @@ async function changePassword(req, res) {
 }
 // [POST register]
 async function register(req, res) {
+    let error = errorMessage[0]
+    const language = req.headers["accept-language"]
+    if (language === 'vi') error = errorMessage[1]
     const data = {
         username: req.body.username,
         password: req.body.password,
@@ -84,16 +97,16 @@ async function register(req, res) {
         email: req.body.email,
         phoneNumber: req.body.phoneNumber
     }
-    if (data.password.includes(' ')) return res.status(400).json({ message: 'password must have no space character' })
+    if (data.password.includes(' ')) return res.status(400).json({ message: error.au06 })
     if (!validate(data.username, data.email)) {
-        return res.status(404).json({ message: 'invalid username or email' })
+        return res.status(404).json({ message: error.au07 })
     }
     if (await findUser(data.username)) {
-        return res.status(404).json({ message: 'username exists' })
+        return res.status(404).json({ message: error.au08 })
     }
     else {
         try {
-            if (data.password.length < 8) return res.status(400).json({ message: 'password must have atleast 8 characters' })
+            if (data.password.length < 8) return res.status(400).json({ message: error.au05 })
             const newData = fortmatData(data)
             const hashedPassword = bcrypt.hashSync(data.password, 10)
             const formatedBirthDate = formatDate(data.birthDate)
