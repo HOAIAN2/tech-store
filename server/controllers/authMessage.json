@@ -1,5 +1,5 @@
-[
-    {
+{
+    "en": {
         "au01": "Cannot find username",
         "au02": "Incorrect password",
         "au03": "Invalid token",
@@ -9,7 +9,7 @@
         "au07": "Invalid username or email",
         "au08": "Username exists"
     },
-    {
+    "vi": {
         "au01": "Không tìm thấy tên người dùng",
         "au02": "Sai mật khẩu",
         "au03": "Token không hợp lệ",
@@ -19,4 +19,4 @@
         "au07": "Tên đăng nhập hoặc email không hợp lệ",
         "au08": "Tên đăng nhập đã tồn tại"
     }
-]
+}

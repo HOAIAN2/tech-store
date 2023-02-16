@@ -7,9 +7,9 @@ const errorMessage = require('./authMessage.json')
 /// API routes
 // [POST login]
 async function login(req, res) {
-    let error = errorMessage[0]
+    let error = errorMessage.en
     const language = req.headers["accept-language"]
-    if (language === 'vi') error = errorMessage[1]
+    if (language === 'vi') error = errorMessage.vi
     const data = {
         username: req.body.username,
         password: req.body.password
@@ -29,9 +29,9 @@ async function login(req, res) {
 }
 // [POST logout]
 function logout(req, res) {
-    let error = errorMessage[0]
+    let error = errorMessage.en
     const language = req.headers["accept-language"]
-    if (language === 'vi') error = errorMessage[1]
+    if (language === 'vi') error = errorMessage.vi
     const refreshToken = req.body.refreshToken
     const index = refreshTokens.indexOf(refreshToken)
     if (index !== -1) {
@@ -44,9 +44,9 @@ function logout(req, res) {
 }
 // [POST changepass]
 async function changePassword(req, res) {
-    let error = errorMessage[0]
+    let error = errorMessage.en
     const language = req.headers["accept-language"]
-    if (language === 'vi') error = errorMessage[1]
+    if (language === 'vi') error = errorMessage.vi
     const token = req.headers['authorization'].split(' ')[1]
     const { username } = readAccessToken(token)
     const data = {
@@ -83,9 +83,9 @@ async function changePassword(req, res) {
 }
 // [POST register]
 async function register(req, res) {
-    let error = errorMessage[0]
+    let error = errorMessage.en
     const language = req.headers["accept-language"]
-    if (language === 'vi') error = errorMessage[1]
+    if (language === 'vi') error = errorMessage.vi
     const data = {
         username: req.body.username,
         password: req.body.password,
