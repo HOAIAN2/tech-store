@@ -2,21 +2,21 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 require('dotenv').config()
 const { refreshTokens, findUser, createUser, updatePassword } = require('../cache')
-const errorMessage = require('./authMessage.json')
+const authErrors = require('./authErrors.json')
 
 /// API routes
 // [POST login]
 async function login(req, res) {
-    let error = errorMessage.en
+    let errorMessages = authErrors.en
     const language = req.headers["accept-language"]
-    if (language === 'vi') error = errorMessage.vi
+    if (language === 'vi') errorMessages = authErrors.vi
     const data = {
         username: req.body.username,
         password: req.body.password
     }
     const user = await findUser(data.username)
     if (!user) {
-        return res.status(404).json({ message: error.au01 })
+        return res.status(404).json({ message: errorMessages.notFoundUsername })
     }
     else {
         if (isCorrectPassword(data.password, user.hashedPassword)) {
@@ -24,14 +24,14 @@ async function login(req, res) {
             refreshTokens.push(token.refreshToken)
             res.json(token)
         }
-        else res.status(400).json({ message: error.au02 })
+        else res.status(400).json({ message: errorMessages.incorrectPassword })
     }
 }
 // [POST logout]
 function logout(req, res) {
-    let error = errorMessage.en
+    let errorMessages = authErrors.en
     const language = req.headers["accept-language"]
-    if (language === 'vi') error = errorMessage.vi
+    if (language === 'vi') errorMessages = authErrors.vi
     const refreshToken = req.body.refreshToken
     const index = refreshTokens.indexOf(refreshToken)
     if (index !== -1) {
@@ -39,14 +39,14 @@ function logout(req, res) {
         res.json({ message: 'success' })
     }
     else {
-        res.status(400).json({ message: error.au03 })
+        res.status(400).json({ message: errorMessages.invalidToken })
     }
 }
 // [POST changepass]
 async function changePassword(req, res) {
-    let error = errorMessage.en
+    let errorMessages = authErrors.en
     const language = req.headers["accept-language"]
-    if (language === 'vi') error = errorMessage.vi
+    if (language === 'vi') errorMessages = authErrors.vi
     const token = req.headers['authorization'].split(' ')[1]
     const { username } = readAccessToken(token)
     const data = {
@@ -56,36 +56,36 @@ async function changePassword(req, res) {
         refreshToken: req.body.refreshToken
     }
     const index = refreshTokens.indexOf(data.refreshToken)
-    if (index === -1) return res.status(404).json({ message: error.au03 })
+    if (index === -1) return res.status(404).json({ message: errorMessages.invalidToken })
     const user = await findUser(username)
     if (!user) {
-        return res.status(404).json({ message: error.au01 })
+        return res.status(404).json({ message: errorMessages.notFoundUsername })
     }
     if (data.oldPassword === data.newPassword) {
-        return res.status(400).json({ message: error.au04 })
+        return res.status(400).json({ message: errorMessages.samePassword })
     }
     if (!isCorrectPassword(data.oldPassword, user.hashedPassword)) {
-        return res.status(400).json({ message: error.au02 })
+        return res.status(400).json({ message: errorMessages.incorrectPassword })
     }
     else {
-        if (data.newPassword.length < 8) return res.status(400).json({ message: error.au05 })
+        if (data.newPassword.length < 8) return res.status(400).json({ message: errorMessages.passwordTooShort })
         const hashedPassword = bcrypt.hashSync(data.newPassword, 10)
         try {
             await updatePassword(data.username, hashedPassword)
             user.setPassword(hashedPassword)
             refreshTokens.splice(index, 0)
             return res.json({ message: 'success' })
-        } catch (error) {
-            console.log('\x1b[31m%s\x1b[0m', error.message)
-            return res.status(500).json({ message: 'error' })
+        } catch (errorMessages) {
+            console.log('\x1b[31m%s\x1b[0m', errorMessages.message)
+            return res.status(500).json({ message: 'errorMessages' })
         }
     }
 }
 // [POST register]
 async function register(req, res) {
-    let error = errorMessage.en
+    let errorMessages = authErrors.en
     const language = req.headers["accept-language"]
-    if (language === 'vi') error = errorMessage.vi
+    if (language === 'vi') errorMessages = authErrors.vi
     const data = {
         username: req.body.username,
         password: req.body.password,
@@ -97,16 +97,16 @@ async function register(req, res) {
         email: req.body.email,
         phoneNumber: req.body.phoneNumber
     }
-    if (data.password.includes(' ')) return res.status(400).json({ message: error.au06 })
+    if (data.password.includes(' ')) return res.status(400).json({ message: errorMessages.invalidPassword })
     if (!validate(data.username, data.email)) {
-        return res.status(404).json({ message: error.au07 })
+        return res.status(404).json({ message: errorMessages.invalidUsernameOrEmail })
     }
     if (await findUser(data.username)) {
-        return res.status(404).json({ message: error.au08 })
+        return res.status(404).json({ message: errorMessages.usernameExists })
     }
     else {
         try {
-            if (data.password.length < 8) return res.status(400).json({ message: error.au05 })
+            if (data.password.length < 8) return res.status(400).json({ message: errorMessages.passwordTooShort })
             const newData = fortmatData(data)
             const hashedPassword = bcrypt.hashSync(data.password, 10)
             const formatedBirthDate = formatDate(data.birthDate)
@@ -125,9 +125,9 @@ async function register(req, res) {
             const token = createToken(user)
             refreshTokens.push(token.refreshToken)
             return res.json(token)
-        } catch (error) {
-            console.log('\x1b[31m%s\x1b[0m', error.message)
-            return res.status(500).json({ message: 'error' })
+        } catch (errorMessages) {
+            console.log('\x1b[31m%s\x1b[0m', errorMessages.message)
+            return res.status(500).json({ message: 'errorMessages' })
         }
     }
 }
@@ -206,8 +206,8 @@ function isCorrectPassword(password, hashedPassword) {
         const isCorrect = bcrypt.compareSync(password, hashedPassword)
         if (isCorrect) return true
         else return false
-    } catch (error) {
-        console.log('\x1b[31m%s\x1b[0m', error.message)
+    } catch (errorMessages) {
+        console.log('\x1b[31m%s\x1b[0m', errorMessages.message)
         return false
     }
 }
@@ -222,8 +222,8 @@ function authenticateToken(req, res, next) {
             try {
                 jwt.verify(token, process.env['ACCESS_TOKEN_SECRET'])
                 next()
-            } catch (error) {
-                console.log('\x1b[31m%s\x1b[0m', error.message)
+            } catch (errorMessages) {
+                console.log('\x1b[31m%s\x1b[0m', errorMessages.message)
                 res.sendStatus(403)
             }
         }
