@@ -1,0 +1,22 @@
+{
+    "en": {
+        "notFoundUsername": "Cannot find username",
+        "incorrectPassword": "Incorrect password",
+        "invalidToken": "Invalid token",
+        "samePassword": "Same password",
+        "passwordTooShort": "Password is too short",
+        "invalidPassword": "Invalid password",
+        "invalidUsernameOrEmail": "Invalid username or email",
+        "usernameExists": "Username exists"
+    },
+    "vi": {
+        "notFoundUsername": "Không tìm thấy tên người dùng",
+        "incorrectPassword": "Sai mật khẩu",
+        "invalidToken": "Token không hợp lệ",
+        "samePassword": "Bạn đang sử dụng mật khẩu cũ",
+        "passwordTooShort": "Mật khẩu quá ngắn",
+        "invalidPassword": "Mật khẩu không được có khoảng trống",
+        "invalidUsernameOrEmail": "Tên đăng nhập hoặc email không hợp lệ",
+        "usernameExists": "Tên đăng nhập đã tồn tại"
+    }
+}
