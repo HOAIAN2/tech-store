@@ -7,7 +7,9 @@
         "passwordTooShort": "Password is too short",
         "invalidPassword": "Invalid password",
         "invalidUsernameOrEmail": "Invalid username or email",
-        "usernameExists": "Username exists"
+        "usernameExists": "Username exists",
+        "emailExists": "Email exists",
+        "phoneNumberExists": "Phone number exists"
     },
     "vi": {
         "notFoundUsername": "Không tìm thấy tên người dùng",
@@ -17,6 +19,8 @@
         "passwordTooShort": "Mật khẩu quá ngắn",
         "invalidPassword": "Mật khẩu không được có khoảng trống",
         "invalidUsernameOrEmail": "Tên đăng nhập hoặc email không hợp lệ",
-        "usernameExists": "Tên đăng nhập đã tồn tại"
+        "usernameExists": "Tên đăng nhập đã tồn tại",
+        "emailExists": "Email đã tồn tại",
+        "phoneNumberExists": "Số điện thoại đã tồn tại"
     }
 }

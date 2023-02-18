@@ -75,9 +75,9 @@ async function changePassword(req, res) {
             user.setPassword(hashedPassword)
             refreshTokens.splice(index, 0)
             return res.json({ message: 'success' })
-        } catch (errorMessages) {
-            console.log('\x1b[31m%s\x1b[0m', errorMessages.message)
-            return res.status(500).json({ message: 'errorMessages' })
+        } catch (error) {
+            console.log('\x1b[31m%s\x1b[0m', error.message)
+            return res.status(500).json({ message: 'error' })
         }
     }
 }
@@ -125,9 +125,11 @@ async function register(req, res) {
             const token = createToken(user)
             refreshTokens.push(token.refreshToken)
             return res.json(token)
-        } catch (errorMessages) {
-            console.log('\x1b[31m%s\x1b[0m', errorMessages.message)
-            return res.status(500).json({ message: 'errorMessages' })
+        } catch (error) {
+            console.log('\x1b[31m%s\x1b[0m', error.message)
+            if (error.message.includes('users.UQ_email')) return res.status(400).json({ message: errorMessages.emailExists })
+            if (error.message.includes('users.UQ_phone_number')) return res.status(400).json({ message: errorMessages.phoneNumberExists })
+            return res.status(500).json({ message: 'error' })
         }
     }
 }
