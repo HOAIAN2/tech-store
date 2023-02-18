@@ -1,12 +1,11 @@
 import Header from "../../../components/header/Header"
 
-function DetailsUser_Purchase() {
+function DetailsUserPurchase() {
     return (
         <>
-            <Header />
             <h1>DetailsUser_Purchase</h1>
         </>
     )
 }
 
-export default DetailsUser_Purchase
+export default DetailsUserPurchase
