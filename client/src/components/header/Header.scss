@@ -1,27 +1,27 @@
 @use '../../colors';
 
 .header {
-    background-color: colors.$black-color;
+    background-color: #1c1c1c;
     height: 175px;
     flex-direction: column;
     display: flex;
-    border-bottom: 5px solid colors.$coler-btn;
+    border-bottom: 5px solid #d41138;
 
     .header_item1 {
         height: 39px;
         background-color: rgb(252, 252, 252);
         display: flex;
         justify-content: center;
-        padding: 0 15px;
 
         .wrap-header-item1 {
             display: flex;
-            width: 1450px;
+            width: 1257px;
             justify-content: space-between;
 
 
             .header_item1-1 {
                 display: flex;
+                margin-left: -10px;
 
                 .header_item_1-1_btn {
                     display: flex;
@@ -44,20 +44,24 @@
 
             .header_item1-2 {
                 display: flex;
-                .header_item_1-2_btn:nth-child(1){
+
+                .header_item_1-2_btn:nth-child(1) {
                     background-color: colors.$coler-btn;
                     border-radius: 2px;
                     position: relative;
                     padding: 0 10px;
-                    span{
+
+                    span {
                         color: aliceblue;
                     }
-                    p{
+
+                    p {
                         color: aliceblue;
                     }
-                    a{
-                        &:hover{
-                            span{
+
+                    a {
+                        &:hover {
+                            span {
                                 text-decoration: underline;
                             }
                         }
@@ -117,15 +121,16 @@
                         span {
                             margin: 4px 2px;
                             // color: colors.$text-color;
-                            
+
 
                             &:hover {
                                 text-decoration: underline;
                                 cursor: pointer;
                             }
                         }
-                        &:hover{
-                            .drop-list-item{
+
+                        &:hover {
+                            .drop-list-item {
                                 display: flex;
                             }
                         }
@@ -141,12 +146,11 @@
         align-items: center;
         height: 96px;
         justify-content: center;
-        // background-image: linear-gradient(45deg, #000000 30%, #fefefe 30%);
 
         .wrap_header_item2 {
-            height: 100px;
+            height: 100%;
+            width: 1257px;
             display: flex;
-            width: 1450px;
             position: relative;
             align-items: center;
 
@@ -155,7 +159,6 @@
                 width: 25%;
                 display: flex;
                 align-items: center;
-                padding-left: 12px;
 
                 .wrap_logo {
                     display: flex;
@@ -174,10 +177,10 @@
 
             .header_search {
                 height: 50px;
-                width: 40%;
+                width: 51%;
                 display: flex;
                 box-shadow: 0 0 2px 0px;
-                background-color: colors.$text-color;
+                background-color: #ebe9e6;
                 margin-left: 45px;
                 border-radius: 5px;
 
@@ -229,7 +232,7 @@
             .cart-shopping {
                 padding: 10px;
                 position: absolute;
-                right: 17%;
+                right: 8%;
 
                 svg {
                     font-size: 35px;
@@ -270,11 +273,10 @@
         justify-content: center;
 
         .wrap-header-item3 {
-            width: 1450px;
+            width: 1257px;
             height: 100%;
             display: flex;
             justify-content: space-between;
-            padding-left: 14px;
 
             .option-item {
                 display: flex;
