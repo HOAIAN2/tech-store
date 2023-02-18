@@ -5,6 +5,7 @@ import Home from './Page/Home/Home'
 import Login from './Page/Auth/Login'
 import ChangePassWord from './Page/Auth/ChangePassword'
 import Register from './Page/Auth/Register'
+import DetailsUser from './Page/Auth/DetailsUser/detailsuser'
 import { fetchUserData } from './utils/Auth'
 import { useUserData, USER_ACTION } from './Context'
 import './App.scss';
@@ -12,6 +13,7 @@ import './App.scss';
 function App() {
   const [, dispatchUser] = useUserData()
   const [isFirstLoad, setIsFirstLoad] = useState(true)
+
   useEffect(() => {
     fetchUserData()
       .then(data => {
@@ -32,10 +34,13 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/change-password' element={<ChangePassWord />} />
         <Route path='/register' element={<Register />} />
+        {DetailsUser()}
         <Route path='*' element={<NotFound />} />
       </Routes>
     </div>
   );
 }
+
+
 
 export default App;
