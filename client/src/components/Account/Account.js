@@ -24,7 +24,7 @@ function Account() {
                 <FontAwesomeIcon icon={faUser} />
                 <span>{user.username}</span>
                 <div className='drop-list-item'>
-                    <span><Link to='/details-user/profile'>Thông tin tài khoản</Link></span>
+                    <span><Link to='/profile'>Thông tin tài khoản</Link></span>
                     <span><Link to='/change-password'>Đổi mật khẩu</Link></span>
                     <span onClick={handleLogout}><Link to='#'>Đăng xuất</Link></span>
                 </div>
