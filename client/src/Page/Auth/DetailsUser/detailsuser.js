@@ -1,8 +1,11 @@
 import "./DetailsUser.scss"
-import { Outlet } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
 import Header from "../../../components/header/Header";
+import { useUserData } from "../../../Context";
 
 function DetailsUser() {
+  const [user] = useUserData()
+  if (!user) return <Navigate to='/login' />
   return (
     <>
       <Header />

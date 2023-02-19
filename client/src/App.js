@@ -23,7 +23,7 @@ function App() {
         setIsFirstLoad(false)
       })
       .catch(error => {
-        console.error(error.message)
+        if (error.message !== 'no token') console.error(error.message)
         setIsFirstLoad(false)
       })
     // eslint-disable-next-line react-hooks/exhaustive-deps
