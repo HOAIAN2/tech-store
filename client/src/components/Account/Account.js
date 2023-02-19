@@ -12,7 +12,7 @@ function Account() {
             .then(data => {
                 console.log(data)
                 localStorage.clear()
-                window.location.reload()
+                window.location.pathname = '/'
             })
             .catch(error => {
                 alert(error.message)
