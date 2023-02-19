@@ -133,6 +133,22 @@ async function register(req, res) {
         }
     }
 }
+// [POST refresh token]
+function reCreateToken(req, res) {
+    let errorMessages = authErrors.en
+    const language = req.headers["accept-language"]
+    if (language === 'vi') errorMessages = authErrors.vi
+    const token = req.body.refreshToken
+    const index = refreshTokens.indexOf(token)
+    if (index === -1) res.status(404).json({ message: errorMessages.invalidToken })
+    else {
+        const user = jwt.decode(token, process.env['REFRESH_TOKEN_SERCET'])
+        const newToken = createToken(user)
+        refreshTokens.splice(index, 1)
+        refreshTokens.push(newToken.refreshToken)
+        res.json(newToken)
+    }
+}
 /// Middlewares, etc...
 function fortmatData(data = {}) {
     const newData = { ...data }
@@ -187,18 +203,6 @@ function createToken(user) {
     token.accessToken = signAccessToken(user)
     token.refreshToken = signRefreshToken(user)
     return token
-}
-function reCreateToken(req, res) {
-    const token = req.body.refreshToken
-    const index = refreshTokens.indexOf(token)
-    if (index === -1) res.status(404).json({ message: 'invalid token' })
-    else {
-        const user = jwt.decode(token, process.env['REFRESH_TOKEN_SERCET'])
-        const newToken = createToken(user)
-        refreshTokens.splice(index, 1)
-        refreshTokens.push(newToken.refreshToken)
-        res.json(newToken)
-    }
 }
 function readAccessToken(token) {
     return jwt.decode(token, process.env['ACCESS_TOKEN_SECRET'])

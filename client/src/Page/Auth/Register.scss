@@ -91,6 +91,12 @@
                 transform: translate(-50%);
                 cursor: pointer;
 
+                &.loading {
+                    opacity: 0.75;
+                    cursor: default;
+                    pointer-events: none;
+                }
+
                 &:hover {
                     box-shadow: 0px 0px 3px colors.$coler-btn;
                 }
