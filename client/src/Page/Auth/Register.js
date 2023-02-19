@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { fetchUserData } from '../../utils/Auth'
 import { useUserData, USER_ACTION } from '../../Context'
 import { register } from '../../utils/Auth'
 import './Register.scss'
 
-function Register(props) {
+function Register() {
     const [, dispatchUser] = useUserData()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -19,8 +19,9 @@ function Register(props) {
     const [phoneNumber, setPhoneNumber] = useState('')
     const [error, setError] = useState('')
     const buttonRef = useRef(null)
+    const location = useLocation()
     const navigate = useNavigate()
-    const prePage = props.path
+    const prePage = location.state?.from
     function handleRegister(e) {
         e.preventDefault()
         if (password !== password1) {
@@ -58,7 +59,7 @@ function Register(props) {
             .then(data => {
                 dispatchUser({ type: USER_ACTION.SET, payload: data })
                 buttonRef.current.classList.remove('loading')
-                navigate(prePage || '/')
+                navigate(prePage?.pathname || '/')
             })
             .catch(error => {
                 buttonRef.current.classList.add('loading')
@@ -71,10 +72,10 @@ function Register(props) {
         fetchUserData()
             .then(data => {
                 dispatchUser({ type: USER_ACTION.SET, payload: data })
-                navigate(prePage || '/')
+                navigate(prePage?.pathname || '/')
             })
             .catch(error => {
-                console.error(error.message)
+                if (error.message !== 'no token') console.error(error.message)
             })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
