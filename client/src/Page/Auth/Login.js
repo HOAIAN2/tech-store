@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { login, fetchUserData } from '../../utils/Auth'
 import { useUserData, USER_ACTION } from '../../Context'
@@ -11,12 +11,14 @@ function Login(props) {
     const [error, setError] = useState('')
     const navigate = useNavigate()
     const prePage = props.path
+    const buttonRef = useRef(null)
     function handleLogin(e) {
         e.preventDefault()
         if (password.length < 8) {
             setError('Mật khẩu phải có ít nhất 8 ký tự')
             return
         }
+        buttonRef.current.classList.add('loading')
         login(username, password)
             .then(data => {
                 localStorage.setItem('token', JSON.stringify(data))
@@ -24,9 +26,11 @@ function Login(props) {
             })
             .then(data => {
                 dispatchUser({ type: USER_ACTION.SET, payload: data })
+                buttonRef.current.classList.remove('loading')
                 navigate(prePage || '/')
             })
             .catch(error => {
+                buttonRef.current.classList.remove('loading')
                 console.error(error.message)
                 setError(error.message)
             })
@@ -67,7 +71,7 @@ function Login(props) {
                     <p>{error}</p>
                 </div>
                 <div>
-                    <button>Login</button>
+                    <button ref={buttonRef}>Login</button>
                 </div>
             </form>
             <div>

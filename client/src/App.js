@@ -41,7 +41,6 @@ function App() {
           <Route index element={<DetailsUserProfile />} />
           <Route path='purchase' element={<DetailsUserPurchase />} />
         </Route>
-        {/* {DetailsUser()} */}
         <Route path='*' element={<NotFound />} />
       </Routes>
     </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchUserData } from '../../utils/Auth'
 import { useUserData, USER_ACTION } from '../../Context'
@@ -18,6 +18,7 @@ function Register(props) {
     const [email, setEmail] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
     const [error, setError] = useState('')
+    const buttonRef = useRef(null)
     const navigate = useNavigate()
     const prePage = props.path
     function handleRegister(e) {
@@ -38,6 +39,7 @@ function Register(props) {
         let formatedSex = 'M'
         if (sex === 'Nữ') formatedSex = 'F'
         const fortmatedPhoneNumber = phoneNumber.replace('0', '+84')
+        buttonRef.current.classList.add('loading')
         register({
             username: username,
             password: password,
@@ -55,9 +57,11 @@ function Register(props) {
             })
             .then(data => {
                 dispatchUser({ type: USER_ACTION.SET, payload: data })
+                buttonRef.current.classList.remove('loading')
                 navigate(prePage || '/')
             })
             .catch(error => {
+                buttonRef.current.classList.add('loading')
                 console.error(error.message)
                 setError(error.message)
             })
@@ -182,19 +186,9 @@ function Register(props) {
                     <span>{error}</span>
                 </div>
                 <div>
-                    <button>Đăng ký</button>
+                    <button ref={buttonRef}>Đăng ký</button>
                 </div>
             </form>
-            {/* <div>
-                <span>
-                    <Link to='#'>Quên mật khẩu</Link>
-                </span>
-            </div>
-            <div>
-                <span>
-                    Chưa có tài khoản? <Link role='button' to='/register'>Đăng ký</Link>
-                </span>
-            </div> */}
         </div>
     )
 }
