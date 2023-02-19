@@ -1,4 +1,4 @@
-import Header from "../../../components/header/Header"
+
 
 function DetailsUserPurchase() {
     return (

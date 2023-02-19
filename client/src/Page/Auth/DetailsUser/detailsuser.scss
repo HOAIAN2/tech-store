@@ -1,4 +1,118 @@
+@use "../../../colors";
 .conten-details-user{
     display: flex;
     justify-content: center;
+}
+
+
+.wrapcontendetailsuser {
+    width: 1257px;
+    display: flex;
+    margin-top: 20px;
+    .sibar-detail-user {
+        width: 247px;
+        .sibar-detail-user_item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+
+            .avata-detail-user {
+                width: 50px;
+                height: 50px;
+                background-color: aliceblue;
+                border-radius: 50%;
+                overflow: hidden;
+                margin-right: 10px;
+                color: #bcbcbc;
+
+                svg {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            .conten-avata-detailuser {
+                flex: 1 1;
+                overflow: hidden;
+                .name {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    font-weight: 600;
+                    color: #333;
+                }
+
+                .edit-profile {
+                    display: flex;
+                    align-items: center;
+
+                    svg {
+                        margin-right: 5px;
+                    }
+                }
+            }
+
+            &:nth-child(1){
+                svg{
+                    color: #333;
+                }
+            }
+            &:nth-child(3){
+                svg{
+                    color: #299fe3;
+                    margin-right: 5px;
+                }
+            }
+            &:nth-child(4){
+                svg{
+                    color: #299fe3;
+                    margin-right: 5px;
+                }
+            }
+            &:nth-child(5){
+                svg{
+                    margin-right: 5px;
+                    color: colors.$coler-btn;
+                }
+            }
+            &:nth-child(6){
+                svg{
+                    margin-right: 5px;
+                    color: colors.$coler-btn;
+                }
+            }
+            &:nth-child(7){
+                svg{
+                    margin-right: 5px;
+                    color: #f88904;
+                }
+            }
+            &:nth-child(n+3){
+               a{
+                &:hover{
+                    color: colors.$coler-btn;
+                    cursor: pointer;
+                }
+               }
+            }
+        }
+        .distance{
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            .distanceitem{
+                border: 1px solid #e3e3e3;
+                width: 80%;
+            }
+        }
+        .active{
+            a{
+                color: colors.$coler-btn;
+            }
+        }
+    }
+    .content-detail-profile{
+        flex: 1;
+        padding: 10px 30px;
+        background-color: #fff;
+    }
 }
