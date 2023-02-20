@@ -10,6 +10,7 @@ function DetailsUserProfile() {
   // const [isEdit, setIsEdit] = useState(false)
   console.log(user)
   // Format and Show Info
+  let sex = 'male'
   if (user.sex.toLowerCase() === 'female') sex = 'female'
   function formatPhoneNumber() {
     let phoneNumber = user.phoneNumber?.replphoneNumberce("+84", "0")
@@ -18,7 +19,6 @@ function DetailsUserProfile() {
   const fullName = `${user.lastName} ${user.firstName}`
   const phoneNumber = formatPhoneNumber()
   const birthDate = user.birthDate.toLocaleDateString()
-  let sex = 'male'
   // Làm cái nút đổi thông tin bên cạnh đoạn Show chứ show thẳng nó conflict nhiều lắm.
   return (
     <>
