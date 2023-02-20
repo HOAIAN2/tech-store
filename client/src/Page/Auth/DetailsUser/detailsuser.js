@@ -1,30 +1,21 @@
-<<<<<<< HEAD
-import "./Detailsuser.scss"
-import { Navigate, Outlet } from 'react-router-dom'
-=======
 import "./DetailsUser.scss"
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
->>>>>>> d82a36cfe921ea51a3dae8de076b74c96a27e646
 import Header from "../../../components/header/Header";
 import { useUserData } from "../../../Context";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faUser } from "@fortawesome/free-solid-svg-icons"
 import { faUserPen } from "@fortawesome/free-solid-svg-icons"
-import {faClipboardList} from "@fortawesome/free-solid-svg-icons"
-import {faBell} from "@fortawesome/free-solid-svg-icons"
-import {faTicketSimple} from "@fortawesome/free-solid-svg-icons"
-import {faCoins} from "@fortawesome/free-solid-svg-icons"
+import { faClipboardList } from "@fortawesome/free-solid-svg-icons"
+import { faBell } from "@fortawesome/free-solid-svg-icons"
+import { faTicketSimple } from "@fortawesome/free-solid-svg-icons"
+import { faCoins } from "@fortawesome/free-solid-svg-icons"
 import { Link } from "react-router-dom"
 
 function DetailsUser() {
   const [user] = useUserData()
-<<<<<<< HEAD
-  if (!user) return <Navigate to='/login' />
-  const fullName = `${user.lastName} ${user.firstName}`
-=======
   const location = useLocation()
   if (!user) return <Navigate to='/login' replace state={{ from: location }} />
->>>>>>> d82a36cfe921ea51a3dae8de076b74c96a27e646
+  const fullName = `${user.lastName} ${user.firstName}`
   return (
     <>
       <Header />
@@ -74,7 +65,7 @@ function DetailsUser() {
 
           </div>
           <div className="content-detail-profile">
-            <Outlet/>
+            <Outlet />
           </div>
         </div>
       </div>

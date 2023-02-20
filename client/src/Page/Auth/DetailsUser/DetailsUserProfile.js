@@ -1,30 +1,25 @@
 import "./DetailsUserProfile.scss"
 import { useUserData } from "../../../Context"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons"
-
 
 function DetailsUserProfile() {
 
   const [user] = useUserData()
-  const [addemail, setaddemail] = useState(false);
-  const [birth, setbirth] = useState("")
-  const [sex , setsex] = useState(false)
-
-  function handlephonenumber() {
-    let a = user.phoneNumber.replace("+84", "0")
-    return a.replace(/\d{8}/, "********")
+  // const [isEdit, setIsEdit] = useState(false)
+  console.log(user)
+  // Format and Show Info
+  if (user.sex.toLowerCase() === 'female') sex = 'female'
+  function formatPhoneNumber() {
+    let phoneNumber = user.phoneNumber?.replphoneNumberce("+84", "0")
+    return phoneNumber?.replace(/\d{8}/, "********")
   }
-  useEffect(() => {
-    setbirth(user.birthDate.toLocaleDateString())
-    if(user.sex.includes("f")){
-      setsex(true)
-    }
-    // console.log(user.birthDate.toLocaleDateString().split("/"))
-  }, [])
-
-
+  const fullName = `${user.lastName} ${user.firstName}`
+  const phoneNumber = formatPhoneNumber()
+  const birthDate = user.birthDate.toLocaleDateString()
+  let sex = 'male'
+  // Làm cái nút đổi thông tin bên cạnh đoạn Show chứ show thẳng nó conflict nhiều lắm.
   return (
     <>
       <div className="detailuser-profile">
@@ -33,7 +28,7 @@ function DetailsUserProfile() {
           <span>Manage and protect your account</span>
         </div>
         <div className="detailuser-profile-infor">
-          <form className="infor-user">
+          <div className="infor-user">
             <div className="infor-user-item">
               <div className="infor-user-item1">User Name</div>
               <div className="infor-user-item2">{user.username}</div>
@@ -41,33 +36,35 @@ function DetailsUserProfile() {
             <div className="infor-user-item">
               <div className="infor-user-item1">Name</div>
               <div className="infor-user-item2">
-                <input type="text"></input>
+                {/* <input type="text"></input> */}
+                <div className="infor-user-item2">{fullName}</div>
               </div>
             </div>
             <div className="infor-user-item">
               <div className="infor-user-item1">Email</div>
               <div className="infor-user-item2">
-                {user.email ?
+                {/* {user.email ?
                   <span>{user.email}</span> :
                   addemail ? <></> : <span className="addemail" onClick={() => { setaddemail(true) }}>Add</span>
                 }
-                {addemail ? <input type="text"></input> : <></>}
+                {addemail ? <input type="text"></input> : <></>} */}
               </div>
             </div>
             <div className="infor-user-item">
               <div className="infor-user-item1">Phone Number</div>
-              <div className="infor-user-item2">{handlephonenumber()}</div>
+              <div className="infor-user-item2">{phoneNumber}</div>
             </div>
             <div className="infor-user-item">
               <div className="infor-user-item1">Gender</div>
               <div className="infor-user-item2">
                 <div className="wrapcheckbox">
-                  <input className="checkbox" type="radio" name="gender" defaultChecked={sex?true:false}/>
+                  {/* <input className="checkbox" type="radio" name="gender" defaultChecked={sex ? false : true} />
                   <label>male</label>
                 </div>
                 <div className="wrapcheckbox">
-                  <input className="checkbox" type="radio" name="gender" defaultChecked={sex?false:true} />
-                  <label>female</label>
+                  <input className="checkbox" type="radio" name="gender" defaultChecked={sex ? true : false} />
+                  <label>female</label> */}
+                  <span>{sex}</span>
                 </div>
               </div>
             </div>
@@ -75,7 +72,7 @@ function DetailsUserProfile() {
               <div className="infor-user-item1">Date Of Birth</div>
               <div className="infor-user-item2">
                 <div className="wrap-infor-user-item2">
-                  {birth}
+                  {birthDate}
                   {/* <div className="birthitem">
                     <div className="dayofbirth-item">
                       <span>1</span>
@@ -100,8 +97,8 @@ function DetailsUserProfile() {
                 </div>
               </div>
             </div>
-            <button className="save">Save</button>
-          </form>
+            <button className="edit">Edit</button>
+          </div>
           <div className="avata-user">
             <div className="wrapavatauser">
               <img className="avata" src="https://images2.thanhnien.vn/Uploaded/gianglao/2022_07_30/odegaard-1979.jpeg"></img>
