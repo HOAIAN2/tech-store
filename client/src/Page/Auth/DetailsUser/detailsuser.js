@@ -1,4 +1,4 @@
-import "./DetailsUser.scss"
+import "./Detailsuser.scss"
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import Header from "../../../components/header/Header";
 import { useUserData } from "../../../Context";

@@ -3,23 +3,39 @@ import { useUserData } from "../../../Context"
 import { useEffect, useRef, useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons"
+import request from "../../../utils/api-config"
+
 
 function DetailsUserProfile() {
 
   const [user] = useUserData()
   // const [isEdit, setIsEdit] = useState(false)
-  console.log(user)
   // Format and Show Info
   let sex = 'male'
   if (user.sex.toLowerCase() === 'female') sex = 'female'
   function formatPhoneNumber() {
-    let phoneNumber = user.phoneNumber?.replphoneNumberce("+84", "0")
+    let phoneNumber = user.phoneNumber.replace("+84", "0")
     return phoneNumber?.replace(/\d{8}/, "********")
   }
   const fullName = `${user.lastName} ${user.firstName}`
   const phoneNumber = formatPhoneNumber()
   const birthDate = user.birthDate.toLocaleDateString()
   // Làm cái nút đổi thông tin bên cạnh đoạn Show chứ show thẳng nó conflict nhiều lắm.
+
+
+  function handlesubmit(e) {
+    var formData = new FormData();
+    console.log(e)
+    formData.append("image", e.target.files[0]);
+    request.post('/auth/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+
+
+  }
+
   return (
     <>
       <div className="detailuser-profile">
@@ -102,13 +118,14 @@ function DetailsUserProfile() {
           <div className="avata-user">
             <div className="wrapavatauser">
               <img className="avata" src="https://images2.thanhnien.vn/Uploaded/gianglao/2022_07_30/odegaard-1979.jpeg"></img>
-              <div className="setavata">
+              <form className="setavata">
                 {/* <button>Select Image</button> */}
-                <input type="file" name="file" id="file" className="inputfile" />
+                <input onChange={handlesubmit} type="file" name="file" id="file" className="inputfile" />
                 <label htmlFor="file">Select Image</label>
-              </div>
+              </form>
             </div>
           </div>
+
         </div>
       </div>
     </>
