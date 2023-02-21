@@ -41,7 +41,7 @@ async function findUser(username) {
         try {
             // Preventing SQL injection in Node.js with placeholder
             const queryString = [
-                'SELECT user_id, roles.name AS role, username, first_name, last_name, birth_date, sex, address, email, phone_number, hashed_password FROM users',
+                'SELECT user_id, roles.name AS role, username, first_name, last_name, birth_date, sex, address, email, phone_number, avatar, hashed_password FROM users',
                 'JOIN roles ON users.role_id = roles.id',
                 'WHERE users.username = ?'
             ].join(' ')
@@ -57,8 +57,9 @@ async function findUser(username) {
                 const address = rows[0]['address']
                 const email = rows[0]['email']
                 const phoneNumber = rows[0]['phone_number']
+                const avatar = rows[0]['avatar']
                 const hashedPassword = rows[0]['hashed_password']
-                user = new User(userID, role, username, firstName, lastName, birthDate, sex, address, email, phoneNumber, hashedPassword)
+                user = new User(userID, role, username, firstName, lastName, birthDate, sex, address, email, phoneNumber, avatar, hashedPassword)
                 users.push(user)
                 return user
             }
