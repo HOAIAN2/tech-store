@@ -17,6 +17,7 @@ CREATE TABLE users (
     address VARCHAR(255) NOT NULL,
     email VARCHAR(255),
     phone_number CHAR(12),
+    avatar VARCHAR(255),
     hashed_password VARCHAR(60),
     PRIMARY KEY (user_id),
     FOREIGN KEY (role_id) REFERENCES roles(id),

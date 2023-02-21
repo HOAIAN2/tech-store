@@ -153,7 +153,7 @@ CREATE TABLE `products` (
   CONSTRAINT `products_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`),
   CONSTRAINT `discount_limit` CHECK (((`discount` > 0) and (`discount` < 1))),
   CONSTRAINT `order_limit` CHECK ((`unit_in_order` <= `quantity`))
-) ENGINE=InnoDB AUTO_INCREMENT=272 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=266 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -238,6 +238,7 @@ CREATE TABLE `users` (
   `address` varchar(255) NOT NULL,
   `email` varchar(255) DEFAULT NULL,
   `phone_number` char(12) DEFAULT NULL,
+  `avatar` varchar(255) DEFAULT NULL,
   `hashed_password` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `UQ_username` (`username`),
@@ -294,4 +295,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-18  9:32:32
+-- Dump completed on 2023-02-21  9:18:05

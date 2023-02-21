@@ -4,7 +4,7 @@ class User {
         else return 'female'
     }
     constructor(userID, role, username, firstName, lastName,
-        birthDate, sex, address, email, phoneNumber, hashedPassword) {
+        birthDate, sex, address, email, phoneNumber, avatar, hashedPassword) {
         this.userID = userID
         this.role = role
         this.username = username
@@ -15,6 +15,7 @@ class User {
         this.address = address
         this.email = email
         this.phoneNumber = phoneNumber
+        this.avatar = avatar
         this.hashedPassword = hashedPassword
     }
     setPassword(hashedPassword) {
