@@ -8,7 +8,7 @@ async function initializeUser() {
     console.log('\x1b[1m%s\x1b[0m', 'Initializing users data...')
     try {
         const queryString = [
-            'SELECT user_id, roles.name AS role, username, first_name, last_name, birth_date, sex, address, email, phone_number, hashed_password FROM users',
+            'SELECT user_id, roles.name AS role, username, first_name, last_name, birth_date, sex, address, email, phone_number, avatar, hashed_password FROM users',
             'JOIN roles ON users.role_id = roles.id'
         ].join(' ')
         const [rows] = await pool.query(queryString)
@@ -23,9 +23,10 @@ async function initializeUser() {
             const address = row['address']
             const email = row['email']
             const phoneNumber = row['phone_number']
+            const avatar = row['avatar']
             const hashedPassword = row['hashed_password']
             // push to cache array
-            const user = new User(userID, role, username, firstName, lastName, birthDate, sex, address, email, phoneNumber, hashedPassword)
+            const user = new User(userID, role, username, firstName, lastName, birthDate, sex, address, email, phoneNumber, avatar, hashedPassword)
             users.push(user)
         })
 
