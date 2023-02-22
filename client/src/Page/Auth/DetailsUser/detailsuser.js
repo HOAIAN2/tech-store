@@ -23,11 +23,10 @@ function DetailsUser() {
         <div className="wrapcontendetailsuser">
           <div className="sibar-detail-user">
             <div className="sibar-detail-user_item">
-              <div className="avata-detail-user">
-                {/* {user.avata? <img id="avata" src="" alt="" />:<FontAwesomeIcon icon={faUser} id="avata"/>} */}
-                <img id="avata" src="" alt="" />
+              <div className="avatar-detail-user">
+              <img id="avatar" src={`http://localhost:4000${user.avatar}`} alt="" />
               </div>
-              <div className="conten-avata-detailuser">
+              <div className="conten-avatar-detailuser">
                 <div className="name">
                   {fullName}
                 </div>
