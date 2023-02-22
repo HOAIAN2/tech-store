@@ -7,8 +7,8 @@ async function initializeOrder() {
     try {
         // Write query and push to products array here
     } catch (error) {
-        console.log('\x1b[31m%s\x1b[0m', `Fail to initialize order data: ${error.message}`)
-        throw new Error(`Fail to initialize order data: ${error.message}`)
+        console.log('\x1b[31m%s\x1b[0m', `Fail to initialize orders data: ${error.message}`)
+        throw new Error(`Fail to initialize orders data: ${error.message}`)
     }
 }
 module.exports = {
