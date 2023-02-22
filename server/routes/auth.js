@@ -7,5 +7,6 @@ router.post('/logout', authController.logout)
 router.post('/change-password', authController.authenticateToken, authController.changePassword)
 router.post('/register', authController.register)
 router.post('/refresh', authController.reCreateToken)
+router.post("/upload", authController.UploadImage)
 
 module.exports = router

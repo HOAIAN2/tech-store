@@ -4,6 +4,7 @@ const express = require('express')
 const cors = require('cors')
 const { initializeData } = require('./cache')
 const routes = require('./routes')
+const fileUpload = require("express-fileupload")
 
 const app = express()
 const SERVER_PORT = parseInt(process.env['SERVER_PORT'])
@@ -16,6 +17,12 @@ app.use(express.json())
 app.use(cors({
     origin: 'http://localhost:3000'
 }))
+
+app.use(fileUpload({
+    // useTempFiles : true,
+    // tempFileDir : './static/images/avatar'
+}));
+
 // routing api and init fetch data from database
 routes(app)
 // route everything else to React

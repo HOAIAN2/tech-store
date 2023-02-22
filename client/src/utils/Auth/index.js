@@ -73,6 +73,26 @@ async function changePassword(oldPassword = '', newPassword) {
         throw new Error(message)
     }
 }
+
+async function UploadImage(file, UserName , currentAvatar) {
+    const token = JSON.parse(localStorage.getItem('token'))
+    var formData = new FormData();
+    formData.append("file", file);
+    formData.append("token", token.refreshToken)
+    formData.append("username", UserName)
+    formData.append("currentavatar", currentAvatar)
+    try {
+        const res = await request.post('/auth/upload', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        return res.data;
+    } catch (error) {
+        throw new Error(error.message)
+    }
+}
+
 async function fetchUserData() {
     const token = JSON.parse(localStorage.getItem('token'))
     if (!token) throw new Error('no token')
@@ -113,5 +133,6 @@ export {
     changePassword,
     register,
     fetchUserData,
-    reGetToken
+    reGetToken,
+    UploadImage,
 }

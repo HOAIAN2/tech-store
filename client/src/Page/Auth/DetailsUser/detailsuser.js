@@ -1,4 +1,4 @@
-import "./DetailsUser.scss"
+import "./Detailsuser.scss"
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import Header from "../../../components/header/Header";
 import { useUserData } from "../../../Context";
@@ -23,11 +23,10 @@ function DetailsUser() {
         <div className="wrapcontendetailsuser">
           <div className="sibar-detail-user">
             <div className="sibar-detail-user_item">
-              <div className="avata-detail-user">
-                {/* <FontAwesomeIcon icon={faUser} /> */}
-                <img src="https://images2.thanhnien.vn/Uploaded/gianglao/2022_07_30/odegaard-1979.jpeg" style={{ width: "100%", height: "100%" }}></img>
+              <div className="avatar-detail-user">
+              <img id="avatar" src={`http://localhost:4000${user.avatar}`} alt="" />
               </div>
-              <div className="conten-avata-detailuser">
+              <div className="conten-avatar-detailuser">
                 <div className="name">
                   {fullName}
                 </div>

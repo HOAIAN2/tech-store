@@ -5,7 +5,7 @@ import Home from './Page/Home/Home'
 import Login from './Page/Auth/Login'
 import ChangePassWord from './Page/Auth/ChangePassword'
 import Register from './Page/Auth/Register'
-import DetailsUser from './Page/Auth/DetailsUser/DetailsUser'
+import DetailsUser from './Page/Auth/DetailsUser/Detailsuser'
 import { fetchUserData } from './utils/Auth'
 import { useUserData, USER_ACTION } from './Context'
 import './App.scss';

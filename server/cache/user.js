@@ -105,11 +105,22 @@ async function updatePassword(username, password) {
     }
 }
 
+async function updateUserImage(path , username) {
+    const queryString = ['UPDATE users SET avatar = ? WHERE username = ?'].join('')
+    try {
+        const [rows] = await pool.query(queryString, [path, username])
+    } catch (error) {
+        console.log('\x1b[31m%s\x1b[0m', error.message)
+        throw new Error(error.message)
+    }
+}
+
 module.exports = {
     findUser,
     createUser,
     initializeUser,
     updatePassword,
     users,
-    refreshTokens
+    refreshTokens,
+    updateUserImage
 }
