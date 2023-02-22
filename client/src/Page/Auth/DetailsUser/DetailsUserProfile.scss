@@ -106,21 +106,21 @@
             }
         }
 
-        .avata-user {
+        .avatar-user {
             flex: 1;
             display: flex;
             justify-content: center;
             margin-top: 50px;
-            .wrapavatauser {
+            .wrapavataruser {
                 text-align: center;
-                .avataitem{
+                .avataritem{
                     width: 100px;
                     height: 100px;
                     background-color: #efefef;
                     border-radius: 50%;
                     overflow: hidden;
                     margin: auto;
-                    #avata {
+                    #avatar {
                         height: 100px;
                         width: 100px;
                         object-fit: cover;
@@ -132,7 +132,7 @@
                     }
                 }
 
-                .setavata {
+                .setavatar {
                     .inputfile {
                         display: none;
                     }
