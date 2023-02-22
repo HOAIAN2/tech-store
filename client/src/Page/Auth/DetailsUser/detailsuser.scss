@@ -19,7 +19,7 @@
             .avata-detail-user {
                 width: 50px;
                 height: 50px;
-                background-color: aliceblue;
+                background-color: #efefef;
                 border-radius: 50%;
                 overflow: hidden;
                 margin-right: 10px;
@@ -28,6 +28,7 @@
                 svg {
                     width: 100%;
                     height: 100%;
+                    color: #c6c8ca;
                 }
             }
             .conten-avata-detailuser {
@@ -53,7 +54,7 @@
 
             &:nth-child(1){
                 svg{
-                    color: #333;
+                    color: #c6c8ca;
                 }
             }
             &:nth-child(3){
