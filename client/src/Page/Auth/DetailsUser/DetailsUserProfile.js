@@ -1,25 +1,46 @@
 import "./DetailsUserProfile.scss"
-import { useUserData } from "../../../Context"
-import { useEffect, useRef, useState } from "react"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons"
+import { UploadImage} from "../../../utils/Auth"
+import { fetchUserData } from "../../../utils/Auth"
+import { useUserData, USER_ACTION } from '../../../Context'
+
 
 function DetailsUserProfile() {
 
-  const [user] = useUserData()
-  // const [isEdit, setIsEdit] = useState(false)
-  console.log(user)
+  const [user, dispatchUser] = useUserData()
   // Format and Show Info
   let sex = 'male'
   if (user.sex.toLowerCase() === 'female') sex = 'female'
   function formatPhoneNumber() {
-    let phoneNumber = user.phoneNumber?.replphoneNumberce("+84", "0")
+    let phoneNumber = user.phoneNumber.replace("+84", "0")
     return phoneNumber?.replace(/\d{8}/, "********")
   }
   const fullName = `${user.lastName} ${user.firstName}`
   const phoneNumber = formatPhoneNumber()
   const birthDate = user.birthDate.toLocaleDateString()
-  // Làm cái nút đổi thông tin bên cạnh đoạn Show chứ show thẳng nó conflict nhiều lắm.
+
+  async function handlesubmit(e) {
+      let a = document.querySelector(".avataitem")
+      const file = new FileReader()
+      file.addEventListener("load", () => {
+        a.children[0].setAttribute("src", file.result)
+      })
+      file.readAsDataURL(e.target.files[0])
+  }
+
+  function handlesave(e) {
+    const file = document.querySelector("#file")
+    const currentAvatar = user.avatar.split("/").at(-1)
+    if (file.files[0]) {
+      UploadImage(file.files[0], user.username, currentAvatar )
+        .then((res) => {
+          return fetchUserData();
+        })
+        .then((res)=>{
+          dispatchUser({ type: USER_ACTION.SET, payload: res })
+        })
+    }
+  }
+
   return (
     <>
       <div className="detailuser-profile">
@@ -36,18 +57,12 @@ function DetailsUserProfile() {
             <div className="infor-user-item">
               <div className="infor-user-item1">Name</div>
               <div className="infor-user-item2">
-                {/* <input type="text"></input> */}
                 <div className="infor-user-item2">{fullName}</div>
               </div>
             </div>
             <div className="infor-user-item">
               <div className="infor-user-item1">Email</div>
               <div className="infor-user-item2">
-                {/* {user.email ?
-                  <span>{user.email}</span> :
-                  addemail ? <></> : <span className="addemail" onClick={() => { setaddemail(true) }}>Add</span>
-                }
-                {addemail ? <input type="text"></input> : <></>} */}
               </div>
             </div>
             <div className="infor-user-item">
@@ -58,12 +73,6 @@ function DetailsUserProfile() {
               <div className="infor-user-item1">Gender</div>
               <div className="infor-user-item2">
                 <div className="wrapcheckbox">
-                  {/* <input className="checkbox" type="radio" name="gender" defaultChecked={sex ? false : true} />
-                  <label>male</label>
-                </div>
-                <div className="wrapcheckbox">
-                  <input className="checkbox" type="radio" name="gender" defaultChecked={sex ? true : false} />
-                  <label>female</label> */}
                   <span>{sex}</span>
                 </div>
               </div>
@@ -73,42 +82,23 @@ function DetailsUserProfile() {
               <div className="infor-user-item2">
                 <div className="wrap-infor-user-item2">
                   {birthDate}
-                  {/* <div className="birthitem">
-                    <div className="dayofbirth-item">
-                      <span>1</span>
-                      <FontAwesomeIcon icon={faChevronDown} />
-                    </div>
-                    <div className="listvalue-dayofbirth"></div>
-                  </div>
-                  <div className="birthitem">
-                    <div className="dayofbirth-item">
-                      <span>1</span>
-                      <FontAwesomeIcon icon={faChevronDown} />
-                    </div>
-                    <div className="listvalue-dayofbirth"></div>
-                  </div>
-                  <div className="birthitem">
-                    <div className="dayofbirth-item">
-                      <span>1</span>
-                      <FontAwesomeIcon icon={faChevronDown} />
-                    </div>
-                    <div className="listvalue-dayofbirth"></div>
-                  </div> */}
                 </div>
               </div>
             </div>
-            <button className="edit">Edit</button>
+            <button className="edit" onClick={handlesave}>Save</button>
           </div>
-          <div className="avata-user">
-            <div className="wrapavatauser">
-              <img className="avata" src="https://images2.thanhnien.vn/Uploaded/gianglao/2022_07_30/odegaard-1979.jpeg"></img>
-              <div className="setavata">
-                {/* <button>Select Image</button> */}
-                <input type="file" name="file" id="file" className="inputfile" />
+          <div className="avatar-user">
+            <div className="wrapavataruser">
+              <div className="avataritem">
+                <img id="avatar" src={`http://localhost:4000${user.avatar}`} alt="" />
+              </div>
+              <div className="setavatar">
+                <input onChange={handlesubmit} type="file" id="file" className="inputfile" />
                 <label htmlFor="file">Select Image</label>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </>

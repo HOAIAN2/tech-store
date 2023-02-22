@@ -89,7 +89,7 @@
                 }
             }
 
-            button {
+            .edit{
                 height: 40px;
                 width: 60px;
                 background-color: colors.$coler-btn;
@@ -98,25 +98,41 @@
                 border-radius: 3px;
                 font-size: 18px;
                 margin-top: 15px;
+
+                &:hover{
+                    cursor: pointer;
+                    text-decoration: underline;
+                }
             }
         }
 
-        .avata-user {
+        .avatar-user {
             flex: 1;
             display: flex;
             justify-content: center;
             margin-top: 50px;
-            .wrapavatauser {
+            .wrapavataruser {
                 text-align: center;
-                .avata {
-                    height: 100px;
+                .avataritem{
                     width: 100px;
-                    object-fit: cover;
+                    height: 100px;
+                    background-color: #efefef;
                     border-radius: 50%;
-                    margin-bottom: 15px;
+                    overflow: hidden;
+                    margin: auto;
+                    #avatar {
+                        height: 100px;
+                        width: 100px;
+                        object-fit: cover;
+                        border-radius: 50%;
+                        margin-bottom: 15px;
+                    }
+                    svg{
+                        color: #c6c8ca;
+                    }
                 }
 
-                .setavata {
+                .setavatar {
                     .inputfile {
                         display: none;
                     }
