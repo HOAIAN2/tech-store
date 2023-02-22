@@ -24,8 +24,8 @@ function DetailsUser() {
           <div className="sibar-detail-user">
             <div className="sibar-detail-user_item">
               <div className="avata-detail-user">
-                {/* <FontAwesomeIcon icon={faUser} /> */}
-                <img src="https://images2.thanhnien.vn/Uploaded/gianglao/2022_07_30/odegaard-1979.jpeg" style={{ width: "100%", height: "100%" }}></img>
+                {/* {user.avata? <img id="avata" src="" alt="" />:<FontAwesomeIcon icon={faUser} id="avata"/>} */}
+                <img id="avata" src="" alt="" />
               </div>
               <div className="conten-avata-detailuser">
                 <div className="name">

@@ -89,7 +89,7 @@
                 }
             }
 
-            button {
+            .edit{
                 height: 40px;
                 width: 60px;
                 background-color: colors.$coler-btn;
@@ -98,6 +98,11 @@
                 border-radius: 3px;
                 font-size: 18px;
                 margin-top: 15px;
+
+                &:hover{
+                    cursor: pointer;
+                    text-decoration: underline;
+                }
             }
         }
 
@@ -108,12 +113,23 @@
             margin-top: 50px;
             .wrapavatauser {
                 text-align: center;
-                .avata {
-                    height: 100px;
+                .avataitem{
                     width: 100px;
-                    object-fit: cover;
+                    height: 100px;
+                    background-color: #efefef;
                     border-radius: 50%;
-                    margin-bottom: 15px;
+                    overflow: hidden;
+                    margin: auto;
+                    #avata {
+                        height: 100px;
+                        width: 100px;
+                        object-fit: cover;
+                        border-radius: 50%;
+                        margin-bottom: 15px;
+                    }
+                    svg{
+                        color: #c6c8ca;
+                    }
                 }
 
                 .setavata {
