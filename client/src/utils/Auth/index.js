@@ -74,16 +74,14 @@ async function changePassword(oldPassword = '', newPassword) {
     }
 }
 
-async function UploadImage(file, UserName , currentAvatar) {
+async function uploadImage(file) {
     const token = JSON.parse(localStorage.getItem('token'))
     var formData = new FormData();
     formData.append("file", file);
-    formData.append("token", token.refreshToken)
-    formData.append("username", UserName)
-    formData.append("currentavatar", currentAvatar)
     try {
         const res = await request.post('/auth/upload', formData, {
             headers: {
+                Authorization: `Bearer ${token.accessToken}`,
                 'Content-Type': 'multipart/form-data'
             }
         })
@@ -134,5 +132,5 @@ export {
     register,
     fetchUserData,
     reGetToken,
-    UploadImage,
+    uploadImage,
 }

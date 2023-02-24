@@ -9,7 +9,9 @@
         "invalidUsernameOrEmail": "Invalid username or email",
         "usernameExists": "Username exists",
         "emailExists": "Email exists",
-        "phoneNumberExists": "Phone number exists"
+        "phoneNumberExists": "Phone number exists",
+        "fileToLarge": "File too Large",
+        "formatNotAccept": "Format not accept"
     },
     "vi": {
         "notFoundUsername": "Không tìm thấy tên người dùng",
@@ -21,6 +23,8 @@
         "invalidUsernameOrEmail": "Tên đăng nhập hoặc email không hợp lệ",
         "usernameExists": "Tên đăng nhập đã tồn tại",
         "emailExists": "Email đã tồn tại",
-        "phoneNumberExists": "Số điện thoại đã tồn tại"
+        "phoneNumberExists": "Số điện thoại đã tồn tại",
+        "fileToLarge": "File quá lớn",
+        "formatNotAccept": "Định dạng file không hợp lệ"
     }
 }

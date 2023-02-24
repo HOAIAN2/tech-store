@@ -21,8 +21,8 @@ class User {
     setPassword(hashedPassword) {
         this.hashedPassword = hashedPassword
     }
-    setAvatar(avatar){
-        this.avatar = avatar 
+    setAvatar(avatar) {
+        this.avatar = avatar
     }
     ignoreProps() {
         const object = { ...this }
