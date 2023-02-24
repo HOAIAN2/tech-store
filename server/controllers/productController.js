@@ -28,12 +28,9 @@ function getProductByID(req, res) {
     if (language === 'vi') errorMessages = productErrors.vi
     const productID = parseInt(req.query.id)
     if (!productID) return res.status(400).json({ message: errorMessages.invalidQuery })
-    console.log(productID)
     const product = products.find(product => {
-        console.log(product)
         return product.productID === productID
     })
-    console.log(product)
     if (product) return res.json(product.ignoreProps('unitInOrder', 'quantity'))
     else return res.status(404)
 }
