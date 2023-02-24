@@ -1,7 +1,11 @@
 const { products, categories, suppliers } = require('../cache')
+const productErrors = require('./productErrors.json')
 
 // [GET home]
-function home(req, res) {
+function index(req, res) {
+    let errorMessages = productErrors.en
+    const language = req.headers["accept-language"]
+    if (language === 'vi') errorMessages = productErrors.vi
     const groupProduct = {}
     categories.forEach(category => {
         groupProduct[category.categoryName] = []
@@ -17,7 +21,23 @@ function home(req, res) {
     })
     res.json(groupProduct)
 }
-
+//[GET product]
+function getProductByID(req, res) {
+    let errorMessages = productErrors.en
+    const language = req.headers["accept-language"]
+    if (language === 'vi') errorMessages = productErrors.vi
+    const productID = parseInt(req.query.id)
+    if (!productID) return res.status(400).json({ message: errorMessages.invalidQuery })
+    console.log(productID)
+    const product = products.find(product => {
+        console.log(product)
+        return product.productID === productID
+    })
+    console.log(product)
+    if (product) return res.json(product.ignoreProps('unitInOrder', 'quantity'))
+    else return res.status(404)
+}
 module.exports = {
-    home
+    index,
+    getProductByID
 }
