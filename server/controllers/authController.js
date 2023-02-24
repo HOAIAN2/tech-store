@@ -153,38 +153,31 @@ function reCreateToken(req, res) {
 }
 //[POST uploadImage]
 async function uploadImage(req, res) {
-    const index = refreshTokens.indexOf(req.body.token)
-    if (index === -1) return res.status(404).json({ message: authErrors.en.invalidToken })
-    if (req.files.file.size > 500000) return res.status(400).json({ message: "err image size" })
-    fs.readFile(`./static/images/avatar/${req.body.currentavatar}`, "utf-8", async (err, data) => {
-        if (err) {
-            return res.status(400).json({ message: "current avatar not found" })
-        } else {
-            let fileName = Date.now() + "-" + req.files.file.name
-            let newpath = path.join("./static/images/avatar", fileName)
-            if (req.body.currentavatar !== "user.png") {
-                fs.unlink(`./static/images/avatar/${req.body.currentavatar}`, (err) => {
-                    if (err) throw err
-                })
-            }
-            req.files.file.mv(newpath);
-            await updateUserImage(`/images/avatar/${fileName}`, req.body.username)
-            let user = await findUser(req.body.username)
-            user.setAvatar(`/images/avatar/${fileName}`)
-            res.status(200).json({ message: "success", path: newpath })
-        }
-
-    })
-    // let fileName = Date.now() + "-" + req.files.file.name
-    // let newpath = path.join("./static/images/avatar", fileName)
-
-    // fs.unlink(`./static/images/avatar/${req.body.currentavatar}`)
-
-    // req.files.file.mv(newpath);
-    // await updateUserImage(`/images/avatar/${fileName}` , req.body.username)
-    // let user = await findUser(req.body.username)
-    // user.setAvatar(`/images/avatar/${fileName}`)
-    // res.status(200).json({message: "success", path: newpath})
+    let errorMessages = authErrors.en
+    const language = req.headers["accept-language"]
+    if (language === 'vi') errorMessages = authErrors.vi
+    const token = req.headers['authorization'].split(' ')[1]
+    const tokenData = readAccessToken(token)
+    const acceptFormats = ['image/png', 'image/jpg', 'image/jpeg']
+    const limitSize = 500000
+    const file = req.files.file
+    if (file.size > limitSize) return res.status(400).json({ message: errorMessages.fileToLarge })
+    if (!acceptFormats.includes(file.mimetype)) return res.status(400).json({ message: errorMessages.formatNotAccept })
+    /// Delete if exist
+    const user = await findUser(tokenData.username)
+    if (user.avatar) fs.unlinkSync(`./static/images/avatar/${user.avatar}`)
+    /// Save new Avatar
+    try {
+        let fileName = Date.now() + "-" + file.name
+        let newpath = path.join('./static/images/avatar', fileName)
+        await updateUserImage(fileName, tokenData.username)
+        file.mv(newpath)
+        user.setAvatar(fileName)
+        return res.status(200).json({ message: "success", path: newpath })
+    } catch (error) {
+        console.log('\x1b[31m%s\x1b[0m', error.message)
+        return res.status(500).json({ message: 'error' })
+    }
 }
 
 /// Middlewares, etc...

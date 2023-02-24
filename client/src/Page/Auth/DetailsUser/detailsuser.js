@@ -1,4 +1,4 @@
-import "./Detailsuser.scss"
+import "./DetailsUser.scss"
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import Header from "../../../components/header/Header";
 import { useUserData } from "../../../Context";
@@ -24,7 +24,7 @@ function DetailsUser() {
           <div className="sibar-detail-user">
             <div className="sibar-detail-user_item">
               <div className="avatar-detail-user">
-              <img id="avatar" src={`http://localhost:4000${user.avatar}`} alt="" />
+                <img id="avatar" src={user.avatar} alt="" />
               </div>
               <div className="conten-avatar-detailuser">
                 <div className="name">

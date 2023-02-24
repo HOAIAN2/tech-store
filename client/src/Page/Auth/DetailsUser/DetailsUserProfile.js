@@ -1,7 +1,8 @@
 import "./DetailsUserProfile.scss"
-import { UploadImage} from "../../../utils/Auth"
+import { uploadImage } from "../../../utils/Auth"
 import { fetchUserData } from "../../../utils/Auth"
 import { useUserData, USER_ACTION } from '../../../Context'
+import { baseIMG } from '../../../utils/api-config'
 
 
 function DetailsUserProfile() {
@@ -11,7 +12,7 @@ function DetailsUserProfile() {
   let sex = 'male'
   if (user.sex.toLowerCase() === 'female') sex = 'female'
   function formatPhoneNumber() {
-    let phoneNumber = user.phoneNumber.replace("+84", "0")
+    let phoneNumber = user.phoneNumber?.replace("+84", "0")
     return phoneNumber?.replace(/\d{8}/, "********")
   }
   const fullName = `${user.lastName} ${user.firstName}`
@@ -19,23 +20,23 @@ function DetailsUserProfile() {
   const birthDate = user.birthDate.toLocaleDateString()
 
   async function handlesubmit(e) {
-      let a = document.querySelector(".avataitem")
-      const file = new FileReader()
-      file.addEventListener("load", () => {
-        a.children[0].setAttribute("src", file.result)
-      })
-      file.readAsDataURL(e.target.files[0])
+    let a = document.querySelector(".avatar-item")
+    const file = new FileReader()
+    file.addEventListener("load", () => {
+      a.children[0].setAttribute("src", file.result)
+    })
+    file.readAsDataURL(e.target.files[0])
   }
 
   function handlesave(e) {
     const file = document.querySelector("#file")
-    const currentAvatar = user.avatar.split("/").at(-1)
+    const currentAvatar = user.avatar?.split("/").at(-1)
     if (file.files[0]) {
-      UploadImage(file.files[0], user.username, currentAvatar )
+      uploadImage(file.files[0], user.username, currentAvatar)
         .then((res) => {
           return fetchUserData();
         })
-        .then((res)=>{
+        .then((res) => {
           dispatchUser({ type: USER_ACTION.SET, payload: res })
         })
     }
@@ -88,11 +89,11 @@ function DetailsUserProfile() {
             <button className="edit" onClick={handlesave}>Save</button>
           </div>
           <div className="avatar-user">
-            <div className="wrapavataruser">
-              <div className="avataritem">
-                <img id="avatar" src={`http://localhost:4000${user.avatar}`} alt="" />
+            <div className="wrap-avatar-user">
+              <div className="avatar-item">
+                <img id="avatar" src={user.avatar} alt="" />
               </div>
-              <div className="setavatar">
+              <div className="set-avatar">
                 <input onChange={handlesubmit} type="file" id="file" className="inputfile" />
                 <label htmlFor="file">Select Image</label>
               </div>
