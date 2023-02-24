@@ -4,6 +4,7 @@ require('dotenv').config()
 const { refreshTokens, findUser, createUser, updatePassword, updateUserImage } = require('../cache')
 const authErrors = require('./authErrors.json')
 const path = require("path")
+const fs = require("fs")
 
 /// API routes
 // [POST login]
@@ -150,7 +151,41 @@ function reCreateToken(req, res) {
         res.json(newToken)
     }
 }
+//[POST uploadImage]
+async function uploadImage(req, res) {
+    const index = refreshTokens.indexOf(req.body.token)
+    if (index === -1) return res.status(404).json({ message: authErrors.en.invalidToken })
+    if (req.files.file.size > 500000) return res.status(400).json({ message: "err image size" })
+    fs.readFile(`./static/images/avatar/${req.body.currentavatar}`, "utf-8", async (err, data) => {
+        if (err) {
+            return res.status(400).json({ message: "current avatar not found" })
+        } else {
+            let fileName = Date.now() + "-" + req.files.file.name
+            let newpath = path.join("./static/images/avatar", fileName)
+            if (req.body.currentavatar !== "user.png") {
+                fs.unlink(`./static/images/avatar/${req.body.currentavatar}`, (err) => {
+                    if (err) throw err
+                })
+            }
+            req.files.file.mv(newpath);
+            await updateUserImage(`/images/avatar/${fileName}`, req.body.username)
+            let user = await findUser(req.body.username)
+            user.setAvatar(`/images/avatar/${fileName}`)
+            res.status(200).json({ message: "success", path: newpath })
+        }
 
+    })
+    // let fileName = Date.now() + "-" + req.files.file.name
+    // let newpath = path.join("./static/images/avatar", fileName)
+
+    // fs.unlink(`./static/images/avatar/${req.body.currentavatar}`)
+
+    // req.files.file.mv(newpath);
+    // await updateUserImage(`/images/avatar/${fileName}` , req.body.username)
+    // let user = await findUser(req.body.username)
+    // user.setAvatar(`/images/avatar/${fileName}`)
+    // res.status(200).json({message: "success", path: newpath})
+}
 
 /// Middlewares, etc...
 function fortmatData(data = {}) {
@@ -239,43 +274,6 @@ function authenticateToken(req, res, next) {
     }
 }
 
-const fs = require("fs")
-
-async function UploadImage(req, res) {
-    const index = refreshTokens.indexOf(req.body.token)
-    if (index === -1) return res.status(404).json({ message: authErrors.en.invalidToken })
-    if (req.files.file.size > 500000) return res.status(400).json({ message: "err image size" })
-    fs.readFile(`./static/images/avatar/${req.body.currentavatar}`,"utf-8", async(err, data) => {
-        if (err) {
-            return res.status(400).json({ message: "current avatar not found" })
-        } else {
-            let fileName = Date.now() + "-" + req.files.file.name
-            let newpath = path.join("./static/images/avatar", fileName)
-            if(req.body.currentavatar !== "user.png"){
-                fs.unlink(`./static/images/avatar/${req.body.currentavatar}`,(err)=>{
-                    if(err) throw err
-                })
-            }
-            req.files.file.mv(newpath);
-            await updateUserImage(`/images/avatar/${fileName}`, req.body.username)
-            let user = await findUser(req.body.username)
-            user.setAvatar(`/images/avatar/${fileName}`)
-            res.status(200).json({ message: "success", path: newpath })
-        }
-
-    })
-    // let fileName = Date.now() + "-" + req.files.file.name
-    // let newpath = path.join("./static/images/avatar", fileName)
-
-    // fs.unlink(`./static/images/avatar/${req.body.currentavatar}`)
-
-    // req.files.file.mv(newpath);
-    // await updateUserImage(`/images/avatar/${fileName}` , req.body.username)
-    // let user = await findUser(req.body.username)
-    // user.setAvatar(`/images/avatar/${fileName}`)
-    // res.status(200).json({message: "success", path: newpath})
-}
-
 module.exports = {
     login,
     logout,
@@ -284,5 +282,5 @@ module.exports = {
     readAccessToken,
     reCreateToken,
     changePassword,
-    UploadImage
+    uploadImage
 }
