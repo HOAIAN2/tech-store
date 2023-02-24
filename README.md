@@ -86,3 +86,22 @@
     "message": "message"
 }
 ```
+### Auth routes: /api/auth/
+>[GET] home
+* Respone
+```json
+{
+    "category": [
+        {
+            "productID": 1,
+            "productName": "string",
+            "supplier": "string",
+            "category": "string",
+            "price": 100000,
+            "discount": null,
+            "images": "string",
+            "description": null
+        }
+    ]
+}
+```
