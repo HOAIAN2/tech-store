@@ -86,8 +86,8 @@
     "message": "message"
 }
 ```
-### Auth routes: /api/auth/
->[GET] home
+### Auth routes: /api/products/
+>[GET]
 * Respone
 ```json
 {
@@ -103,5 +103,19 @@
             "description": null
         }
     ]
+}
+```
+>[GET] product?id=number
+* Respone
+```json
+{
+    "productID": 1,
+    "productName": "string",
+    "supplier": "string",
+    "category": "string",
+    "price": 100000,
+    "discount": null,
+    "images": "string",
+    "description": null
 }
 ```
