@@ -159,11 +159,11 @@ async function uploadImage(req, res) {
     const token = req.headers['authorization'].split(' ')[1]
     const tokenData = readAccessToken(token)
     const acceptFormats = ['image/png', 'image/jpg', 'image/jpeg']
-    const limitSize = 500000
+    const limitSize = 500 * 1024
     const file = req.files?.file
     // files.file is our variable, if someone stole api and send another variable, server will crash
     if (!file) return res.status(400).json({ message: errorMessages.noFileFound })
-    if (file.size > limitSize) return res.status(400).json({ message: errorMessages.fileToLarge })
+    if (file.size > limitSize) return res.status(413).json({ message: errorMessages.fileToLarge })
     if (!acceptFormats.includes(file.mimetype)) return res.status(400).json({ message: errorMessages.formatNotAccept })
     const user = await findUser(tokenData.username)
     /// Save new Avatar and delete previous avatar
