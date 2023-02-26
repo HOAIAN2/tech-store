@@ -160,7 +160,7 @@ async function uploadImage(req, res) {
     const tokenData = readAccessToken(token)
     const acceptFormats = ['image/png', 'image/jpg', 'image/jpeg']
     const limitSize = 500000
-    const file = req.files.file
+    const file = req.files?.file
     // files.file is our variable, if someone stole api and send another variable, server will crash
     if (!file) return res.status(400).json({ message: errorMessages.noFileFound })
     if (file.size > limitSize) return res.status(400).json({ message: errorMessages.fileToLarge })
