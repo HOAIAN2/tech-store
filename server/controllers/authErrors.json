@@ -10,6 +10,7 @@
         "usernameExists": "Username exists",
         "emailExists": "Email exists",
         "phoneNumberExists": "Phone number exists",
+        "noFileFound": "No file Found",
         "fileToLarge": "File too Large",
         "formatNotAccept": "Format not accept"
     },
@@ -24,6 +25,7 @@
         "usernameExists": "Tên đăng nhập đã tồn tại",
         "emailExists": "Email đã tồn tại",
         "phoneNumberExists": "Số điện thoại đã tồn tại",
+        "noFileFound": "không tìm thấy file",
         "fileToLarge": "File quá lớn",
         "formatNotAccept": "Định dạng file không hợp lệ"
     }

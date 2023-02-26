@@ -2,8 +2,6 @@ import "./DetailsUserProfile.scss"
 import { uploadImage } from "../../../utils/Auth"
 import { fetchUserData } from "../../../utils/Auth"
 import { useUserData, USER_ACTION } from '../../../Context'
-import { baseIMG } from '../../../utils/api-config'
-
 
 function DetailsUserProfile() {
 
@@ -30,12 +28,9 @@ function DetailsUserProfile() {
 
   function handlesave(e) {
     const file = document.querySelector("#file")
-    const currentAvatar = user.avatar?.split("/").at(-1)
     if (file.files[0]) {
-      uploadImage(file.files[0], user.username, currentAvatar)
-        .then((res) => {
-          return fetchUserData();
-        })
+      uploadImage(file.files[0])
+        .then(() => fetchUserData())
         .then((res) => {
           dispatchUser({ type: USER_ACTION.SET, payload: res })
         })
