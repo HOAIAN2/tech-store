@@ -86,6 +86,9 @@
     "message": "message"
 }
 ```
+>[POST] upload
+* Request: formData(file: yourImage) (accept: png, jpeg, jpg)
+* Respone: HTTP status code
 ### Auth routes: /api/products/
 >[GET]
 * Respone

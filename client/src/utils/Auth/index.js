@@ -79,13 +79,12 @@ async function uploadImage(file) {
     var formData = new FormData();
     formData.append("file", file);
     try {
-        const res = await request.post('/auth/upload', formData, {
+        await request.post('/auth/upload', formData, {
             headers: {
                 Authorization: `Bearer ${token.accessToken}`,
                 'Content-Type': 'multipart/form-data'
             }
         })
-        return res.data;
     } catch (error) {
         throw new Error(error.message)
     }

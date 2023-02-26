@@ -161,19 +161,20 @@ async function uploadImage(req, res) {
     const acceptFormats = ['image/png', 'image/jpg', 'image/jpeg']
     const limitSize = 500000
     const file = req.files.file
+    // files.file is our variable, if someone stole api and send another variable, server will crash
+    if (!file) return res.status(400).json({ message: errorMessages.noFileFound })
     if (file.size > limitSize) return res.status(400).json({ message: errorMessages.fileToLarge })
     if (!acceptFormats.includes(file.mimetype)) return res.status(400).json({ message: errorMessages.formatNotAccept })
-    /// Delete if exist
     const user = await findUser(tokenData.username)
-    if (user.avatar) fs.unlinkSync(`./static/images/avatar/${user.avatar}`)
-    /// Save new Avatar
+    /// Save new Avatar and delete previous avatar
     try {
-        let fileName = Date.now() + "-" + file.name
+        let fileName = `${Date.now()}-${user.username}.${file.mimetype.split('/')[1]}` // block unicode errors
         let newpath = path.join('./static/images/avatar', fileName)
-        await updateUserImage(fileName, tokenData.username)
         file.mv(newpath)
+        await updateUserImage(fileName, tokenData.username)
+        if (user.avatar) fs.unlinkSync(`./static/images/avatar/${user.avatar}`)
         user.setAvatar(fileName)
-        return res.status(200).json({ message: "success", path: newpath })
+        return res.sendStatus(200)
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)
         return res.status(500).json({ message: 'error' })
