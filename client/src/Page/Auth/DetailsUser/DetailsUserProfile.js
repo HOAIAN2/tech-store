@@ -34,6 +34,9 @@ function DetailsUserProfile() {
         .then((res) => {
           dispatchUser({ type: USER_ACTION.SET, payload: res })
         })
+        .catch(error => {
+          console.log(error.message)
+        })
     }
   }
 
