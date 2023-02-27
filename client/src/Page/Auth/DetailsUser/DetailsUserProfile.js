@@ -1,11 +1,17 @@
-import "./DetailsUserProfile.scss"
+import { useRef, useState } from "react"
 import { uploadImage } from "../../../utils/Auth"
 import { fetchUserData } from "../../../utils/Auth"
 import { useUserData, USER_ACTION } from '../../../Context'
+import EditProfile from "./EditProfile"
+import "./DetailsUserProfile.scss"
 
 function DetailsUserProfile() {
-
   const [user, dispatchUser] = useUserData()
+  const [avatar, setAvatar] = useState(user.avatar)
+  const [isDifferentAvatar, setIsDifferentAvatar] = useState(false)
+  const [isEditMode, setIsEditMode] = useState(false)
+  const inputFileRef = useRef()
+  const imageRef = useRef()
   // Format and Show Info
   let sex = 'male'
   if (user.sex.toLowerCase() === 'female') sex = 'female'
@@ -16,23 +22,21 @@ function DetailsUserProfile() {
   const fullName = `${user.lastName} ${user.firstName}`
   const phoneNumber = formatPhoneNumber()
   const birthDate = user.birthDate.toLocaleDateString()
-
-  async function handlesubmit(e) {
-    let a = document.querySelector(".avatar-item")
+  async function handleChangeAvatar(e) {
     const file = new FileReader()
     file.addEventListener("load", () => {
-      a.children[0].setAttribute("src", file.result)
+      setAvatar(file.result)
+      setIsDifferentAvatar(true)
     })
     file.readAsDataURL(e.target.files[0])
   }
-
-  function handlesave(e) {
-    const file = document.querySelector("#file")
-    if (file.files[0]) {
-      uploadImage(file.files[0])
+  function handleSaveAvatar(e) {
+    if (inputFileRef.current.files[0]) {
+      uploadImage(inputFileRef.current.files[0])
         .then(() => fetchUserData())
         .then((res) => {
           dispatchUser({ type: USER_ACTION.SET, payload: res })
+          setIsDifferentAvatar(false)
         })
         .catch(error => {
           console.log(error.message)
@@ -83,22 +87,23 @@ function DetailsUserProfile() {
                 </div>
               </div>
             </div>
-            <button className="edit" onClick={handlesave}>Save</button>
+            <button className="edit" onClick={() => { setIsEditMode(true) }}>Edit</button>
           </div>
           <div className="avatar-user">
             <div className="wrap-avatar-user">
               <div className="avatar-item">
-                <img id="avatar" src={user.avatar} alt="" />
+                <img ref={imageRef} id="avatar" onClick={() => { inputFileRef.current.click() }} src={avatar} alt="" />
               </div>
               <div className="set-avatar">
-                <input onChange={handlesubmit} type="file" id="file" className="inputfile" />
-                <label htmlFor="file">Select Image</label>
+                <input ref={inputFileRef} onChange={handleChangeAvatar} type="file" id="file" className="inputfile" />
+                {isDifferentAvatar && <button onClick={handleSaveAvatar}>Save</button>}
               </div>
             </div>
           </div>
 
         </div>
       </div>
+      {isEditMode && <EditProfile setIsEditMode={setIsEditMode} />}
     </>
   )
 }
