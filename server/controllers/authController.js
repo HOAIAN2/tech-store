@@ -75,8 +75,8 @@ async function changePassword(req, res) {
         try {
             await updatePassword(data.username, hashedPassword)
             user.setPassword(hashedPassword)
-            refreshTokens.splice(index, 0)
-            return res.json({ message: 'success' })
+            refreshTokens.splice(index, 1)
+            return res.sendStatus(200)
         } catch (error) {
             console.log('\x1b[31m%s\x1b[0m', error.message)
             return res.status(500).json({ message: 'error' })
