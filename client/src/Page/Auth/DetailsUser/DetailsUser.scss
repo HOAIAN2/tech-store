@@ -4,7 +4,8 @@
     display: flex;
     justify-content: center;
 }
-.content-popup-update{
+
+.content-popup-update {
     margin-top: 15px;
 }
 
@@ -143,6 +144,10 @@
     top: 0;
     left: 0;
 
+    &.hide {
+        display: none;
+    }
+
     .shadow {
         width: 100%;
         height: 100%;
@@ -223,6 +228,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
+
                 .titlebtnsave {
                     width: 80%;
                     background: #f72034;
@@ -231,12 +237,14 @@
                     color: aliceblue;
                     border-radius: 5px;
                     font-size: 21px;
-                    &:hover{
+
+                    &:hover {
                         text-decoration: underline;
                         cursor: pointer;
                     }
                 }
-                .errormessage{
+
+                .errormessage {
                     position: absolute;
                     bottom: 100%;
                     color: colors.$coler-btn;
