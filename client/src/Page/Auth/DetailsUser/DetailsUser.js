@@ -16,12 +16,12 @@ import { useEffect, useState } from "react";
 function DetailsUser() {
   const [user] = useUserData()
   const location = useLocation()
-  const [valueofusername,setvauleofusername] = useState(user.username)
-  const [valueoffirstName,setvalueoffirstName] = useState(user.firstName)
-  const [valueoflastName,setvalueoflastName] = useState(user.lastName)
-  const [valueofaddress,setvalueofaddress] = useState(user.address)
-  const [valueofemail,setvalueofemail] = useState(user.email)
-  const [error , seterror] = useState()
+  const [valueofusername, setvauleofusername] = useState(user.username)
+  const [valueoffirstName, setvalueoffirstName] = useState(user.firstName)
+  const [valueoflastName, setvalueoflastName] = useState(user.lastName)
+  const [valueofaddress, setvalueofaddress] = useState(user.address)
+  const [valueofemail, setvalueofemail] = useState(user.email || '')
+  const [error, seterror] = useState()
 
   useEffect(() => {
     const optionElement = document.querySelectorAll("#option-gender")
@@ -47,9 +47,9 @@ function DetailsUser() {
 
   function handlelistday(data1, data2) {
     return (e) => {
-      if(e.target.className === "listday-item") document.querySelector(".value-dayofbirth").innerHTML = e.target.textContent
-      if(e.target.className === "listmonth-item") document.querySelector(".value-monthofbirth").innerHTML = e.target.textContent
-      if(e.target.className === "listyear-item")  document.querySelector(".value-yearofbirth").innerHTML = e.target.textContent
+      if (e.target.className === "listday-item") document.querySelector(".value-dayofbirth").innerHTML = e.target.textContent
+      if (e.target.className === "listmonth-item") document.querySelector(".value-monthofbirth").innerHTML = e.target.textContent
+      if (e.target.className === "listyear-item") document.querySelector(".value-yearofbirth").innerHTML = e.target.textContent
       let a = document.querySelector(data1)
       let b = document.querySelector(data2)
       if (a.style.display === "none") {
@@ -62,35 +62,35 @@ function DetailsUser() {
     }
   }
   function inputchange(e) {
-    if(e.target.className === "username-input") return setvauleofusername(e.target.value)
-    if(e.target.className === "firstname-input") return setvalueoffirstName(e.target.value)
-    if(e.target.className === "lastname-input") return setvalueoflastName(e.target.value)
-    if(e.target.className === "address-input") return setvalueofaddress(e.target.value)
-    if(e.target.className === "email-input") return setvalueofemail(e.target.value)
+    if (e.target.className === "username-input") return setvauleofusername(e.target.value)
+    if (e.target.className === "firstname-input") return setvalueoffirstName(e.target.value)
+    if (e.target.className === "lastname-input") return setvalueoflastName(e.target.value)
+    if (e.target.className === "address-input") return setvalueofaddress(e.target.value)
+    if (e.target.className === "email-input") return setvalueofemail(e.target.value)
   }
 
   function getbirth() {
     let a = document.querySelectorAll(".birth-value")
     let rs = []
-    a.forEach((element)=>{
-      if(element.textContent.length === 1){
-        return rs.push("0"+element.textContent)
+    a.forEach((element) => {
+      if (element.textContent.length === 1) {
+        return rs.push("0" + element.textContent)
       }
       return rs.push(element.textContent)
     })
     const newArray = rs.slice().reverse();
-    return newArray.toString().replace(/,/g,"-")
+    return newArray.toString().replace(/,/g, "-")
   }
   function getgender() {
     let a = document.querySelectorAll("#option-gender")
-    if(a[0].checked){
+    if (a[0].checked) {
       return "male"
     }
     return "female"
   }
   function handlebtnsave(e) {
-    seterror()
-    if(!valueofemail.includes("@gmail.com")) return seterror("Invalid email")
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+    if (!valueofemail.match(emailRegex)) return seterror("Invalid email")
     let a = {
       userName: valueofusername,
       firstName: valueoffirstName,
@@ -104,13 +104,13 @@ function DetailsUser() {
   }
 
   function closepopup(e) {
-    if(e.target.className === "shadow"){
-      e.target.parentElement.style.display = "none"
+    if (e.target.className === "shadow") {
+      e.target.parentElement.classList.add('hide')
     }
   }
   function popupopen(e) {
     const a = document.querySelector(".popup")
-    a.style.display = "block"
+    a.classList.remove('hide')
   }
 
   return (
@@ -166,7 +166,7 @@ function DetailsUser() {
         </div>
       </div>
 
-      <div className="popup" style={{display: "none"}}>
+      <div className="popup hide">
         <div className="shadow" onClick={closepopup}>
           <div className="contentpopup">
             <div className="titlepopupupdateuser">Update User</div>
@@ -181,13 +181,13 @@ function DetailsUser() {
               <div className="updateuser uploadfirstname">
                 <span className="titlepuload">First Name</span>
                 <div className="wrapinput-pudate">
-                  <input className="firstname-input" type="text" value={valueoffirstName} onInput={inputchange}/>
+                  <input className="firstname-input" type="text" value={valueoffirstName} onInput={inputchange} />
                 </div>
               </div>
               <div className="updateuser uploadlastname">
                 <span className="titlepuload">Last Name</span>
                 <div className="wrapinput-pudate">
-                  <input className="lastname-input" type="text" value={valueoflastName} onInput={inputchange}/>
+                  <input className="lastname-input" type="text" value={valueoflastName} onInput={inputchange} />
                 </div>
               </div>
 
@@ -198,37 +198,37 @@ function DetailsUser() {
                     <p className="birth-value value-dayofbirth">1</p>
                     <FontAwesomeIcon icon={faChevronDown} />
                     <div className="listday" style={{ display: "none" }}>
-                      <li className= "listday-item">1</li>
-                      <li className= "listday-item">2</li>
-                      <li className= "listday-item">3</li>
-                      <li className= "listday-item">4</li>
-                      <li className= "listday-item">5</li>
-                      <li className= "listday-item">6</li>
-                      <li className= "listday-item">7</li>
-                      <li className= "listday-item">8</li>
-                      <li className= "listday-item">9</li>
-                      <li className= "listday-item">10</li>
-                      <li className= "listday-item">11</li>
-                      <li className= "listday-item">12</li>
-                      <li className= "listday-item">13</li>
-                      <li className= "listday-item">14</li>
-                      <li className= "listday-item">15</li>
-                      <li className= "listday-item">16</li>
-                      <li className= "listday-item">17</li>
-                      <li className= "listday-item">18</li>
-                      <li className= "listday-item">19</li>
-                      <li className= "listday-item">20</li>
-                      <li className= "listday-item">21</li>
-                      <li className= "listday-item">22</li>
-                      <li className= "listday-item">23</li>
-                      <li className= "listday-item">24</li>
-                      <li className= "listday-item">25</li>
-                      <li className= "listday-item">26</li>
-                      <li className= "listday-item">27</li>
-                      <li className= "listday-item">28</li>
-                      <li className= "listday-item">29</li>
-                      <li className= "listday-item">30</li>
-                      <li className= "listday-item">31</li>
+                      <li className="listday-item">1</li>
+                      <li className="listday-item">2</li>
+                      <li className="listday-item">3</li>
+                      <li className="listday-item">4</li>
+                      <li className="listday-item">5</li>
+                      <li className="listday-item">6</li>
+                      <li className="listday-item">7</li>
+                      <li className="listday-item">8</li>
+                      <li className="listday-item">9</li>
+                      <li className="listday-item">10</li>
+                      <li className="listday-item">11</li>
+                      <li className="listday-item">12</li>
+                      <li className="listday-item">13</li>
+                      <li className="listday-item">14</li>
+                      <li className="listday-item">15</li>
+                      <li className="listday-item">16</li>
+                      <li className="listday-item">17</li>
+                      <li className="listday-item">18</li>
+                      <li className="listday-item">19</li>
+                      <li className="listday-item">20</li>
+                      <li className="listday-item">21</li>
+                      <li className="listday-item">22</li>
+                      <li className="listday-item">23</li>
+                      <li className="listday-item">24</li>
+                      <li className="listday-item">25</li>
+                      <li className="listday-item">26</li>
+                      <li className="listday-item">27</li>
+                      <li className="listday-item">28</li>
+                      <li className="listday-item">29</li>
+                      <li className="listday-item">30</li>
+                      <li className="listday-item">31</li>
                     </div>
                     <div className="wrapdayofbirth" style={{ display: "none" }}></div>
                   </div>
@@ -331,26 +331,26 @@ function DetailsUser() {
                   <div className="">
                     <input id="option-gender" name="radio" value="one" type="radio" />
                   </div>
-                  <label for="option-one"> Male </label>
+                  <label htmlFor="option-one"> Male </label>
                 </div>
                 <div className="option">
                   <div className="">
                     <input id="option-gender" name="radio" value="two" type="radio" />
                   </div>
-                  <label for="option-two"> Female </label>
+                  <label htmlFor="option-two"> Female </label>
                 </div>
               </div>
 
               <div className="updateuser uploademail">
                 <span className="titlepuload">Address</span>
                 <div className="wrapinput-pudate">
-                  <input className="address-input" type="text" value={valueofaddress} onInput={inputchange}/>
+                  <input className="address-input" type="text" value={valueofaddress} onInput={inputchange} />
                 </div>
               </div>
               <div className="updateuser uploademail">
                 <span className="titlepuload">Email</span>
                 <div className="wrapinput-pudate">
-                  <input className="email-input" type="email" value={valueofemail}onInput={inputchange} />
+                  <input className="email-input" type="email" value={valueofemail} onInput={inputchange} />
                 </div>
               </div>
             </div>
