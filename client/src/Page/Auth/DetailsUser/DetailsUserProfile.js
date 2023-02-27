@@ -61,8 +61,7 @@ function DetailsUserProfile() {
             </div>
             <div className="infor-user-item">
               <div className="infor-user-item1">Email</div>
-              <div className="infor-user-item2">
-              </div>
+              <div className="infor-user-item2">{user.email}</div>
             </div>
             <div className="infor-user-item">
               <div className="infor-user-item1">Phone Number</div>

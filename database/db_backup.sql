@@ -238,7 +238,7 @@ CREATE TABLE `users` (
   `address` varchar(255) NOT NULL,
   `email` varchar(255) DEFAULT NULL,
   `phone_number` char(12) DEFAULT NULL,
-  `avatar` varchar(255) DEFAULT '/images/avatar/user.png',
+  `avatar` varchar(255) DEFAULT 'user.png',
   `hashed_password` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `UQ_username` (`username`),
