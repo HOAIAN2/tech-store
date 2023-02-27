@@ -83,8 +83,8 @@
                 outline: none;
                 border: none;
                 color: white;
-                // background-color: $coler-btn);
-                background-color: colors.$coler-btn;
+                // background-color: $color-btn);
+                background-color: colors.$color-btn;
                 border-radius: 5px;
                 position: absolute;
                 left: 50%;
@@ -98,7 +98,7 @@
                 }
 
                 &:hover {
-                    box-shadow: 0px 0px 3px colors.$coler-btn;
+                    box-shadow: 0px 0px 3px colors.$color-btn;
                 }
             }
         }

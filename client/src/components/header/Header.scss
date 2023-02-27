@@ -36,7 +36,7 @@
                     }
 
                     &:hover {
-                        background-color: colors.$coler-hover;
+                        background-color: colors.$color-hover;
                         cursor: pointer;
                     }
                 }
@@ -46,7 +46,7 @@
                 display: flex;
 
                 .header_item_1-2_btn:nth-child(1) {
-                    background-color: colors.$coler-btn;
+                    background-color: colors.$color-btn;
                     border-radius: 2px;
                     position: relative;
                     padding: 0 10px;
@@ -113,7 +113,7 @@
                         position: relative;
                         align-items: center;
                         justify-content: center;
-                        background-color: colors.$coler-btn;
+                        background-color: colors.$color-btn;
                         color: colors.$text-color;
                         border-radius: 3px;
                         padding: 16px;
@@ -166,7 +166,7 @@
 
                     .header_logo_item:nth-child(1) {
                         margin-right: 22px;
-                        color: colors.$coler-btn;
+                        color: colors.$color-btn;
                     }
 
                     .header_logo_item:nth-child(2) {
@@ -197,7 +197,7 @@
                         border: none;
                         background: transparent;
                         outline: none;
-                        caret-color: colors.$coler-btn;
+                        caret-color: colors.$color-btn;
                     }
                 }
 
@@ -213,7 +213,7 @@
                         border-radius: 5px;
                         display: flex;
                         height: 91%;
-                        background-color: colors.$coler-btn;
+                        background-color: colors.$color-btn;
                         align-items: center;
                         color: colors.$text-color;
                         justify-content: center;
@@ -223,7 +223,7 @@
                         cursor: pointer;
 
                         span {
-                            color: colors.$coler-hover;
+                            color: colors.$color-hover;
                         }
                     }
                 }
@@ -236,7 +236,7 @@
 
                 svg {
                     font-size: 35px;
-                    color: colors.$coler-btn;
+                    color: colors.$color-btn;
                 }
 
                 .number-cart {
@@ -305,11 +305,11 @@
                         cursor: pointer;
 
                         svg {
-                            color: colors.$coler-hover;
+                            color: colors.$color-hover;
                         }
 
                         span {
-                            color: colors.$coler-hover;
+                            color: colors.$color-hover;
                         }
                     }
                 }
@@ -321,7 +321,7 @@
                     margin-left: 15px;
 
                     svg {
-                        color: colors.$coler-btn;
+                        color: colors.$color-btn;
                         margin-right: 5px;
                     }
 

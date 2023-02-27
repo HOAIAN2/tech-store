@@ -50,7 +50,7 @@
 
                     .addemail {
                         &:hover {
-                            color: colors.$coler-btn;
+                            color: colors.$color-btn;
                             text-decoration: underline;
                             cursor: pointer;
                         }
@@ -75,7 +75,7 @@
                         .birthitem {
                             width: 32%;
                             height: 30px;
-                            border: 1px solid colors.$coler-btn;
+                            border: 1px solid colors.$color-btn;
 
                             .dayofbirth-item {
                                 width: 100%;
@@ -93,16 +93,16 @@
             .edit {
                 height: 40px;
                 width: 60px;
-                background-color: colors.$coler-btn;
+                background-color: colors.$color-btn;
                 color: colors.$text-color;
                 border: none;
                 border-radius: 3px;
                 font-size: 18px;
                 margin-top: 15px;
+                cursor: pointer;
 
                 &:hover {
-                    cursor: pointer;
-                    text-decoration: underline;
+                    box-shadow: 0px 0px 3px colors.$color-btn;
                 }
             }
         }
@@ -130,6 +130,7 @@
                         object-fit: cover;
                         border-radius: 50%;
                         margin-bottom: 15px;
+                        cursor: pointer;
                     }
 
                     svg {
@@ -142,9 +143,11 @@
                         display: none;
                     }
 
-                    label {
+                    button {
+                        margin-top: 5px;
+                        background-color: colors.$color-btn;
                         font-size: 17px;
-                        color: black;
+                        color: white;
                         display: inline-block;
                         cursor: pointer;
                         border: 1px solid #ddd;
