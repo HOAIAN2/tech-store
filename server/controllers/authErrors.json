@@ -1,5 +1,6 @@
 {
     "en": {
+        "invalidDataType": "Invalid data type",
         "notFoundUsername": "Cannot find username",
         "incorrectPassword": "Incorrect password",
         "invalidToken": "Invalid token",
@@ -15,6 +16,7 @@
         "formatNotAccept": "Format not accept"
     },
     "vi": {
+        "invalidDataType": "Kiểu dữ liệu không hợp lệ",
         "notFoundUsername": "Không tìm thấy tên người dùng",
         "incorrectPassword": "Sai mật khẩu",
         "invalidToken": "Token không hợp lệ",

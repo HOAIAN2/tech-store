@@ -57,6 +57,10 @@ async function changePassword(req, res) {
         newPassword: req.body.newPassword,
         refreshToken: req.body.refreshToken
     }
+    const validDataType = Object.keys(data).every(key => {
+        return typeof data[key] === 'string'
+    })
+    if (!validDataType) return res.status(400).json({ message: errorMessages.invalidDataType })
     const index = refreshTokens.indexOf(data.refreshToken)
     if (index === -1) return res.status(404).json({ message: errorMessages.invalidToken })
     const user = await findUser(username)
@@ -100,6 +104,10 @@ async function register(req, res) {
         email: req.body.email,
         phoneNumber: req.body.phoneNumber
     }
+    const validDataType = Object.keys(data).every(key => {
+        return typeof data[key] === 'string'
+    })
+    if (!validDataType) return res.status(400).json({ message: errorMessages.invalidDataType })
     if (data.password?.includes(' ')) return res.status(400).json({ message: errorMessages.invalidPassword })
     if (!validate(data.username, data.email)) {
         return res.status(404).json({ message: errorMessages.invalidUsernameOrEmail })
