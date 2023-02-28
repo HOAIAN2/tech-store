@@ -11,8 +11,11 @@ import { faHouseChimney } from "@fortawesome/free-solid-svg-icons"
 import { faPhoneVolume } from "@fortawesome/free-solid-svg-icons"
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons"
 import Account from "../Account/Account"
-function Header() {
+import languages from './Languages/Header.json'
 
+function Header() {
+    let language = languages.en
+    if (navigator.language === 'vi') language = languages.vi
     return (
         <div className="header">
             <div className="header_item1">

@@ -1,0 +1,26 @@
+{
+    "en": {
+        "title": "My profile",
+        "subTitle": "Manage and protect your account",
+        "edit": "Edit",
+        "username": "User name",
+        "name": "Name",
+        "email": "Email",
+        "phoneNumber": "Số điện thoại",
+        "sex": "Sex",
+        "birthDate": "Birth date",
+        "save": "Save"
+    },
+    "vi": {
+        "title": "Trang cá nhân",
+        "subTitle": "Quản lý và bảo vệ tài khoản của bạn",
+        "edit": "Sửa",
+        "username": "Tên đăng nhập",
+        "name": "Tên",
+        "email": "Email",
+        "phoneNumber": "Số điện thoại",
+        "sex": "Giới tính",
+        "birthDate": "Ngày sinh",
+        "save": "Lưu"
+    }
+}

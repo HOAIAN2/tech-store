@@ -46,10 +46,8 @@
                         height: 30px;
                         align-items: center;
                         justify-content: center;
-                        // border: 1px solid;
 
-                        & input,
-                        & select {
+                        & input {
                             flex: 1;
                             display: block;
                             font-size: 18px;
@@ -59,12 +57,12 @@
                             outline: none;
                             border: 1px solid colors.$shadow;
                             border-radius: 5px;
+                            transition: 0.2s;
 
                             &:hover,
-                            :focus,
-                            :active {
+                            &:focus,
+                            &:active {
                                 box-shadow: 0px 0px 3px colors.$shadow;
-
                             }
                         }
                     }
@@ -114,6 +112,7 @@
                     font-size: 21px;
                     cursor: pointer;
                     font-weight: bold;
+                    transition: 0.2s;
 
                     &:hover {
                         box-shadow: 0px 0px 3px colors.$color-btn;

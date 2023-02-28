@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { changePassword } from '../../utils/Auth'
 import './ChangePassword.scss'
+import languages from './Languages/ChangePassword.json'
 
 function ChangePassWord() {
     const [oldPassword, setOldPassword] = useState('')
@@ -9,10 +10,16 @@ function ChangePassWord() {
     const [newPassword1, setNewPassword1] = useState('')
     const [error, setError] = useState('')
     const navigate = useNavigate()
+    let language = languages.en
+    if (navigator.language === 'vi') language = languages.vi
     function handleChangePassword(e) {
         e.preventDefault()
         if (newPassword !== newPassword1) {
-            setError('nhập lại mật khẩu không chính xác')
+            setError(language.wrongReapeatPassword)
+            return
+        }
+        if (newPassword.length < 8) {
+            setError(language.passwordTooShort)
             return
         }
         changePassword(oldPassword, newPassword)
@@ -27,37 +34,38 @@ function ChangePassWord() {
             })
     }
     useEffect(() => {
-        document.title = 'Đổi mật khẩu'
+        document.title = language.title
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     return (
         <div className="change-password">
             <div className='change-password-title'>
-                <span>Đổi mật khẩu</span>
+                <span>{language.title}</span>
             </div>
             <form onSubmit={handleChangePassword}>
                 <div>
-                    <input type='password' placeholder="Mật khẩu cũ"
+                    <input type='password' placeholder={language.oldPassword}
                         required
                         value={oldPassword}
                         onInput={e => { setOldPassword(e.target.value) }} /> <br />
                 </div>
                 <div>
-                    <input type='password' placeholder="Mật khẩu mới"
+                    <input type='password' placeholder={language.newPassword}
                         required
                         value={newPassword}
                         onInput={e => { setNewPassword(e.target.value) }} /> <br />
                 </div>
                 <div>
-                    <input type='password' placeholder="Nhập lại mật khẩu mới"
+                    <input type='password' placeholder={language.repeatPassword}
                         required
                         value={newPassword1}
                         onInput={e => { setNewPassword1(e.target.value) }} /> <br />
                 </div>
-                <div className='error-login'>
+                <div className='error-change-password'>
                     <p>{error}</p>
                 </div>
                 <div>
-                    <button>Đổi mật khẩu</button>
+                    <button>{language.title}</button>
                 </div>
             </form>
         </div>

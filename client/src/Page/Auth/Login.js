@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { login, fetchUserData } from '../../utils/Auth'
 import { useUserData, USER_ACTION } from '../../Context'
+import languages from './Languages/Login.json'
 import './Login.scss'
 
 function Login() {
@@ -13,10 +14,12 @@ function Login() {
     const location = useLocation()
     const buttonRef = useRef(null)
     const prePage = location.state?.from
+    let language = languages.en
+    if (navigator.language === 'vi') language = languages.vi
     function handleLogin(e) {
         e.preventDefault()
         if (password.length < 8) {
-            setError('Mật khẩu phải có ít nhất 8 ký tự')
+            setError(language.passwordTooShort)
             return
         }
         buttonRef.current.classList.add('loading')
@@ -38,7 +41,7 @@ function Login() {
     }
     // Trigger back have token or data refactor later
     useEffect(() => {
-        document.title = 'Đăng nhập'
+        document.title = language.title
         fetchUserData()
             .then(data => {
                 dispatchUser({ type: USER_ACTION.SET, payload: data })
@@ -52,18 +55,18 @@ function Login() {
     return (
         <div className="login">
             <div className='login-title'>
-                <span>Đăng nhập</span>
+                <span>{language.title}</span>
             </div>
             <form onSubmit={handleLogin}>
                 <div>
-                    <input type='text' placeholder="Tên đăng nhập"
+                    <input type='text' placeholder={language.username}
                         autoFocus
                         required
                         value={username}
                         onInput={e => { setUsername(e.target.value) }} /> <br />
                 </div>
                 <div>
-                    <input type='password' placeholder="Mật khẩu"
+                    <input type='password' placeholder={language.password}
                         required
                         value={password}
                         onInput={e => { setPassword(e.target.value) }} /> <br />
@@ -72,17 +75,17 @@ function Login() {
                     <p>{error}</p>
                 </div>
                 <div>
-                    <button ref={buttonRef}>Login</button>
+                    <button ref={buttonRef}>{language.title}</button>
                 </div>
             </form>
             <div>
                 <span>
-                    <Link to='#'>Quên mật khẩu</Link>
+                    <Link to='#'>{language.forget}</Link>
                 </span>
             </div>
             <div>
                 <span>
-                    Chưa có tài khoản? <Link role='button' to='/register'>Đăng ký</Link>
+                    {language.doesntHaveAccount} <Link role='button' to='/register'>{language.register}</Link>
                 </span>
             </div>
         </div>
