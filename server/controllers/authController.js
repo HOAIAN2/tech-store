@@ -66,13 +66,14 @@ async function changePassword(req, res) {
     if (data.oldPassword === data.newPassword) {
         return res.status(400).json({ message: errorMessages.samePassword })
     }
+    if (data.newPassword?.includes(' ')) return res.status(400).json({ message: errorMessages.invalidPassword })
     if (!isCorrectPassword(data.oldPassword, user.hashedPassword)) {
         return res.status(400).json({ message: errorMessages.incorrectPassword })
     }
     else {
-        if (data.newPassword.length < 8) return res.status(400).json({ message: errorMessages.passwordTooShort })
-        const hashedPassword = bcrypt.hashSync(data.newPassword, 10)
         try {
+            if (data.newPassword.length < 8) return res.status(400).json({ message: errorMessages.passwordTooShort })
+            const hashedPassword = bcrypt.hashSync(data.newPassword, 10)
             await updatePassword(data.username, hashedPassword)
             user.setPassword(hashedPassword)
             refreshTokens.splice(index, 1)
@@ -99,7 +100,7 @@ async function register(req, res) {
         email: req.body.email,
         phoneNumber: req.body.phoneNumber
     }
-    if (data.password.includes(' ')) return res.status(400).json({ message: errorMessages.invalidPassword })
+    if (data.password?.includes(' ')) return res.status(400).json({ message: errorMessages.invalidPassword })
     if (!validate(data.username, data.email)) {
         return res.status(404).json({ message: errorMessages.invalidUsernameOrEmail })
     }
@@ -172,7 +173,7 @@ async function uploadImage(req, res) {
         let newpath = path.join('./static/images/avatar', fileName)
         file.mv(newpath)
         await updateUserImage(fileName, tokenData.username)
-        if (user.avatar) fs.unlinkSync(`./static/images/avatar/${user.avatar}`, ()=>{console.log(123)})
+        if (user.avatar) fs.unlinkSync(`./static/images/avatar/${user.avatar}`, () => { console.log(123) })
         user.setAvatar(fileName)
         return res.sendStatus(200)
     } catch (error) {
@@ -185,18 +186,18 @@ async function uploadImage(req, res) {
 function fortmatData(data = {}) {
     const newData = { ...data }
     for (const prop in newData) {
-        if (newData[prop].trim().length === 0) {
+        if (newData[prop]?.trim().length === 0) {
             newData[prop] = undefined
         }
         else {
-            newData[prop] = newData[prop].trim()
+            newData[prop] = newData[prop]?.trim()
         }
     }
     return newData
 }
 function formatDate(date) {
     const formatedDate = new Date(date)
-    return formatedDate.toISOString().split('T')[0]
+    return formatedDate?.toISOString().split('T')[0]
 }
 function validate(username, email) {
     if (!username) return

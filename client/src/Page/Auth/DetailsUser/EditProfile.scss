@@ -87,12 +87,13 @@
 
                     .option {
                         display: flex;
+                        margin-left: 10px;
                         margin-right: 10px;
                     }
                 }
             }
 
-            .btnsave {
+            .btn-save {
                 height: 50px;
                 width: 100%;
                 margin-top: 20px;
@@ -112,58 +113,19 @@
                     border-radius: 5px;
                     font-size: 21px;
                     cursor: pointer;
+                    font-weight: bold;
 
                     &:hover {
                         box-shadow: 0px 0px 3px colors.$color-btn;
                     }
                 }
 
-                .errormessage {
+                .error-message {
                     position: absolute;
                     bottom: 100%;
                     color: colors.$color-btn;
                 }
             }
         }
-    }
-}
-
-.birth {
-    border-radius: 5px;
-
-    .listmonth,
-    .listday,
-    .listyear {
-        position: absolute;
-        width: 100%;
-        max-height: 200px;
-        top: 108%;
-        z-index: 2;
-        left: 0;
-        overflow-y: scroll;
-        background-color: #fff;
-        border: 1px solid;
-        list-style: none;
-        border-radius: 5px;
-
-        li {
-            padding: 5px;
-
-            &:hover {
-                cursor: pointer;
-                color: colors.$color-btn;
-            }
-        }
-    }
-
-    .wrapdayofbirth,
-    .wrapmonthofbirth,
-    .wrapyearofbirth {
-        position: fixed;
-        height: 100%;
-        width: 100%;
-        left: 0;
-        z-index: 1;
-        top: 0;
     }
 }
