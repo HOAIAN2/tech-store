@@ -11,7 +11,19 @@ import { faHouseChimney } from "@fortawesome/free-solid-svg-icons"
 import { faPhoneVolume } from "@fortawesome/free-solid-svg-icons"
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons"
 import Account from "../Account/Account"
+import {searchProduct} from "../../utils/Auth"
+import { useState } from "react"
 function Header() {
+    const [valueofsearch, setvalueofsearch] = useState("")
+    const [productsearch, setproductsearch] = useState([])
+    async function handleinputsearch(e) {
+        setvalueofsearch(e.target.value)
+        searchProduct(e.target.value)
+        .then((res)=>{
+            setproductsearch(res)
+            console.log(res)
+        })
+    }
 
     return (
         <div className="header">
@@ -31,17 +43,6 @@ function Header() {
                     </div>
 
                     <div className="header_item1-2">
-                        {/* <div className="header_item_1-2_btn"> */}
-                        {/* <div className="wrap_btn_login-logout"> */}
-                        {/* <Link to='/login'>
-                                    <span>Login</span>
-                                </Link>
-                                <p>/</p>
-                                <Link to='/register'>
-                                    <span>Sign up</span>
-                                </Link> */}
-                        {/* </div> */}
-                        {/* </div> */}
                         <Account />
                         <div className="header_item_1-2_btn">
                             <span className="text-thongbao">Thông Báo</span>
@@ -85,7 +86,13 @@ function Header() {
                     </div>
                     <div className="header_search">
                         <div className='search'>
-                            <input placeholder='Tìm sản phẩm' className='search_input' ></input>
+                            <input placeholder='Tìm sản phẩm' className='search_input' value={valueofsearch} onInput={handleinputsearch}></input>
+                            <div className="list-search">
+                               <div className="search-item">
+                                <img className="image-product-search" src="http://localhost:4000/images/avatar/user.png"></img>
+                                <div className="description">Điện thoại Samsung Galaxy Z Flip 4 (8GB/128GB) - Hàng chính hãng</div>
+                               </div>
+                            </div>
                         </div>
                         <div className="search_btn">
                             <div className="wrap_search-btn">

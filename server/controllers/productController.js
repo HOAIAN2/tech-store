@@ -1,11 +1,8 @@
-const { products, categories, suppliers } = require('../cache')
+const { products, categories, suppliers , findProduce} = require('../cache')
 const productErrors = require('./productErrors.json')
 
 // [GET home]
 function index(req, res) {
-    let errorMessages = productErrors.en
-    const language = req.headers["accept-language"]
-    if (language === 'vi') errorMessages = productErrors.vi
     const groupProduct = {}
     categories.forEach(category => {
         groupProduct[category.categoryName] = []
@@ -19,7 +16,7 @@ function index(req, res) {
             return product.ignoreProps('unitInOrder', 'quantity')
         })
     })
-    res.json(groupProduct)
+    return groupProduct
 }
 //[GET product]
 function getProductByID(req, res) {
@@ -34,7 +31,16 @@ function getProductByID(req, res) {
     if (product) return res.json(product.ignoreProps('unitInOrder', 'quantity'))
     else return res.status(404)
 }
+
+
+async function searchProduct(req,res) {
+    const product = await findProduce(req.query.name)
+    if(!product) return res.status(500).json({error: "1", message: "not found product"})
+    res.json(product)
+}
+
 module.exports = {
     index,
-    getProductByID
+    getProductByID,
+    searchProduct
 }
