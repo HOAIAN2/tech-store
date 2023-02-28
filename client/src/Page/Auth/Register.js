@@ -23,8 +23,6 @@ function Register() {
     const navigate = useNavigate()
     const prePage = location.state?.from
 
-    console.log(birthDate)
-
     function handleRegister(e) {
         e.preventDefault()
         if (password !== password1) {

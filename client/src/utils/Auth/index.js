@@ -90,6 +90,10 @@ async function uploadImage(file) {
     }
 }
 
+async function updateUser() {
+    
+}
+
 async function fetchUserData() {
     const token = JSON.parse(localStorage.getItem('token'))
     if (!token) throw new Error('no token')
