@@ -12,14 +12,17 @@ import { faTicketSimple } from "@fortawesome/free-solid-svg-icons"
 import { faCoins } from "@fortawesome/free-solid-svg-icons"
 import { Link } from "react-router-dom"
 import EditProfile from "./EditProfile"
+import languages from './Languages/DetailUser.json'
 
 function DetailsUser() {
   const [user] = useUserData()
   const location = useLocation()
   const [isEditMode, setIsEditMode] = useState(false)
   useEffect(() => {
-    document.title = 'Trang cá nhân'
+    document.title = language.title
   })
+  let language = languages.en
+  if (navigator.language === 'vi') language = languages.vi
   if (!user) return <Navigate to='/login' replace state={{ from: location }} />
   const fullName = `${user.lastName} ${user.firstName}`
   return (
@@ -38,7 +41,7 @@ function DetailsUser() {
                 </div>
                 <div className="edit-profile">
                   <FontAwesomeIcon icon={faUserPen} />
-                  <span onClick={() => { setIsEditMode(true) }}>Edit Profile</span>
+                  <span onClick={() => { setIsEditMode(true) }}>{language.edit}</span>
                 </div>
               </div>
             </div>
@@ -49,23 +52,23 @@ function DetailsUser() {
 
             <div className="sibar-detail-user_item active">
               <FontAwesomeIcon icon={faUser} />
-              <Link to={"/"}>My Account</Link>
+              <Link to={"/"}>{language.myAccount}</Link>
             </div>
             <div className="sibar-detail-user_item">
               <FontAwesomeIcon icon={faClipboardList} />
-              <Link to={"/"}>My Purchase</Link>
+              <Link to={"/"}>{language.myPurchase}</Link>
             </div>
             <div className="sibar-detail-user_item">
               <FontAwesomeIcon icon={faBell} />
-              <Link to={"/"}>Notifications</Link>
+              <Link to={"/"}>{language.notifications}</Link>
             </div>
             <div className="sibar-detail-user_item">
               <FontAwesomeIcon icon={faTicketSimple} />
-              <Link to={"/"}>My Vouchers</Link>
+              <Link to={"/"}>{language.myVoucher}</Link>
             </div>
             <div className="sibar-detail-user_item">
               <FontAwesomeIcon icon={faCoins} />
-              <Link to={"/"}>My TechStore Coins</Link>
+              <Link to={"/"}>{language.coin}</Link>
             </div>
 
           </div>

@@ -1,0 +1,34 @@
+{
+    "en": {
+        "title": "Personal profile",
+        "username": "Username",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "birthDate": "Birth date",
+        "address": "Address",
+        "sex": "Sex",
+        "password": "Password",
+        "repeatPassword": "Reapeat password",
+        "email": "Email",
+        "phoneNumber": "Phone number",
+        "male": "Male",
+        "female": "Female",
+        "submit": "Update"
+    },
+    "vi": {
+        "title": "Thông tin cá nhân",
+        "username": "Tên đăng nhập",
+        "firstName": "Tên",
+        "lastName": "Họ",
+        "birthDate": "Ngày sinh",
+        "address": "Địa chỉ",
+        "sex": "Giới tính",
+        "password": "Mật khẩu",
+        "repeatPassword": "Nhập lại mật khẩu",
+        "email": "Email",
+        "phoneNumber": "Số điện thoại",
+        "male": "Nam",
+        "female": "Nữ",
+        "submit": "Cập nhật"
+    }
+}

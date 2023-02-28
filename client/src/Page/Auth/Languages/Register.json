@@ -1,0 +1,38 @@
+{
+    "en": {
+        "title": "Register",
+        "username": "Username",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "birthDate": "Birth date",
+        "address": "Address",
+        "sex": "Sex",
+        "password": "Password",
+        "repeatPassword": "Reapeat password",
+        "email": "Email",
+        "phoneNumber": "Phone number",
+        "male": "Male",
+        "female": "Female",
+        "passwordTooShort": "Password must have atleast 8 characters",
+        "usernameTooShort": "Username must have atleast 8 characters",
+        "wrongReapeatPassword": "Wrong repeat password"
+    },
+    "vi": {
+        "title": "Đăng ký",
+        "username": "Tên đăng nhập",
+        "firstName": "Tên",
+        "lastName": "Họ",
+        "birthDate": "Ngày sinh",
+        "address": "Địa chỉ",
+        "sex": "Giới tính",
+        "password": "Mật khẩu",
+        "repeatPassword": "Nhập lại mật khẩu",
+        "email": "Email",
+        "phoneNumber": "Số điện thoại",
+        "male": "Nam",
+        "female": "Nữ",
+        "passwordTooShort": "Mật khẩu phải có ít nhất 8 ký tự",
+        "usernameTooShort": "Tên đăng nhập phải có ít nhất 8 ký tự",
+        "wrongReapeatPassword": "Nhập lại mật khẩu không chính xác"
+    }
+}

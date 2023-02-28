@@ -4,6 +4,7 @@ import { fetchUserData } from '../../utils/Auth'
 import { useUserData, USER_ACTION } from '../../Context'
 import { register } from '../../utils/Auth'
 import './Register.scss'
+import languages from './Languages/Register.json'
 
 function Register() {
     const [, dispatchUser] = useUserData()
@@ -22,26 +23,25 @@ function Register() {
     const location = useLocation()
     const navigate = useNavigate()
     const prePage = location.state?.from
-
-    console.log(birthDate)
-
+    let language = languages.en
+    if (navigator.language === 'vi') language = languages.vi
     function handleRegister(e) {
         e.preventDefault()
         if (password !== password1) {
-            setError('Nhập lại mật khẩu không chính xác')
+            setError(language.wrongReapeatPassword)
             return
         }
         if (username.length < 8) {
-            setError('Tên đăng nhập phải có ít nhất 8 ký tự')
+            setError(language.usernameTooShort)
             return
         }
-        if (username.length > 20) {
-            setError('Tên đăng nhập quá dài')
+        if (password.length < 8) {
+            setError(language.passwordTooShort)
             return
         }
         const formatedBirthDate = new Date(birthDate)
         let formatedSex = 'M'
-        if (sex === 'Nữ') formatedSex = 'F'
+        if (sex === language.female) formatedSex = 'F'
         const fortmatedPhoneNumber = phoneNumber.replace('0', '+84')
         buttonRef.current.classList.add('loading')
         register({
@@ -71,7 +71,7 @@ function Register() {
             })
     }
     useEffect(() => {
-        document.title = 'Đăng ký'
+        document.title = language.title
         fetchUserData()
             .then(data => {
                 dispatchUser({ type: USER_ACTION.SET, payload: data })
@@ -85,12 +85,12 @@ function Register() {
     return (
         <div className="register">
             <div className='register-title'>
-                <span>Đăng ký</span>
+                <span>{language.title}</span>
             </div>
             <form onSubmit={handleRegister}>
                 <div>
                     <div>
-                        <label htmlFor='register-username'>Tên đăng nhập</label>
+                        <label htmlFor='register-username'>{language.username}</label>
                         <input type='text'
                             id='register-username'
                             autoFocus
@@ -101,7 +101,7 @@ function Register() {
                 </div>
                 <div>
                     <div>
-                        <label htmlFor='register-first-name'>Họ</label>
+                        <label htmlFor='register-first-name'>{language.lastName}</label>
                         <input type='text'
                             id='register-first-name'
                             required
@@ -111,7 +111,7 @@ function Register() {
                 </div>
                 <div>
                     <div>
-                        <label htmlFor='register-last-name'>Tên</label>
+                        <label htmlFor='register-last-name'>{language.firstName}</label>
                         <input type='text'
                             id='register-last-name'
                             required
@@ -121,7 +121,7 @@ function Register() {
                 </div>
                 <div>
                     <div>
-                        <label htmlFor='register-birth-date'>Ngày sinh</label>
+                        <label htmlFor='register-birth-date'>{language.birthDate}</label>
                         <input type='date'
                             id='register-birth-date'
                             required
@@ -131,17 +131,17 @@ function Register() {
                 </div>
                 <div>
                     <div>
-                        <label htmlFor='register-sex'>Giới tính</label>
+                        <label htmlFor='register-sex'>{language.sex}</label>
                         <select name='register-sex' value={sex}
                             onChange={e => { setSex(e.target.value) }}>
-                            <option>Nam</option>
-                            <option>Nữ</option>
+                            <option>{language.male}</option>
+                            <option>{language.female}</option>
                         </select>
                     </div>
                 </div>
                 <div>
                     <div>
-                        <label htmlFor='register-address'>Địa chỉ</label>
+                        <label htmlFor='register-address'>{language.address}</label>
                         <input type='text'
                             id='register-address'
                             required
@@ -151,7 +151,7 @@ function Register() {
                 </div>
                 <div>
                     <div>
-                        <label htmlFor='register-email'>Email</label>
+                        <label htmlFor='register-email'>{language.email}</label>
                         <input type='email'
                             id='register-email'
                             value={email}
@@ -160,7 +160,7 @@ function Register() {
                 </div>
                 <div>
                     <div>
-                        <label htmlFor='register-tel'>Số điện thoại</label>
+                        <label htmlFor='register-tel'>{language.phoneNumber}</label>
                         <input type='tel'
                             id='tel'
                             pattern="[0]\d{9}"
@@ -170,7 +170,7 @@ function Register() {
                 </div>
                 <div>
                     <div>
-                        <label htmlFor='register-password'>Mật khẩu</label>
+                        <label htmlFor='register-password'>{language.password}</label>
                         <input type='password'
                             id='register-password'
                             value={password}
@@ -179,7 +179,7 @@ function Register() {
                 </div>
                 <div>
                     <div>
-                        <label htmlFor='register-password1'>Nhập lại mật khẩu</label>
+                        <label htmlFor='register-password1'>{language.repeatPassword}</label>
                         <input type='password'
                             id='register-password1'
                             value={password1}
@@ -190,7 +190,7 @@ function Register() {
                     <span>{error}</span>
                 </div>
                 <div>
-                    <button ref={buttonRef}>Đăng ký</button>
+                    <button ref={buttonRef}>{language.title}</button>
                 </div>
             </form>
         </div>
