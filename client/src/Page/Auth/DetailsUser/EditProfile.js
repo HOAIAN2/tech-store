@@ -27,18 +27,18 @@ function EditProfile(props) {
         if (e.target.className === "birth-date-input") return setBirthDate(e.target.value)
     }
     function getGender() {
-        let genders = document.querySelectorAll("#option-gender")
+        let genders = document.querySelectorAll(".option-gender")
         if (genders[0].checked) {
-            return "male"
+            return "m"
         }
-        return "female"
+        return "f"
     }
     function handleSave(e) {
         const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
         if (email.trim() !== '') {
             if (!email.match(emailRegex)) return seterror("Invalid email")
         }
-        let data = {
+        const data = {
             userName: username,
             firstName: firstName,
             lastName: lastName,
@@ -58,7 +58,7 @@ function EditProfile(props) {
     }
 
     useEffect(() => {
-        const optionElement = document.querySelectorAll("#option-gender")
+        const optionElement = document.querySelectorAll(".option-gender")
         if (user.sex.includes("f")) {
             optionElement[1].setAttribute("checked", true)
         } else {
@@ -102,13 +102,13 @@ function EditProfile(props) {
                             <span className="title-update-field">Gender</span>
                             <div className="option">
                                 <div className="">
-                                    <input id="option-gender" name="radio" value="one" type="radio" />
+                                    <input id="option-one" className="option-gender" name="radio" value="one" type="radio" />
                                 </div>
                                 <label htmlFor="option-one"> Male </label>
                             </div>
                             <div className="option">
                                 <div className="">
-                                    <input id="option-gender" name="radio" value="two" type="radio" />
+                                    <input id="option-two" className="option-gender" name="radio" value="two" type="radio" />
                                 </div>
                                 <label htmlFor="option-two"> Female </label>
                             </div>

@@ -28,6 +28,7 @@ function DetailsUserProfile() {
       setAvatar(file.result)
       setIsDifferentAvatar(true)
     })
+    if (!e.target.files[0]) return
     file.readAsDataURL(e.target.files[0])
   }
   function handleSaveAvatar(e) {
