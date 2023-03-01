@@ -1,10 +1,11 @@
 import { useState } from "react"
-import { useUserData } from "../../../Context"
+import { useUserData, USER_ACTION } from "../../../Context"
 import './EditProfile.scss'
 import languages from './Languages/EditProfile.json'
+import { editProfile, fetchUserData } from "../../../utils/Auth"
 
 function EditProfile(props) {
-    const [user] = useUserData()
+    const [user, dispatchUser] = useUserData()
     const [username, setUsername] = useState(user.username)
     const [firstName, setfirstName] = useState(user.firstName)
     const [lastName, setlastName] = useState(user.lastName)
@@ -16,7 +17,7 @@ function EditProfile(props) {
     const [address, setaddress] = useState(user.address)
     const [email, setEmail] = useState(user.email || '')
     const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber || '')
-    const [error, seterror] = useState('')
+    const [error, setError] = useState('')
     let language = languages.en
     if (navigator.language === 'vi') language = languages.vi
     function inputChange(e) {
@@ -37,10 +38,13 @@ function EditProfile(props) {
         // eslint-disable-next-line no-useless-escape
         const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
         if (email.trim() !== '') {
-            if (!email.match(emailRegex)) return seterror("Invalid email")
+            if (!email.match(emailRegex)) return setError(language.emailInvalid)
         }
+        if (!firstName) return setError(language.firstNameNotNull)
+        if (!lastName) return setError(language.lastNameNotNull)
+        if (!address) return setError(language.addressNotNull)
         const data = {
-            userName: username,
+            username: username,
             firstName: firstName,
             lastName: lastName,
             birthDate: new Date(birthDate),
@@ -49,7 +53,17 @@ function EditProfile(props) {
             email: email,
             phoneNumber: phoneNumber
         }
-        console.log(data)
+        editProfile(data)
+            .then(() => fetchUserData())
+            .then(data => {
+                dispatchUser({ type: USER_ACTION.SET, payload: data })
+                props.setIsEditMode(false)
+            })
+            .catch(error => {
+                if (error.message !== 'no token') console.error(error.message)
+                console.error(error.message)
+                setError(error.message)
+            })
     }
 
     function closePopup(e) {

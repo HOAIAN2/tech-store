@@ -49,7 +49,7 @@ function DetailsUser() {
 
             <div className="sibar-detail-user_item active">
               <FontAwesomeIcon icon={faUser} />
-              <Link to={"/"}>{language.myAccount}</Link>
+              <Link to={"/profile"}>{language.myAccount}</Link>
             </div>
             <div className="sibar-detail-user_item">
               <FontAwesomeIcon icon={faClipboardList} />
