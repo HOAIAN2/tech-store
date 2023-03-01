@@ -88,7 +88,15 @@ async function uploadImage(file) {
             }
         })
     } catch (error) {
-        throw new Error(error.message)
+        if (error.response.status === 403) {
+            try {
+                await reGetToken()
+                await uploadImage(file)
+            } catch (error) {
+                throw new Error(error)
+            }
+        }
+        else throw new Error(error)
     }
 }
 
