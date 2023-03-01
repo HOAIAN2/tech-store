@@ -68,9 +68,11 @@ async function changePassword(oldPassword = '', newPassword) {
                 throw new Error(error)
             }
         }
-        if (!error.response) throw new Error(error.message)
-        const message = error.response.data.message
-        throw new Error(message)
+        else {
+            if (!error.response) throw new Error(error.message)
+            const message = error.response.data.message
+            throw new Error(message)
+        }
     }
 }
 
@@ -109,7 +111,7 @@ async function fetchUserData() {
                 throw new Error(error)
             }
         }
-        throw new Error(error)
+        else throw new Error(error)
     }
 }
 async function reGetToken() {

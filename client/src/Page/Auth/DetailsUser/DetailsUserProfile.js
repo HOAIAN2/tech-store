@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 import { uploadImage } from "../../../utils/Auth"
 import { fetchUserData } from "../../../utils/Auth"
 import { useUserData, USER_ACTION } from '../../../Context'
@@ -47,7 +47,9 @@ function DetailsUserProfile() {
         })
     }
   }
-
+  useEffect(() => {
+    document.title = language.title
+  })
   return (
     <>
       <div className="detailuser-profile">

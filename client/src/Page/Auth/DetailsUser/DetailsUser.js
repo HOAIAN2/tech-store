@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import "./DetailsUser.scss"
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import Header from "../../../components/header/Header";
@@ -18,9 +18,6 @@ function DetailsUser() {
   const [user] = useUserData()
   const location = useLocation()
   const [isEditMode, setIsEditMode] = useState(false)
-  useEffect(() => {
-    document.title = language.title
-  })
   let language = languages.en
   if (navigator.language === 'vi') language = languages.vi
   if (!user) return <Navigate to='/login' replace state={{ from: location }} />
