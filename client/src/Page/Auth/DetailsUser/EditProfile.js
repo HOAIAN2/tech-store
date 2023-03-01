@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react"
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { useState } from "react"
 import { useUserData } from "../../../Context"
 import './EditProfile.scss'
 import languages from './Languages/EditProfile.json'
@@ -36,6 +34,7 @@ function EditProfile(props) {
     }
     function handleSave(e) {
         e.preventDefault()
+        // eslint-disable-next-line no-useless-escape
         const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
         if (email.trim() !== '') {
             if (!email.match(emailRegex)) return seterror("Invalid email")
