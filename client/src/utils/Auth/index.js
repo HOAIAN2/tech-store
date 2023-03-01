@@ -122,6 +122,31 @@ async function fetchUserData() {
         else throw new Error(error)
     }
 }
+async function editProfile(data) {
+    const token = JSON.parse(localStorage.getItem('token'))
+    if (!token) throw new Error('no token')
+    try {
+        await request.post('/auth/edit', data, {
+            headers: {
+                Authorization: `Bearer ${token.accessToken}`
+            }
+        })
+    } catch (error) {
+        if (error.response.status === 403) {
+            try {
+                await reGetToken()
+                await editProfile(data)
+            } catch (error) {
+                throw new Error(error)
+            }
+        }
+        else {
+            if (!error.response) throw new Error(error.message)
+            const message = error.response.data.message
+            throw new Error(message)
+        }
+    }
+}
 async function reGetToken() {
     try {
         const token = JSON.parse(localStorage.getItem('token'))
@@ -142,4 +167,5 @@ export {
     fetchUserData,
     reGetToken,
     uploadImage,
+    editProfile
 }

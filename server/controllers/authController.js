@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 require('dotenv').config()
-const { refreshTokens, findUser, createUser, updatePassword, updateUserImage } = require('../cache')
+const { refreshTokens, findUser, createUser, updatePassword, updateUserImage, updateProfile } = require('../cache')
 const authErrors = require('./authErrors.json')
 const path = require("path")
 const fs = require("fs")
@@ -189,6 +189,65 @@ async function uploadImage(req, res) {
         return res.status(500).json({ message: 'error' })
     }
 }
+//[POST]
+async function editProfile(req, res) {
+    let errorMessages = authErrors.en
+    const language = req.headers["accept-language"]
+    if (language === 'vi') errorMessages = authErrors.vi
+    const token = req.headers['authorization'].split(' ')[1]
+    const tokenData = readAccessToken(token)
+    const data = {
+        username: req.body.username,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        birthDate: req.body.birthDate,
+        sex: req.body.sex,
+        address: req.body.address,
+        email: req.body.email,
+        phoneNumber: req.body.phoneNumber
+    }
+    const validDataType = Object.keys(data).every(key => {
+        return typeof data[key] === 'string'
+    })
+    if (!validDataType) return res.status(400).json({ message: errorMessages.invalidDataType })
+    if (!validate(data.username, data.email)) {
+        return res.status(404).json({ message: errorMessages.invalidUsernameOrEmail })
+    }
+    const user = await findUser(tokenData.username)
+    if (!user) {
+        return res.status(404).json({ message: errorMessages.usernameExists })
+    }
+    else {
+        try {
+            const newData = fortmatData(data)
+            const formatedBirthDate = formatDate(data.birthDate)
+            await updateProfile(user.userID, {
+                username: newData.username,
+                firstName: newData.firstName,
+                lastName: newData.lastName,
+                birthDate: formatedBirthDate,
+                sex: newData.sex,
+                address: newData.address,
+                email: newData.email,
+                phoneNumber: newData.phoneNumber
+            })
+            user.setUsername(newData.username)
+            user.setFirstName(newData.firstName)
+            user.setLastName(newData.lastName)
+            user.setBirthDate(formatedBirthDate)
+            user.setSex(newData.sex)
+            user.setAddress(newData.address)
+            user.setEmail(newData.email)
+            user.setPhoneNumber(newData.phoneNumber)
+            return res.sendStatus(200)
+        } catch (error) {
+            console.log('\x1b[31m%s\x1b[0m', error.message)
+            if (error.message.includes('users.UQ_email')) return res.status(400).json({ message: errorMessages.emailExists })
+            if (error.message.includes('users.UQ_phone_number')) return res.status(400).json({ message: errorMessages.phoneNumberExists })
+            return res.status(500).json({ message: 'error' })
+        }
+    }
+}
 
 /// Middlewares, etc...
 function fortmatData(data = {}) {
@@ -281,6 +340,7 @@ module.exports = {
     login,
     logout,
     register,
+    editProfile,
     authenticateToken,
     readAccessToken,
     reCreateToken,

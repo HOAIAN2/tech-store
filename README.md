@@ -12,6 +12,21 @@
 ## Database Diagram
 ![](/database/store_db_diagram.png)
 ## API
+### User routes: /api/user/
+>[GET] /: JWT require
+* Respone
+``` json
+{
+    "username": "username",
+    "firstName": "first name",
+    "lastName": "last name",
+    "birthDate": "2023-02-09T01:18:02.135Z",
+    "sex": "M",
+    "address": "province, city, etc",
+    "email": "username@email.com", // NULLABLE
+    "phoneNumber": "+84....", // phone number in Vietnam, CHAR(12) NULLABLE
+}
+```
 ### Auth routes: /api/auth/
 >[POST] login
 * Request
@@ -28,7 +43,7 @@
     "refreshToken": "string"
 }
 ```
->[POST] logout
+>[POST] logout: JWT require
 * Request
 ```json
 {
@@ -41,7 +56,7 @@
     "message": "message"
 }
 ```
->[POST] change-password
+>[POST] change-password: JWT require
 * Request
 ```json
 {
@@ -86,6 +101,21 @@
     "message": "message"
 }
 ```
+>[POST] edit: JWT require
+* Request
+```json
+{
+    "username": "username",
+    "firstName": "first name",
+    "lastName": "last name",
+    "birthDate": "2023-02-09T01:18:02.135Z",
+    "sex": "M",
+    "address": "province, city, etc",
+    "email": "username@email.com", // NULLABLE
+    "phoneNumber": "+84....", // phone number in Vietnam, CHAR(12) NULLABLE
+}
+```
+* Respone
 >[POST] upload
 * Request: formData(file: yourImage) (accept: png, jpeg, jpg)
 * Respone: HTTP status code

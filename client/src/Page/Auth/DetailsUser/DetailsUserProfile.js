@@ -17,7 +17,7 @@ function DetailsUserProfile() {
   if (navigator.language === 'vi') language = languages.vi
   // Format and Show Info
   let sex = language.male
-  if (user.sex.toLowerCase() === language.female) sex = language.female
+  if (user.sex.toLowerCase() === 'female') sex = language.female
   function formatPhoneNumber() {
     let phoneNumber = user.phoneNumber?.replace("+84", "0")
     return phoneNumber?.replace(/\d{8}/, "********")

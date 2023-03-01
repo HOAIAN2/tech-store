@@ -13,7 +13,11 @@
         "phoneNumber": "Phone number",
         "male": "Male",
         "female": "Female",
-        "submit": "Update"
+        "submit": "Update",
+        "firstNameNotNull": "First name cannot be null",
+        "lastNameNotNull": "Last name cannot be null",
+        "addressNotNull": "Address cannot be null",
+        "emailInvalid": "Email invalid"
     },
     "vi": {
         "title": "Thông tin cá nhân",
@@ -29,6 +33,10 @@
         "phoneNumber": "Số điện thoại",
         "male": "Nam",
         "female": "Nữ",
-        "submit": "Cập nhật"
+        "submit": "Cập nhật",
+        "firstNameNotNull": "Tên không được để trống",
+        "lastNameNotNull": "Họ không được để trống",
+        "addressNotNull": "Địa chỉ không được để trống",
+        "emailInvalid": "Email không hợp lệ"
     }
 }
