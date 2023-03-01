@@ -1,4 +1,4 @@
-import "./Header.scss"
+import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
 import { faBell } from "@fortawesome/free-solid-svg-icons"
@@ -10,10 +10,14 @@ import { faCartShopping } from "@fortawesome/free-solid-svg-icons"
 import { faHouseChimney } from "@fortawesome/free-solid-svg-icons"
 import { faPhoneVolume } from "@fortawesome/free-solid-svg-icons"
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons"
+import { faSearch } from "@fortawesome/free-solid-svg-icons"
 import Account from "../Account/Account"
 import languages from './Languages/Header.json'
+import "./Header.scss"
 
 function Header() {
+    const [searchValue, setSeacrhValue] = useState('')
+    console.log(searchValue)
     let language = languages.en
     if (navigator.language === 'vi') language = languages.vi
     return (
@@ -21,33 +25,22 @@ function Header() {
             <div className="header_item1">
                 <div className="wrap-header-item1">
                     <div className="header_item1-1">
-                        <div className="header_item_1-1_btn">
+                        {/* <div className="header_item_1-1_btn">
                             <span>Kênh Người Bán</span>
+                        </div> */}
+                        <div className="header_item_1-1_btn">
+                            <span>{language.download}</span>
                         </div>
                         <div className="header_item_1-1_btn">
-                            <span>Tải Ứng Dụng</span>
-                        </div>
-                        <div className="header_item_1-1_btn">
-                            <span>Language</span>
+                            <span>{language.languages}</span>
                             <FontAwesomeIcon icon={faCaretDown} />
                         </div>
                     </div>
 
                     <div className="header_item1-2">
-                        {/* <div className="header_item_1-2_btn"> */}
-                        {/* <div className="wrap_btn_login-logout"> */}
-                        {/* <Link to='/login'>
-                                    <span>Login</span>
-                                </Link>
-                                <p>/</p>
-                                <Link to='/register'>
-                                    <span>Sign up</span>
-                                </Link> */}
-                        {/* </div> */}
-                        {/* </div> */}
                         <Account />
                         <div className="header_item_1-2_btn">
-                            <span className="text-thongbao">Thông Báo</span>
+                            <span className="text-thongbao">{language.notifications}</span>
                             <FontAwesomeIcon className="thongbao-icon" icon={faBell} />
                         </div>
                         <div className="header_item_1-2_btn">
@@ -88,13 +81,19 @@ function Header() {
                     </div>
                     <div className="header_search">
                         <div className='search'>
-                            <input placeholder='Tìm sản phẩm' className='search_input' ></input>
+                            <input placeholder={language.placeHolder}
+                                className='search_input'
+                                value={searchValue}
+                                onInput={(e) => { setSeacrhValue(e.target.value) }}
+                            ></input>
                         </div>
-                        <div className="search_btn">
+                        {searchValue && <div className="search_btn">
                             <div className="wrap_search-btn">
-                                <span>Search</span>
+                                <span>
+                                    <FontAwesomeIcon icon={faSearch} />
+                                </span>
                             </div>
-                        </div>
+                        </div>}
                     </div>
                     <div className="cart-shopping">
                         <FontAwesomeIcon icon={faCartShopping} />
@@ -110,28 +109,28 @@ function Header() {
                     <div className="option-item">
                         <div className="header-option">
                             <FontAwesomeIcon icon={faHouseChimney} />
-                            <span>Home</span>
+                            <span>{language.home}</span>
                             <FontAwesomeIcon icon={faCaretDown} className="icondow" />
                         </div>
                         <div className="header-option">
-                            <span>Products</span>
+                            <span>{language.products}</span>
                             <FontAwesomeIcon icon={faCaretDown} className="icondow" />
                         </div>
                         <div className="header-option">
-                            <span>Blog</span>
+                            <span>{language.blog}</span>
                         </div>
                         <div className="header-option">
-                            <span>Contact</span>
+                            <span>{language.contact}</span>
                         </div>
                     </div>
                     <div className="option-item">
                         <div className="header-contact">
                             <FontAwesomeIcon icon={faPhoneVolume} />
-                            <span>035 596 0156</span>
+                            <span>{language.phoneNumber}</span>
                         </div>
                         <div className="header-contact">
                             <FontAwesomeIcon icon={faEnvelope} />
-                            <span>dungprof8.0@gmail.com</span>
+                            <span>{language.email}</span>
                         </div>
                     </div>
                 </div>

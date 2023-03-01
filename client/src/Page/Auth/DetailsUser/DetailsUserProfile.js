@@ -16,8 +16,8 @@ function DetailsUserProfile() {
   let language = languages.en
   if (navigator.language === 'vi') language = languages.vi
   // Format and Show Info
-  let sex = 'male'
-  if (user.sex.toLowerCase() === 'female') sex = 'female'
+  let sex = language.male
+  if (user.sex.toLowerCase() === language.female) sex = language.female
   function formatPhoneNumber() {
     let phoneNumber = user.phoneNumber?.replace("+84", "0")
     return phoneNumber?.replace(/\d{8}/, "********")
@@ -96,7 +96,7 @@ function DetailsUserProfile() {
           <div className="avatar-user">
             <div className="wrap-avatar-user">
               <div className="avatar-item">
-                <img ref={imageRef} id="avatar" onClick={() => { inputFileRef.current.click() }} src={avatar} alt="" />
+                <img title={language.hover} ref={imageRef} id="avatar" onClick={() => { inputFileRef.current.click() }} src={avatar} alt="" />
               </div>
               <div className="set-avatar">
                 <input ref={inputFileRef} onChange={handleChangeAvatar} type="file" id="file" className="inputfile" />

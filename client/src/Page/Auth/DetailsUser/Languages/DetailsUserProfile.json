@@ -8,19 +8,25 @@
         "email": "Email",
         "phoneNumber": "Số điện thoại",
         "sex": "Sex",
+        "male": "male",
+        "female": "female",
         "birthDate": "Birth date",
-        "save": "Save"
+        "save": "Save",
+        "hover": "Change avatar"
     },
     "vi": {
         "title": "Trang cá nhân",
         "subTitle": "Quản lý và bảo vệ tài khoản của bạn",
-        "edit": "Sửa",
+        "edit": "Chỉnh sửa",
         "username": "Tên đăng nhập",
         "name": "Tên",
         "email": "Email",
         "phoneNumber": "Số điện thoại",
         "sex": "Giới tính",
+        "male": "nam",
+        "female": "nữ",
         "birthDate": "Ngày sinh",
-        "save": "Lưu"
+        "save": "Lưu",
+        "hover": "Thay đổi ảnh đại diện"
     }
 }
