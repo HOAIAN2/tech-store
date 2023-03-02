@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
 import { faBell } from "@fortawesome/free-solid-svg-icons"
@@ -14,10 +14,22 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons"
 import Account from "../Account/Account"
 import languages from './Languages/Header.json'
 import "./Header.scss"
+import SearchList from '../render_item/SearchList'
+import { searchProduct } from '../../utils/Product'
 
 function Header() {
     const [searchValue, setSeacrhValue] = useState('')
-    console.log(searchValue)
+    const [searchData, setSeacrhData] = useState([])
+    useEffect(() => {
+        searchProduct(searchValue, 'less')
+            .then(res => {
+                setSeacrhData(res)
+                console.log(res)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }, [searchValue])
     let language = languages.en
     if (navigator.language === 'vi') language = languages.vi
     return (
@@ -94,6 +106,7 @@ function Header() {
                                 </span>
                             </div>
                         </div>}
+                        {/* <SearchList data={searchData} /> */}
                     </div>
                     <div className="cart-shopping">
                         <FontAwesomeIcon icon={faCartShopping} />
