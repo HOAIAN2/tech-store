@@ -24,7 +24,6 @@ function ChangePassWord() {
         }
         changePassword(oldPassword, newPassword)
             .then(data => {
-                console.log(data)
                 localStorage.removeItem('token')
                 navigate('/login')
             })

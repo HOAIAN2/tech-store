@@ -33,7 +33,44 @@ async function initializeProduct() {
         throw new Error(`Fail to initialize products data: ${error.message}`)
     }
 }
+
+async function findProduce(name) {
+    const product = products.find((data) => { data.productName.includes(name) || data.category.includes(name) || data.supplier.includes(name) })
+    if (!product) {
+        const queryString = [
+            'SELECT product_name, images , price',
+            'FROM products JOIN suppliers ON products.supplier_id = suppliers.supplier_id',
+            'JOIN categories ON products.category_id = categories.category_id',
+            'WHERE product_name LIKE "%"?"%" OR suppliers.supplier_name LIKE "%"?"%" OR categories.category_name LIKE "%"?"%"',
+            'LIMIT 5,5'
+        ].join(' ')
+        try {
+            const [rows] = await pool.query(queryString, [name,name,name])
+            return rows
+        } catch (error) {
+          return {data: []}
+        }
+    }
+    return product
+}
+
+async function getSuppliersCategories_Name() {
+    const queryString1 = 'select supplier_name from suppliers;';
+    const queryString2 = 'select category_name  from categories;';
+
+    try {
+        const [rows1] = await pool.query(queryString1)
+        const [rows2] = await pool.query(queryString2)
+        return {rows1 , rows2}
+    } catch (error) {
+        sole.log('\x1b[31m%s\x1b[0m', error.message)
+        throw new Error(error.message)
+    }
+}
+
 module.exports = {
     initializeProduct,
+    findProduce,
+    getSuppliersCategories_Name,
     products
 }

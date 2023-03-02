@@ -158,6 +158,14 @@ async function reGetToken() {
         throw new Error(error.response.data.message)
     }
 }
+async function searchProduct(text) {
+    try {
+        const product = await request.get(`/products/search?name=${text}`)
+        return product.data
+    } catch (error) {
+        return []
+    }
+}
 
 export {
     login,
