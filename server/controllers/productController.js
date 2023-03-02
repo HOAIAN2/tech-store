@@ -1,4 +1,4 @@
-const { products, categories, suppliers , findProduce} = require('../cache')
+const { products, categories, suppliers, findProduct } = require('../cache')
 const productErrors = require('./productErrors.json')
 
 // [GET home]
@@ -33,22 +33,24 @@ function getProductByID(req, res) {
 }
 
 
-async function searchProduct(req,res) {
+async function searchProduct(req, res) {
     const text = req.query.name.trim()
-    if(text == "") return res.json([])
-    const product = await findProduce(text)
+    if (text == "") return res.json([])
+    const product = await findProduct(text)
     res.json(product)
 }
 
-async function getSuppliers_categories(req,res) {
-    const rs = await getSuppliersCategories_Name()
-    if(Object.keys(rs).length === 0 || !rs) return res.status(500)
-    res.json(rs)
+async function getSuppliersCategories(req, res) {
+    const data = {
+        categories: categories.map(category => category.categoryName),
+        suppliers: suppliers.map(supplier => supplier.supplierName)
+    }
+    res.json(data)
 }
 
 module.exports = {
     index,
     getProductByID,
     searchProduct,
-    getSuppliers_categories
+    getSuppliersCategories
 }
