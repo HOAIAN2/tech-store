@@ -24,7 +24,6 @@ function Header() {
         searchProduct(searchValue, 'less')
             .then(res => {
                 setSeacrhData(res)
-                console.log(res)
             })
             .catch(error => {
                 console.error(error)

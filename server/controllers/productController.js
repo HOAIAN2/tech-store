@@ -34,17 +34,17 @@ function getProductByID(req, res) {
 
 
 async function searchProduct(req, res) {
-    const options = ['less', 'more']
+    const options = ['get5item', 'get40item']
     const text = req.query.name?.trim()
     const option = req.query.option?.trim()
     if (text === "") return res.json([])
     if (!options.includes(option)) return res.sendStatus(400)
-    if (option === 'less') {
-        const result = await findProduct(text)
-        return res.json(result.slice(0, 5).map(product => product.ignoreProps('unitInOrder', 'quantity')))
+    if (option === 'get5item') {
+        const result = await findProduct(text,option)
+        return res.json(result.map(product => product.ignoreProps('unitInOrder', 'quantity')))
     }
     else {
-        const result = await findProduct(text)
+        const result = await findProduct(text, option)
         return res.json(result.map(product => product.ignoreProps('unitInOrder', 'quantity')))
     }
 }
