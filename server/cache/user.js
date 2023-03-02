@@ -115,26 +115,12 @@ async function updateUserImage(path, username) {
     }
 }
 
-async function getSuppliersCategories_Name() {
-    const queryString1 = 'select supplier_name from suppliers;';
-    const queryString2 = 'select category_name  from categories;';
-
-    try {
-        const [rows1] = await pool.query(queryString1)
-        const [rows2] = await pool.query(queryString2)
-        return {rows1 , rows2}
-    } catch (error) {
-        sole.log('\x1b[31m%s\x1b[0m', error.message)
-        throw new Error(error.message)
-    }
-}
 
 module.exports = {
     findUser,
     createUser,
     initializeUser,
     updatePassword,
-    getSuppliersCategories_Name,
     users,
     refreshTokens,
     updateUserImage
