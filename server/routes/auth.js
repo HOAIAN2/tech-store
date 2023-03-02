@@ -8,6 +8,4 @@ router.post('/change-password', authController.authenticateToken, authController
 router.post('/register', authController.register)
 router.post('/refresh', authController.reCreateToken)
 router.post("/upload", authController.authenticateToken, authController.uploadImage)
-router.get("/suppliers-categories", authController.getSuppliers_categories)
-
 module.exports = router

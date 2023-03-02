@@ -40,8 +40,15 @@ async function searchProduct(req,res) {
     res.json(product)
 }
 
+async function getSuppliers_categories(req,res) {
+    const rs = await getSuppliersCategories_Name()
+    if(Object.keys(rs).length === 0 || !rs) return res.status(500)
+    res.json(rs)
+}
+
 module.exports = {
     index,
     getProductByID,
-    searchProduct
+    searchProduct,
+    getSuppliers_categories
 }

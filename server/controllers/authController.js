@@ -190,6 +190,8 @@ async function uploadImage(req, res) {
     }
 }
 
+
+
 /// Middlewares, etc...
 function fortmatData(data = {}) {
     const newData = { ...data }
@@ -277,11 +279,6 @@ function authenticateToken(req, res, next) {
     }
 }
 
-async function getSuppliers_categories(req,res) {
-    const rs = await getSuppliersCategories_Name()
-    if(Object.keys(rs).length === 0 || !rs) return res.status(500)
-    res.json(rs)
-}
 
 module.exports = {
     login,
@@ -292,5 +289,4 @@ module.exports = {
     reCreateToken,
     changePassword,
     uploadImage,
-    getSuppliers_categories,
 }
