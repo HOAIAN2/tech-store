@@ -44,6 +44,8 @@ module.exports = {
     updateProfile,
     updatePassword,
     updateUserImage,
+    findProduce,
+    getSuppliersCategories_Name,
     pool,
     users,
     products,
