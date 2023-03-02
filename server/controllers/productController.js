@@ -34,8 +34,9 @@ function getProductByID(req, res) {
 
 
 async function searchProduct(req,res) {
-    const product = await findProduce(req.query.name)
-    if(!product) return res.status(500).json({error: "1", message: "not found product"})
+    const text = req.query.name.trim()
+    if(text == "") return res.json([])
+    const product = await findProduce(text)
     res.json(product)
 }
 

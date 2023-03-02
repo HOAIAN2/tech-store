@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 require('dotenv').config()
-const { refreshTokens, findUser, createUser, updatePassword, updateUserImage } = require('../cache')
+const { refreshTokens, findUser, createUser, updatePassword, updateUserImage , getSuppliersCategories_Name} = require('../cache')
 const authErrors = require('./authErrors.json')
 const path = require("path")
 const fs = require("fs")
@@ -277,6 +277,12 @@ function authenticateToken(req, res, next) {
     }
 }
 
+async function getSuppliers_categories(req,res) {
+    const rs = await getSuppliersCategories_Name()
+    if(Object.keys(rs).length === 0 || !rs) return res.status(500)
+    res.json(rs)
+}
+
 module.exports = {
     login,
     logout,
@@ -285,5 +291,6 @@ module.exports = {
     readAccessToken,
     reCreateToken,
     changePassword,
-    uploadImage
+    uploadImage,
+    getSuppliers_categories,
 }

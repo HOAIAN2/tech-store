@@ -1,6 +1,6 @@
 require('dotenv').config()
 const { pool } = require('./database')
-const { users, findUser, createUser, initializeUser, updatePassword, refreshTokens , updateUserImage} = require('./user')
+const { users, findUser, createUser, initializeUser, updatePassword, refreshTokens , updateUserImage,getSuppliersCategories_Name } = require('./user')
 const { products, initializeProduct, findProduce } = require('./product')
 const { categories, initializeCategory } = require('./category')
 const { orders, initializeOrder } = require('./order')
@@ -35,6 +35,7 @@ module.exports = {
     updatePassword,
     updateUserImage,
     findProduce,
+    getSuppliersCategories_Name,
     pool,
     users,
     products,

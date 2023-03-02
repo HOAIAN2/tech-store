@@ -128,7 +128,7 @@ async function searchProduct(text) {
         const product = await request.get(`/products/search?name=${text}`)
         return product.data
     } catch (error) {
-        throw new Error(error)
+        return []
     }
 }
 
