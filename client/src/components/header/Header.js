@@ -11,18 +11,19 @@ import { faHouseChimney } from "@fortawesome/free-solid-svg-icons"
 import { faPhoneVolume } from "@fortawesome/free-solid-svg-icons"
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons"
 import Account from "../Account/Account"
-import {searchProduct} from "../../utils/Auth"
+import { searchProduct } from "../../utils/Auth"
 import { useState } from "react"
+import Render_list_search from "../render_item/render_list_search"
 function Header() {
     const [valueofsearch, setvalueofsearch] = useState("")
     const [productsearch, setproductsearch] = useState([])
+
     async function handleinputsearch(e) {
         setvalueofsearch(e.target.value)
         searchProduct(e.target.value)
-        .then((res)=>{
-            setproductsearch(res)
-            console.log(res)
-        })
+            .then((res) => {
+                setproductsearch(res)
+            })
     }
 
     return (
@@ -88,10 +89,9 @@ function Header() {
                         <div className='search'>
                             <input placeholder='Tìm sản phẩm' className='search_input' value={valueofsearch} onInput={handleinputsearch}></input>
                             <div className="list-search">
-                               <div className="search-item">
-                                <img className="image-product-search" src="http://localhost:4000/images/avatar/user.png"></img>
-                                <div className="description">Điện thoại Samsung Galaxy Z Flip 4 (8GB/128GB) - Hàng chính hãng</div>
-                               </div>
+                                {productsearch.map((data,index)=>{
+                                    return <div key={index}><Render_list_search data={data}/></div>
+                                })}
                             </div>
                         </div>
                         <div className="search_btn">

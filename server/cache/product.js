@@ -46,11 +46,9 @@ async function findProduce(name) {
         ].join(' ')
         try {
             const [rows] = await pool.query(queryString, [name,name,name])
-            if(rows.length !== 0){
-                return rows
-            }
+            return rows
         } catch (error) {
-          console.log(error)
+          return {data: []}
         }
     }
     return product
