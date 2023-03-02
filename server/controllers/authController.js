@@ -268,7 +268,7 @@ function formatDate(date) {
 }
 function validate(username, email) {
     if (!username) return
-    const usernameRegex = /^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/
+    const usernameRegex = /^(?=[a-zA-Z0-9._]{8,100}$)(?!.*[_.]{2})[^_.].*[^_.]$/
     const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
     if (email) {
         if (username.match(usernameRegex) && email.match(emailRegex)) return true

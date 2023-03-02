@@ -101,7 +101,12 @@ function DetailsUserProfile() {
                 <img title={language.hover} ref={imageRef} id="avatar" onClick={() => { inputFileRef.current.click() }} src={avatar} alt="" />
               </div>
               <div className="set-avatar">
-                <input ref={inputFileRef} onChange={handleChangeAvatar} type="file" id="file" className="inputfile" />
+                <input ref={inputFileRef}
+                  onChange={handleChangeAvatar}
+                  type="file"
+                  accept="image/png, image/jpeg, image/jpg"
+                  id="file"
+                  className="inputfile" />
                 {isDifferentAvatar && <button onClick={handleSaveAvatar}>{language.save}</button>}
               </div>
             </div>

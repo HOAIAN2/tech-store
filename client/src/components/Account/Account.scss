@@ -44,7 +44,7 @@
             }
 
             &:hover {
-                text-decoration: underline;
+                // text-decoration: underline;
                 cursor: pointer;
 
                 .drop-list-item {
@@ -79,8 +79,8 @@
                 height: 20px;
 
                 &:hover {
-                    text-decoration: underline;
-                    opacity: 0.9;
+                    // text-decoration: underline;
+                    opacity: 0.5;
                     cursor: pointer;
                 }
             }
