@@ -143,6 +143,7 @@ async function updateUserImage(path, username) {
     }
 }
 
+
 module.exports = {
     findUser,
     createUser,

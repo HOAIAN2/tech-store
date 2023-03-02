@@ -249,6 +249,8 @@ async function editProfile(req, res) {
     }
 }
 
+
+
 /// Middlewares, etc...
 function fortmatData(data = {}) {
     const newData = { ...data }
@@ -336,6 +338,7 @@ function authenticateToken(req, res, next) {
     }
 }
 
+
 module.exports = {
     login,
     logout,
@@ -345,5 +348,5 @@ module.exports = {
     readAccessToken,
     reCreateToken,
     changePassword,
-    uploadImage
+    uploadImage,
 }
