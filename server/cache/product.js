@@ -34,23 +34,20 @@ async function initializeProduct() {
     }
 }
 
-async function findProduct(name) {
+async function findProduct(name, option) {
     const result = []
-    products.forEach((product) => {
-        if (product.productName.includes(name)) result.push(product)
-    })
-    if (result.length === 0) return result
-    else {
+    async function query(index) {
         const queryString = [
             'SELECT product_id, product_name, suppliers.supplier_name, categories.category_name, price, quantity,',
             'unit_in_order, discount, images, products.description',
             'FROM products JOIN suppliers ON products.supplier_id = suppliers.supplier_id',
             'JOIN categories ON products.category_id = categories.category_id',
-            'WHERE product_name LIKE "%"?"%"',
+            'WHERE product_name LIKE "%"?"%" AND product_id > ?',
+            'order by product_id asc;'
         ].join(' ')
         try {
-            const [rows] = await pool.query(queryString, [name, name, name])
-            rows.forEach(row => {
+            const [rows] = await pool.query(queryString, [name, index])
+            rows.every(row => {
                 const productID = row['product_id']
                 const productName = row['product_name']
                 const supplier = row['supplier_name']
@@ -64,13 +61,37 @@ async function findProduct(name) {
                 const product = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description)
                 products.push(product)
                 result.push(product)
+                if(result.length >= 40){
+                    return false
+                }
+                return true
             })
-            return result
         } catch (error) {
             console.log('\x1b[31m%s\x1b[0m', error.message)
-            return []
         }
     }
+    function handleaddproduct() {
+        products.every((product,index) => {
+            if(product.productName.includes(name)){
+                result.push(product)
+            }
+            if(result.length === 5 && option === "get5item"){
+                return false
+            }
+            if(result.length === 40){
+                return false
+            }
+            return true
+        })
+    }
+    handleaddproduct()
+    if(option === "get5item" && result.length <= 5) return result
+    if(option === "get40item" && result.length === 40) return result
+    else{
+       const index = result[result.length-1]
+       await query(index?index.productID:0)
+    }
+    return result
 }
 
 module.exports = {
