@@ -4,8 +4,12 @@ import { useUserData } from '../../Context'
 import './Account.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser } from "@fortawesome/free-solid-svg-icons"
+import languages from './Languages/Account.json'
+
 function Account() {
     // Fetch user Data when app first load
+    let language = languages.en
+    if (navigator.language === 'vi') language = languages.vi
     const [user] = useUserData()
     function handleLogout() {
         logout()
@@ -24,9 +28,9 @@ function Account() {
                 <FontAwesomeIcon icon={faUser} />
                 <span>{user.username}</span>
                 <div className='drop-list-item'>
-                    <span><Link to='/profile'>Thông tin tài khoản</Link></span>
-                    <span><Link to='/change-password'>Đổi mật khẩu</Link></span>
-                    <span onClick={handleLogout}><Link to='#'>Đăng xuất</Link></span>
+                    <span><Link to='/profile'>{language.accountInfo}</Link></span>
+                    <span><Link to='/change-password'>{language.changePassword}</Link></span>
+                    <span onClick={handleLogout}><Link to='#'>{language.logout}</Link></span>
                 </div>
             </div>
         </div>
@@ -34,11 +38,11 @@ function Account() {
     else return (
         <div className='header-account'>
             <Link className='login-btn' to='/login'>
-                <span>Đăng nhập</span>
+                <span>{language.login}</span>
             </Link>
             {/* <p>/</p> */}
             <Link className='register-btn' to='/register'>
-                <span>Đăng ký</span>
+                <span>{language.register}</span>
             </Link>
         </div>
     )

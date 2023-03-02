@@ -1,0 +1,16 @@
+{
+    "en": {
+        "login": "Login",
+        "register": "Register",
+        "accountInfo": "Account info",
+        "logout": "Logout",
+        "changePassword": "Change password"
+    },
+    "vi": {
+        "login": "Đăng nhập",
+        "register": "Đăng ký",
+        "accountInfo": "Thông tin tài khoản",
+        "logout": "Đăng xuất",
+        "changePassword": "Đổi mật khẩu"
+    }
+}

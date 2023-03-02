@@ -1,0 +1,26 @@
+{
+    "en": {
+        "download": "Download app",
+        "languages": "Languages",
+        "notifications": "Notifications",
+        "home": "Home",
+        "products": "Products",
+        "blog": "Blogs",
+        "contact": "Contact",
+        "phoneNumber": "035 596 0156",
+        "email": "dungprof8.0@gmail.com",
+        "placeHolder": "Seacrh products"
+    },
+    "vi": {
+        "download": "Tải ứng dụng",
+        "languages": "Ngôn ngữ",
+        "notifications": "Thông báo",
+        "home": "Trang chủ",
+        "products": "Sản phẩm",
+        "blog": "Blogs",
+        "contact": "Liên hệ",
+        "phoneNumber": "035 596 0156",
+        "email": "dungprof8.0@gmail.com",
+        "placeHolder": "Tìm sản phẩm"
+    }
+}

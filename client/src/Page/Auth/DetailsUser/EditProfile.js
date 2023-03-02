@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react"
-import { faChevronDown } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useUserData } from "../../../Context"
+import { useState } from "react"
+import { useUserData, USER_ACTION } from "../../../Context"
 import './EditProfile.scss'
-function EditProfile(props) {
-    const [user] = useUserData()
+import languages from './Languages/EditProfile.json'
+import { editProfile, fetchUserData } from "../../../utils/Auth"
 
+function EditProfile(props) {
+    const [user, dispatchUser] = useUserData()
     const [username, setUsername] = useState(user.username)
     const [firstName, setfirstName] = useState(user.firstName)
     const [lastName, setlastName] = useState(user.lastName)
@@ -13,10 +13,13 @@ function EditProfile(props) {
         const date = new Date(user.birthDate).toLocaleDateString('pt-br').split('/').reverse().join('-');
         return date
     })
+    const [sex, setSex] = useState(user.sex)
     const [address, setaddress] = useState(user.address)
     const [email, setEmail] = useState(user.email || '')
     const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber || '')
-    const [error, seterror] = useState('')
+    const [error, setError] = useState('')
+    let language = languages.en
+    if (navigator.language === 'vi') language = languages.vi
     function inputChange(e) {
         if (e.target.className === "username-input") return setUsername(e.target.value)
         if (e.target.className === "firstname-input") return setfirstName(e.target.value)
@@ -26,29 +29,41 @@ function EditProfile(props) {
         if (e.target.className === "phone-input") return setPhoneNumber(e.target.value)
         if (e.target.className === "birth-date-input") return setBirthDate(e.target.value)
     }
-    function getGender() {
-        let genders = document.querySelectorAll(".option-gender")
-        if (genders[0].checked) {
-            return "m"
-        }
-        return "f"
+    function getSex() {
+        if (sex === 'male') return 'm'
+        else return 'f'
     }
     function handleSave(e) {
+        e.preventDefault()
+        // eslint-disable-next-line no-useless-escape
         const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
         if (email.trim() !== '') {
-            if (!email.match(emailRegex)) return seterror("Invalid email")
+            if (!email.match(emailRegex)) return setError(language.emailInvalid)
         }
+        if (!firstName) return setError(language.firstNameNotNull)
+        if (!lastName) return setError(language.lastNameNotNull)
+        if (!address) return setError(language.addressNotNull)
         const data = {
-            userName: username,
+            username: username,
             firstName: firstName,
             lastName: lastName,
             birthDate: new Date(birthDate),
-            sex: getGender(),
+            sex: getSex(),
             address: address,
             email: email,
             phoneNumber: phoneNumber
         }
-        console.log(data)
+        editProfile(data)
+            .then(() => fetchUserData())
+            .then(data => {
+                dispatchUser({ type: USER_ACTION.SET, payload: data })
+                props.setIsEditMode(false)
+            })
+            .catch(error => {
+                if (error.message !== 'no token') console.error(error.message)
+                console.error(error.message)
+                setError(error.message)
+            })
     }
 
     function closePopup(e) {
@@ -56,78 +71,75 @@ function EditProfile(props) {
             props.setIsEditMode(false)
         }
     }
-
-    useEffect(() => {
-        const optionElement = document.querySelectorAll(".option-gender")
-        if (user.sex.includes("f")) {
-            optionElement[1].setAttribute("checked", true)
-        } else {
-            optionElement[0].setAttribute("checked", true)
-        }
-    })
     return (
         <div className="edit-profile-popup">
             <div className="shadow" onClick={closePopup}>
-                <div className="popup-container">
-                    <div className="title-popup-update-user">User Profile</div>
+                <form onSubmit={handleSave} className="popup-container">
+                    <div className="title-popup-update-user">{language.title}</div>
 
                     <div className="content-popup-update">
                         <div className="update-user">
-                            <span className="title-update-field">User Name</span>
+                            <span className="title-update-field">{language.username}</span>
                             <div className="wrap-input-pudate">
                                 <input className="username-input" type="text" value={username} onInput={inputChange} />
                             </div>
                         </div>
                         <div className="update-user">
-                            <span className="title-update-field">First Name</span>
+                            <span className="title-update-field">{language.firstName}</span>
                             <div className="wrap-input-pudate">
                                 <input className="firstname-input" type="text" value={firstName} onInput={inputChange} />
                             </div>
                         </div>
                         <div className="update-user">
-                            <span className="title-update-field">Last Name</span>
+                            <span className="title-update-field">{language.lastName}</span>
                             <div className="wrap-input-pudate">
                                 <input className="lastname-input" type="text" value={lastName} onInput={inputChange} />
                             </div>
                         </div>
 
                         <div className="update-user uploadbirth">
-                            <span className="title-update-field">Birth</span>
+                            <span className="title-update-field">{language.birthDate}</span>
                             <div className="wrap-input-pudate">
                                 <input type='date' className="birth-date-input" value={birthDate} onInput={inputChange} />
                             </div>
                         </div>
 
                         <div className="update-user">
-                            <span className="title-update-field">Gender</span>
+                            <span className="title-update-field">{language.sex}</span>
                             <div className="option">
                                 <div className="">
-                                    <input id="option-one" className="option-gender" name="radio" value="one" type="radio" />
+                                    <input id="option-one" className="option-gender"
+                                        checked={sex === 'male'}
+                                        onChange={() => { setSex('male') }}
+                                        name="radio" type="radio" />
                                 </div>
-                                <label htmlFor="option-one"> Male </label>
+                                <label htmlFor="option-one"> {language.male} </label>
                             </div>
                             <div className="option">
                                 <div className="">
-                                    <input id="option-two" className="option-gender" name="radio" value="two" type="radio" />
+                                    <input id="option-two" className="option-gender"
+                                        checked={sex === 'female'}
+                                        onChange={() => { setSex('female') }}
+                                        name="radio" type="radio" />
                                 </div>
-                                <label htmlFor="option-two"> Female </label>
+                                <label htmlFor="option-two"> {language.female} </label>
                             </div>
                         </div>
 
                         <div className="update-user">
-                            <span className="title-update-field">Address</span>
+                            <span className="title-update-field">{language.address}</span>
                             <div className="wrap-input-pudate">
                                 <input className="address-input" type="text" value={address} onInput={inputChange} />
                             </div>
                         </div>
                         <div className="update-user">
-                            <span className="title-update-field">Email</span>
+                            <span className="title-update-field">{language.email}</span>
                             <div className="wrap-input-pudate">
                                 <input className="email-input" type="email" value={email} onInput={inputChange} />
                             </div>
                         </div>
                         <div className="update-user">
-                            <span className="title-update-field">Phone number</span>
+                            <span className="title-update-field">{language.phoneNumber}</span>
                             <div className="wrap-input-pudate">
                                 <input className="phone-input"
                                     pattern="[0]\d{9}"
@@ -138,10 +150,10 @@ function EditProfile(props) {
 
                     <div className="btn-save">
                         <div className="error-message">{error}</div>
-                        <button onClick={handleSave} >Update</button>
+                        <button>{language.submit}</button>
                     </div>
 
-                </div>
+                </form>
             </div>
         </div>
     )
