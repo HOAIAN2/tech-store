@@ -94,11 +94,39 @@ async function createUser(user) {
     }
 }
 
+async function updateProfile(id, data) {
+    const queryString = [
+        'UPDATE users SET username = ? ,',
+        'first_name = ? ,',
+        'last_name = ? ,',
+        'birth_date = ? ,',
+        'sex = ? ,',
+        'address = ? ,',
+        'email = ? ,',
+        'phone_number = ?',
+        'WHERE user_id = ?'
+    ].join(' ')
+    try {
+        await pool.query(queryString, [
+            data.username,
+            data.firstName,
+            data.lastName,
+            data.birthDate,
+            data.sex,
+            data.address,
+            data.email,
+            data.phoneNumber,
+            id
+        ])
+    } catch (error) {
+        console.log('\x1b[31m%s\x1b[0m', error.message)
+        throw new Error(error.message)
+    }
+}
 async function updatePassword(username, password) {
     const queryString = ['UPDATE users SET hashed_password = ? WHERE username = ?'].join('')
     try {
-        const [rows] = await pool.query(queryString, [password, username])
-        // console.log(rows)
+        await pool.query(queryString, [password, username])
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)
         throw new Error(error.message)
@@ -123,5 +151,6 @@ module.exports = {
     updatePassword,
     users,
     refreshTokens,
-    updateUserImage
+    updateUserImage,
+    updateProfile
 }

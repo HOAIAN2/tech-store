@@ -1,0 +1,42 @@
+{
+    "en": {
+        "title": "Personal profile",
+        "username": "Username",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "birthDate": "Birth date",
+        "address": "Address",
+        "sex": "Sex",
+        "password": "Password",
+        "repeatPassword": "Reapeat password",
+        "email": "Email",
+        "phoneNumber": "Phone number",
+        "male": "Male",
+        "female": "Female",
+        "submit": "Update",
+        "firstNameNotNull": "First name cannot be null",
+        "lastNameNotNull": "Last name cannot be null",
+        "addressNotNull": "Address cannot be null",
+        "emailInvalid": "Email invalid"
+    },
+    "vi": {
+        "title": "Thông tin cá nhân",
+        "username": "Tên đăng nhập",
+        "firstName": "Tên",
+        "lastName": "Họ",
+        "birthDate": "Ngày sinh",
+        "address": "Địa chỉ",
+        "sex": "Giới tính",
+        "password": "Mật khẩu",
+        "repeatPassword": "Nhập lại mật khẩu",
+        "email": "Email",
+        "phoneNumber": "Số điện thoại",
+        "male": "Nam",
+        "female": "Nữ",
+        "submit": "Cập nhật",
+        "firstNameNotNull": "Tên không được để trống",
+        "lastNameNotNull": "Họ không được để trống",
+        "addressNotNull": "Địa chỉ không được để trống",
+        "emailInvalid": "Email không hợp lệ"
+    }
+}

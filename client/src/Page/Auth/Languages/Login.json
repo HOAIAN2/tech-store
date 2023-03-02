@@ -1,0 +1,20 @@
+{
+    "en": {
+        "title": "Login",
+        "username": "Username",
+        "password": "Password",
+        "forget": "Forget password",
+        "register": "Register",
+        "doesntHaveAccount": "Doesn't have account?",
+        "passwordTooShort": "Password must have atleast 8 characters"
+    },
+    "vi": {
+        "title": "Đăng nhập",
+        "username": "Tên đăng nhập",
+        "password": "Mật khẩu",
+        "forget": "Quên mật khẩu",
+        "register": "Đăng ký",
+        "doesntHaveAccount": "Chưa có tài khoản?",
+        "passwordTooShort": "Mật khẩu phải có ít nhất 8 ký tự"
+    }
+}

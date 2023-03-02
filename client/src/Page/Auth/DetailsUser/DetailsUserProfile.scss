@@ -92,7 +92,8 @@
 
             .edit {
                 height: 40px;
-                width: 60px;
+                // width: 60px;
+                padding: 0px 5px 0px 5px;
                 background-color: colors.$color-btn;
                 color: colors.$text-color;
                 border: none;

@@ -68,9 +68,11 @@ async function changePassword(oldPassword = '', newPassword) {
                 throw new Error(error)
             }
         }
-        if (!error.response) throw new Error(error.message)
-        const message = error.response.data.message
-        throw new Error(message)
+        else {
+            if (!error.response) throw new Error(error.message)
+            const message = error.response.data.message
+            throw new Error(message)
+        }
     }
 }
 
@@ -86,7 +88,15 @@ async function uploadImage(file) {
             }
         })
     } catch (error) {
-        throw new Error(error.message)
+        if (error.response.status === 403) {
+            try {
+                await reGetToken()
+                await uploadImage(file)
+            } catch (error) {
+                throw new Error(error)
+            }
+        }
+        else throw new Error(error)
     }
 }
 
@@ -109,7 +119,32 @@ async function fetchUserData() {
                 throw new Error(error)
             }
         }
-        throw new Error(error)
+        else throw new Error(error)
+    }
+}
+async function editProfile(data) {
+    const token = JSON.parse(localStorage.getItem('token'))
+    if (!token) throw new Error('no token')
+    try {
+        await request.post('/auth/edit', data, {
+            headers: {
+                Authorization: `Bearer ${token.accessToken}`
+            }
+        })
+    } catch (error) {
+        if (error.response.status === 403) {
+            try {
+                await reGetToken()
+                await editProfile(data)
+            } catch (error) {
+                throw new Error(error)
+            }
+        }
+        else {
+            if (!error.response) throw new Error(error.message)
+            const message = error.response.data.message
+            throw new Error(message)
+        }
     }
 }
 async function reGetToken() {
@@ -140,5 +175,5 @@ export {
     fetchUserData,
     reGetToken,
     uploadImage,
-    searchProduct,
+    editProfile
 }

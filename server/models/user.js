@@ -18,6 +18,30 @@ class User {
         this.avatar = avatar
         this.hashedPassword = hashedPassword
     }
+    setUsername(username) {
+        this.username = username
+    }
+    setFirstName(firstName) {
+        this.firstName = firstName
+    }
+    setLastName(lastName) {
+        this.lastName = lastName
+    }
+    setBirthDate(birthDate) {
+        this.birthDate = new Date(birthDate)
+    }
+    setSex(sex) {
+        this.sex = User.#checkSex(sex)
+    }
+    setAddress(address) {
+        this.address = address
+    }
+    setEmail(email) {
+        this.email = email
+    }
+    setPhoneNumber(phoneNumber) {
+        this.phoneNumber = phoneNumber
+    }
     setPassword(hashedPassword) {
         this.hashedPassword = hashedPassword
     }

@@ -1,0 +1,20 @@
+{
+    "en": {
+        "title": "Personal profile",
+        "edit": "Edit profile",
+        "myAccount": "My account",
+        "myPurchase": "My purchase",
+        "notifications": "Notifications",
+        "myVoucher": "My voucher",
+        "coin": "Coin"
+    },
+    "vi": {
+        "title": "Trang cá nhân",
+        "edit": "Chỉnh sửa",
+        "myAccount": "Tài khoản của tôi",
+        "notifications": "Thông báo",
+        "myPurchase": "Đơn hàng của tôi",
+        "myVoucher": "Voucher",
+        "coin": "Coin"
+    }
+}

@@ -1,9 +1,10 @@
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 import { uploadImage } from "../../../utils/Auth"
 import { fetchUserData } from "../../../utils/Auth"
 import { useUserData, USER_ACTION } from '../../../Context'
 import EditProfile from "./EditProfile"
 import "./DetailsUserProfile.scss"
+import languages from './Languages/DetailsUserProfile.json'
 
 function DetailsUserProfile() {
   const [user, dispatchUser] = useUserData()
@@ -12,9 +13,11 @@ function DetailsUserProfile() {
   const [isEditMode, setIsEditMode] = useState(false)
   const inputFileRef = useRef()
   const imageRef = useRef()
+  let language = languages.en
+  if (navigator.language === 'vi') language = languages.vi
   // Format and Show Info
-  let sex = 'male'
-  if (user.sex.toLowerCase() === 'female') sex = 'female'
+  let sex = language.male
+  if (user.sex.toLowerCase() === 'female') sex = language.female
   function formatPhoneNumber() {
     let phoneNumber = user.phoneNumber?.replace("+84", "0")
     return phoneNumber?.replace(/\d{8}/, "********")
@@ -44,36 +47,38 @@ function DetailsUserProfile() {
         })
     }
   }
-
+  useEffect(() => {
+    document.title = language.title
+  })
   return (
     <>
       <div className="detailuser-profile">
         <div className="detailuser-profile-title">
-          <h1>My Profile</h1>
-          <span>Manage and protect your account</span>
+          <h1>{language.title}</h1>
+          <span>{language.subTitle}</span>
         </div>
         <div className="detailuser-profile-infor">
           <div className="infor-user">
             <div className="infor-user-item">
-              <div className="infor-user-item1">User Name</div>
+              <div className="infor-user-item1">{language.username}</div>
               <div className="infor-user-item2">{user.username}</div>
             </div>
             <div className="infor-user-item">
-              <div className="infor-user-item1">Name</div>
+              <div className="infor-user-item1">{language.name}</div>
               <div className="infor-user-item2">
                 <div className="infor-user-item2">{fullName}</div>
               </div>
             </div>
             <div className="infor-user-item">
-              <div className="infor-user-item1">Email</div>
+              <div className="infor-user-item1">{language.email}</div>
               <div className="infor-user-item2">{user.email}</div>
             </div>
             <div className="infor-user-item">
-              <div className="infor-user-item1">Phone Number</div>
+              <div className="infor-user-item1">{language.phoneNumber}</div>
               <div className="infor-user-item2">{phoneNumber}</div>
             </div>
             <div className="infor-user-item">
-              <div className="infor-user-item1">Gender</div>
+              <div className="infor-user-item1">{language.sex}</div>
               <div className="infor-user-item2">
                 <div className="wrapcheckbox">
                   <span>{sex}</span>
@@ -81,23 +86,23 @@ function DetailsUserProfile() {
               </div>
             </div>
             <div className="infor-user-item">
-              <div className="infor-user-item1">Date Of Birth</div>
+              <div className="infor-user-item1">{language.birthDate}</div>
               <div className="infor-user-item2">
                 <div className="wrap-infor-user-item2">
                   {birthDate}
                 </div>
               </div>
             </div>
-            <button className="edit" onClick={() => { setIsEditMode(true) }}>Edit</button>
+            <button className="edit" onClick={() => { setIsEditMode(true) }}>{language.edit}</button>
           </div>
           <div className="avatar-user">
             <div className="wrap-avatar-user">
               <div className="avatar-item">
-                <img ref={imageRef} id="avatar" onClick={() => { inputFileRef.current.click() }} src={avatar} alt="" />
+                <img title={language.hover} ref={imageRef} id="avatar" onClick={() => { inputFileRef.current.click() }} src={avatar} alt="" />
               </div>
               <div className="set-avatar">
                 <input ref={inputFileRef} onChange={handleChangeAvatar} type="file" id="file" className="inputfile" />
-                {isDifferentAvatar && <button onClick={handleSaveAvatar}>Save</button>}
+                {isDifferentAvatar && <button onClick={handleSaveAvatar}>{language.save}</button>}
               </div>
             </div>
           </div>
