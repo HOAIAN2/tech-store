@@ -53,9 +53,6 @@ async function searchProduct(req, res) {
     else {
         /// Handle sort các kiểu dưới đây
         const result = await findProduct(text)
-        if (sortBys.includes(sortBy) && sortModes.includes(sortMode)) {
-            // sort sản phẩm theo cái user muốn sort
-        }
         if (suppliers.find(supplier => supplier.supplierName === brand)) {
             // Handle sản phẩm chỉ đến từ brands nào đó
             if (sortBys.includes(sortBy) && sortModes.includes(sortMode)) {
@@ -64,6 +61,9 @@ async function searchProduct(req, res) {
             else {
                 //không sort thì cứ chạy theo kết quả
             }
+        }
+        if (sortBys.includes(sortBy) && sortModes.includes(sortMode)) {
+            // sort sản phẩm theo cái user muốn sort
         }
         return res.json(result.slice(40).map(product => product.ignoreProps('unitInOrder', 'quantity')))
     }
