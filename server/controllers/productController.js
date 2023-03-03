@@ -34,18 +34,38 @@ function getProductByID(req, res) {
 
 
 async function searchProduct(req, res) {
-    const options = ['get5item', 'get40item']
+    const options = ['less', 'more']
+    const sortBys = ['price', 'hot', 'top-sell']
+    const sortModes = ['asc', 'desc']
     const text = req.query.name?.trim()
     const option = req.query.option?.trim()
+    const sortBy = req.query.sortBy?.trim()
+    const sortMode = req.query.sortMode?.trim()
+    const brand = req.query.brand?.trim()
+    const page = parseInt(req.query.page)
     if (text === "") return res.json([])
     if (!options.includes(option)) return res.sendStatus(400)
-    if (option === 'get5item') {
-        const result = await findProduct(text,option)
-        return res.json(result.map(product => product.ignoreProps('unitInOrder', 'quantity')))
+    if (option === 'less') {
+        // chỗ này ít quá không cần sort
+        const result = await findProduct(text)
+        return res.json(result.slice(0, 5).map(product => product.ignoreProps('unitInOrder', 'quantity')))
     }
     else {
-        const result = await findProduct(text, option)
-        return res.json(result.map(product => product.ignoreProps('unitInOrder', 'quantity')))
+        /// Handle sort các kiểu dưới đây
+        const result = await findProduct(text)
+        if (sortBys.includes(sortBy) && sortModes.includes(sortMode)) {
+            // sort sản phẩm theo cái user muốn sort
+        }
+        if (suppliers.find(supplier => supplier.supplierName === brand)) {
+            // Handle sản phẩm chỉ đến từ brands nào đó
+            if (sortBys.includes(sortBy) && sortModes.includes(sortMode)) {
+                // sort sản phẩm theo cái user muốn sort của brand
+            }
+            else {
+                //không sort thì cứ chạy theo kết quả
+            }
+        }
+        return res.json(result.slice(40).map(product => product.ignoreProps('unitInOrder', 'quantity')))
     }
 }
 
