@@ -96,8 +96,7 @@ async function createUser(user) {
 
 async function updateProfile(id, data) {
     const queryString = [
-        'UPDATE users SET username = ? ,',
-        'first_name = ? ,',
+        'UPDATE users SET first_name = ? ,',
         'last_name = ? ,',
         'birth_date = ? ,',
         'sex = ? ,',
@@ -108,7 +107,6 @@ async function updateProfile(id, data) {
     ].join(' ')
     try {
         await pool.query(queryString, [
-            data.username,
             data.firstName,
             data.lastName,
             data.birthDate,
@@ -136,7 +134,7 @@ async function updatePassword(username, password) {
 async function updateUserImage(path, username) {
     const queryString = ['UPDATE users SET avatar = ? WHERE username = ?'].join('')
     try {
-        const [rows] = await pool.query(queryString, [path, username])
+        await pool.query(queryString, [path, username])
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)
         throw new Error(error.message)

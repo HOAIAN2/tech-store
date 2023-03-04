@@ -12,7 +12,9 @@
         "female": "female",
         "birthDate": "Birth date",
         "save": "Save",
-        "hover": "Change avatar"
+        "hover": "Change avatar",
+        "sizeLimit": "File size to large",
+        "formatNotAccept": "Format not accept"
     },
     "vi": {
         "title": "Trang cá nhân",
@@ -27,6 +29,8 @@
         "female": "nữ",
         "birthDate": "Ngày sinh",
         "save": "Lưu",
-        "hover": "Thay đổi ảnh đại diện"
+        "hover": "Thay đổi ảnh đại diện",
+        "sizeLimit": "Dung lượng file quá lớn",
+        "formatNotAccept": "Định dạng không hợp lệ"
     }
 }

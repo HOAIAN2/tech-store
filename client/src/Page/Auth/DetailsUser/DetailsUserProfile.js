@@ -11,6 +11,7 @@ function DetailsUserProfile() {
   const [avatar, setAvatar] = useState(user.avatar)
   const [isDifferentAvatar, setIsDifferentAvatar] = useState(false)
   const [isEditMode, setIsEditMode] = useState(false)
+  const [error, setError] = useState('')
   const inputFileRef = useRef()
   const imageRef = useRef()
   let language = languages.en
@@ -26,12 +27,18 @@ function DetailsUserProfile() {
   const phoneNumber = formatPhoneNumber()
   const birthDate = user.birthDate.toLocaleDateString()
   async function handleChangeAvatar(e) {
+    setError('')
+    const acceptFormats = ['image/png', 'image/jpg', 'image/jpeg']
+    const limitSize = 500 * 1024
+    if (!e.target.files[0]) return
+    if (e.target.files[0].size > limitSize) return setError(language.sizeLimit)
+    if (!acceptFormats.includes(e.target.files[0].type)) return setError(language.formatNotAccept)
     const file = new FileReader()
     file.addEventListener("load", () => {
       setAvatar(file.result)
       setIsDifferentAvatar(true)
+      setError('')
     })
-    if (!e.target.files[0]) return
     file.readAsDataURL(e.target.files[0])
   }
   function handleSaveAvatar(e) {
@@ -98,7 +105,7 @@ function DetailsUserProfile() {
           <div className="avatar-user">
             <div className="wrap-avatar-user">
               <div className="avatar-item">
-                <img title={language.hover} ref={imageRef} id="avatar" onClick={() => { inputFileRef.current.click() }} src={avatar} alt="" />
+                <img title={language.hover} ref={imageRef} onClick={() => { inputFileRef.current.click() }} src={avatar} alt={`${fullName} avatar`} />
               </div>
               <div className="set-avatar">
                 <input ref={inputFileRef}
@@ -107,7 +114,8 @@ function DetailsUserProfile() {
                   accept="image/png, image/jpeg, image/jpg"
                   id="file"
                   className="inputfile" />
-                {isDifferentAvatar && <button onClick={handleSaveAvatar}>{language.save}</button>}
+                {error && <span className="error-file">{error}</span>}
+                {isDifferentAvatar && !error && <button onClick={handleSaveAvatar}>{language.save}</button>}
               </div>
             </div>
           </div>
