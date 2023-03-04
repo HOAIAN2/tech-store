@@ -18,9 +18,6 @@ class User {
         this.avatar = avatar
         this.hashedPassword = hashedPassword
     }
-    setUsername(username) {
-        this.username = username
-    }
     setFirstName(firstName) {
         this.firstName = firstName
     }

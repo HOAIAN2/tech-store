@@ -7,7 +7,8 @@ function index(req, res) {
     const user = users.find(user => {
         return user.username === data.username
     })
-    res.json(user.ignoreProps('hashedPassword', 'role'))
+    if (user) return res.json(user.ignoreProps('hashedPassword', 'role'))
+    else return res.sendStatus(404)
 }
 
 module.exports = {

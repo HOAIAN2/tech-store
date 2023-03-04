@@ -30,7 +30,7 @@ function DetailsUser() {
           <div className="sibar-detail-user">
             <div className="sibar-detail-user_item">
               <div className="avatar-detail-user">
-                <img id="avatar" src={user.avatar} alt="" />
+                <img src={user.avatar} alt={`${fullName} avatar`} />
               </div>
               <div className="conten-avatar-detailuser">
                 <div className="name">

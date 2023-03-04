@@ -197,7 +197,6 @@ async function editProfile(req, res) {
     const token = req.headers['authorization'].split(' ')[1]
     const tokenData = readAccessToken(token)
     const data = {
-        username: req.body.username,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         birthDate: req.body.birthDate,
@@ -210,8 +209,8 @@ async function editProfile(req, res) {
         return typeof data[key] === 'string'
     })
     if (!validDataType) return res.status(400).json({ message: errorMessages.invalidDataType })
-    if (!validate(data.username, data.email)) {
-        return res.status(404).json({ message: errorMessages.invalidUsernameOrEmail })
+    if (!validate(tokenData.username, data.email)) {
+        return res.status(404).json({ message: errorMessages.invalidEmail })
     }
     const user = await findUser(tokenData.username)
     if (!user) {
@@ -222,7 +221,6 @@ async function editProfile(req, res) {
             const newData = fortmatData(data)
             const formatedBirthDate = formatDate(data.birthDate)
             await updateProfile(user.userID, {
-                username: newData.username,
                 firstName: newData.firstName,
                 lastName: newData.lastName,
                 birthDate: formatedBirthDate,
@@ -231,7 +229,6 @@ async function editProfile(req, res) {
                 email: newData.email,
                 phoneNumber: newData.phoneNumber
             })
-            user.setUsername(newData.username)
             user.setFirstName(newData.firstName)
             user.setLastName(newData.lastName)
             user.setBirthDate(formatedBirthDate)

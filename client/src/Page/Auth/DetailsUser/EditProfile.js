@@ -6,7 +6,6 @@ import { editProfile, fetchUserData } from "../../../utils/Auth"
 
 function EditProfile(props) {
     const [user, dispatchUser] = useUserData()
-    const [username, setUsername] = useState(user.username)
     const [firstName, setfirstName] = useState(user.firstName)
     const [lastName, setlastName] = useState(user.lastName)
     const [birthDate, setBirthDate] = useState(() => {
@@ -21,7 +20,6 @@ function EditProfile(props) {
     let language = languages.en
     if (navigator.language === 'vi') language = languages.vi
     function inputChange(e) {
-        if (e.target.className === "username-input") return setUsername(e.target.value)
         if (e.target.className === "firstname-input") return setfirstName(e.target.value)
         if (e.target.className === "lastname-input") return setlastName(e.target.value)
         if (e.target.className === "address-input") return setaddress(e.target.value)
@@ -44,7 +42,6 @@ function EditProfile(props) {
         if (!lastName) return setError(language.lastNameNotNull)
         if (!address) return setError(language.addressNotNull)
         const data = {
-            username: username,
             firstName: firstName,
             lastName: lastName,
             birthDate: new Date(birthDate),
@@ -78,12 +75,6 @@ function EditProfile(props) {
                     <div className="title-popup-update-user">{language.title}</div>
 
                     <div className="content-popup-update">
-                        <div className="update-user">
-                            <span className="title-update-field">{language.username}</span>
-                            <div className="wrap-input-pudate">
-                                <input className="username-input" type="text" value={username} onInput={inputChange} />
-                            </div>
-                        </div>
                         <div className="update-user">
                             <span className="title-update-field">{language.firstName}</span>
                             <div className="wrap-input-pudate">

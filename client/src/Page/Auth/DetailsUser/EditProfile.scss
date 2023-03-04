@@ -66,28 +66,6 @@
                             }
                         }
                     }
-
-                    .wrapupdatebirth {
-                        display: flex;
-                        justify-content: space-between;
-                        flex: 1;
-
-                        .birth {
-                            width: 31%;
-                            position: relative;
-                            display: flex;
-                            align-items: center;
-                            justify-content: space-between;
-                            padding: 8px;
-                            border: 1px solid;
-                        }
-                    }
-
-                    .option {
-                        display: flex;
-                        margin-left: 10px;
-                        margin-right: 10px;
-                    }
                 }
             }
 
