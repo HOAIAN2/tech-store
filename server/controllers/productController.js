@@ -1,4 +1,4 @@
-const { products, categories, suppliers, findProduct } = require('../cache')
+const { products, categories, suppliers, findProduct, serchproduct_test } = require('../cache')
 const productErrors = require('./productErrors.json')
 
 // [GET home]
@@ -45,28 +45,48 @@ async function searchProduct(req, res) {
     const page = parseInt(req.query.page)
     if (text === "") return res.json([])
     if (!options.includes(option)) return res.sendStatus(400)
-    if (option === 'less') {
-        // chỗ này ít quá không cần sort
-        const result = await findProduct(text)
-        return res.json(result.slice(0, 5).map(product => product.ignoreProps('unitInOrder', 'quantity')))
-    }
-    else {
-        /// Handle sort các kiểu dưới đây
-        const result = await findProduct(text)
-        if (suppliers.find(supplier => supplier.supplierName === brand)) {
-            // Handle sản phẩm chỉ đến từ brands nào đó
-            if (sortBys.includes(sortBy) && sortModes.includes(sortMode)) {
-                // sort sản phẩm theo cái user muốn sort của brand
-            }
-            else {
-                //không sort thì cứ chạy theo kết quả
-            }
+
+    const result = await serchproduct_test(text, option, brand)
+    if (result) {
+        // /api/products/search?name=...&option=less , co nhieu tra nhieu
+        if (option === 'less') {
+            return res.json(result.map((product) => { return product.ignoreProps('unitInOrder', 'quantity') }))
         }
-        if (sortBys.includes(sortBy) && sortModes.includes(sortMode)) {
-            // sort sản phẩm theo cái user muốn sort
+        // /api/products/search?name=...&option=more , tra 40 product ngau nhien
+        // /api/products/search?name=...&option=more&brand=... , lay product theo brand
+        if (option === 'more') {
+            // /api/products/search?name=...&option=more&brand=...&sortBy=price/hot&sortMode=asc/desc
+            if (sortBy === 'price') {
+                const resultsort = handlesort(result, sortMode, sortBy)
+                return res.json(resultsort.map((product) => { return product.ignoreProps('unitInOrder', 'quantity') }))
+            }
+            if (sortBy === 'hot') {
+                const resultsort = handlesort(result, sortMode, sortBy)
+                return res.json(resultsort.map((product) => { return product.ignoreProps('unitInOrder', 'quantity') }))
+            }
+            // sort theo top sell lam gio hang xong roi lam
+            return res.json(result.map((product) => { return product.ignoreProps('unitInOrder', 'quantity') }))
         }
-        return res.json(result.slice(40).map(product => product.ignoreProps('unitInOrder', 'quantity')))
     }
+
+    function handlesort(data, sortMode, sortBy) {
+        if (sortMode === 'asc') {
+            const resultsortasc = data.sort((product1, product2) => {
+                if (sortBy === 'price') return product1.price - product2.price
+                if (sortBy === 'hot') return product1.unitInOrder - product2.unitInOrder
+            })
+            return resultsortasc
+        }
+        if (sortMode === 'desc') {
+            const resultsortdesc = data.sort((product1, product2) => {
+                if (sortBy === 'price') return product2.price - product1.price
+                if (sortBy === 'hot') return product2.unitInOrder - product1.unitInOrder
+            })
+            return resultsortdesc
+        }
+        return []
+    }
+    return res.json([])
 }
 
 async function getSuppliersCategories(req, res) {
