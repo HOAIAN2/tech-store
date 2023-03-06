@@ -1,4 +1,4 @@
-const { products, categories, suppliers, findProduct, serchproduct_test } = require('../cache')
+const { products, categories, suppliers, findProduct } = require('../cache')
 const productErrors = require('./productErrors.json')
 
 // [GET home]
@@ -46,7 +46,7 @@ async function searchProduct(req, res) {
     if (text === "") return res.json([])
     if (!options.includes(option)) return res.sendStatus(400)
 
-    const result = await serchproduct_test(text, option, brand)
+    const result = await findProduct(text, option, brand)
     if (result) {
         // /api/products/search?name=...&option=less , co nhieu tra nhieu
         if (option === 'less') {
