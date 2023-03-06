@@ -42,7 +42,6 @@ async function findProduct(name) {
     if (result.length === 0) return result
     else {
         const queryString = [
-            'SELECT product_name, images , price',
             'SELECT product_id, product_name, suppliers.supplier_name, categories.category_name, price, quantity,',
             'unit_in_order, discount, images, products.description',
             'FROM products JOIN suppliers ON products.supplier_id = suppliers.supplier_id',
@@ -74,8 +73,100 @@ async function findProduct(name) {
     }
 }
 
+
+async function serchproduct_test(text, option, brand) {
+    const result = []
+    products.every((product, index) => {
+        if (!brand) {
+            if (product.productName.toLocaleLowerCase().includes(text.toLocaleLowerCase())) {
+                result.push(product)
+            }
+        } else {
+            if (product.productName.toLocaleLowerCase().includes(text.toLocaleLowerCase()) && product.supplier === brand) {
+                result.push(product)
+            }
+        }
+        if (result.length === 5 && option === 'less') return false
+        if (result.length === 40) return false
+        return true
+    })
+
+    if (option === 'more') {
+        if (result.length < 40) {
+            if (!brand) {
+                const queryString = [
+                    'SELECT product_id, product_name, suppliers.supplier_name, categories.category_name, price, quantity,',
+                    'unit_in_order, discount, images, products.description',
+                    'FROM products JOIN suppliers ON products.supplier_id = suppliers.supplier_id',
+                    'JOIN categories ON products.category_id = categories.category_id',
+                    'WHERE product_name LIKE "%"?"%" AND product_id > ?',
+                    'ORDER BY product_id ASC;'
+                ].join(' ')
+                try {
+                    const index = result[result.length - 1].productID
+                    const [rows] = await pool.query(queryString, [text, index])
+
+                    rows.every((product) => {
+                        const productID = product['product_id']
+                        const productName = product['product_name']
+                        const supplier = product['supplier_name']
+                        const category = product['category_name']
+                        const price = product['price']
+                        const quantity = product['quantity']
+                        const unitInOrder = product['unit_in_order']
+                        const discount = product['discount']
+                        const images = product['images']
+                        const description = product['description']
+                        const newproduct = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description)
+                        products.push(newproduct)
+                        result.push(newproduct)
+                        if (result.length >= 40) return false
+                        return true
+                    })
+                } catch (error) {
+                    console.log('\x1b[31m%s\x1b[0m', error.message)
+                }
+            } else {
+                const queryString1 = [
+                    'SELECT product_id, product_name, suppliers.supplier_name, categories.category_name, price, quantity,',
+                    'unit_in_order, discount, images, products.description',
+                    'FROM products JOIN suppliers ON products.supplier_id = suppliers.supplier_id',
+                    'JOIN categories ON products.category_id = categories.category_id',
+                    'WHERE product_name LIKE "%"?"%" AND product_id > ? and suppliers.supplier_name = ?',
+                    'ORDER BY product_id ASC'
+                ].join(' ')
+                try {
+                    const index = result[result.length - 1]?.productID
+                    const [rows] = await pool.query(queryString1, [text, index, brand])
+                    rows.every((product) => {
+                        const productID = product['product_id']
+                        const productName = product['product_name']
+                        const supplier = product['supplier_name']
+                        const category = product['category_name']
+                        const price = product['price']
+                        const quantity = product['quantity']
+                        const unitInOrder = product['unit_in_order']
+                        const discount = product['discount']
+                        const images = product['images']
+                        const description = product['description']
+                        const newproduct = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description)
+                        products.push(newproduct)
+                        result.push(newproduct)
+                        if (result.length >= 40) return false
+                        return true
+                    })
+                } catch (error) {
+                    console.log('\x1b[31m%s\x1b[0m', error.message)
+                }
+            }
+        }
+    }
+    return result
+}
+
 module.exports = {
     initializeProduct,
     findProduct,
-    products
+    products,
+    serchproduct_test
 }
