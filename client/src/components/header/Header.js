@@ -23,6 +23,7 @@ function Header() {
     const [searchData, setSeacrhData] = useState([])
     const debounce = useDebounce(searchValue, 300)
     useEffect(() => {
+        if (!debounce) return
         searchProduct(debounce, 'less')
             .then(res => {
                 setSeacrhData(res)
@@ -107,7 +108,7 @@ function Header() {
                                 </span>
                             </div>
                         </div>}
-                        {/* <SearchList data={searchData} /> */}
+                        <SearchList data={searchData} />
                     </div>
                     <div className="cart-shopping">
                         <FontAwesomeIcon icon={faCartShopping} />
