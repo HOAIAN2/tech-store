@@ -41,30 +41,46 @@ async function searchProduct(req, res) {
     const sortBy = req.query.sortBy?.trim()
     const sortMode = req.query.sortMode?.trim()
     const brand = req.query.brand?.trim()
+    let indextostart = parseInt(req.query.nextindex)
     const page = parseInt(req.query.page)
-    if (text === "") return res.json([])
+    if(text){
+        if (text === "") return res.json([])
+    }else{return res.json([])}
     if (!options.includes(option)) return res.sendStatus(400)
+    if (!indextostart) indextostart = 0
 
-    const result = await findProduct(text, option, brand)
+    const result = await findProduct(text, option, brand, indextostart)
     if (result) {
         // /api/products/search?name=...&option=less , co nhieu tra nhieu
         if (option === 'less') {
-            return res.json(result.map((product) => { return product.ignoreProps('unitInOrder', 'quantity') }))
+            return res.json(result.map((product) => { return product.ignoreProps('unitInOrder', 'quantity', 'description', 'discount', 'supplier', 'category') }))
         }
         // /api/products/search?name=...&option=more , tra 40 product ngau nhien
         // /api/products/search?name=...&option=more&brand=... , lay product theo brand
         if (option === 'more') {
+            const rs = {next: false}
+            if(result.length >= 41){
+                result.pop()
+                rs.next = true
+            }
             // /api/products/search?name=...&option=more&brand=...&sortBy=price/hot&sortMode=asc/desc
             if (sortBy === 'price') {
                 const resultsort = handlesort(result, sortMode, sortBy)
-                return res.json(resultsort.map((product) => { return product.ignoreProps('unitInOrder', 'quantity') }))
+                const data = resultsort.map((product) => { return product.ignoreProps('unitInOrder', 'quantity') })
+                rs.data = data
+                return res.json(rs)
             }
             if (sortBy === 'hot') {
                 const resultsort = handlesort(result, sortMode, sortBy)
-                return res.json(resultsort.map((product) => { return product.ignoreProps('unitInOrder', 'quantity') }))
+                const data = resultsort.map((product) => { return product.ignoreProps('unitInOrder', 'quantity') })
+                rs.data = data
+                return res.json(rs)
             }
             // sort theo top sell lam gio hang xong roi lam
-            return res.json(result.map((product) => { return product.ignoreProps('unitInOrder', 'quantity') }))
+            // return res.json(result.map((product) => { return product.ignoreProps('unitInOrder', 'quantity') }))
+            const data = result.map((product) => { return product.ignoreProps('unitInOrder', 'quantity') })
+            rs.data = data
+            return res.json(rs)
         }
     }
 

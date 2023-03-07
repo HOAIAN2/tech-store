@@ -74,25 +74,25 @@ async function initializeProduct() {
 // }
 
 
-async function findProduct(text, option, brand) {
+async function findProduct(text, option, brand , indextostart = 0) {
     const result = []
     products.every((product, index) => {
         if (!brand) {
-            if (product.productName.toLocaleLowerCase().includes(text.toLocaleLowerCase())) {
+            if (product.productName.toLocaleLowerCase().includes(text.toLocaleLowerCase()) && product.productID > indextostart) {
                 result.push(product)
             }
         } else {
-            if (product.productName.toLocaleLowerCase().includes(text.toLocaleLowerCase()) && product.supplier === brand) {
+            if (product.productName.toLocaleLowerCase().includes(text.toLocaleLowerCase()) && product.supplier === brand  && product.productID > indextostart) {
                 result.push(product)
             }
         }
         if (result.length === 5 && option === 'less') return false
-        if (result.length === 40) return false
+        if (result.length === 41) return false
         return true
     })
 
     if (option === 'more') {
-        if (result.length < 40) {
+        if (result.length < 41) {
             if (!brand) {
                 const queryString = [
                     'SELECT product_id, product_name, suppliers.supplier_name, categories.category_name, price, quantity,',
@@ -120,7 +120,7 @@ async function findProduct(text, option, brand) {
                         const newproduct = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description)
                         products.push(newproduct)
                         result.push(newproduct)
-                        if (result.length >= 40) return false
+                        if (result.length >= 41) return false
                         return true
                     })
                 } catch (error) {
@@ -152,7 +152,7 @@ async function findProduct(text, option, brand) {
                         const newproduct = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description)
                         products.push(newproduct)
                         result.push(newproduct)
-                        if (result.length >= 40) return false
+                        if (result.length >= 41) return false
                         return true
                     })
                 } catch (error) {
