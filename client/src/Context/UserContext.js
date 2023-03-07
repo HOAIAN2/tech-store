@@ -11,9 +11,7 @@ function userReducer(state, action) {
     switch (action.type) {
         case USER_ACTION.SET:
             const birthDate = new Date(action.payload.birthDate)
-            let avatar = ''
-            if (!action.payload.avatar) avatar = `${baseIMG}avatar/user.png`
-            else avatar = `${baseIMG}avatar/${action.payload.avatar}`
+            const avatar = `${baseIMG}avatar/${action.payload.avatar}`
             return { ...action.payload, birthDate: birthDate, avatar: avatar }
         case USER_ACTION.REMOVE:
             return null

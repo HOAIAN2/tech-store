@@ -256,7 +256,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,1,'hoaian_admin','Hoài Ân','Lê','2003-02-22','M','Hòa Trị, Phú Hòa, Phú Yên',NULL,NULL,NULL,'$2b$10$V11jxXDnQf2Xryyu2jP.6./6v0JRMA5DOCmTTuYd6FgsxJ1R6kxzm');
+INSERT INTO `users` VALUES (1,1,'hoaian_admin','Hoài Ân','Lê','2003-02-22','M','Hòa Trị, Phú Hòa, Phú Yên',NULL,NULL,'user.png','$2b$10$V11jxXDnQf2Xryyu2jP.6./6v0JRMA5DOCmTTuYd6FgsxJ1R6kxzm');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -296,4 +296,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-28 10:04:28
+-- Dump completed on 2023-03-07 16:21:40
