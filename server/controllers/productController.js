@@ -31,8 +31,7 @@ function getProductByID(req, res) {
     if (product) return res.json(product.ignoreProps('unitInOrder', 'quantity'))
     else return res.status(404)
 }
-
-
+// [GET search]
 async function searchProduct(req, res) {
     const options = ['less', 'more']
     const sortBys = ['price', 'hot', 'top-sell']
