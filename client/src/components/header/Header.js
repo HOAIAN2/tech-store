@@ -16,19 +16,21 @@ import languages from './Languages/Header.json'
 import "./Header.scss"
 import SearchList from '../render_item/SearchList'
 import { searchProduct } from '../../utils/Product'
+import useDebounce from '../../utils/hooks/useDebounce'
 
 function Header() {
     const [searchValue, setSeacrhValue] = useState('')
     const [searchData, setSeacrhData] = useState([])
+    const debounce = useDebounce(searchValue, 300)
     useEffect(() => {
-        searchProduct(searchValue, 'less')
+        searchProduct(debounce, 'less')
             .then(res => {
                 setSeacrhData(res)
             })
             .catch(error => {
                 console.error(error)
             })
-    }, [searchValue])
+    }, [debounce])
     let language = languages.en
     if (navigator.language === 'vi') language = languages.vi
     return (
