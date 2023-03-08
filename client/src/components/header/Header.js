@@ -14,7 +14,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons"
 import Account from "../Account/Account"
 import languages from './Languages/Header.json'
 import "./Header.scss"
-import SearchList from '../render_item/SearchList'
+import SearchListPopup from '../render_item/SearchListPopup'
 import { searchProduct } from '../../utils/Product'
 import useDebounce from '../../utils/hooks/useDebounce'
 
@@ -108,7 +108,7 @@ function Header() {
                                 </span>
                             </div>
                         </div>}
-                        <SearchList data={searchData} />
+                        {searchValue && <SearchListPopup data={searchData} />}
                     </div>
                     <div className="cart-shopping">
                         <FontAwesomeIcon icon={faCartShopping} />
