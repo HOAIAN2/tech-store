@@ -75,39 +75,50 @@ async function initializeProduct() {
 
 
 async function findProduct(text, option, brand , indextostart = 0) {
-    const result = []
+    const result = {index:0 ,data:[]}
     products.every((product, index) => {
         if (!brand) {
-            if (product.productName.toLocaleLowerCase().includes(text.toLocaleLowerCase()) && product.productID > indextostart) {
-                result.push(product)
+            if (product.productName.toLocaleLowerCase().includes(text.toLocaleLowerCase()) && index+1 > indextostart) {
+                result.data.push(product)
             }
         } else {
-            if (product.productName.toLocaleLowerCase().includes(text.toLocaleLowerCase()) && product.supplier === brand  && product.productID > indextostart) {
-                result.push(product)
+            if (product.productName.toLocaleLowerCase().includes(text.toLocaleLowerCase()) && product.supplier === brand  && index+1 > indextostart) {
+                result.data.push(product)
             }
         }
-        if (result.length === 5 && option === 'less') return false
-        if (result.length === 41) return false
+        if (result.data.length === 5 && option === 'less') return false
+        if (result.data.length === 41){
+            result.index = index
+            return false
+        } 
         return true
     })
 
     if (option === 'more') {
         if (result.length < 41) {
             if (!brand) {
+                // const queryString = [
+                //     'SELECT product_id, product_name, suppliers.supplier_name, categories.category_name, price, quantity,',
+                //     'unit_in_order, discount, images, products.description',
+                //     'FROM products JOIN suppliers ON products.supplier_id = suppliers.supplier_id',
+                //     'JOIN categories ON products.category_id = categories.category_id',
+                //     'WHERE product_name LIKE "%"?"%" AND product_id > ?',
+                //     'ORDER BY product_id ASC;'
+                // ].join(' ')
                 const queryString = [
                     'SELECT product_id, product_name, suppliers.supplier_name, categories.category_name, price, quantity,',
-                    'unit_in_order, discount, images, products.description',
-                    'FROM products JOIN suppliers ON products.supplier_id = suppliers.supplier_id',
-                    'JOIN categories ON products.category_id = categories.category_id',
-                    'WHERE product_name LIKE "%"?"%" AND product_id > ?',
-                    'ORDER BY product_id ASC;'
-                ].join(' ')
+            'unit_in_order, discount, images, products.description',
+            'FROM products JOIN suppliers ON products.supplier_id = suppliers.supplier_id',
+            'JOIN categories ON products.category_id = categories.category_id',
+            'ORDER BY unit_in_order DESC'
+                ]
                 try {
-                    const index = result[result.length - 1].productID
-                    const [rows] = await pool.query(queryString, [text, index])
+                    // const index = result[result.length - 1].productID
+                    const [rows] = await pool.query(queryString)
 
-                    rows.every((product) => {
-                        const productID = product['product_id']
+                    rows.every((product,index) => {
+                        if(index>result.index && product[product_name].includes(text)){
+                            const productID = product['product_id']
                         const productName = product['product_name']
                         const supplier = product['supplier_name']
                         const category = product['category_name']
@@ -119,27 +130,36 @@ async function findProduct(text, option, brand , indextostart = 0) {
                         const description = product['description']
                         const newproduct = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description)
                         products.push(newproduct)
-                        result.push(newproduct)
-                        if (result.length >= 41) return false
+                        result.data.push(newproduct)
+                    }
+                        if (result.data.length >= 41) return false
                         return true
                     })
                 } catch (error) {
                     console.log('\x1b[31m%s\x1b[0m', error.message)
                 }
             } else {
+                // const queryString1 = [
+                //     'SELECT product_id, product_name, suppliers.supplier_name, categories.category_name, price, quantity,',
+                //     'unit_in_order, discount, images, products.description',
+                //     'FROM products JOIN suppliers ON products.supplier_id = suppliers.supplier_id',
+                //     'JOIN categories ON products.category_id = categories.category_id',
+                //     'WHERE product_name LIKE "%"?"%" AND product_id > ? and suppliers.supplier_name = ?',
+                //     'ORDER BY product_id ASC'
+                // ].join(' ')
                 const queryString1 = [
                     'SELECT product_id, product_name, suppliers.supplier_name, categories.category_name, price, quantity,',
-                    'unit_in_order, discount, images, products.description',
-                    'FROM products JOIN suppliers ON products.supplier_id = suppliers.supplier_id',
-                    'JOIN categories ON products.category_id = categories.category_id',
-                    'WHERE product_name LIKE "%"?"%" AND product_id > ? and suppliers.supplier_name = ?',
-                    'ORDER BY product_id ASC'
-                ].join(' ')
+            'unit_in_order, discount, images, products.description',
+            'FROM products JOIN suppliers ON products.supplier_id = suppliers.supplier_id',
+            'JOIN categories ON products.category_id = categories.category_id',
+            'ORDER BY unit_in_order DESC'
+                ]
                 try {
-                    const index = result[result.length - 1]?.productID
+                    // const index = result[result.length - 1]?.productID
                     const [rows] = await pool.query(queryString1, [text, index, brand])
-                    rows.every((product) => {
-                        const productID = product['product_id']
+                    rows.every((product,index) => {
+                        if(index>result.index && product[product_name].includes(text) && product[supplier_name]===brand){
+                            const productID = product['product_id']
                         const productName = product['product_name']
                         const supplier = product['supplier_name']
                         const category = product['category_name']
@@ -151,8 +171,9 @@ async function findProduct(text, option, brand , indextostart = 0) {
                         const description = product['description']
                         const newproduct = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description)
                         products.push(newproduct)
-                        result.push(newproduct)
-                        if (result.length >= 41) return false
+                        result.data.push(newproduct)
+                        }
+                        if (result.data.length >= 41) return false
                         return true
                     })
                 } catch (error) {
