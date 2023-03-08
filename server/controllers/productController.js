@@ -1,4 +1,5 @@
-const { products, categories, suppliers, findProduct } = require('../cache')
+const { refreshTokens, products, categories, suppliers, findProduct, findUser } = require('../cache')
+const { readAccessToken } = require("./authController")
 const productErrors = require('./productErrors.json')
 
 // [GET home]
@@ -43,7 +44,7 @@ async function searchProduct(req, res) {
     const brand = req.query.brand?.trim()
     let indextostart = parseInt(req.query.nextindex)
     const page = parseInt(req.query.page)
-    if(!text) return res.json([])
+    if (!text) return res.json([])
     if (text === "") return res.json([])
     if (!options.includes(option)) return res.sendStatus(400)
     if (!indextostart) indextostart = 0
@@ -57,8 +58,8 @@ async function searchProduct(req, res) {
         // /api/products/search?name=...&option=more , tra 40 product ngau nhien
         // /api/products/search?name=...&option=more&brand=... , lay product theo brand
         if (option === 'more') {
-            const rs = {indexnext: false}
-            if(result.data.length >= 41){
+            const rs = { indexnext: false }
+            if (result.data.length >= 41) {
                 result.data.pop()
                 rs.indexnext = result.index
             }
@@ -103,6 +104,30 @@ async function searchProduct(req, res) {
     return res.json([])
 }
 
+async function addProduct(req, res) {
+    if (!req.body.product_name || !req.body.product_name?.trim() || req.body.product_name?.trim() === '') return res.status(400).json({ errorMessages: "value of name product invalid" })
+    if (!req.body.supplier || !req.body.supplier?.trim() || req.body.supplier?.trim() === '') return res.status(400).json({ errorMessages: "value of supplier invalid" })
+    if (!req.body.category || !req.body.category?.trim() || req.body.category?.trim() === '') return res.status(400).json({ errorMessages: "value of category invalid" })
+    if (!req.body.price || !req.body.price?.trim() || req.body.price?.trim() === '') return res.status(400).json({ errorMessages: "value of price invalid" })
+    if (!req.body.quantity || !req.body.quantity?.trim() || req.body.quantity?.trim() === '') return res.status(400).json({ errorMessages: "value of quantity invalid" })
+    if (!req.body.images) return res.status(400).json({ errorMessages: "value of images not null" })
+    if (!req.body.description || !req.body.description?.trim() || req.body.description?.trim() === '') return res.status(400).json({ errorMessages: "value of description invalid" })
+
+    const refreshToken = req.body.refreshToken
+    const index = refreshTokens.indexOf(refreshToken)
+    if (index === -1) return res.status(401).json({ errorMessages: "you are the intruder" })
+
+    const token = req.headers['authorization'].split(' ')[1]
+    const tokenData = readAccessToken(token)
+    const userAdmin = findUser(tokenData.username)
+    if (!user) return res.status(401).json({ errorMessages: "you are the intruder" })
+    if (userAdmin.rule === 1) {
+        // handle add product
+    }
+
+
+}
+
 async function getSuppliersCategories(req, res) {
     const data = {
         categories: categories.map(category => category.categoryName),
@@ -115,5 +140,6 @@ module.exports = {
     index,
     getProductByID,
     searchProduct,
-    getSuppliersCategories
+    getSuppliersCategories,
+    addProduct,
 }
