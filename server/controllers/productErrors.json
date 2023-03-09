@@ -1,8 +1,16 @@
 {
     "en": {
-        "invalidQuery": "Invalid query"
+        "invalidQuery": "Invalid query",
+        "invalidDataType": "Invalid data type",
+        "noFileFound": "No file Found",
+        "fileToLarge": "File too Large",
+        "formatNotAccept": "Format not accept"
     },
     "vi": {
-        "invalidQuery": "Query không hợp lệ"
+        "invalidQuery": "Query không hợp lệ",
+        "invalidDataType": "Kiểu dữ liệu không hợp lệ",
+        "noFileFound": "không tìm thấy file",
+        "fileToLarge": "File quá lớn",
+        "formatNotAccept": "Định dạng file không hợp lệ"
     }
 }

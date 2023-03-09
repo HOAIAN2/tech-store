@@ -103,31 +103,37 @@ async function searchProduct(req, res) {
     }
     return res.json([])
 }
-
+// [POST addProduct]
 async function addProduct(req, res) {
-    if (!req.body.product_name || !req.body.product_name?.trim() || req.body.product_name?.trim() === '') return res.status(400).json({ errorMessages: "value of name product invalid" })
-    if (!req.body.supplier || !req.body.supplier?.trim() || req.body.supplier?.trim() === '') return res.status(400).json({ errorMessages: "value of supplier invalid" })
-    if (!req.body.category || !req.body.category?.trim() || req.body.category?.trim() === '') return res.status(400).json({ errorMessages: "value of category invalid" })
-    if (!req.body.price || !req.body.price?.trim() || req.body.price?.trim() === '') return res.status(400).json({ errorMessages: "value of price invalid" })
-    if (!req.body.quantity || !req.body.quantity?.trim() || req.body.quantity?.trim() === '') return res.status(400).json({ errorMessages: "value of quantity invalid" })
-    if (!req.body.images) return res.status(400).json({ errorMessages: "value of images not null" })
-    if (!req.body.description || !req.body.description?.trim() || req.body.description?.trim() === '') return res.status(400).json({ errorMessages: "value of description invalid" })
-
-    const refreshToken = req.body.refreshToken
-    const index = refreshTokens.indexOf(refreshToken)
-    if (index === -1) return res.status(401).json({ errorMessages: "you are the intruder" })
-
+    let errorMessages = productErrors.en
+    const language = req.headers["accept-language"]
+    if (language === 'vi') errorMessages = productErrors.vi
+    const acceptFormats = ['image/png', 'image/jpg', 'image/jpeg']
+    const limitSize = 500 * 1024
+    const data = {
+        productName: req.body['product_name'],
+        supplierID: req.body['supplier_id'],
+        categoryID: req.body['category_id'],
+        price: req.body['price'],
+        quantity: req.body['quantity'],
+        description: req.body['description']
+    }
+    const validDataType = Object.keys(data).every(key => {
+        if (key === 'price' || key === 'quantity') return typeof data[key] === 'number'
+        return typeof data[key] === 'string'
+    })
+    if (!validDataType) return res.status(400).json({ message: errorMessages.invalidDataType })
+    const newData = formatData(data) // format với đổi '' thành undefined
+    const images = req.files // multi images. Tách ra bên đây cho deev chứ bên kia sml
     const token = req.headers['authorization'].split(' ')[1]
     const tokenData = readAccessToken(token)
-    const userAdmin = findUser(tokenData.username)
-    if (!user) return res.status(401).json({ errorMessages: "you are the intruder" })
-    if (userAdmin.rule === 1) {
-        // handle add product
+    const user = findUser(tokenData.username)
+    if (!user.role === 'admin') return res.sendStatus(401)
+    else {
+        // đoạn này đúng admin rồi thì handle các thứ
     }
-
-
 }
-
+// [GET supplier and category]
 async function getSuppliersCategories(req, res) {
     const data = {
         categories: categories.map(category => category.categoryName),
@@ -135,7 +141,20 @@ async function getSuppliersCategories(req, res) {
     }
     res.json(data)
 }
-
+// Middlewares, etc
+function formatData(data = {}) {
+    const newData = { ...data }
+    for (const prop in newData) {
+        if (prop === 'price' || prop === 'quantity') continue
+        if (newData[prop]?.trim().length === 0) {
+            newData[prop] = undefined
+        }
+        else {
+            newData[prop] = newData[prop]?.trim()
+        }
+    }
+    return newData
+}
 module.exports = {
     index,
     getProductByID,
