@@ -118,7 +118,7 @@ async function register(req, res) {
     else {
         try {
             if (data.password.length < 8) return res.status(400).json({ message: errorMessages.passwordTooShort })
-            const newData = fortmatData(data)
+            const newData = formatData(data)
             const hashedPassword = bcrypt.hashSync(data.password, 10)
             const formatedBirthDate = formatDate(data.birthDate)
             await createUser({
@@ -218,7 +218,7 @@ async function editProfile(req, res) {
     }
     else {
         try {
-            const newData = fortmatData(data)
+            const newData = formatData(data)
             const formatedBirthDate = formatDate(data.birthDate)
             await updateProfile(user.userID, {
                 firstName: newData.firstName,
@@ -249,7 +249,7 @@ async function editProfile(req, res) {
 
 
 /// Middlewares, etc...
-function fortmatData(data = {}) {
+function formatData(data = {}) {
     const newData = { ...data }
     for (const prop in newData) {
         if (newData[prop]?.trim().length === 0) {
