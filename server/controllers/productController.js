@@ -170,8 +170,7 @@ async function addProduct(req, res) {
                 const product = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description)
                 products.push(product)
             }
-
-            return res.json("done")
+            return res.json(newproduct)
         } else {
             const checksize = file.size <= limitSize
             const checktype = acceptFormats.includes(file.mimetype)
