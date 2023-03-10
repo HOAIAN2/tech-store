@@ -99,13 +99,27 @@ async function findProduct(text, option, brand, indextostart = 0) {
 }
 
 
-async function AddProduct(params) {
-
+async function AddProduct(data) {
+    console.log(data)
+    try {
+        const queryString = [
+            'INSERT INTO products(product_name, supplier_id, category_id ,price, quantity, images, description)',
+            'VALUES(?, ?, ?, ?, ?, ?, ?);'
+        ].join(' ')
+        const queryString1 = 'SELECT * FROM products ORDER BY product_id DESC LIMIT 1;'
+        await pool.query(queryString, [data.productName, data.supplierID, data.categoryID, data.price, data.quantity, data.images, data.description])
+        const newproduct = await pool.query(queryString1)
+        return newproduct
+    } catch (error) {
+        console.log('\x1b[31m%s\x1b[0m', `Fail to initialize products data: ${error.message}`)
+        throw new Error(`Fail to initialize products data: ${error.message}`)
+    }
 }
 
 
 module.exports = {
     initializeProduct,
     findProduct,
+    AddProduct,
     products,
 }
