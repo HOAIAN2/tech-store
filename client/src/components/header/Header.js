@@ -21,7 +21,7 @@ import useDebounce from '../../utils/hooks/useDebounce'
 function Header() {
     const [searchValue, setSeacrhValue] = useState('')
     const [searchData, setSeacrhData] = useState([])
-    const debounce = useDebounce(searchValue, 300)
+    const debounce = useDebounce(searchValue, 200)
     useEffect(() => {
         if (!debounce) return
         searchProduct(debounce, 'less')
