@@ -1,23 +1,25 @@
+import { Link } from "react-router-dom"
 import { baseIMG } from "../../utils/api-config"
-import { useState } from "react"
 import './SearchListPopup.scss'
 
 function SearchListPopup({ data }) {
     const renderData = data.map(product => {
         return { ...product, images: `${baseIMG}/products/${product.images}` }
     })
-    console.log(renderData)
+    function formatPirce(price) {
+        return `${price.toLocaleString('vi')} VNĐ`
+    }
     return (
         <div className="search-container">
             {renderData.map(product => {
                 return (
-                    <div key={product.productID} className="product-item">
+                    <Link key={product.productID} className="product-item" to={`product/${product.productID}`}>
                         <img src={product.images} alt="" />
                         <div className="item-content">
                             <div className="product-name">{product.productName}</div>
-                            <div className="product-price">{product.price}</div>
+                            <div className="product-price">{formatPirce(product.price)}</div>
                         </div>
-                    </div>
+                    </Link>
                 )
             })}
         </div>
