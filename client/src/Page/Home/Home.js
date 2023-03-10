@@ -9,10 +9,14 @@ function Home() {
         // console.log(user)
     })
 
+    function test(e) {
+        console.log(e)
+    }
 
 
     return (
         <div className='home'>
+            <input onInput={test} type="file" name="filefield" multiple="multiple"></input>
             <Header />
         </div>
     )

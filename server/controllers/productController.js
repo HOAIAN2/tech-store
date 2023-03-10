@@ -1,5 +1,7 @@
-const { refreshTokens, products, categories, suppliers, findProduct, findUser } = require('../cache')
+const { refreshTokens, products, categories, suppliers, findProduct, findUser, AddProduct } = require('../cache')
+const Product = require("../models/product")
 const { readAccessToken } = require("./authController")
+const path = require("path")
 const productErrors = require('./productErrors.json')
 
 // [GET home]
@@ -110,28 +112,93 @@ async function addProduct(req, res) {
     if (language === 'vi') errorMessages = productErrors.vi
     const acceptFormats = ['image/png', 'image/jpg', 'image/jpeg']
     const limitSize = 500 * 1024
+    if (!req.files.file) return res.json(401)
     const data = {
         productName: req.body['product_name'],
         supplierID: req.body['supplier_id'],
         categoryID: req.body['category_id'],
         price: req.body['price'],
         quantity: req.body['quantity'],
-        description: req.body['description']
+        description: req.body['description'],
+        images: ''
     }
+
     const validDataType = Object.keys(data).every(key => {
-        if (key === 'price' || key === 'quantity') return typeof data[key] === 'number'
-        return typeof data[key] === 'string'
+        if (key === 'price' || key === 'quantity' || key === 'supplierID' || key === 'categoryID') {
+            const a = data[key] = parseInt(data[key])
+            if (a) return true
+            return false
+        } else {
+            typeof data[key] === 'string'
+            return true
+        }
     })
     if (!validDataType) return res.status(400).json({ message: errorMessages.invalidDataType })
-    const newData = formatData(data) // format với đổi '' thành undefined
-    const images = req.files // multi images. Tách ra bên đây cho deev chứ bên kia sml
-    const token = req.headers['authorization'].split(' ')[1]
+    // const newData = formatData(data) // format với đổi '' thành undefined
+
+    const token = req.headers['authorization'].split(' ')[0]
     const tokenData = readAccessToken(token)
     const user = findUser(tokenData.username)
     if (!user.role === 'admin') return res.sendStatus(401)
     else {
-        // đoạn này đúng admin rồi thì handle các thứ
+        if (req.files.file.length) {
+            const checkfile = req.files.file.every((file) => {
+                const checksize = file.size <= limitSize
+                const checktype = acceptFormats.includes(file.mimetype)
+                if (!checksize || !checktype) return false
+                return true
+            })
+            if (!checkfile) return res.status(402)
+            req.files.file.map((file, index) => {
+                let fileName = `${Date.now()}-${data.productName}-${index}.${file.mimetype.split('/')[1]}`
+                let newpath = path.join('./static/images/products', fileName)
+                file.mv(newpath)
+                data.images = data.images.concat(`${fileName},`)
+            })
+            const newproduct = await AddProduct(data)
+            if (newproduct) {
+                const productID = newproduct['product_id']
+                const productName = newproduct['product_name']
+                const supplier = newproduct['supplier_name']
+                const category = newproduct['category_name']
+                const price = newproduct['price']
+                const quantity = newproduct['quantity']
+                const unitInOrder = newproduct['unit_in_order']
+                const discount = newproduct['discount']
+                const images = newproduct['images']
+                const description = newproduct['description']
+                const product = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description)
+                products.push(product)
+            }
+
+            return res.json("done")
+        } else {
+            const checksize = file.size <= limitSize
+            const checktype = acceptFormats.includes(file.mimetype)
+            if (!checksize || !checktype) return res.status(402)
+            let fileName = `${Date.now()}-${data.productName}-${index}.${req.files.file.mimetype.split('/')[1]}`
+            let newpath = path.join('./static/images/products', fileName)
+            file.mv(newpath)
+            data.images = data.images.concat(`${fileName},`)
+            const newproduct = await AddProduct(data)
+            if (newproduct) {
+                const productID = newproduct['product_id']
+                const productName = newproduct['product_name']
+                const supplier = newproduct['supplier_name']
+                const category = newproduct['category_name']
+                const price = newproduct['price']
+                const quantity = newproduct['quantity']
+                const unitInOrder = newproduct['unit_in_order']
+                const discount = newproduct['discount']
+                const images = newproduct['images']
+                const description = newproduct['description']
+                const product = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description)
+                products.push(product)
+            }
+            return res.join("done")
+        }
     }
+
 }
 // [GET supplier and category]
 async function getSuppliersCategories(req, res) {
@@ -145,7 +212,7 @@ async function getSuppliersCategories(req, res) {
 function formatData(data = {}) {
     const newData = { ...data }
     for (const prop in newData) {
-        if (prop === 'price' || prop === 'quantity') continue
+        if (prop === 'price' || prop === 'quantity' || prop === 'supplierID' || prop === 'categoryID') continue
         if (newData[prop]?.trim().length === 0) {
             newData[prop] = undefined
         }

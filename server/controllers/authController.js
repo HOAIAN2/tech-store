@@ -322,7 +322,7 @@ function authenticateToken(req, res, next) {
     if (!authorizationHeader) res.sendStatus(401)
     else {
         const token = authorizationHeader.split(' ')[1]
-        if (!token) res.sendStatus(401)
+        if (!token) res.sendStatus(402)
         else {
             try {
                 jwt.verify(token, process.env['ACCESS_TOKEN_SECRET'])
