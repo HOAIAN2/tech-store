@@ -23,7 +23,7 @@ async function initializeProduct() {
             const quantity = row['quantity']
             const unitInOrder = row['unit_in_order']
             const discount = row['discount']
-            const images = row['images']
+            const images = row['images'].split(',')
             const description = row['description']
             const product = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description)
             products.push(product)
@@ -113,12 +113,31 @@ async function AddProduct(data) {
             'JOIN categories ON products.category_id = categories.category_id',
             'ORDER BY product_id DESC LIMIT 1;'
         ].join(' ')
-        await pool.query(queryString, [data.productName, data.supplierID, data.categoryID, data.price, data.quantity, data.images, data.description])
-        const [newproduct] = await pool.query(queryString1)
-        return newproduct[0]
+        await pool.query(queryString, [
+            data.productName,
+            data.supplierID,
+            data.categoryID,
+            data.price,
+            data.quantity,
+            data.images,
+            data.description
+        ])
+        const [newProduct] = await pool.query(queryString1)
+        const productID = newProduct[0]['product_id']
+        const productName = newProduct[0]['product_name']
+        const supplier = newProduct[0]['supplier_name']
+        const category = newProduct[0]['category_name']
+        const price = newProduct[0]['price']
+        const quantity = newProduct[0]['quantity']
+        const unitInOrder = newProduct[0]['unit_in_order']
+        const discount = newProduct[0]['discount']
+        const images = newProduct[0]['images'].split(',')
+        const description = newProduct[0]['description']
+        const product = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description)
+        return product
     } catch (error) {
-        console.log('\x1b[31m%s\x1b[0m', `Fail to initialize products data: ${error.message}`)
-        throw new Error(`Fail to initialize products data: ${error.message}`)
+        console.log('\x1b[31m%s\x1b[0m', `Fail to add product: ${error.message}`)
+        throw new Error(`Fail to add product data: ${error.message}`)
     }
 }
 
