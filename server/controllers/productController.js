@@ -112,7 +112,9 @@ async function addProduct(req, res) {
     if (language === 'vi') errorMessages = productErrors.vi
     const acceptFormats = ['image/png', 'image/jpg', 'image/jpeg']
     const limitSize = 500 * 1024
-    if (!req.files.file) return res.json(401)
+    const files = req.files
+    if (!files) return res.sendStatus(400)
+    // if (!req.files.file) return res.json(401)
     const data = {
         productName: req.body['product_name'],
         supplierID: req.body['supplier_id'],
@@ -122,82 +124,46 @@ async function addProduct(req, res) {
         description: req.body['description'],
         images: ''
     }
-
     const validDataType = Object.keys(data).every(key => {
-        if (key === 'price' || key === 'quantity' || key === 'supplierID' || key === 'categoryID') {
-            const a = data[key] = parseInt(data[key])
-            if (a) return true
-            return false
-        } else {
-            typeof data[key] === 'string'
-            return true
+        const numberFields = ['price', 'quantity', 'supplierID', 'categoryID']
+        if (numberFields.includes(key)) {
+            return typeof parseInt(data[key]) === 'number' // nó parse '5h' ra 5 nên cần dùng cách khác
+        }
+        else {
+            return typeof data[key] === 'string'
         }
     })
     if (!validDataType) return res.status(400).json({ message: errorMessages.invalidDataType })
     // const newData = formatData(data) // format với đổi '' thành undefined
-
-    const token = req.headers['authorization'].split(' ')[0]
+    const newData = formatData(data) // handle 1 đống dấu cách
+    const token = req.headers['authorization'].split(' ')[1]
     const tokenData = readAccessToken(token)
-    const user = findUser(tokenData.username)
+    const user = await findUser(tokenData.username)
     if (!user.role === 'admin') return res.sendStatus(401)
     else {
-        if (req.files.file.length) {
-            const checkfile = req.files.file.every((file) => {
-                const checksize = file.size <= limitSize
-                const checktype = acceptFormats.includes(file.mimetype)
-                if (!checksize || !checktype) return false
+        try {
+            const checkfile = Object.keys(files).every((file) => {
+                const checkSize = files[file].size <= limitSize
+                const checkType = acceptFormats.includes(files[file].mimetype)
+                if (!checkSize || !checkType) return false
                 return true
             })
-            if (!checkfile) return res.status(402)
-            req.files.file.map((file, index) => {
-                let fileName = `${Date.now()}-${data.productName}-${index}.${file.mimetype.split('/')[1]}`
+            if (!checkfile) return res.sendStatus(400)
+            const fileTemp = []
+            Object.keys(files).forEach((file, index) => {
+                let fileName = `${Date.now()}-${newData.productName}-${index}.${files[file].mimetype.split('/')[1]}`
                 let newpath = path.join('./static/images/products', fileName)
-                file.mv(newpath)
-                data.images = data.images.concat(`${fileName},`)
+                files[file].mv(newpath)
+                fileTemp.push(fileName)
             })
-            const newproduct = await AddProduct(data)
-            if (newproduct) {
-                const productID = newproduct['product_id']
-                const productName = newproduct['product_name']
-                const supplier = newproduct['supplier_name']
-                const category = newproduct['category_name']
-                const price = newproduct['price']
-                const quantity = newproduct['quantity']
-                const unitInOrder = newproduct['unit_in_order']
-                const discount = newproduct['discount']
-                const images = newproduct['images']
-                const description = newproduct['description']
-                const product = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description)
-                products.push(product)
-            }
-            return res.json(newproduct)
-        } else {
-            const checksize = file.size <= limitSize
-            const checktype = acceptFormats.includes(file.mimetype)
-            if (!checksize || !checktype) return res.status(402)
-            let fileName = `${Date.now()}-${data.productName}-${index}.${req.files.file.mimetype.split('/')[1]}`
-            let newpath = path.join('./static/images/products', fileName)
-            file.mv(newpath)
-            data.images = data.images.concat(`${fileName},`)
-            const newproduct = await AddProduct(data)
-            if (newproduct) {
-                const productID = newproduct['product_id']
-                const productName = newproduct['product_name']
-                const supplier = newproduct['supplier_name']
-                const category = newproduct['category_name']
-                const price = newproduct['price']
-                const quantity = newproduct['quantity']
-                const unitInOrder = newproduct['unit_in_order']
-                const discount = newproduct['discount']
-                const images = newproduct['images']
-                const description = newproduct['description']
-                const product = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description)
-                products.push(product)
-            }
-            return res.join("done")
+            newData.images = fileTemp.join(',')
+            const newProduct = await AddProduct(newData)
+            return res.json(newProduct)
+        } catch (error) {
+            console.log('\x1b[31m%s\x1b[0m', error.message)
+            return res.status(500).json({ message: 'error' })
         }
     }
-
 }
 // [GET supplier and category]
 async function getSuppliersCategories(req, res) {
@@ -211,7 +177,12 @@ async function getSuppliersCategories(req, res) {
 function formatData(data = {}) {
     const newData = { ...data }
     for (const prop in newData) {
-        if (prop === 'price' || prop === 'quantity' || prop === 'supplierID' || prop === 'categoryID') continue
+        const numberFields = ['price', 'quantity', 'supplierID', 'categoryID']
+        if (prop === 'images') continue
+        if (numberFields.includes(prop)) {
+            newData[prop] = parseInt(newData[prop])
+            continue
+        }
         if (newData[prop]?.trim().length === 0) {
             newData[prop] = undefined
         }

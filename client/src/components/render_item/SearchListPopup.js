@@ -4,7 +4,12 @@ import './SearchListPopup.scss'
 
 function SearchListPopup({ data }) {
     const renderData = data.map(product => {
-        return { ...product, images: `${baseIMG}/products/${product.images}` }
+        return {
+            ...product,
+            images: product.images.map(image => {
+                return `${baseIMG}/products/${image}`
+            })
+        }
     })
     function formatPirce(price) {
         return `${price.toLocaleString('vi')} VNĐ`
