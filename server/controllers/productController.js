@@ -1,4 +1,4 @@
-const { refreshTokens, products, categories, suppliers, findProduct, findUser, AddProduct } = require('../cache')
+const { refreshTokens, products, categories, suppliers, findProduct, findUser, createProduct } = require('../cache')
 const Product = require("../models/product")
 const { readAccessToken } = require("./authController")
 const path = require("path")
@@ -157,7 +157,7 @@ async function addProduct(req, res) {
                 fileTemp.push(fileName)
             })
             newData.images = fileTemp.join(',')
-            const newProduct = await AddProduct(newData)
+            const newProduct = await createProduct(newData)
             return res.json(newProduct)
         } catch (error) {
             console.log('\x1b[31m%s\x1b[0m', error.message)

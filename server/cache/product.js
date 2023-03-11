@@ -99,8 +99,7 @@ async function findProduct(text, option, brand, indextostart = 0) {
 }
 
 
-async function AddProduct(data) {
-    console.log(data)
+async function createProduct(data) {
     try {
         const queryString = [
             'INSERT INTO store.products (product_name, supplier_id, category_id ,price, quantity, images ,description)',
@@ -145,6 +144,6 @@ async function AddProduct(data) {
 module.exports = {
     initializeProduct,
     findProduct,
-    AddProduct,
+    createProduct,
     products,
 }
