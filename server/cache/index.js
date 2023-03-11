@@ -10,7 +10,7 @@ const {
     updateUserImage,
     updateProfile
 } = require('./user')
-const { products, initializeProduct, findProduct, AddProduct } = require('./product')
+const { products, initializeProduct, findProduct, createProduct } = require('./product')
 const { categories, initializeCategory } = require('./category')
 const { orders, initializeOrder } = require('./order')
 const { suppliers, initializeSupplier } = require('./supplier')
@@ -45,7 +45,7 @@ module.exports = {
     updatePassword,
     updateUserImage,
     findProduct,
-    AddProduct,
+    createProduct,
     pool,
     users,
     products,
