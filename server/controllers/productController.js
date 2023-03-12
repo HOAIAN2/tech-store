@@ -163,7 +163,7 @@ async function addProduct(req, res) {
                 fileTemp.map((item) => {
                     return fs.unlinkSync(`./static/images/products/${item}`, (error) => { if (error) { console.log(error) } })
                 })
-                return res.status(401).json('err')
+                return res.status(500).json({ message: 'error' })
             }
             return res.json(newProduct)
         } catch (error) {
