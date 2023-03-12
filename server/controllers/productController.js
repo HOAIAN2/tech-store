@@ -1,6 +1,7 @@
 const { refreshTokens, products, categories, suppliers, findProduct, findUser, createProduct } = require('../cache')
 const Product = require("../models/product")
 const { readAccessToken } = require("./authController")
+const fs = require('fs')
 const path = require("path")
 const productErrors = require('./productErrors.json')
 
@@ -127,7 +128,7 @@ async function addProduct(req, res) {
     const validDataType = Object.keys(data).every(key => {
         const numberFields = ['price', 'quantity', 'supplierID', 'categoryID']
         if (numberFields.includes(key)) {
-            return typeof parseInt(data[key]) === 'number' // nó parse '5h' ra 5 nên cần dùng cách khác
+            return checkNumber(data[key])
         }
         else {
             return typeof data[key] === 'string'
@@ -139,7 +140,7 @@ async function addProduct(req, res) {
     const token = req.headers['authorization'].split(' ')[1]
     const tokenData = readAccessToken(token)
     const user = await findUser(tokenData.username)
-    if (!user.role === 'admin') return res.sendStatus(401)
+    if (user.role != 'admin') return res.sendStatus(401)
     else {
         try {
             const checkfile = Object.keys(files).every((file) => {
@@ -158,6 +159,12 @@ async function addProduct(req, res) {
             })
             newData.images = fileTemp.join(',')
             const newProduct = await createProduct(newData)
+            if (!newProduct) {
+                fileTemp.map((item) => {
+                    return fs.unlinkSync(`./static/images/products/${item}`, (error) => { if (error) { console.log(error) } })
+                })
+                return res.status(401).json('err')
+            }
             return res.json(newProduct)
         } catch (error) {
             console.log('\x1b[31m%s\x1b[0m', error.message)
@@ -191,6 +198,13 @@ function formatData(data = {}) {
         }
     }
     return newData
+}
+function checkNumber(number) {
+    let i = 0
+    for (i; i < number.length; i++) {
+        if (isNaN(parseInt(number[i]))) return false
+    }
+    return true
 }
 module.exports = {
     index,
