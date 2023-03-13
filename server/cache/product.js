@@ -74,15 +74,15 @@ async function initializeProduct() {
 // }
 
 
-async function findProduct(text, option, brand, indextostart = 0) {
+async function findProduct(text, option, brand, indexToStart = 0) {
     const result = { index: 0, data: [] }
     products.every((product, index) => {
         if (!brand) {
-            if (product.productName.toLocaleLowerCase().includes(text.toLocaleLowerCase()) && index + 1 > indextostart) {
+            if (product.productName.toLocaleLowerCase().includes(text.toLocaleLowerCase()) && index + 1 > indexToStart) {
                 result.data.push(product)
             }
         } else {
-            if (product.productName.toLocaleLowerCase().includes(text.toLocaleLowerCase()) && product.supplier === brand && index + 1 > indextostart) {
+            if (product.productName.toLocaleLowerCase().includes(text.toLocaleLowerCase()) && product.supplier === brand && index + 1 > indexToStart) {
                 result.data.push(product)
             }
         }

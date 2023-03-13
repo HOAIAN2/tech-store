@@ -1,20 +1,20 @@
 # Tech-store
 ## Prerequisites
-* Nodejs v 18.11.0 or later (yarn or npm)
-* MySQL
+- Nodejs v 18.11.0 or later (yarn or npm)
+- MySQL
 ## Installation
-* `git clone https://github.com/HOAIAN2/tech-store.git`
-* `cd tech-store`
-* Run `prepare.bat` to generate .env file and install libs for server and client.
-* `yarn start` or `npm start`
+- `git clone https://github.com/HOAIAN2/tech-store.git`
+- `cd tech-store`
+- Run `prepare.bat` to generate .env file and install libs for server and client.
+- `yarn start` or `npm start`
 ## Build
-* Run `build.bat` to build ReactJS and start server
+- Run `build.bat` to build ReactJS and start server
 ## Database Diagram
 ![](/database/store_db_diagram.png)
 ## API
 ### User routes: /api/user/
 >[GET] /: JWT require
-* Respone
+- Respone
 ``` json
 {
     "username": "username",
@@ -29,14 +29,14 @@
 ```
 ### Auth routes: /api/auth/
 >[POST] login
-* Request
+- Request
 ```json
 {
     "username": "username",
     "password": "password"
 }
 ```
-* Respone
+- Respone
 ```json
 {
     "accessToken": "string",
@@ -44,20 +44,20 @@
 }
 ```
 >[POST] logout: JWT require
-* Request
+- Request
 ```json
 {
     "refreshToken": "string"
 }
 ```
-* Respone
+- Respone
 ```json
 {
     "message": "message"
 }
 ```
 >[POST] change-password: JWT require
-* Request
+- Request
 ```json
 {
     "oldPassword": "string",
@@ -65,9 +65,9 @@
     "refreshToken": "string"
 }
 ```
-* Respone
+- Respone
 >[POST] register
-* Request
+- Request
 ```json
 {
     "username": "username",
@@ -81,7 +81,7 @@
     "password": "password"
 }
 ```
-* Respone
+- Respone
 ```json
 {
     "accessToken": "string",
@@ -89,20 +89,20 @@
 }
 ```
 >[POST] refresh
-* Request
+- Request
 ```json
 {
     "refreshToken": "string"
 }
 ```
-* Respone
+- Respone
 ```json
 {
     "message": "message"
 }
 ```
 >[POST] edit: JWT require
-* Request
+- Request
 ```json
 {
     "username": "username",
@@ -115,13 +115,13 @@
     "phoneNumber": "+84....", // phone number in Vietnam, CHAR(12) NULLABLE
 }
 ```
-* Respone
+- Respone
 >[POST] upload
-* Request: formData(file: yourImage) (accept: png, jpeg, jpg)
-* Respone: HTTP status code
+- Request: formData(file: yourImage) (accept: png, jpeg, jpg)
+- Respone: HTTP status code
 ### Auth routes: /api/products/
 >[GET]
-* Respone
+- Respone
 ```json
 {
     "category": [
@@ -132,14 +132,14 @@
             "category": "string",
             "price": 100000,
             "discount": null,
-            "images": "string",
+            "images": ["string"],
             "description": null
         }
     ]
 }
 ```
 >[GET] product?id=number
-* Respone
+- Respone
 ```json
 {
     "productID": 1,
@@ -148,7 +148,85 @@
     "category": "string",
     "price": 100000,
     "discount": null,
-    "images": "string",
+    "images": ["string"],
+    "description": null
+}
+```
+>[GET] suppliers-categories
+- Respone
+```json
+{
+    "categories": [
+        "category"
+    ],
+    "suppliers": [
+        "supplier"
+    ]
+}
+```
+>[GET] search
+- Request: query params
+  - _name_ : product name
+  - _option_ : less, more
+  - _sortBy_: price, hot, top-sell
+  - _sortMode_: asc, desc
+  - _indexToStart_:
+
+- Respone
+  - _less_
+  ```json
+  [
+    {
+        "productID": 1,
+        "productName": "string",
+        "price": 100000,
+        "discount": null,
+        "images": ["string"],
+    }
+  ]
+  ```
+  - _more_
+  ```json
+  {
+    "index": 5,
+    "data": [
+        {
+            "productID": 1,
+            "productName": "string",
+            "supplier": "string",
+            "category": "string",
+            "price": 100000,
+            "discount": null,
+            "images": ["string"],
+            "description": null
+        }
+    ]
+  }
+  ```
+>[POST] add-product: JWT require (token admin)
+- Request
+  - form data: only send String so server gonna parse data type
+  ```json
+  {
+    "productName": "string",
+    "supplier": "string",
+    "category": "string",
+    "price": "100000",
+    "quantity": "100",
+    "description": ""
+  }
+  ```
+  - images: accept: jpeg, jpg, png, =< 500kbs
+- Respone
+```json
+{
+    "productID": 1,
+    "productName": "string",
+    "supplier": "string",
+    "category": "string",
+    "price": 100000,
+    "discount": null,
+    "images": ["string"],
     "description": null
 }
 ```
