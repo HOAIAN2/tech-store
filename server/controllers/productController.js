@@ -45,36 +45,37 @@ async function searchProduct(req, res) {
     const sortBy = req.query.sortBy?.trim()
     const sortMode = req.query.sortMode?.trim()
     const brand = req.query.brand?.trim()
-    let indextostart = parseInt(req.query.nextindex)
-    const page = parseInt(req.query.page)
+    let indexToStart = parseInt(req.query.nextindex)
     if (!text) return res.json([])
     if (text === "") return res.json([])
     if (!options.includes(option)) return res.sendStatus(400)
-    if (!indextostart) indextostart = 0
+    if (sortBy && !sortBys.includes(sortBy)) return res.sendStatus(400)
+    if (sortMode && !sortModes.includes(sortMode)) return res.sendStatus(400)
+    if (!indexToStart) indexToStart = 0
 
-    const result = await findProduct(text, option, brand, indextostart)
+    const result = await findProduct(text, option, brand, indexToStart)
     if (result) {
         // /api/products/search?name=...&option=less , co nhieu tra nhieu
         if (option === 'less') {
-            return res.json(result.data.map((product) => { return product.ignoreProps('unitInOrder', 'quantity', 'description', 'discount', 'supplier', 'category') }))
+            return res.json(result.data.map((product) => { return product.ignoreProps('unitInOrder', 'quantity', 'description', 'supplier', 'category') }))
         }
         // /api/products/search?name=...&option=more , tra 40 product ngau nhien
         // /api/products/search?name=...&option=more&brand=... , lay product theo brand
         if (option === 'more') {
-            const rs = { indexnext: false }
+            const rs = { indexNext: false }
             if (result.data.length >= 41) {
                 result.data.pop()
-                rs.indexnext = result.index
+                rs.indexNext = result.index
             }
             // /api/products/search?name=...&option=more&brand=...&sortBy=price/hot&sortMode=asc/desc
             if (sortBy === 'price') {
-                const resultsort = handlesort(result.data, sortMode, sortBy)
+                const resultsort = handleSort(result.data, sortMode, sortBy)
                 const data = resultsort.map((product) => { return product.ignoreProps('unitInOrder', 'quantity') })
                 rs.data = data
                 return res.json(rs)
             }
             if (sortBy === 'hot') {
-                const resultsort = handlesort(result.data, sortMode, sortBy)
+                const resultsort = handleSort(result.data, sortMode, sortBy)
                 const data = resultsort.map((product) => { return product.ignoreProps('unitInOrder', 'quantity') })
                 rs.data = data
                 return res.json(rs)
@@ -87,7 +88,7 @@ async function searchProduct(req, res) {
         }
     }
 
-    function handlesort(data, sortMode, sortBy) {
+    function handleSort(data, sortMode, sortBy) {
         if (sortMode === 'asc') {
             const resultsortasc = data.sort((product1, product2) => {
                 if (sortBy === 'price') return product1.price - product2.price
@@ -117,12 +118,12 @@ async function addProduct(req, res) {
     if (!files) return res.sendStatus(400)
     // if (!req.files.file) return res.json(401)
     const data = {
-        productName: req.body['product_name'],
-        supplierID: req.body['supplier_id'],
-        categoryID: req.body['category_id'],
-        price: req.body['price'],
-        quantity: req.body['quantity'],
-        description: req.body['description'],
+        productName: req.body.productName,
+        supplierID: req.body.supplierID,
+        categoryID: req.body.categoryID,
+        price: req.body.price,
+        quantity: req.body.quantity,
+        description: req.body.description,
         images: ''
     }
     const validDataType = Object.keys(data).every(key => {
@@ -160,8 +161,8 @@ async function addProduct(req, res) {
             newData.images = fileTemp.join(',')
             const newProduct = await createProduct(newData)
             if (!newProduct) {
-                fileTemp.map((item) => {
-                    return fs.unlinkSync(`./static/images/products/${item}`, (error) => { if (error) { console.log(error) } })
+                fileTemp.forEach((item) => {
+                    fs.unlinkSync(`./static/images/products/${item}`, (error) => { if (error) { console.log('\x1b[31m%s\x1b[0m', error) } })
                 })
                 return res.status(500).json({ message: 'error' })
             }
