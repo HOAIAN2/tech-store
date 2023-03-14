@@ -38,9 +38,17 @@
             }
 
             & .product-price {
-                color: colors.$color-btn;
-                font-weight: bold;
-                // margin-left: 5px;
+                & .price {
+                    color: colors.$color-btn;
+                    font-weight: bold;
+                    // margin-left: 5px;
+                }
+
+                & .discount {
+                    margin-left: 20px;
+                    text-decoration: line-through;
+                    color: colors.$shadow;
+                }
             }
         }
     }
