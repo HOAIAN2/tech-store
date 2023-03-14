@@ -8,9 +8,8 @@ class Order {
         this.products = [] // {productID, productName, quantity, price?}
         this.total = 0
     }
-    #setCurrentPrice() { }
-    addProduct(productID, productName, quantity, price) {
-        this.products.push({ productID, productName, quantity, price })
+    addProduct(productID, productName, quantity, price, discount) {
+        this.products.push({ productID, productName, quantity, price, discount })
     }
     setProduct(productID, quantity) {
         for (let index = 0; index < this.products.length; i++) {
@@ -27,7 +26,6 @@ class Order {
         this.products.splice(index, 1)
     }
     paidOrder(paidMethod, orderDate) {
-        this.#setCurrentPrice()
         this.paidMethod = paidMethod
         this.total = this.products.reduce((sum, product) => {
             return sum + product.price * product.quantity
