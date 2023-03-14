@@ -28,7 +28,7 @@ class Order {
     paidOrder(paidMethod, orderDate) {
         this.paidMethod = paidMethod
         this.total = this.products.reduce((sum, product) => {
-            return sum + product.price * product.quantity
+            return sum + (product.price * (1 - product.discount) * product.quantity)
         }, 0)
         this.orderDate = new Date(orderDate)
         this.paid = true
