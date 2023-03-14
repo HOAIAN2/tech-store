@@ -53,11 +53,13 @@ CREATE TABLE `order_details` (
   `product_id` int NOT NULL,
   `quantity` int NOT NULL,
   `price` int DEFAULT NULL,
+  `discount` double DEFAULT NULL,
   KEY `order_id` (`order_id`),
   KEY `product_id` (`product_id`),
   CONSTRAINT `order_details_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`),
   CONSTRAINT `order_details_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`),
-  CONSTRAINT `atleast_quantity` CHECK ((`quantity` > 0))
+  CONSTRAINT `atleast_quantity` CHECK ((`quantity` > 0)),
+  CONSTRAINT `order_details_discount_limit` CHECK (((`discount` > 0) and (`discount` < 1)))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -296,4 +298,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-03-07 16:21:40
+-- Dump completed on 2023-03-14 10:33:48

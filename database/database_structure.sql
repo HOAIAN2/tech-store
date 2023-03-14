@@ -93,9 +93,11 @@ CREATE TABLE order_details (
     product_id INT NOT NULL,
     quantity INT NOT NULL,
     price INT DEFAULT NULL,
+    discount DOUBLE DEFAULT NULL,
     FOREIGN KEY (order_id) REFERENCES orders(order_id),
     FOREIGN KEY (product_id) REFERENCES products(product_id),
-    CONSTRAINT atleast_quantity CHECK (quantity > 0)
+    CONSTRAINT atleast_quantity CHECK (quantity > 0),
+    CONSTRAINT order_details_discount_limit CHECK (discount> 0 AND discount < 1)
 );
 CREATE TRIGGER before_order_detail_insert
 BEFORE INSERT ON order_details
@@ -128,5 +130,6 @@ UPDATE products JOIN order_details ON products.product_id = order_details.produc
 JOIN orders ON order_details.order_id = NEW.order_id
 SET products.quantity = products.quantity - order_details.quantity,
 unit_in_order = unit_in_order - order_details.quantity,
-order_details.price = products.price
+order_details.price = products.price,
+order_details.discount = products.discount
 WHERE products.product_id = order_details.product_id;
