@@ -119,7 +119,7 @@
 >[POST] upload
 - Request: formData(file: yourImage) (accept: png, jpeg, jpg)
 - Respone: HTTP status code
-### Auth routes: /api/products/
+### Product routes: /api/products/
 >[GET]
 - Respone
 ```json
