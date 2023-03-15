@@ -216,7 +216,7 @@
     "description": ""
   }
   ```
-  - images: accept: jpeg, jpg, png, =< 500kbs
+  - images "files": accept: jpeg, jpg, png, =< 500kbs
 - Respone
 ```json
 {
