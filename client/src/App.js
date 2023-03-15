@@ -11,6 +11,7 @@ import { useUserData, USER_ACTION } from './Context'
 import './App.scss';
 import DetailsUserProfile from './Page/Auth/DetailsUser/DetailsUserProfile'
 import DetailsUserPurchase from './Page/Auth/DetailsUser/DetailsUserPurchase'
+import ProductPage from './Page/Products/ProductPage'
 
 function App() {
   const [, dispatchUser] = useUserData()
@@ -41,6 +42,7 @@ function App() {
           <Route index element={<DetailsUserProfile />} />
           <Route path='purchase' element={<DetailsUserPurchase />} />
         </Route>
+        <Route path='/product/:id' element={<ProductPage />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
     </div>

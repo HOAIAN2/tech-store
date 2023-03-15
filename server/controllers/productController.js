@@ -33,7 +33,7 @@ function getProductByID(req, res) {
         return product.productID === productID
     })
     if (product) return res.json(product.ignoreProps('unitInOrder', 'quantity'))
-    else return res.status(404)
+    else return res.sendStatus(404)
 }
 // [GET search]
 async function searchProduct(req, res) {
@@ -114,9 +114,9 @@ async function addProduct(req, res) {
     if (language === 'vi') errorMessages = productErrors.vi
     const acceptFormats = ['image/png', 'image/jpg', 'image/jpeg']
     const limitSize = 500 * 1024
-    const files = req.files
+    let files = req.files.files
     if (!files) return res.sendStatus(400)
-    // if (!req.files.file) return res.json(401)
+    if (!Array.isArray(files)) files = [files]
     const data = {
         productName: req.body.productName,
         supplierID: req.body.supplierID,
@@ -144,18 +144,18 @@ async function addProduct(req, res) {
     if (user.role != 'admin') return res.sendStatus(401)
     else {
         try {
-            const checkfile = Object.keys(files).every((file) => {
-                const checkSize = files[file].size <= limitSize
-                const checkType = acceptFormats.includes(files[file].mimetype)
+            const checkfile = files.every((file) => {
+                const checkSize = file.size <= limitSize
+                const checkType = acceptFormats.includes(file.mimetype)
                 if (!checkSize || !checkType) return false
                 return true
             })
             if (!checkfile) return res.sendStatus(400)
             const fileTemp = []
-            Object.keys(files).forEach((file, index) => {
-                let fileName = `${Date.now()}-${newData.productName}-${index}.${files[file].mimetype.split('/')[1]}`
+            files.forEach((file, index) => {
+                let fileName = `${Date.now()}-${newData.productName}-${index}.${file.mimetype.split('/')[1]}`
                 let newpath = path.join('./static/images/products', fileName)
-                files[file].mv(newpath)
+                file.mv(newpath)
                 fileTemp.push(fileName)
             })
             newData.images = fileTemp.join(',')

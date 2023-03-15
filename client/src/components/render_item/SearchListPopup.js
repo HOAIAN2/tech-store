@@ -15,7 +15,6 @@ function SearchListPopup({ data }) {
     function formatPirce(price) {
         return `${price.toLocaleString('vi')} VNĐ`
     }
-    console.log(renderData)
     return (
         <div className="search-container">
             {renderData.map(product => {
