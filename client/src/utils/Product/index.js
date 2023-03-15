@@ -23,7 +23,8 @@ async function getProductByID(id) {
         console.log(product)
         return product.data
     } catch (error) {
-        if (error.response.status === 404 || error.response.status === 400) throw new Error('404')
+        const notFoundCodes = [404, 400] //replace because id only accept number
+        if (notFoundCodes.includes(error.response.status)) throw new Error('404')
     }
 }
 
