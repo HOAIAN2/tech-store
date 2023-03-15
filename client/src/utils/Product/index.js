@@ -23,7 +23,7 @@ async function getProductByID(id) {
         console.log(product)
         return product.data
     } catch (error) {
-        if (error.response.status === 404) throw new Error('404')
+        if (error.response.status === 404 || error.response.status === 400) throw new Error('404')
     }
 }
 
