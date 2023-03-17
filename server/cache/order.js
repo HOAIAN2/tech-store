@@ -96,5 +96,6 @@ async function paidOrder(orderID, paymentMethodID) {
 }
 module.exports = {
     initializeOrder,
+    getOrder,
     orders
 }

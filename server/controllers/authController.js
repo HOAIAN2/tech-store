@@ -93,6 +93,7 @@ async function register(req, res) {
     let errorMessages = authErrors.en
     const language = req.headers["accept-language"]
     if (language === 'vi') errorMessages = authErrors.vi
+    console.log(req.body.birthDate)
     const data = {
         username: req.body.username,
         password: req.body.password,
