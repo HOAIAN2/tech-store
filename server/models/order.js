@@ -33,6 +33,15 @@ class Order {
         this.orderDate = new Date(orderDate)
         this.paid = true
     }
+    updatequantityproduct(quantity, productID) {
+        this.products.every((item) => {
+            if (item.productID === productID) {
+                item.quantity = quantity
+                return false
+            }
+            return true
+        })
+    }
 }
 
 module.exports = Order
