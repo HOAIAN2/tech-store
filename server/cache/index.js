@@ -12,7 +12,7 @@ const {
 } = require('./user')
 const { products, initializeProduct, findProduct, createProduct } = require('./product')
 const { categories, initializeCategory } = require('./category')
-const { orders, initializeOrder, getOrder } = require('./order')
+const { orders, initializeOrder, getOrder, addOrder, addOrderDetail, updatequantityorder_detail, createorder_detail } = require('./order')
 const { suppliers, initializeSupplier } = require('./supplier')
 
 async function initializeData() {
@@ -47,6 +47,10 @@ module.exports = {
     findProduct,
     createProduct,
     getOrder,
+    addOrder,
+    addOrderDetail,
+    updatequantityorder_detail,
+    createorder_detail,
     pool,
     users,
     products,
