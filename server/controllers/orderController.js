@@ -1,10 +1,9 @@
 const { readAccessToken } = require("../controllers/authController")
-const { orders, pool, getOrder, addOrder, addOrderDetail, updatequantityorder_detail, createorder_detail } = require("../cache")
+const { orders, getOrder, addOrder, addOrderDetail, updateOrderDetail } = require("../cache")
 const orderErrors = require("./orderErrors.json")
 
 
 async function createOrder(req, res) {
-
     let errorMessages = orderErrors.en
     const language = req.headers["accept-language"]
     if (language === 'vi') errorMessages = orderErrors.vi
@@ -13,13 +12,12 @@ async function createOrder(req, res) {
     // let time = new Date();
     // time = time.toLocaleTimeString('it-IT')
     const data = {
-        // orderDate: time,
         userID: user.id,
         productID: req.body.productID,
         productQuantity: req.body.productQuantity,
-        price: req.body.price,
     }
-
+    // Nếu cùng 1 lúc 1 user cho tồn tại nhiều order thì không cần check này nọ, cứ insert luôn
+    // Đoạn dưới từ từ handle
     const dataFormat = formatdata(data);
     if (!dataFormat) return res.status(400);
     const orderinvalit = orders.find((item) => {
@@ -35,13 +33,13 @@ async function createOrder(req, res) {
         orderinvalit.products.every(async (item) => {
             if (item.productID === data.productID) {
                 const newquantity = item.quantity + 1;
-                const order = await updatequantityorder_detail(newquantity, item.orderID, data.productID)
-                orderinvalit.updatequantityproduct(newquantity, data.productID)
+                const order = await updateOrderDetail(newquantity, item.orderID, data.productID)
+                orderinvalit.setProduct(data.productID, quantity)
                 res.status(200).json(orderinvalit)
             }
             return true
         })
-        const order = await createorder_detail(orderinvalit.orderID, data.productID, data.productQuantity, data.price)
+        const order = await addOrderDetail(orderinvalit.orderID, data.productID, data.productQuantity, data.price)
         res.status(200).json(order)
     } else {
         const orderID = await addOrder(data.userID)
