@@ -39,7 +39,7 @@ async function createOrder(req, res) {
             }
             return true
         })
-        const order = await addOrderDetail(orderinvalit.orderID, data.productID, data.productQuantity, data.price)
+        const order = await addOrderDetail(orderinvalit.orderID, data.productID, data.productQuantity)
         res.status(200).json(order)
     } else {
         const orderID = await addOrder(data.userID)
