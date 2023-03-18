@@ -96,26 +96,26 @@ async function paidOrder(orderID, paymentMethodID) {
 }
 
 
-async function addOrder(data) {
-    const queryString1 = [
+async function addOrder(userID) {
+    const queryString = [
         'INSERT INTO orders (user_id)',
         'VALUE(?)'
     ].join(' ')
     try {
-        const orderid = await pool.query(queryString1, data)
+        const orderid = await pool.query(queryString, userID)
         return orderid[0].insertId
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)
         throw new Error(error.message)
     }
 }
-async function addOrderDetail(orderID, productID, quantity, price) {
-    const queryString2 = [
-        'INSERT INTO order_details(order_id,product_id,quantity,price)',
-        'VALUE(?,?,?,?)'
+async function addOrderDetail(orderID, productID, quantity) {
+    const queryString = [
+        'INSERT INTO order_details(order_id, product_id, quantity)',
+        'VALUE(?, ?, ?, ?)'
     ].join(' ')
     try {
-        await pool.query(queryString2, [orderID, productID, quantity, price])
+        await pool.query(queryString, [orderID, productID, quantity])
         const order = await getOrder(orderID)
         return order
     } catch (error) {
@@ -123,7 +123,7 @@ async function addOrderDetail(orderID, productID, quantity, price) {
         throw new Error(error.message)
     }
 }
-async function updatequantityorder_detail(quantity, orderID, productID) {
+async function updateOrderDetail(orderID, productID, quantity) {
     const queryString3 = [
         'UPDATE order_details',
         'SET quantity = ?',
@@ -137,27 +137,39 @@ async function updatequantityorder_detail(quantity, orderID, productID) {
         throw new Error(error.message)
     }
 }
-async function createorder_detail(orderID, productID, quantity, price) {
+async function removeOrderDetail(orderID, productID) {
     const queryString = [
-        'INSERT INTO order_details(order_id,product_id,quantity,price)',
-        'value (?,?,?,?);'
+        'DELETE FROM order_details',
+        'WHERE order_id = ? AND product_id = ?'
     ].join(' ')
     try {
-        await pool.query(queryString, [orderID, productID, quantity, price])
-        const order = await getOrder(orderID)
-        return order
+        await pool.query(queryString, [orderID, productID])
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)
         throw new Error(error.message)
     }
 }
+// async function createorder_detail(orderID, productID, quantity, price) {
+//     const queryString = [
+//         'INSERT INTO order_details(order_id,product_id,quantity,price)',
+//         'value (?,?,?,?);'
+//     ].join(' ')
+//     try {
+//         await pool.query(queryString, [orderID, productID, quantity, price])
+//         const order = await getOrder(orderID)
+//         return order
+//     } catch (error) {
+//         console.log('\x1b[31m%s\x1b[0m', error.message)
+//         throw new Error(error.message)
+//     }
+// }
 
 module.exports = {
     initializeOrder,
-    getOrder,
-    updatequantityorder_detail,
     addOrder,
+    getOrder,
     addOrderDetail,
-    createorder_detail,
+    updateOrderDetail,
+    removeOrderDetail,
     orders
 }

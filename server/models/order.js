@@ -11,7 +11,7 @@ class Order {
     addProduct(productID, productName, quantity, price, discount) {
         this.products.push({ productID, productName, quantity, price, discount })
     }
-    setProduct(productID, quantity) {
+    setProduct(productID, quantity) { // Cái set này để update giá nè, viết sẵn rồi
         for (let index = 0; index < this.products.length; i++) {
             if (this.products[index].productID === productID) {
                 this.products[index.quantity] = quantity
@@ -32,15 +32,6 @@ class Order {
         }, 0)
         this.orderDate = new Date(orderDate)
         this.paid = true
-    }
-    updatequantityproduct(quantity, productID) {
-        this.products.every((item) => {
-            if (item.productID === productID) {
-                item.quantity = quantity
-                return false
-            }
-            return true
-        })
     }
 }
 
