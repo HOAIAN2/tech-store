@@ -109,13 +109,13 @@ async function addOrder(data) {
         throw new Error(error.message)
     }
 }
-async function addOrderDetail(orderID, productID, quantity, price) {
+async function addOrderDetail(orderID, productID, quantity) {
     const queryString2 = [
-        'INSERT INTO order_details(order_id,product_id,quantity,price)',
-        'VALUE(?,?,?,?)'
+        'INSERT INTO order_details(order_id,product_id,quantity)',
+        'VALUE(?,?,?)'
     ].join(' ')
     try {
-        await pool.query(queryString2, [orderID, productID, quantity, price])
+        await pool.query(queryString2, [orderID, productID, quantity])
         const order = await getOrder(orderID)
         return order
     } catch (error) {
@@ -137,13 +137,13 @@ async function updatequantityorder_detail(quantity, orderID, productID) {
         throw new Error(error.message)
     }
 }
-async function createorder_detail(orderID, productID, quantity, price) {
+async function createorder_detail(orderID, productID, quantity) {
     const queryString = [
-        'INSERT INTO order_details(order_id,product_id,quantity,price)',
-        'value (?,?,?,?);'
+        'INSERT INTO order_details(order_id,product_id,quantity)',
+        'value (?,?,?);'
     ].join(' ')
     try {
-        await pool.query(queryString, [orderID, productID, quantity, price])
+        await pool.query(queryString, [orderID, productID, quantity])
         const order = await getOrder(orderID)
         return order
     } catch (error) {
