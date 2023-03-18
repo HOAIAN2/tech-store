@@ -43,7 +43,7 @@ async function createOrder(req, res) {
         res.status(200).json(order)
     } else {
         const orderID = await addOrder(data.userID)
-        const order = await addOrderDetail(orderID, data.productID, data.productQuantity, data.price)
+        const order = await addOrderDetail(orderID, data.productID, data.productQuantity)
         console.log(order, orders)
         res.status(200).json(order)
     }
