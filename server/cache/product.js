@@ -140,10 +140,24 @@ async function createProduct(data) {
     }
 }
 
+async function get10hotproduct() {
+    try {
+        const queryString = [
+            'SELECT product_id, price, images FROM products',
+            'ORDER BY unit_in_order DESC LIMIT 10'
+        ].join(' ')
+        const [rows] = await pool.query(queryString)
+        return rows
+    } catch (error) {
+        console.log('\x1b[31m%s\x1b[0m', `Fail to initialize products data: ${error.message}`)
+        throw new Error(`Fail to initialize products data: ${error.message}`)
+    }
+}
 
 module.exports = {
     initializeProduct,
     findProduct,
     createProduct,
+    get10hotproduct,
     products,
 }
