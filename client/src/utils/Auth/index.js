@@ -158,6 +158,15 @@ async function reGetToken() {
         throw new Error(error.response.data.message)
     }
 }
+async function getproducthot() {
+    try {
+        const products = await request.get("/products/get10producthot")
+        return products
+    } catch (error) {
+        throw new Error(error.response.data.message)
+
+    }
+}
 export {
     login,
     logout,
@@ -166,5 +175,6 @@ export {
     fetchUserData,
     reGetToken,
     uploadImage,
-    editProfile
+    editProfile,
+    getproducthot,
 }
