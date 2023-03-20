@@ -1,4 +1,4 @@
-const { refreshTokens, products, categories, suppliers, findProduct, findUser, createProduct } = require('../cache')
+const { refreshTokens, products, categories, suppliers, findProduct, findUser, createProduct, get10hotproduct } = require('../cache')
 const Product = require("../models/product")
 const { readAccessToken } = require("./authController")
 const fs = require('fs')
@@ -207,10 +207,15 @@ function checkNumber(number) {
     }
     return true
 }
+async function get10producthot(req, res) {
+    const products = await get10hotproduct()
+    res.json(products)
+}
 module.exports = {
     index,
     getProductByID,
     searchProduct,
     getSuppliersCategories,
     addProduct,
+    get10producthot,
 }

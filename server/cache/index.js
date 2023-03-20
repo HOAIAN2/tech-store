@@ -10,7 +10,7 @@ const {
     updateUserImage,
     updateProfile
 } = require('./user')
-const { products, initializeProduct, findProduct, createProduct } = require('./product')
+const { products, initializeProduct, findProduct, createProduct, get10hotproduct } = require('./product')
 const { categories, initializeCategory } = require('./category')
 const { orders, initializeOrder, getOrder, addOrder, addOrderDetail, updateOrderDetail } = require('./order')
 const { suppliers, initializeSupplier } = require('./supplier')

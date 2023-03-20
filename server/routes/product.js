@@ -7,5 +7,6 @@ router.get('/product', productController.getProductByID)
 router.get('/search', productController.searchProduct)
 router.get('/suppliers-categories', productController.getSuppliersCategories)
 router.post('/add-product', authController.authenticateToken, productController.addProduct)
+router.get('/get10producthot', productController.get10producthot)
 
 module.exports = router
