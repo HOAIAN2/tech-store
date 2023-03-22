@@ -1,0 +1,26 @@
+@use '../../colors';
+
+.product-page {
+    display: flex;
+
+    &-data {
+        .product-name {
+            font-size: 24px;
+        }
+
+        & .product-price {
+            & .price {
+                font-size: 22px;
+                color: colors.$color-btn;
+                font-weight: bold;
+                // margin-left: 5px;
+            }
+
+            & .discount {
+                margin-left: 20px;
+                text-decoration: line-through;
+                color: colors.$shadow;
+            }
+        }
+    }
+}

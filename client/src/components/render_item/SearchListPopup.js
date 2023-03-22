@@ -1,8 +1,9 @@
+import { useRef } from "react"
 import { Link } from "react-router-dom"
 import { baseIMG } from "../../utils/api-config"
 import './SearchListPopup.scss'
 
-function SearchListPopup({ data }) {
+function SearchListPopup({ data, setSearchValue }) {
     const renderData = data.map(product => {
         return {
             ...product,
@@ -19,16 +20,18 @@ function SearchListPopup({ data }) {
         <div className="search-container">
             {renderData.map(product => {
                 return (
-                    <Link key={product.productID} className="product-item" to={`product/${product.productID}`}>
-                        <img src={product.images} alt="" />
-                        <div className="item-content">
-                            <div className="product-name">{product.productName}</div>
-                            <div className="product-price">
-                                <span className="price">{formatPrice(product.price)}</span>
-                                {product.discount && <span className="discount">{`- ${product.discount}%`}</span>}
+                    <div onClick={() => { setSearchValue('') }}>
+                        <Link key={product.productID} className="product-item" to={`/product/${product.productID}`}>
+                            <img src={product.images} alt="" />
+                            <div className="item-content">
+                                <div className="product-name">{product.productName}</div>
+                                <div className="product-price">
+                                    <span className="price">{formatPrice(product.price)}</span>
+                                    {product.discount && <span className="discount">{`- ${product.discount}%`}</span>}
+                                </div>
                             </div>
-                        </div>
-                    </Link>
+                        </Link>
+                    </div>
                 )
             })}
         </div>
