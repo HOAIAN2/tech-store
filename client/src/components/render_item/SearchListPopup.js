@@ -12,7 +12,7 @@ function SearchListPopup({ data }) {
             discount: product.discount * 100 || null
         }
     })
-    function formatPirce(price) {
+    function formatPrice(price) {
         return `${price.toLocaleString('vi')} VNĐ`
     }
     return (
@@ -24,7 +24,7 @@ function SearchListPopup({ data }) {
                         <div className="item-content">
                             <div className="product-name">{product.productName}</div>
                             <div className="product-price">
-                                <span className="price">{formatPirce(product.price)}</span>
+                                <span className="price">{formatPrice(product.price)}</span>
                                 {product.discount && <span className="discount">{`- ${product.discount}%`}</span>}
                             </div>
                         </div>

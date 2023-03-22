@@ -20,15 +20,27 @@ async function getProductByID(id) {
                 id: id
             }
         })
-        console.log(product)
         return product.data
     } catch (error) {
         const notFoundCodes = [404, 400] //replace because id only accept number
         if (notFoundCodes.includes(error.response.status)) throw new Error('404')
     }
 }
+async function getHotProducts(limit = 10) {
+    try {
+        const products = await request.get('/products/hot', {
+            params: {
+                limit: limit
+            }
+        })
+        return products.data
+    } catch (error) {
+        throw new Error(error.response.data.message)
 
+    }
+}
 export {
     searchProduct,
-    getProductByID
+    getProductByID,
+    getHotProducts
 }
