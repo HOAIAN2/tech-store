@@ -11,6 +11,8 @@ function ProductPage() {
         getProductByID(id)
             .then(data => {
                 setProduct(data)
+                document.title = data.productName
+                console.log(data)
             })
             .catch(error => {
                 if (error.message === '404') setNotFound(true)
@@ -19,7 +21,9 @@ function ProductPage() {
     }, [])
     if (notFound) return <NotFound />
     return (
-        <div>{JSON.stringify(product)}</div>
+        <div className='product-page'>
+            <span>{product.productName}</span>
+        </div>
     )
 }
 export default ProductPage

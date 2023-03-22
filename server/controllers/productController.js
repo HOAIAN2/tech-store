@@ -1,4 +1,4 @@
-const { refreshTokens, products, categories, suppliers, findProduct, findUser, createProduct, get10hotproduct } = require('../cache')
+const { refreshTokens, products, categories, suppliers, findProduct, findUser, createProduct } = require('../cache')
 const Product = require("../models/product")
 const { readAccessToken } = require("./authController")
 const fs = require('fs')
@@ -181,6 +181,17 @@ async function getSuppliersCategories(req, res) {
     }
     res.json(data)
 }
+// [GET hot-product]
+async function getHotProducts(req, res) {
+    let errorMessages = productErrors.en
+    const language = req.headers["accept-language"]
+    if (language === 'vi') errorMessages = productErrors.vi
+    const limit = parseInt(req.query.limit)
+    if (!limit) return res.status(400).json({ message: errorMessages.invalidQuery })
+    return res.json(products.slice(0, limit).map(product => {
+        return product.ignoreProps('unitInOrder', 'quantity', 'description', 'supplier', 'category')
+    }))
+}
 // Middlewares, etc
 function formatData(data = {}) {
     const newData = { ...data }
@@ -207,15 +218,11 @@ function checkNumber(number) {
     }
     return true
 }
-async function get10producthot(req, res) {
-    const products = await get10hotproduct()
-    res.json(products)
-}
 module.exports = {
     index,
     getProductByID,
     searchProduct,
     getSuppliersCategories,
     addProduct,
-    get10producthot,
+    getHotProducts,
 }
