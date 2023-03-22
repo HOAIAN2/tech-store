@@ -19,14 +19,14 @@ import { searchProduct } from '../../utils/Product'
 import useDebounce from '../../utils/hooks/useDebounce'
 
 function Header() {
-    const [searchValue, setSeacrhValue] = useState('')
-    const [searchData, setSeacrhData] = useState([])
+    const [searchValue, setSearchValue] = useState('')
+    const [searchData, setSearchData] = useState([])
     const debounce = useDebounce(searchValue, 200)
     useEffect(() => {
         if (!debounce) return
         searchProduct(debounce, 'less')
             .then(res => {
-                setSeacrhData(res)
+                setSearchData(res)
             })
             .catch(error => {
                 console.error(error)
@@ -98,7 +98,7 @@ function Header() {
                             <input placeholder={language.placeHolder}
                                 className='search_input'
                                 value={searchValue}
-                                onInput={(e) => { setSeacrhValue(e.target.value) }}
+                                onInput={(e) => { setSearchValue(e.target.value) }}
                             ></input>
                         </div>
                         {searchValue && <div className="search_btn">
@@ -108,7 +108,7 @@ function Header() {
                                 </span>
                             </div>
                         </div>}
-                        {searchValue && <SearchListPopup data={searchData} />}
+                        {searchValue && <SearchListPopup data={searchData} setSearchValue={setSearchValue} />}
                     </div>
                     <div className="cart-shopping">
                         <FontAwesomeIcon icon={faCartShopping} />
