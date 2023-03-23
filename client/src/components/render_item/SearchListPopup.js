@@ -1,4 +1,3 @@
-import { useRef } from "react"
 import { Link } from "react-router-dom"
 import { baseIMG } from "../../utils/api-config"
 import './SearchListPopup.scss'

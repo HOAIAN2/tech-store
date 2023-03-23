@@ -32,19 +32,24 @@ function ProductPage() {
             })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id])
+    console.log(product)
     if (notFound) return <NotFound />
     return (
         <>
             <Header />
             <div className='product-page'>
-                <div>
-                    <img src={product.images} alt="" />
-                </div>
-                <div className='product-page-data'>
-                    <div className='product-name'>{product.productName}</div>
-                    <div className="product-price">
-                        <span className="price">{product.price}</span>
-                        {product.discount && <span className="discount">{`- ${product.discount}%`}</span>}
+                <div className='product-page-content'>
+                    <div className='product-page-images'>
+                        {product.images && product.images.map((image, index) => {
+                            return <img key={index} src={image} alt={product.productName} />
+                        })}
+                    </div>
+                    <div className='product-page-data'>
+                        <div className='product-name'>{product.productName}</div>
+                        <div className="product-price">
+                            <span className="price">{product.price}</span>
+                            {product.discount && <span className="discount">{`- ${product.discount}%`}</span>}
+                        </div>
                     </div>
                 </div>
             </div>

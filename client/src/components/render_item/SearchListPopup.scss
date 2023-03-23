@@ -1,6 +1,7 @@
 @use '../../colors';
 
 .search-container {
+    z-index: 100;
     position: absolute;
     top: 80px;
     width: 51%;
@@ -46,7 +47,7 @@
 
                 & .discount {
                     margin-left: 20px;
-                    text-decoration: line-through;
+                    // text-decoration: line-through;
                     color: colors.$shadow;
                 }
             }
