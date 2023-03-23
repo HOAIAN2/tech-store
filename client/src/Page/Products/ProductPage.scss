@@ -1,26 +1,51 @@
 @use '../../colors';
 
 .product-page {
-    display: flex;
+    width: 100%;
+    height: 100%;
+    position: relative;
 
-    &-data {
-        .product-name {
-            font-size: 24px;
+    &-content {
+        position: absolute;
+        left: 50%;
+        top: 5%;
+        transform: translateX(-50%);
+        display: flex;
+        justify-content: space-between;
+        // border: 1px solid red;
+        width: 80%;
+
+        & .product-page-images {
+            img {
+                width: 360px;
+            }
         }
 
-        & .product-price {
-            & .price {
-                font-size: 22px;
-                color: colors.$color-btn;
-                font-weight: bold;
-                // margin-left: 5px;
+
+        & .product-page-data {
+            width: 60%;
+            height: 100%;
+
+            .product-name {
+                font-size: 24px;
             }
 
-            & .discount {
-                margin-left: 20px;
-                text-decoration: line-through;
-                color: colors.$shadow;
+            & .product-price {
+                & .price {
+                    font-size: 22px;
+                    color: colors.$color-btn;
+                    font-weight: bold;
+                    // margin-left: 5px;
+                }
+
+                & .discount {
+                    font-size: 22px;
+                    margin-left: 20px;
+                    // text-decoration: line-through;
+                    color: colors.$shadow;
+                }
             }
         }
     }
+
 }
