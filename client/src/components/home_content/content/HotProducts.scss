@@ -11,14 +11,38 @@
 // }
 
 .hot-products {
-    height: 240px;
+    height: 285px;
     padding-top: 19px;
     width: 100%;
     background-color: #fff;
     display: flex;
     align-items: center;
+    justify-content: center;
     position: relative;
     overflow: hidden;
+
+    .wrap_hot_products {
+        width: 1257px;
+        height: 100%;
+        display: flex;
+
+        .hot_products_slice {
+            width: 70%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .thumbnail_category {
+            flex: 1;
+
+            .thumbnail_category_item {
+                width: 100%;
+                height: 50%;
+            }
+        }
+    }
+
 
     // .content1_adv {
     //     display: flex;

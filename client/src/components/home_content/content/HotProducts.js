@@ -4,6 +4,7 @@ import { getHotProducts } from "../../../utils/Product/index"
 import "./HotProducts.scss"
 import { baseIMG } from "../../../utils/api-config";
 import randomSlide from "./slideAnimation";
+import BackageSlice from "@danghung_dung/slice_items"
 function HotProducts() {
     const [products, setProducts] = useState([])
     const container = useRef()
@@ -64,27 +65,23 @@ function HotProducts() {
         })
     }, [])
     useEffect(() => {
-        if (products.length !== 0) randomSlide(container.current)
+        // if (products.length !== 0) randomSlide(container.current)
+        const element = document.querySelector(".hot_products_slice")
+        BackageSlice(element, 3, 5, 0.5)
     })
     return (
         <div ref={container} className="hot-products">
-            {/* <div className='wrapcontent1'> */}
-            {/* <div className="content1_adv"> */}
-            {products.map(product => {
-                return <HotItem key={product.productID} data={product} />
-            })}
-            {/* <HotItem data={products} /> */}
-            {/* <div className="content1_adv_child">
-                    <div className="content1_adv_child_item">
-                        <img src="http://localhost:4000/images/orther/1676860538826-600x180.jpg"></img>
-                    </div>
-                    <div className="content1_adv_child_item">
-                        <img src="http://localhost:4000/images/orther/d2351061-0c8a-47.jpeg"></img>
-                    </div>
-                </div> */}
-            {/* </div> */}
-            {/* <div className="content1_categories" ></div> */}
-            {/* </div> */}
+            <div className="wrap_hot_products">
+                <div className="hot_products_slice">
+                    {products.map(product => {
+                        return <HotItem key={product.productID} data={product} />
+                    })}
+                </div>
+                <div className="thumbnail_category">
+                    <div className="thumbnail_category_item">thumbnail_category</div>
+                    <div className="thumbnail_category_item">thumbnail_category</div>
+                </div>
+            </div>
         </div>
     )
 
