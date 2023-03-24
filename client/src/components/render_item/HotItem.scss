@@ -6,52 +6,7 @@
     flex-shrink: 0;
     height: 100%;
     position: absolute;
-    // transition: all ease 0.75s;
 
-    // .hot-item-content {
-    //     height: 100%;
-    //     position: relative;
-    //     overflow: hidden;
-    //     border-radius: 5px;
-
-    //     img {
-    //         width: 100%;
-    //         height: 100%;
-    //         object-fit: cover;
-    //     }
-
-    //     .detail {
-    //         position: absolute;
-    //         width: 100%;
-    //         height: 38%;
-    //         left: 0;
-    //         bottom: 0;
-    //         background: rgba(0, 0, 0, 0.8);
-    //         color: #fff;
-    //         text-align: center;
-
-    //         .price {
-    //             padding: 4px 0;
-    //             width: max-content;
-    //             margin: auto;
-    //             font-size: 18px;
-    //             border-bottom: 1px solid;
-    //             border-top: 1px solid;
-    //             color: #ffffff;
-    //             margin-top: 8px;
-    //             margin-bottom: 8px;
-    //         }
-
-    //         .btn {
-    //             color: white;
-    //             width: max-content;
-    //             margin: auto;
-    //             padding: 7px 9px;
-    //             border-radius: 3px;
-    //             background-color: red;
-    //         }
-    //     }
-    // }
     .wrap-hot-item {
         position: absolute;
         width: 90%;
