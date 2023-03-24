@@ -3,7 +3,6 @@ import { useEffect, useState, useRef } from "react";
 import { getHotProducts } from "../../../utils/Product/index"
 import "./HotProducts.scss"
 import { baseIMG } from "../../../utils/api-config";
-import randomSlide from "./slideAnimation";
 import BackageSlice from "@danghung_dung/slice_items"
 function HotProducts() {
     const [products, setProducts] = useState([])
@@ -65,14 +64,12 @@ function HotProducts() {
         })
     }, [])
     useEffect(() => {
-        // if (products.length !== 0) randomSlide(container.current)
-        const element = document.querySelector(".hot_products_slice")
-        BackageSlice(element, 3, 5, 0.5)
+        BackageSlice(container.current, 3, 5, 0.5)
     })
     return (
-        <div ref={container} className="hot-products">
+        <div className="hot-products">
             <div className="wrap_hot_products">
-                <div className="hot_products_slice">
+                <div ref={container} className="hot_products_slice">
                     {products.map(product => {
                         return <HotItem key={product.productID} data={product} />
                     })}

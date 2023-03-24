@@ -7,7 +7,7 @@ function HotItem({ data }) {
         <>
             <div className='hot-item' >
                 <div className="wrap-hot-item">
-                    <img src={data.images[0]}></img>
+                    <img src={data.images[0]} alt="" />
                     <div className='detail'>
                         <div className='price'>{data.price}</div>
                         {/* <div className='btn'>Detail</div> */}
@@ -17,17 +17,6 @@ function HotItem({ data }) {
             </div>
         </>
     )
-    // return (
-    //     <div className='hot-item' >
-    //         <div className="hot-item-content">
-    //             <img src={data.images[0]} alt=""></img>
-    //             <div className='detail'>
-    //                 <div className='price'>{data.price}</div>
-    //                 <Link className='btn' to={`product/${data.productID}`}>Detail</Link>
-    //             </div>
-    //         </div>
-    //     </div>
-    // )
 }
 
 export default HotItem
