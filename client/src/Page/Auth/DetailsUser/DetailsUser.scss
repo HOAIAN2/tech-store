@@ -57,7 +57,7 @@
 
                     &:hover {
                         // text-decoration: underline;
-                        color: colors.$color-btn;
+                        color: colors.$color-red;
                         cursor: pointer;
                     }
 
@@ -84,14 +84,14 @@
             &:nth-child(5) {
                 svg {
                     margin-right: 5px;
-                    color: colors.$color-btn;
+                    color: colors.$color-red;
                 }
             }
 
             &:nth-child(6) {
                 svg {
                     margin-right: 5px;
-                    color: colors.$color-btn;
+                    color: colors.$color-red;
                 }
             }
 
@@ -105,7 +105,7 @@
             &:nth-child(n+3) {
                 a {
                     &:hover {
-                        color: colors.$color-btn;
+                        color: colors.$color-red;
                         cursor: pointer;
                     }
                 }
@@ -125,7 +125,7 @@
 
         .active {
             a {
-                color: colors.$color-btn;
+                color: colors.$color-red;
             }
         }
     }

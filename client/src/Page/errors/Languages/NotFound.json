@@ -1,0 +1,12 @@
+{
+    "en": {
+        "title": "Page not found :((",
+        "content": "Ops, page not found",
+        "button": "Go home"
+    },
+    "vi": {
+        "title": "Không tìm thấy trang :((",
+        "content": "Ops, không tìm thấy trang",
+        "button": "Về trang chủ"
+    }
+}
