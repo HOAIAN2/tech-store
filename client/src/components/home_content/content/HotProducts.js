@@ -22,6 +22,8 @@ function HotProducts() {
                     price: formatPrice(product.price)
                 }
             }))
+        }).catch(error => {
+            console.error(error)
         })
     }, [])
     useEffect(() => {

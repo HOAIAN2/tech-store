@@ -29,24 +29,30 @@ function App() {
       })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+  useEffect(() => {
+    const items = document.querySelectorAll('.loading, .pre-load')
+    if (isFirstLoad) return
+    items.forEach(node => { node.remove() })
+  }, [isFirstLoad])
   if (isFirstLoad) return null
-  else return (
-    <div className="App">
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/change-password' element={<ChangePassWord />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/profile' element={<DetailsUser />}>
-          {/* Nest Route default by React Router DOM */}
-          <Route index element={<DetailsUserProfile />} />
-          <Route path='purchase' element={<DetailsUserPurchase />} />
-        </Route>
-        <Route path='/product/:id' element={<ProductPage />} />
-        <Route path='*' element={<NotFound />} />
-      </Routes>
-    </div>
-  );
+  else
+    return (
+      <div className="App">
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/change-password' element={<ChangePassWord />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/profile' element={<DetailsUser />}>
+            {/* Nest Route default by React Router DOM */}
+            <Route index element={<DetailsUserProfile />} />
+            <Route path='purchase' element={<DetailsUserPurchase />} />
+          </Route>
+          <Route path='/product/:id' element={<ProductPage />} />
+          <Route path='*' element={<NotFound />} />
+        </Routes>
+      </div>
+    );
 }
 
 
