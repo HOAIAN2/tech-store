@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { getHotProducts } from "../../../utils/Product/index"
 import "./HotProducts.scss"
 import { baseIMG } from "../../../utils/api-config";
-import BackageSlice from "@danghung_dung/slice_items"
+import PackageSlice from "@danghung_dung/slice_item2"
 function HotProducts() {
     const [products, setProducts] = useState([])
     const container = useRef()
@@ -25,7 +25,7 @@ function HotProducts() {
         })
     }, [])
     useEffect(() => {
-        BackageSlice(container.current, 3, 5, 0.5)
+        PackageSlice(container.current, 3, 5, 0.7, 'ease')
     })
     return (
         <div className="hot-products">
@@ -44,6 +44,9 @@ function HotProducts() {
     )
 
 }
+
+
+
 
 
 export default HotProducts;
