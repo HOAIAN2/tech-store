@@ -17,7 +17,7 @@ function NotFound() {
             <div className='not-found__contents'>
                 <div>404</div>
                 <div>{language.content}</div>
-                <div><Link to='/'> Về trang chủ</Link></div>
+                <div><Link to='/'>{language.button}</Link></div>
             </div>
             <HotProducts />
         </div>
