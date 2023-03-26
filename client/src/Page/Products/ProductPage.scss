@@ -33,7 +33,7 @@
             & .product-price {
                 & .price {
                     font-size: 22px;
-                    color: colors.$color-btn;
+                    color: colors.$color-red;
                     font-weight: bold;
                     // margin-left: 5px;
                 }
@@ -42,7 +42,7 @@
                     font-size: 22px;
                     margin-left: 20px;
                     // text-decoration: line-through;
-                    color: colors.$shadow;
+                    color: colors.$color-shadow;
                 }
             }
         }

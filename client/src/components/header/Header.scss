@@ -46,7 +46,7 @@
                 display: flex;
 
                 .header_item_1-2_btn:nth-child(1) {
-                    background-color: colors.$color-btn;
+                    background-color: colors.$color-red;
                     border-radius: 2px;
                     position: relative;
                     padding: 0 10px;
@@ -113,14 +113,14 @@
                         position: relative;
                         align-items: center;
                         justify-content: center;
-                        background-color: colors.$color-btn;
-                        color: colors.$text-color;
+                        background-color: colors.$color-red;
+                        color: colors.$color-text;
                         border-radius: 3px;
                         padding: 16px;
 
                         span {
                             margin: 4px 2px;
-                            // color: colors.$text-color;
+                            // color: colors.$color-text;
 
 
                             &:hover {
@@ -166,11 +166,11 @@
 
                     .header_logo_item:nth-child(1) {
                         margin-right: 22px;
-                        color: colors.$color-btn;
+                        color: colors.$color-red;
                     }
 
                     .header_logo_item:nth-child(2) {
-                        color: colors.$text-color;
+                        color: colors.$color-text;
                     }
                 }
             }
@@ -192,13 +192,13 @@
 
                     .search_input {
                         width: 100%;
-                        color: colors.$black-color;
+                        color: colors.$color-black;
                         height: 100%;
                         font-size: 17px;
                         border: none;
                         background: transparent;
                         outline: none;
-                        caret-color: colors.$color-btn;
+                        caret-color: colors.$color-red;
                     }
 
                     .list-search {
@@ -208,19 +208,22 @@
                         left: 0;
                         background-color: #fff;
 
-                        .search-item{
+                        .search-item {
                             display: flex;
                             padding: 10px;
+
                             .image-product-search {
                                 width: 40px;
                                 height: 40px;
                                 border-radius: 50%;
-    
+
                             }
-                            .detail-search-product{
+
+                            .detail-search-product {
                                 padding-left: 10px;
                                 overflow: hidden;
-                                .description{
+
+                                .description {
                                     overflow: hidden;
                                     text-overflow: ellipsis;
                                     font-weight: 500;
@@ -228,8 +231,9 @@
                                     font-size: 14px;
                                     color: #333;
                                 }
-                                .price-search{
-                                    color: colors.$color-btn;
+
+                                .price-search {
+                                    color: colors.$color-red;
                                 }
                             }
 
@@ -249,9 +253,9 @@
                         height: 91%;
                         border-radius: 5px;
                         display: flex;
-                        background-color: colors.$color-btn;
+                        background-color: colors.$color-red;
                         align-items: center;
-                        color: colors.$text-color;
+                        color: colors.$color-text;
                         justify-content: center;
                     }
 
@@ -272,7 +276,7 @@
 
                 svg {
                     font-size: 35px;
-                    color: colors.$color-btn;
+                    color: colors.$color-red;
                 }
 
                 .number-cart {
@@ -324,12 +328,12 @@
                     margin-right: 15px;
 
                     svg {
-                        color: colors.$text-color;
+                        color: colors.$color-text;
                         margin-right: 5px;
                     }
 
                     span {
-                        color: colors.$text-color;
+                        color: colors.$color-text;
                     }
 
                     .icondow {
@@ -357,12 +361,12 @@
                     margin-left: 15px;
 
                     svg {
-                        color: colors.$color-btn;
+                        color: colors.$color-red;
                         margin-right: 5px;
                     }
 
                     span {
-                        color: colors.$text-color;
+                        color: colors.$color-text;
                     }
                 }
             }
