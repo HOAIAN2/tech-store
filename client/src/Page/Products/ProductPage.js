@@ -12,6 +12,7 @@ function ProductPage() {
     }
     const [product, setProduct] = useState({})
     const [notFound, setNotFound] = useState(false)
+    const [quantity, setQuantity] = useState(1)
     const { id } = useParams()
     useEffect(() => {
         getProductByID(id)
@@ -26,6 +27,7 @@ function ProductPage() {
                     price: formatPrice(data.price)
                 })
                 document.title = data.productName
+                setQuantity(1)
             })
             .catch(error => {
                 if (error.message === '404') setNotFound(true)
@@ -33,6 +35,12 @@ function ProductPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id])
     console.log(product)
+    function handleSetQuantity(e) {
+        if (e.target.className === 'decrease') {
+            if (quantity !== 1) setQuantity(quantity - 1)
+        }
+        else setQuantity(quantity + 1)
+    }
     if (notFound) return <NotFound />
     return (
         <>
@@ -49,6 +57,13 @@ function ProductPage() {
                         <div className="product-price">
                             <span className="price">{product.price}</span>
                             {product.discount && <span className="discount">{`- ${product.discount}%`}</span>}
+                        </div>
+                        <div className='product-action'>
+                            <div className='quantity'>
+                                <button className='decrease' onClick={handleSetQuantity}>-</button>
+                                <input value={quantity} type="number" min="1" onInput={(e) => { setQuantity(e.target.value) }} />
+                                <button className='increase' onClick={handleSetQuantity}>+</button>
+                            </div>
                         </div>
                     </div>
                 </div>
