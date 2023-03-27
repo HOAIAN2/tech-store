@@ -19,6 +19,7 @@ function Register() {
     const [email, setEmail] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
     const [error, setError] = useState('')
+    const [checking, setChecking] = useState(true)
     const buttonRef = useRef(null)
     const location = useLocation()
     const navigate = useNavigate()
@@ -71,18 +72,20 @@ function Register() {
             })
     }
     useEffect(() => {
-        document.title = language.title
         fetchUserData()
             .then(data => {
                 dispatchUser({ type: USER_ACTION.SET, payload: data })
                 navigate(prePage?.pathname || '/')
             })
             .catch(error => {
+                setChecking(false)
+                document.title = language.title
                 if (error.message !== 'no token') console.error(error.message)
             })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-    return (
+    if (checking) return null
+    else return (
         <div className="register">
             <div className='register-title'>
                 <span>{language.title}</span>
