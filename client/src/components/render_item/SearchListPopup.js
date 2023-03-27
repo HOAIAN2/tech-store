@@ -19,8 +19,8 @@ function SearchListPopup({ data, setSearchValue }) {
         <div className="search-container">
             {renderData.map(product => {
                 return (
-                    <div onClick={() => { setSearchValue('') }}>
-                        <Link key={product.productID} className="product-item" to={`/product/${product.productID}`}>
+                    <div key={product.productID} onClick={() => { setSearchValue('') }}>
+                        <Link className="product-item" to={`/product/${product.productID}`}>
                             <img src={product.images} alt="" />
                             <div className="item-content">
                                 <div className="product-name">{product.productName}</div>

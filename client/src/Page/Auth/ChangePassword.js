@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { changePassword } from '../../utils/Auth'
+import { changePassword, fetchUserData } from '../../utils/Auth'
 import './ChangePassword.scss'
 import languages from './Languages/ChangePassword.json'
 
@@ -9,6 +9,7 @@ function ChangePassWord() {
     const [newPassword, setNewPassword] = useState('')
     const [newPassword1, setNewPassword1] = useState('')
     const [error, setError] = useState('')
+    const [checking, setChecking] = useState(true)
     const navigate = useNavigate()
     let language = languages.en
     if (navigator.language === 'vi') language = languages.vi
@@ -33,9 +34,17 @@ function ChangePassWord() {
             })
     }
     useEffect(() => {
-        document.title = language.title
+        fetchUserData()
+            .then(() => {
+                setChecking(false)
+                document.title = language.title
+            })
+            .catch(() => {
+                navigate('/login')
+            })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+    if (checking) return null
     return (
         <div className="change-password">
             <div className='change-password-title'>
