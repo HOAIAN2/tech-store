@@ -32,10 +32,13 @@ function HotProducts() {
     return (
         <div className="hot-products">
             <div className="wrap_hot_products">
-                <div ref={container} className="hot_products_slice">
-                    {products.map(product => {
-                        return <HotItem key={product.productID} data={product} />
-                    })}
+                <div className="hot_products_slice">
+                    <div ref={container} className="wrap_hot_product_slice" style={{ height: "100%", margin: "0 -10px", position: "absolute", width: "100%", display: "flex", overflow: "hidden" }}>
+                        {products.map(product => {
+                            return <HotItem key={product.productID} data={product} />
+                        })}
+
+                    </div>
                 </div>
                 <div className="thumbnail_category">
                     <div className="thumbnail_category_item">thumbnail_category</div>
