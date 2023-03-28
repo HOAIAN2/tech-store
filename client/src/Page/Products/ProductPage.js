@@ -5,6 +5,7 @@ import NotFound from '../errors/NotFound'
 import { baseIMG } from '../../utils/api-config'
 import './ProductPage.scss'
 import Header from '../../components/header/Header'
+import ProductRating from './ProductRating'
 
 function ProductPage() {
     function formatPrice(price) {
@@ -24,7 +25,8 @@ function ProductPage() {
                         return `${baseIMG}/products/${image}`
                     }),
                     discount: data.discount * 100 || null,
-                    price: formatPrice(data.price)
+                    price: formatPrice(data.price),
+                    rate: 3.8
                 })
                 document.title = data.productName
                 setQuantity(1)
@@ -58,6 +60,7 @@ function ProductPage() {
                             <span className="price">{product.price}</span>
                             {product.discount && <span className="discount">{`- ${product.discount}%`}</span>}
                         </div>
+                        <ProductRating rate={product.rate} />
                         <div className='product-action'>
                             <div className='quantity'>
                                 <button className='decrease' onClick={handleSetQuantity}>-</button>

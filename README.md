@@ -10,7 +10,7 @@
 ## Build
 - Run `build.bat` to build ReactJS and start server
 ## Database Diagram
-![](/database/store_db_diagram.png)
+![](/database/Store%20Database%20Diagram.png)
 ## API
 ### User routes: /api/user/
 >[GET] /: JWT require
