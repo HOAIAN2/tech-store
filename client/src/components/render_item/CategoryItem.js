@@ -1,6 +1,6 @@
-import "./CategoryProduct.scss"
+import "./CategoryItem.scss"
 
-function Category_item(params) {
+function CategoryItem(params) {
     return (
         <div className="wrapcategoryitem">
 
@@ -16,4 +16,4 @@ function Category_item(params) {
     )
 }
 
-export default Category_item
+export default CategoryItem
