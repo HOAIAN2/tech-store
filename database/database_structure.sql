@@ -41,6 +41,7 @@ CREATE TABLE categories (
 	category_id INT NOT NULL AUTO_INCREMENT,
     category_name VARCHAR(255) NOT NULL,
     description TEXT,
+    icon varchar(255),
     PRIMARY KEY (category_id),
     CONSTRAINT UQ_category UNIQUE (category_name)
 );
@@ -61,6 +62,15 @@ CREATE TABLE products (
     CONSTRAINT UQ_product UNIQUE (product_name),
     CONSTRAINT discount_limit CHECK (discount> 0 AND discount < 1),
     CONSTRAINT order_limit CHECK (unit_in_order <= quantity)
+);
+CREATE TABLE ratings(
+	user_id INT NOT NULL,
+	product_id INT NOT null,
+	rate INT UNSIGNED,
+	comment VARCHAR(512),
+	FOREIGN KEY (user_id) REFERENCES users(user_id),
+	FOREIGN KEY (product_id) REFERENCES products(product_id),
+	CONSTRAINT rate CHECK (rate >= 1 AND rate <= 5)
 );
 CREATE TABLE vouchers (
 	voucher_id VARCHAR(60) NOT NULL,
