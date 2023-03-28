@@ -26,6 +26,7 @@ CREATE TABLE `categories` (
   `category_id` int NOT NULL AUTO_INCREMENT,
   `category_name` varchar(255) NOT NULL,
   `description` text,
+  `icon` varchar(255),
   PRIMARY KEY (`category_id`),
   UNIQUE KEY `UQ_category` (`category_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -37,7 +38,7 @@ CREATE TABLE `categories` (
 
 LOCK TABLES `categories` WRITE;
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
-INSERT INTO `categories` VALUES (1,'Laptop',NULL),(2,'Phone',NULL),(3,'Other',NULL),(4,'Camera',NULL),(5,'Mainboard',NULL),(6,'Screen',NULL),(7,'Ram',NULL),
+INSERT INTO `categories` VALUES (1,'Laptop',NULL, 'icon-laptop.png'),(2,'Phone',NULL, 'img-dienthoai-desk.webp'),(3,'Other',NULL, 'icon-accessories.png'),(4,'Camera',NULL, 'images.jpeg'),(5,'Mainboard',NULL),(6,'Screen',NULL, 'icon-screen.png'),(7,'Ram',NULL),
 (8,"CPU",NULL),(9,"VGA",NULL),(10,"Watch",NULL);
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
 UNLOCK TABLES;
