@@ -38,8 +38,8 @@ CREATE TABLE `categories` (
 
 LOCK TABLES `categories` WRITE;
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
-INSERT INTO `categories` VALUES (1,'Laptop',NULL, 'icon-laptop.png'),(2,'Phone',NULL, 'img-dienthoai-desk.webp'),(3,'Other',NULL, 'icon-accessories.png'),(4,'Camera',NULL, 'images.jpeg'),(5,'Mainboard',NULL),(6,'Screen',NULL, 'icon-screen.png'),(7,'Ram',NULL),
-(8,"CPU",NULL),(9,"VGA",NULL),(10,"Watch",NULL);
+INSERT INTO `categories` VALUES (1,'Laptop',NULL, 'icon-laptop.png'),(2,'Phone',NULL, 'img-dienthoai-desk.webp'),(3,'Other',NULL, 'icon-accessories.png'),(4,'Camera',NULL, 'images.jpeg'),(5,'Mainboard',NULL, NULL),(6,'Screen',NULL, 'icon-screen.png'),(7,'Ram',NULL, NULL),
+(8,"CPU",NULL, NULL),(9,"VGA",NULL, NULL),(10,"Watch",NULL, 'icon-smartwatch.png');
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
