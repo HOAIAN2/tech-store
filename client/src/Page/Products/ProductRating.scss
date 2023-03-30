@@ -8,11 +8,16 @@
     & div {
         position: absolute;
 
+        svg {
+            height: 13px;
+            padding-right: 3px;
+        }
+
         &:last-child {
             height: 25px;
             // width: attr(rate-percent);
             width: var(--rate-percent);
-            color: colors.$color-rate-checked;
+            color: colors.$color-red;
             overflow: hidden;
 
             div {

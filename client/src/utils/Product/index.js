@@ -1,11 +1,13 @@
 import request from '../api-config'
 
-async function searchProduct(text, option) {
+async function searchProduct(text, option, sortBy, sortMode) {
     try {
         const products = await request.get('/products/search', {
             params: {
                 name: text,
-                option: option
+                option: option,
+                sortBy: sortBy,
+                sortMode: sortMode
             }
         })
         return products.data

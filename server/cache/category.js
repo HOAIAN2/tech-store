@@ -23,7 +23,23 @@ async function initializeCategory() {
         throw new Error(`Fail to initialize category data: ${error.message}`)
     }
 }
+
+async function getcategory() {
+    try {
+        const queryString = [
+            'SELECT category_name, icon FROM store.categories',
+            'WHERE icon IS NOT NULL;'
+        ].join(' ')
+        const [rs] = await pool.query(queryString)
+        return rs
+    } catch (error) {
+        console.log('\x1b[31m%s\x1b[0m', `Fail to initialize category data: ${error.message}`)
+        throw new Error(`Fail to initialize category data: ${error.message}`)
+    }
+}
+
 module.exports = {
     initializeCategory,
+    getcategory,
     categories
 }

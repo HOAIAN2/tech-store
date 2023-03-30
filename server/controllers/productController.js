@@ -173,6 +173,10 @@ async function addProduct(req, res) {
         }
     }
 }
+
+
+
+
 // [GET supplier and category]
 async function getSuppliersCategories(req, res) {
     const data = {
