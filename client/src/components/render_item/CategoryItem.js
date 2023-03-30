@@ -1,15 +1,18 @@
 import "./CategoryItem.scss"
+import { baseIMG } from "../../utils/api-config"
 
-function CategoryItem(params) {
+function CategoryItem({ data }) {
+
     return (
         <div className="wrapcategoryitem">
-
             <div className="category_item">
                 <div className="category_item_icon">
-                    <img src="https://images.fpt.shop/unsafe/fit-in/60x60/filters:quality(90):fill(transparent)/fptshop.com.vn/Uploads/images/2015/img-dienthoai-desk.png"></img>
+                    <div className="wrapicon">
+                        <img src={`${baseIMG}orther/${data.icon}`}></img>
+                    </div>
                 </div>
                 <div className="category_name">
-                    <span>Điện thoại</span>
+                    <span>{data.category_name}</span>
                 </div>
             </div>
         </div>
