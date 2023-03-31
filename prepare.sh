@@ -1,7 +1,6 @@
-
+#!/bin/sh
 node random.js
 cd ./server
-(npm install) || (yarn install)
+(yarn install) || (npm install)
 cd ../client
-npm install || (yarn install)
-
+(yarn install) || (npm install)
