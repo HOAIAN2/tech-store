@@ -1,14 +1,12 @@
-const { getcategory } = require('../cache')
+const { categories } = require('../cache')
 
-async function getcategories(req, res) {
-    const rs = await getcategory()
-    if (rs) {
-        res.json(rs)
-    }
-    res.status(500)
+async function getCategories(req, res) {
+    res.json(categories.filter(category => {
+        return category.icon !== null
+    }))
 }
 
 
 module.exports = {
-    getcategories,
+    getCategories,
 }

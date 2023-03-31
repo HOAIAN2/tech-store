@@ -41,8 +41,18 @@ async function getHotProducts(limit = 10) {
 
     }
 }
+async function getCategories() {
+    try {
+        const rs = await request.get('/category')
+        return rs
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
 export {
     searchProduct,
     getProductByID,
-    getHotProducts
+    getHotProducts,
+    getCategories
 }

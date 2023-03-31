@@ -1,8 +1,9 @@
 class Category {
-  constructor(categoryId, categoryName, description) {
-    this.categoryId = categoryId;
-    this.categoryName = categoryName;
-    this.description = description;
+  constructor(categoryId, categoryName, description, icon) {
+    this.categoryId = categoryId
+    this.categoryName = categoryName
+    this.description = description
+    this.icon = icon
   }
   ignoreProps() {
     const object = { ...this }

@@ -159,16 +159,6 @@ async function reGetToken() {
     }
 }
 
-async function getcategories() {
-    try {
-        const rs = await request.get('/category')
-        return rs
-    } catch (error) {
-        throw new Error(error)
-    }
-}
-
-
 export {
     login,
     logout,
@@ -178,5 +168,4 @@ export {
     reGetToken,
     uploadImage,
     editProfile,
-    getcategories,
 }
