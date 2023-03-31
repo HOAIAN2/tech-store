@@ -37,34 +37,38 @@ function getProductByID(req, res) {
 }
 // [GET search]
 async function searchProduct(req, res) {
-    const options = ['less', 'more']
+    // const options = ['less', 'more']
     const sortBys = ['price', 'hot', 'top-sell']
     const sortModes = ['asc', 'desc']
     const text = req.query.name?.trim()
-    const option = req.query.option?.trim()
+    // const option = req.query.option?.trim()
     const sortBy = req.query.sortBy?.trim()
     const sortMode = req.query.sortMode?.trim()
     const brand = req.query.brand?.trim()
     let indexToStart = parseInt(req.query.nextindex)
+    const limit = checknumberlimit(req.query.limit)
+    if (!limit) return res.sendStatus(400)
     if (!text) return res.json([])
     if (text === "") return res.json([])
-    if (!options.includes(option)) return res.sendStatus(400)
+    // if (!options.includes(option)) return res.sendStatus(400)
     if (sortBy && !sortBys.includes(sortBy)) return res.sendStatus(400)
     if (sortMode && !sortModes.includes(sortMode)) return res.sendStatus(400)
     if (!indexToStart) indexToStart = 0
 
-    const result = await findProduct(text, option, brand, indexToStart)
+
+    const result = await findProduct(text, limit, brand, indexToStart)
+
     if (result) {
         // /api/products/search?name=...&option=less , co nhieu tra nhieu
-        if (option === 'less') {
+        if (!limit) {
             return res.json(result.data.map((product) => { return product.ignoreProps('unitInOrder', 'quantity', 'description', 'supplier', 'category') }))
         }
         // /api/products/search?name=...&option=more , tra 40 product ngau nhien
         // /api/products/search?name=...&option=more&brand=... , lay product theo brand
-        if (option === 'more') {
+        if (limit) {
             const rs = { indexNext: false }
-            if (result.data.length >= 41) {
-                result.data.pop()
+            if (result.data.length >= limit) {
+                // result.data.pop()
                 rs.indexNext = result.index
             }
             // /api/products/search?name=...&option=more&brand=...&sortBy=price/hot&sortMode=asc/desc
@@ -104,6 +108,16 @@ async function searchProduct(req, res) {
             return resultsortdesc
         }
         return []
+    }
+    function checknumberlimit(text) {
+        const a = text.split('')
+        const b = a.every((item) => {
+            if (!isNaN(parseInt(item))) {
+                return true
+            }
+            return false
+        })
+        return b ? parseInt(text) : false
     }
     return res.json([])
 }

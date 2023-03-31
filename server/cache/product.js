@@ -74,7 +74,7 @@ async function initializeProduct() {
 // }
 
 
-async function findProduct(text, option, brand, indexToStart = 0) {
+async function findProduct(text, limit = 5, brand, indexToStart = 0) {
     const result = { index: 0, data: [] }
     products.every((product, index) => {
         if (!brand) {
@@ -86,15 +86,13 @@ async function findProduct(text, option, brand, indexToStart = 0) {
                 result.data.push(product)
             }
         }
-        if (result.data.length === 5 && option === 'less') return false
-        if (result.data.length === 41) {
+        if (result.data.length === 5 && limit === 5) return false
+        if (limit != 5 && result.data.length == limit) {
             result.index = index - 1
             return false
         }
         return true
     })
-
-
     return result
 }
 
