@@ -1,9 +1,11 @@
 import ProductRating from "../../Page/Products/ProductRating"
 import { baseIMG } from "../../utils/api-config"
 import { Link } from "react-router-dom"
+import './ProductItem.scss'
 
 function ProductItem({ data }) {
     // console.log(data)
+    data.discount = 0.2
     function formatPrice(price) {
         if (data.discount) {
             let a;
@@ -15,7 +17,7 @@ function ProductItem({ data }) {
     }
 
 
-    if (data.length != 0) {
+    if (data.length !== 0) {
         return (
             <div className="producthome_item">
                 <div className="contentitem">
@@ -29,7 +31,7 @@ function ProductItem({ data }) {
                     </div>
                     <div className="home__produt-item-action">
                         <ProductRating rate={2.5} />
-                        <Link to={`product/${data.productID}`}>Mua Ngay</Link>
+                        <Link to={`product/${data.productID}`}>Chi tiết</Link>
                     </div>
                 </div>
             </div>

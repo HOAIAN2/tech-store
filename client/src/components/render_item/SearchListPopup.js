@@ -13,7 +13,7 @@ function SearchListPopup({ data, setSearchValue }) {
         }
     })
     function formatPrice(price) {
-        return `${price.toLocaleString('vi')} VNĐ`
+        return `${price.toLocaleString('vi')} đ`
     }
     return (
         <div className="search-container">

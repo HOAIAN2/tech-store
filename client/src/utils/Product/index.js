@@ -43,8 +43,8 @@ async function getHotProducts(limit = 10) {
 }
 async function getCategories() {
     try {
-        const rs = await request.get('/category')
-        return rs
+        const result = await request.get('/category')
+        return result.data
     } catch (error) {
         throw new Error(error)
     }

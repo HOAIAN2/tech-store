@@ -82,6 +82,27 @@
                 }
 
             }
+
+            & .product-function {
+                border: 1px solid red;
+                height: 100px;
+
+                & button {
+                    background-color: colors.$color-red;
+                    border: none;
+                    outline: none;
+                    border-radius: 5px;
+                    color: white;
+                    font-size: 24px;
+                    width: 300px;
+                    height: 75px;
+                    cursor: pointer;
+
+                    & span {
+                        margin-right: 30px;
+                    }
+                }
+            }
         }
     }
 

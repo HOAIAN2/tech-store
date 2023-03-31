@@ -14,7 +14,7 @@ function ProductHome() {
     function fortmatarr(data) {
         let a = []
         let b = []
-        data.map((item, index) => {
+        data.forEach((item, index) => {
             if (((index + 1) % 5) === 0 && index !== 0) {
                 // b.push(item)
                 a.push(b)
@@ -25,17 +25,17 @@ function ProductHome() {
         })
         return a
     }
-
-
     return (
         <div className="producthome">
             <div className="wrapproducthome">
                 {products.map((item, index) => {
-                    return <div key={index} style={{ display: "flex", justifyContent: "space-around", marginBottom: "30px" }}>
-                        {item.map((item) => {
-                            return <ProductItem data={item} />
-                        })}
-                    </div>
+                    return (
+                        <div key={index} style={{ display: "flex", justifyContent: "space-around", marginBottom: "30px" }}>
+                            {item.map((item) => {
+                                return <ProductItem key={item.productID} data={item} />
+                            })}
+                        </div>
+                    )
                 })}
 
                 {/* <div style={{ display: "flex", justifyContent: "space-around" }}>

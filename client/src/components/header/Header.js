@@ -17,6 +17,7 @@ import "./Header.scss"
 import SearchListPopup from '../render_item/SearchListPopup'
 import { searchProduct } from '../../utils/Product'
 import useDebounce from '../../utils/hooks/useDebounce'
+import { Link } from 'react-router-dom'
 
 function Header() {
     const [searchValue, setSearchValue] = useState('')
@@ -88,10 +89,10 @@ function Header() {
             <div className="header_item2">
                 <div className="wrap_header_item2">
                     <div className="header_logo">
-                        <a className="wrap_logo" href="/">
+                        <Link className="wrap_logo" to="/">
                             <h1 className="header_logo_item">TECH</h1>
                             <h1 className="header_logo_item">STORE</h1>
-                        </a>
+                        </Link>
                     </div>
                     <div className="header_search">
                         <div className='search'>
