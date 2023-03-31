@@ -14,7 +14,7 @@ function HotItem({ data }) {
 
                             <div className='price'>{data.price}</div>
                             {/* <div className='btn'>Detail</div> */}
-                            <Link className='btn' to={`product/${data.productID}`}>Detail</Link>
+                            <Link className='btn' to={`product/${data.productID}`}>Chi tiết</Link>
                         </div>
                     </div>
                     {/* </div> */}

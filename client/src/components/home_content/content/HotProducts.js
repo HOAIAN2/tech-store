@@ -8,7 +8,7 @@ function HotProducts() {
     const [products, setProducts] = useState([])
     const container = useRef()
     function formatPrice(price) {
-        return `${price.toLocaleString('vi')} VNĐ`
+        return `${price.toLocaleString('vi')} đ`
     }
     useEffect(() => {
         getHotProducts().then(res => {

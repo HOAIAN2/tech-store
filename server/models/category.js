@@ -1,6 +1,6 @@
 class Category {
-  constructor(categoryId, categoryName, description, icon) {
-    this.categoryId = categoryId
+  constructor(categoryID, categoryName, description, icon) {
+    this.categoryID = categoryID
     this.categoryName = categoryName
     this.description = description
     this.icon = icon

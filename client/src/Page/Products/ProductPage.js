@@ -6,10 +6,12 @@ import { baseIMG } from '../../utils/api-config'
 import './ProductPage.scss'
 import Header from '../../components/header/Header'
 import ProductRating from './ProductRating'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCartShopping } from '@fortawesome/free-solid-svg-icons'
 
 function ProductPage() {
     function formatPrice(price) {
-        return `${price.toLocaleString('vi')} VNĐ`
+        return `${price.toLocaleString('vi')} đ`
     }
     const [product, setProduct] = useState({})
     const [notFound, setNotFound] = useState(false)
@@ -34,6 +36,7 @@ function ProductPage() {
             .catch(error => {
                 if (error.message === '404') setNotFound(true)
             })
+        document.querySelector('.App').scrollTo(0, 0)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id])
     console.log(product)
@@ -67,6 +70,12 @@ function ProductPage() {
                                 <input value={quantity} type="number" min="1" onInput={(e) => { setQuantity(e.target.value) }} />
                                 <button className='increase' onClick={handleSetQuantity}>+</button>
                             </div>
+                        </div>
+                        <div className='product-function'>
+                            <button>
+                                <span>Thêm vào giỏ hàng</span>
+                                <FontAwesomeIcon icon={faCartShopping} />
+                            </button>
                         </div>
                     </div>
                 </div>
