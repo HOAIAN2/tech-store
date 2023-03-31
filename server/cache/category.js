@@ -7,7 +7,7 @@ async function initializeCategory() {
     console.log('\x1b[1m%s\x1b[0m', 'Initializing categories data...')
     try {
         const queryString = [
-            'SELECT category_id, category_name, description',
+            'SELECT category_id, category_name, description, icon',
             'FROM categories'
         ].join(' ')
         const [rows] = await pool.query(queryString)
@@ -15,7 +15,8 @@ async function initializeCategory() {
             const categoryID = row['category_id']
             const categoryName = row['category_name']
             const description = row['description']
-            const category = new Category(categoryID, categoryName, description)
+            const icon = row['icon']
+            const category = new Category(categoryID, categoryName, description, icon)
             categories.push(category)
         })
     } catch (error) {
@@ -24,22 +25,7 @@ async function initializeCategory() {
     }
 }
 
-async function getcategory() {
-    try {
-        const queryString = [
-            'SELECT category_name, icon FROM store.categories',
-            'WHERE icon IS NOT NULL;'
-        ].join(' ')
-        const [rs] = await pool.query(queryString)
-        return rs
-    } catch (error) {
-        console.log('\x1b[31m%s\x1b[0m', `Fail to initialize category data: ${error.message}`)
-        throw new Error(`Fail to initialize category data: ${error.message}`)
-    }
-}
-
 module.exports = {
     initializeCategory,
-    getcategory,
     categories
 }

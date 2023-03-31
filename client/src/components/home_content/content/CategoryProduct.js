@@ -1,13 +1,13 @@
 import CategoryItem from "../../render_item/CategoryItem"
-import { getcategories } from "../../../utils/Auth/index"
+import { getCategories } from "../../../utils/Product/index"
 import { useEffect, useState } from "react"
 
 function CategoryProduct() {
-    const [categories, setcategories] = useState([])
+    const [categories, setCategories] = useState([])
     useEffect(() => {
-        getcategories()
+        getCategories()
             .then((rs) => {
-                setcategories(rs.data)
+                setCategories(rs.data)
             })
     }, [])
 

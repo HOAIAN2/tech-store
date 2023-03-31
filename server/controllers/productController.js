@@ -178,13 +178,13 @@ async function addProduct(req, res) {
 
 
 // [GET supplier and category]
-async function getSuppliersCategories(req, res) {
-    const data = {
-        categories: categories.map(category => category.categoryName),
-        suppliers: suppliers.map(supplier => supplier.supplierName)
-    }
-    res.json(data)
-}
+// async function getSuppliersCategories(req, res) {
+//     const data = {
+//         categories: categories.map(category => category.categoryName),
+//         suppliers: suppliers.map(supplier => supplier.supplierName)
+//     }
+//     res.json(data)
+// }
 // [GET hot-product]
 async function getHotProducts(req, res) {
     let errorMessages = productErrors.en
@@ -226,7 +226,7 @@ module.exports = {
     index,
     getProductByID,
     searchProduct,
-    getSuppliersCategories,
+    // getSuppliersCategories,
     addProduct,
     getHotProducts,
 }
