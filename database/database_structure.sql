@@ -63,21 +63,11 @@ CREATE TABLE products (
     CONSTRAINT discount_limit CHECK (discount> 0 AND discount < 1),
     CONSTRAINT order_limit CHECK (unit_in_order <= quantity)
 );
-CREATE TABLE comments(
-    comment_id INT NOT NULL,
-	user_id INT NOT NULL,
-	product_id INT NOT null,
-	comment VARCHAR(255),
-    PRIMARY KEY (comment_id),
-	FOREIGN KEY (user_id) REFERENCES users(user_id),
-	FOREIGN KEY (product_id) REFERENCES products(product_id)
-);
 CREATE TABLE ratings(
-    rating_id INT NOT NULL,
 	user_id INT NOT NULL,
 	product_id INT NOT null,
 	rate INT UNSIGNED,
-    PRIMARY KEY (rating_id),
+	comment VARCHAR(512),
 	FOREIGN KEY (user_id) REFERENCES users(user_id),
 	FOREIGN KEY (product_id) REFERENCES products(product_id),
 	CONSTRAINT rate CHECK (rate >= 1 AND rate <= 5)
