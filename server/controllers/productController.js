@@ -4,6 +4,7 @@ const { readAccessToken } = require("./authController")
 const fs = require('fs')
 const path = require("path")
 const productErrors = require('./productErrors.json')
+const { time } = require('console')
 
 // [GET home]
 function index(req, res) {
@@ -12,7 +13,17 @@ function index(req, res) {
         groupProduct[category.categoryName] = []
     })
     Object.keys(groupProduct).forEach(group => {
-        const temp = products.filter(product => product.category === group)
+        const temp = []
+        products.every((product) => {
+            if (product.category === group && temp.length < 12) {
+                temp.push(product)
+                return true
+            }
+            if (temp.length >= 12) {
+                return false
+            }
+            return true
+        })
         groupProduct[group] = [...temp]
     })
     Object.keys(groupProduct).forEach(group => {
@@ -20,7 +31,13 @@ function index(req, res) {
             return product.ignoreProps('unitInOrder', 'quantity')
         })
     })
-    return groupProduct
+    // return groupProduct
+    const rs = [
+        { 'title': 'Laptop Nổi Bật', 'products': groupProduct['Laptop'] },
+        { 'title': 'Điện Thoại Nổi Bật', 'products': groupProduct['Phone'] },
+        { 'title': 'Màng Hình Nổi Bật', 'products': groupProduct['Screen'] }
+    ]
+    res.json(rs)
 }
 //[GET product]
 function getProductByID(req, res) {

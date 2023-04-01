@@ -1,41 +1,60 @@
 import "./ProductHome.scss"
 import ProductItem from "../../render_item/ProductItem"
-import { searchProduct } from "../../../utils/Product"
+import { getHomeProduct } from "../../../utils/Product"
 import { useEffect, useState } from "react"
 
 function ProductHome() {
     const [products, setproducts] = useState([])
     useEffect(() => {
-        searchProduct('Laptop', 'more', 'hot', 'asc')
+        getHomeProduct()
             .then((rs) => {
-                setproducts(fortmatarr(rs.data))
+                const a = rs.data;
+                a.map((item, index) => {
+                    a[index].products = fortmatarr(item.products)
+                })
+                setproducts(a)
             })
     }, [])
     function fortmatarr(data) {
         let a = []
         let b = []
         data.forEach((item, index) => {
-            if (((index + 1) % 5) === 0 && index !== 0) {
-                // b.push(item)
+            if (((index + 1) % 4) === 0) {
+                b.push(item)
                 a.push(b)
                 b = []
-            } else {
+            }
+            else {
                 b.push(item)
             }
         })
         return a
     }
+
     return (
         <div className="producthome">
             <div className="wrapproducthome">
                 {products.map((item, index) => {
-                    return (
-                        <div key={index} style={{ display: "flex", justifyContent: "space-around", marginBottom: "30px" }}>
-                            {item.map((item) => {
-                                return <ProductItem key={item.productID} data={item} />
-                            })}
-                        </div>
-                    )
+                    return <div key={index} style={{ backgroundColor: "#fff" }}>
+                        <h2 style={{ padding: "10px 20px 30px 20px", fontSize: "35px", fontWeight: "500" }}>{item.title}</h2>
+                        {item.products.map((item, index) => {
+                            return (
+                                <div key={index} style={{ display: "flex", justifyContent: "space-around", marginBottom: "30px" }}>
+                                    {item.map((item) => {
+                                        return <ProductItem key={item.productID} data={item} />
+                                    })}
+                                </div>
+                            )
+                        })}
+                    </div>
+
+                    // return (
+                    //     <div key={index} style={{ display: "flex", justifyContent: "space-around", marginBottom: "30px" }}>
+                    //         {item.map((item) => {
+                    //             return <ProductItem key={item.productID} data={item} />
+                    //         })}
+                    //     </div>
+                    // )
                 })}
 
                 {/* <div style={{ display: "flex", justifyContent: "space-around" }}>
