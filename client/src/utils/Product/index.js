@@ -49,10 +49,19 @@ async function getCategories() {
         throw new Error(error)
     }
 }
+async function getHomeProduct() {
+    try {
+        const rs = await request.get('/products')
+        return rs
+    } catch (error) {
+        throw new Error(error)
+    }
+}
 
 export {
     searchProduct,
     getProductByID,
     getHotProducts,
-    getCategories
+    getCategories,
+    getHomeProduct
 }
