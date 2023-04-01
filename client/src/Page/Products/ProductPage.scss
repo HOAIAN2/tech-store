@@ -6,6 +6,8 @@
     position: relative;
 
     &-content {
+        background-color: white;
+        overflow: hidden;
         position: absolute;
         left: 50%;
         top: 5%;
@@ -13,7 +15,7 @@
         display: flex;
         justify-content: space-between;
         // border: 1px solid red;
-        width: 80%;
+        width: 85%;
 
         & .product-page-images {
             img {
@@ -27,11 +29,15 @@
             height: 100%;
 
             & .product-name {
+                height: 100px;
+                margin-top: 20px;
                 font-size: 24px;
                 font-weight: bold;
             }
 
             & .product-price {
+                margin-top: 10px;
+
                 & .price {
                     font-size: 22px;
                     color: colors.$color-red;
@@ -42,35 +48,45 @@
                 & .discount {
                     font-size: 22px;
                     margin-left: 20px;
-                    // text-decoration: line-through;
+                    text-decoration: line-through;
                     color: colors.$color-shadow;
                 }
             }
 
             & .product-action {
+                margin-top: 20px;
                 height: 50px;
 
                 .quantity {
-                    width: 90px;
+                    width: 104px;
                     height: 100%;
                     position: relative;
+                    border: 2px solid black;
 
                     & button {
+                        // background-color: white;
+                        background-color: rgb(245, 245, 245);
+                        font-size: 22px;
+                        outline: none;
+                        border: none;
                         height: 100%;
                         width: 30px;
                         position: absolute;
+                        cursor: pointer;
                     }
 
                     & button:last-child {
-                        margin-left: 80px;
+                        margin-left: 70px;
                     }
 
                     & input {
+                        border: none;
+                        outline: none;
                         text-align: center;
                         margin-left: 30px;
                         position: absolute;
                         font-size: 28px;
-                        width: 50px;
+                        width: 40px;
                         height: 100%;
 
                         &::-webkit-outer-spin-button,
@@ -84,7 +100,8 @@
             }
 
             & .product-function {
-                border: 1px solid red;
+                margin-top: 20px;
+                // border: 1px solid red;
                 height: 100px;
 
                 & button {

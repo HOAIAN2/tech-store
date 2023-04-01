@@ -27,8 +27,7 @@ function ProductPage() {
                         return `${baseIMG}/products/${image}`
                     }),
                     discount: data.discount * 100 || null,
-                    price: formatPrice(data.price),
-                    rate: 3.8
+                    rate: 3.5
                 })
                 document.title = data.productName
                 setQuantity(1)
@@ -40,6 +39,7 @@ function ProductPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id])
     console.log(product)
+    /// Alot of bugs, fix
     function handleSetQuantity(e) {
         if (e.target.className === 'decrease') {
             if (quantity !== 1) setQuantity(quantity - 1)
@@ -59,15 +59,15 @@ function ProductPage() {
                     </div>
                     <div className='product-page-data'>
                         <div className='product-name'>{product.productName}</div>
-                        <div className="product-price">
-                            <span className="price">{product.price}</span>
-                            {product.discount && <span className="discount">{`- ${product.discount}%`}</span>}
-                        </div>
                         <ProductRating rate={product.rate} />
+                        <div className="product-price">
+                            <span className="price">{formatPrice(product.price * (1 - product.discount))}</span>
+                            {product.discount && <span className="discount">{formatPrice(product.price)}</span>}
+                        </div>
                         <div className='product-action'>
                             <div className='quantity'>
                                 <button className='decrease' onClick={handleSetQuantity}>-</button>
-                                <input value={quantity} type="number" min="1" onInput={(e) => { setQuantity(e.target.value) }} />
+                                <input value={quantity} type="number" min="1" readOnly />
                                 <button className='increase' onClick={handleSetQuantity}>+</button>
                             </div>
                         </div>
