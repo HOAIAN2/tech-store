@@ -35,7 +35,7 @@ function index(req, res) {
     const rs = [
         { 'title': 'Laptop Nổi Bật', 'products': groupProduct['Laptop'] },
         { 'title': 'Điện Thoại Nổi Bật', 'products': groupProduct['Phone'] },
-        { 'title': 'Màng Hình Nổi Bật', 'products': groupProduct['Screen'] }
+        { 'title': 'Màn Hình Nổi Bật', 'products': groupProduct['Screen'] }
     ]
     res.json(rs)
 }
