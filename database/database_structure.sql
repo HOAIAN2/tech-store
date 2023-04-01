@@ -63,11 +63,21 @@ CREATE TABLE products (
     CONSTRAINT discount_limit CHECK (discount> 0 AND discount < 1),
     CONSTRAINT order_limit CHECK (unit_in_order <= quantity)
 );
-CREATE TABLE ratings(
+CREATE TABLE comments(
+    comment_id INT NOT NULL AUTO_INCREMENT,
 	user_id INT NOT NULL,
-	product_id INT NOT null,
+	product_id INT NOT NULL,
+	comment VARCHAR(255),
+    PRIMARY KEY (comment_id),
+	FOREIGN KEY (user_id) REFERENCES users(user_id),
+	FOREIGN KEY (product_id) REFERENCES products(product_id)
+);
+CREATE TABLE ratings(
+    rating_id INT NOT NULL AUTO_INCREMENT,
+	user_id INT NOT NULL,
+	product_id INT NOT NULL,
 	rate INT UNSIGNED,
-	comment VARCHAR(512),
+    PRIMARY KEY (rating_id),
 	FOREIGN KEY (user_id) REFERENCES users(user_id),
 	FOREIGN KEY (product_id) REFERENCES products(product_id),
 	CONSTRAINT rate CHECK (rate >= 1 AND rate <= 5)
@@ -116,15 +126,18 @@ UPDATE products
 SET unit_in_order = unit_in_order + NEW.quantity
 WHERE NEW.product_id = products.product_id;
 --
-DELIMITER //
-CREATE TRIGGER before_order_detail_update
-BEFORE UPDATE ON order_details
-FOR EACH ROW
-IF(NEW.quantity <> OLD.quantity) THEN
-UPDATE products
-SET unit_in_order = unit_in_order + (NEW.quantity - OLD.quantity)
-WHERE NEW.product_id = products.product_id AND NEW.quantity <> OLD.quantity;
-END IF;
+DELIMITER $$
+
+    CREATE TRIGGER before_order_detail_update BEFORE UPDATE ON order_details
+    FOR EACH ROW BEGIN
+      IF (NEW.quantity <> OLD.quantity) THEN
+            UPDATE products
+            SET unit_in_order = unit_in_order + (NEW.quantity - OLD.quantity)
+            WHERE NEW.product_id = products.product_id AND NEW.quantity <> OLD.quantity;
+      END IF;
+    END$$
+
+DELIMITER ;
 --
 CREATE TRIGGER before_order_detail_delete
 BEFORE DELETE ON order_details
