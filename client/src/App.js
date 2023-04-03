@@ -29,6 +29,7 @@ function App() {
       })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
   useEffect(() => {
     const items = document.querySelectorAll('.loading, .pre-load')
     if (isFirstLoad) return

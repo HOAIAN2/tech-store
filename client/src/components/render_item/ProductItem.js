@@ -5,7 +5,7 @@ import './ProductItem.scss'
 
 function ProductItem({ data }) {
     // console.log(data)
-    // data.discount = 0.2
+    data.discount = 0.2
     function formatPrice(price) {
         return `${price.toLocaleString('vi')} ₫`
     }
@@ -25,6 +25,7 @@ function ProductItem({ data }) {
                         <ProductRating rate={2.5} />
                         <Link to={`product/${data.productID}`}>Chi tiết</Link>
                     </div>
+                    <div className="discount">{`Giảm ${(data.price * data.discount).toLocaleString('vi')} ₫`}</div>
                 </div>
             </div>
         )

@@ -2,6 +2,8 @@ import "./ProductHome.scss"
 import ProductItem from "../../render_item/ProductItem"
 import { getHomeProduct } from "../../../utils/Product"
 import { useEffect, useState } from "react"
+import dung_React_scrollbar from "@danghung_dung/react_scrollbar"
+
 
 function ProductHome() {
     const [products, setproducts] = useState([])
@@ -30,12 +32,17 @@ function ProductHome() {
         })
         return a
     }
+    useEffect(() => {
+        if (document.querySelector(".wrapproducthome").children.length != 0) {
+            dung_React_scrollbar(document.querySelector(".App"), 'red')
+        }
+    })
 
     return (
         <div className="producthome">
             <div className="wrapproducthome">
                 {products.map((item, index) => {
-                    return <div key={index} style={{ backgroundColor: "#fff" }}>
+                    return <div key={index} style={{ backgroundColor: "#fff", padding: "1px 0px", margin: "30px 0px" }}>
                         <h2 style={{ padding: "10px 20px 30px 20px", fontSize: "35px", fontWeight: "500" }}>{item.title}</h2>
                         {item.products.map((item, index) => {
                             return (

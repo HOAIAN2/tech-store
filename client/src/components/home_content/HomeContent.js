@@ -4,7 +4,7 @@ import ProductHome from "./content/ProductHome"
 
 function HomeContent() {
     return (
-        <div className="content-home" style={{}}>
+        <div className="content-home" style={{ paddingTop: "175px" }}>
             <div className="component1" style={{ backgroundColor: "#fff", boxShadow: "0 0 1px" }}>
                 <HotProducts />
                 <div className="maincontenthome" style={{ width: "100%", height: "maxcontent", backgroundColor: "#fff", paddingTop: "10px" }}>

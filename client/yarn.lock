@@ -1186,6 +1186,11 @@
   resolved "https://registry.npmjs.org/@csstools/selector-specificity/-/selector-specificity-2.0.2.tgz"
   integrity sha512-IkpVW/ehM1hWKln4fCA3NzJU8KwD+kIOvPZA4cqxoJHtE21CCzjyp+Kxbu0i5I4tBNOlXPL9mjwnWlL0VEG4Fg==
 
+"@danghung_dung/react_scrollbar@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/@danghung_dung/react_scrollbar/-/react_scrollbar-1.0.0.tgz"
+  integrity sha512-QOF6kCbO048vKs0fm4CzQTKbS/MB0ZUTZVyEzpwWnaUBuvsmtBW28/MGi9+6dBu9Bc1aHVagZlpBH//ZisJf9Q==
+
 "@danghung_dung/slice_item2@^1.0.0":
   version "1.0.0"
   resolved "https://registry.npmjs.org/@danghung_dung/slice_item2/-/slice_item2-1.0.0.tgz"
@@ -3893,11 +3898,6 @@ dotenv@^10.0.0:
   version "10.0.0"
   resolved "https://registry.npmjs.org/dotenv/-/dotenv-10.0.0.tgz"
   integrity sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==
-
-dung_react_scrollbar@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/dung_react_scrollbar/-/dung_react_scrollbar-1.0.0.tgz"
-  integrity sha512-5gztJ2xop4dx+DHIDELCMjf1XQvwX4j7w6qi0kSd9woVQY/WdDJwdPGCH3jiUu+y5yPK8YrTPqOuG66U+WF7sg==
 
 duplexer@^0.1.2:
   version "0.1.2"

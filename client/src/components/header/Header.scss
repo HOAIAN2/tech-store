@@ -6,6 +6,11 @@
     flex-direction: column;
     display: flex;
     border-bottom: 5px solid #d41138;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 1;
 
     .header_item1 {
         height: 39px;
