@@ -33,6 +33,7 @@ async function initializeOrder() {
                 order.addProduct(productID, productName, quantity, price, discount)
             })
             if (order.paid) order.paidOrder(paidMethod, orderDate)
+            orders.push(order)
         })
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', `Fail to initialize orders data: ${error.message}`)
@@ -97,13 +98,28 @@ async function paidOrder(orderID, paymentMethodID) {
 
 
 async function addOrder(userID) {
-    const queryString = [
-        'INSERT INTO orders (user_id)',
-        'VALUE(?)'
-    ].join(' ')
+    let newOrder = null
     try {
-        const orderid = await pool.query(queryString, userID)
-        return orderid[0].insertId
+        const queryString = [
+            'INSERT INTO orders(user_id) VALUES(?)'
+        ].join(' ')
+        const queryString1 = [
+            'SELECT order_id, user_id, order_date, payment_methods.name AS paid_method, paid',
+            'FROM orders LEFT JOIN payment_methods ON orders.paid_method_id = payment_methods.method_id'
+        ].join(' ')
+        await pool.query(queryString, [userID])
+        const [rows] = await pool.query(queryString1)
+        rows.forEach(async (row) => {
+            const orderID = row['order_id']
+            const userID = row['user_id']
+            const orderDate = row['order_date']
+            const paidMethod = row['paid_method']
+            const paid = row['paid']
+            const order = new Order(orderID, userID, orderDate, paidMethod, paid)
+            orders.push(order)
+            newOrder = order
+        })
+        return newOrder
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)
         throw new Error(error.message)
