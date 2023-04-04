@@ -90,6 +90,8 @@ async function paidOrder(orderID, paymentMethodID) {
             'WHERE order_id = ?'
         ].join(' ')
         await pool.query(queryString, [paymentMethodID, orderID])
+        const order = await getOrder(orderID)
+        return order
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)
         throw new Error(error.message)
@@ -176,5 +178,6 @@ module.exports = {
     addOrderDetail,
     updateOrderDetail,
     removeOrderDetail,
+    paidOrder,
     orders
 }

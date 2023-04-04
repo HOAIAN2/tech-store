@@ -6,5 +6,6 @@ rounter.post('/create-order', authController.authenticateToken, orderController.
 rounter.post('/add-product', authController.authenticateToken, orderController.addProduct)
 rounter.post('/update-product', authController.authenticateToken, orderController.updateProduct)
 rounter.post('/remove-product', authController.authenticateToken, orderController.removeProduct)
+rounter.post('/make-payment', authController.authenticateToken, orderController.makePayment)
 
 module.exports = rounter
