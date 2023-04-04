@@ -5,6 +5,7 @@ import NotFound from '../errors/NotFound'
 import { baseIMG } from '../../utils/api-config'
 import './ProductPage.scss'
 import Header from '../../components/header/Header'
+import Footer from '../../components/footer/Footer'
 import ProductRating from './ProductRating'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons'
@@ -80,6 +81,7 @@ function ProductPage() {
                     </div>
                 </div>
             </div>
+            <Footer />
         </>
     )
 }

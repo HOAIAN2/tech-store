@@ -1,10 +1,29 @@
-.footer {
-    background-color: black;
-    width: 100%;
-    height: 150px;
+@use "../../colors";
 
-    &_item1 {
-        height: 39px;
-        background-color: aqua;
+.footer {
+    border-top: 4px solid colors.$color-red;
+    background-color: #1c1c1c;
+    padding-top: 55px;
+    padding-bottom: 63px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .footer_item1 {
+        color: #fff;
+
+        .title {
+            margin-bottom: 19px;
+        }
+
+        .footer_item1_item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0px;
+
+            p {
+                margin-left: 5px;
+            }
+        }
     }
 }
