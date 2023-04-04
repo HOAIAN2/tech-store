@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { logout } from '../../utils/Auth'
 import { useUserData } from '../../Context'
 import './Account.scss'
@@ -7,6 +7,7 @@ import { faUser } from "@fortawesome/free-solid-svg-icons"
 import languages from './Languages/Account.json'
 
 function Account() {
+    const location = useLocation()
     // Fetch user Data when app first load
     let language = languages.en
     if (navigator.language === 'vi') language = languages.vi
@@ -37,7 +38,7 @@ function Account() {
     )
     else return (
         <div className='header-account'>
-            <Link className='login-btn' to='/login'>
+            <Link className='login-btn' to='/login' replace state={{ from: location }}>
                 <span>{language.login}</span>
             </Link>
             {/* <p>/</p> */}
