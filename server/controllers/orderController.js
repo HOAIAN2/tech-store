@@ -57,21 +57,62 @@ async function addProduct(req, res) {
 }
 // [POST update-product]
 async function updateProduct(req, res) {
+    const data = {
+        productID: req.body.productID,
+        quantity: req.body.quantity
+    }
     let errorMessages = orderErrors.en
     const language = req.headers["accept-language"]
     if (language === 'vi') errorMessages = orderErrors.vi
     const token = req.headers['authorization'].split(' ')[1]
     const user = readAccessToken(token)
-    //
+    const lastOrder = orders.findLast(order => {
+        console.log(order)
+        return order.userID === user.id
+    })
+    console.log(lastOrder)
+    if (lastOrder && lastOrder.paid === 0) {
+        if (!lastOrder.products.find(product => {
+            return product.productID === data.productID
+        })) return res.sendStatus(400)
+        try {
+            const order = await updateOrderDetail(lastOrder.orderID, data.productID, data.quantity)
+            return res.json(order)
+        } catch (error) {
+            console.log('\x1b[31m%s\x1b[0m', error.message)
+            return res.status(500).json({ message: 'error' })
+        }
+    }
+    return res.sendStatus(400)
 }
 // [POST remove-product]
 async function removeProduct(req, res) {
+    const data = {
+        productID: req.body.productID
+    }
     let errorMessages = orderErrors.en
     const language = req.headers["accept-language"]
     if (language === 'vi') errorMessages = orderErrors.vi
     const token = req.headers['authorization'].split(' ')[1]
     const user = readAccessToken(token)
-    //
+    const lastOrder = orders.findLast(order => {
+        console.log(order)
+        return order.userID === user.id
+    })
+    console.log(lastOrder)
+    if (lastOrder && lastOrder.paid === 0) {
+        if (!lastOrder.products.find(product => {
+            return product.productID === data.productID
+        })) return res.sendStatus(400)
+        try {
+            const order = await removeOrderDetail(lastOrder.orderID, data.productID)
+            return res.json(order)
+        } catch (error) {
+            console.log('\x1b[31m%s\x1b[0m', error.message)
+            return res.status(500).json({ message: 'error' })
+        }
+    }
+    return res.sendStatus(400)
 }
 // [POST make-payment]
 async function makePayment(req, res) {
