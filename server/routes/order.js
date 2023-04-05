@@ -7,6 +7,7 @@ router.post('/add-product', authController.authenticateToken, orderController.ad
 router.post('/update-product', authController.authenticateToken, orderController.updateProduct)
 router.post('/remove-product', authController.authenticateToken, orderController.removeProduct)
 router.post('/make-payment', authController.authenticateToken, orderController.makePayment)
+router.post('/set-voucher', authController.authenticateToken, orderController.setVoucher)
 router.get('/', authController.authenticateToken, orderController.getOrder)
 
 module.exports = router

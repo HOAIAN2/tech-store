@@ -82,6 +82,21 @@ async function getOrder(orderID) {
         throw new Error(error.message)
     }
 }
+async function addVoucher(orderID, voucherID) {
+    try {
+        const queryString = [
+            'UPDATE orders',
+            'SET voucher_id = ?',
+            'WHERE order_id = ?'
+        ].join(' ')
+        await pool.query(queryString, [voucherID, orderID])
+        const order = await getOrder(orderID)
+        return order
+    } catch (error) {
+        console.log('\x1b[31m%s\x1b[0m', error.message)
+        throw new Error(error.message)
+    }
+}
 async function paidOrder(orderID, paymentMethodID) {
     try {
         const queryString = [
@@ -178,6 +193,7 @@ module.exports = {
     addOrderDetail,
     updateOrderDetail,
     removeOrderDetail,
+    addVoucher,
     paidOrder,
     orders
 }

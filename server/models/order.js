@@ -7,6 +7,7 @@ class Order {
         this.paid = paid
         this.products = [] // {productID, productName, quantity, price?}
         this.total = 0
+        this.voucher = null
     }
     addProduct(productID, productName, quantity, price, discount) {
         this.products.push({ productID, productName, quantity, price, discount })
@@ -25,11 +26,17 @@ class Order {
         })
         this.products.splice(index, 1)
     }
+    setVoucher(voucher) {
+        this.voucher = voucher
+    }
     paidOrder(paidMethod, orderDate) {
         this.paidMethod = paidMethod
         this.total = this.products.reduce((sum, product) => {
             return sum + (product.price * (1 - product.discount) * product.quantity)
         }, 0)
+        if (this.voucher) {
+            this.total = this.total * (1 - this.voucher.voucherDiscount)
+        }
         this.orderDate = new Date(orderDate)
         this.paid = true
     }
