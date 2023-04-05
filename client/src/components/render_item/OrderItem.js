@@ -1,4 +1,4 @@
-function Orderitem({ data }) {
+function OrderItem({ data }) {
     return (
         <>
             {data.map((item, index) => {
@@ -11,4 +11,4 @@ function Orderitem({ data }) {
 }
 
 
-export default Orderitem;
+export default OrderItem;

@@ -18,13 +18,13 @@ import SearchListPopup from '../render_item/SearchListPopup'
 import { searchProduct } from '../../utils/Product'
 import useDebounce from '../../utils/hooks/useDebounce'
 import { Link } from 'react-router-dom'
-import { getorder } from "../../utils/Auth/index"
-import Orderitem from '../render_item/orderitem'
+import { getOrder } from "../../utils/Order/index"
+import OrderItem from '../render_item/OrderItem'
 import { baseIMG } from "../../utils/api-config"
 function Header() {
     const [searchValue, setSearchValue] = useState('')
     const [searchData, setSearchData] = useState([])
-    const [order, setorder] = useState([])
+    const [order, setOrder] = useState([])
     const debounce = useDebounce(searchValue, 200)
     useEffect(() => {
         if (!debounce) return
@@ -37,9 +37,9 @@ function Header() {
             })
     }, [debounce])
     useEffect(() => {
-        getorder()
+        getOrder()
             .then((rs) => {
-                setorder(rs)
+                setOrder(rs)
             })
     }, [])
     let language = languages.en
@@ -126,11 +126,11 @@ function Header() {
                             <span>1</span>
                         </div>
                         <div className='popup_cart-shopping'>
-                            {order.length != 0 ?
-                                <Orderitem data={order} />
+                            {order.length !== 0 ?
+                                <OrderItem data={order} />
                                 :
                                 <div style={{ textAlign: "center" }}>
-                                    <img src={`${baseIMG}orther/icon-nonorder.png`}></img>
+                                    <img src={`${baseIMG}orther/icon-nonorder.png`} alt=''></img>
                                     <div>Không Có Sản Phẩm</div>
                                 </div>}
                         </div>

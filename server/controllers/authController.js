@@ -319,7 +319,6 @@ function isCorrectPassword(password, hashedPassword) {
 // Middleware auth
 function authenticateToken(req, res, next) {
     const authorizationHeader = req.headers['authorization']
-    console.log(authorizationHeader)
     if (!authorizationHeader) res.sendStatus(401)
     else {
         const token = authorizationHeader.split(' ')[1]
