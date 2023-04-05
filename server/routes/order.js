@@ -1,11 +1,12 @@
 const express = require("express")
-const rounter = express.Router()
+const router = express.Router()
 const { orderController, authController } = require("../controllers")
 
-rounter.post('/create-order', authController.authenticateToken, orderController.createOrder)
-rounter.post('/add-product', authController.authenticateToken, orderController.addProduct)
-rounter.post('/update-product', authController.authenticateToken, orderController.updateProduct)
-rounter.post('/remove-product', authController.authenticateToken, orderController.removeProduct)
-rounter.post('/make-payment', authController.authenticateToken, orderController.makePayment)
+router.post('/create-order', authController.authenticateToken, orderController.createOrder)
+router.post('/add-product', authController.authenticateToken, orderController.addProduct)
+router.post('/update-product', authController.authenticateToken, orderController.updateProduct)
+router.post('/remove-product', authController.authenticateToken, orderController.removeProduct)
+router.post('/make-payment', authController.authenticateToken, orderController.makePayment)
+router.get('/', authController.authenticateToken, orderController.getOrder)
 
-module.exports = rounter
+module.exports = router
