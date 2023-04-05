@@ -8,7 +8,7 @@ function CategoryItem({ data }) {
             <div className="category_item">
                 <div className="category_item_icon">
                     <div className="wrapicon">
-                        <img src={`${baseIMG}orther/${data.icon}`}></img>
+                        <img src={`${baseIMG}orther/${data.icon}`} alt=""></img>
                     </div>
                 </div>
                 <div className="category_name">
