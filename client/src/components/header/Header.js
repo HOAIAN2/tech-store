@@ -18,10 +18,13 @@ import SearchListPopup from '../render_item/SearchListPopup'
 import { searchProduct } from '../../utils/Product'
 import useDebounce from '../../utils/hooks/useDebounce'
 import { Link } from 'react-router-dom'
-
+import { getorder } from "../../utils/Auth/index"
+import Orderitem from '../render_item/orderitem'
+import { baseIMG } from "../../utils/api-config"
 function Header() {
     const [searchValue, setSearchValue] = useState('')
     const [searchData, setSearchData] = useState([])
+    const [order, setorder] = useState([])
     const debounce = useDebounce(searchValue, 200)
     useEffect(() => {
         if (!debounce) return
@@ -33,6 +36,12 @@ function Header() {
                 console.error(error)
             })
     }, [debounce])
+    useEffect(() => {
+        getorder()
+            .then((rs) => {
+                setorder(rs)
+            })
+    }, [])
     let language = languages.en
     if (navigator.language === 'vi') language = languages.vi
     return (
@@ -115,6 +124,15 @@ function Header() {
                         <FontAwesomeIcon icon={faCartShopping} />
                         <div className="number-cart">
                             <span>1</span>
+                        </div>
+                        <div className='popup_cart-shopping'>
+                            {order.length != 0 ?
+                                <Orderitem data={order} />
+                                :
+                                <div style={{ textAlign: "center" }}>
+                                    <img src={`${baseIMG}orther/icon-nonorder.png`}></img>
+                                    <div>Không Có Sản Phẩm</div>
+                                </div>}
                         </div>
                     </div>
                 </div>
