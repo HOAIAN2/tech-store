@@ -146,13 +146,19 @@ UPDATE products
 SET unit_in_order = unit_in_order - OLD.quantity
 WHERE OLD.product_id = products.product_id;
 --
-CREATE TRIGGER before_orders_update
-BEFORE UPDATE ON orders
-FOR EACH ROW
-UPDATE products JOIN order_details ON products.product_id = order_details.product_id
-JOIN orders ON order_details.order_id = NEW.order_id
-SET products.quantity = products.quantity - order_details.quantity,
-unit_in_order = unit_in_order - order_details.quantity,
-order_details.price = products.price,
-order_details.discount = products.discount
-WHERE products.product_id = order_details.product_id;
+DELIMITER $$
+
+    CREATE TRIGGER before_orders_update BEFORE UPDATE ON orders
+    FOR EACH ROW BEGIN
+      IF (NEW.paid = 1) THEN
+            UPDATE products JOIN order_details ON products.product_id = order_details.product_id
+			JOIN orders ON order_details.order_id = NEW.order_id
+			SET products.quantity = products.quantity - order_details.quantity,
+			unit_in_order = unit_in_order - order_details.quantity,
+			order_details.price = products.price,
+			order_details.discount = products.discount
+			WHERE products.product_id = order_details.product_id;
+      END IF;
+    END$$
+
+DELIMITER ;

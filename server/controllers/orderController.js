@@ -1,5 +1,5 @@
 const { readAccessToken } = require("../controllers/authController")
-const { orders, addOrder, addOrderDetail, updateOrderDetail, paidOrder, removeOrderDetail } = require("../cache")
+const { orders, addOrder, addOrderDetail, updateOrderDetail, paidOrder, removeOrderDetail, addVoucher, vouchers } = require("../cache")
 const orderErrors = require("./orderErrors.json")
 
 // [GET]
@@ -133,6 +133,35 @@ async function removeProduct(req, res) {
     }
     return res.sendStatus(400)
 }
+// [POST set-voucher]
+async function setVoucher(req, res) {
+    const data = {
+        voucherID: req.body.voucherID
+    }
+    let errorMessages = orderErrors.en
+    const language = req.headers["accept-language"]
+    if (language === 'vi') errorMessages = orderErrors.vi
+    const token = req.headers['authorization'].split(' ')[1]
+    const user = readAccessToken(token)
+    if (!isValidData(data)) return res.status(400).json({ message: errorMessages.invalidDataType })
+    const latestOrder = orders.findLast(order => {
+        return order.userID === user.id
+    })
+    const voucher = vouchers.find(item => {
+        return (item.voucherID === data.voucherID && item.expiryDate > new Date())
+    })
+    if (!voucher) return res.status(400).json({ message: errorMessages.voucherInvalid })
+    if (latestOrder && !latestOrder.paid) {
+        try {
+            const order = await addVoucher(latestOrder.orderID, data.voucherID)
+            return res.json(order)
+        } catch (error) {
+            console.log('\x1b[31m%s\x1b[0m', error.message)
+            return res.status(500).json({ message: 'error' })
+        }
+    }
+    return res.sendStatus(400)
+}
 // [POST make-payment]
 async function makePayment(req, res) {
     const data = {
@@ -175,5 +204,6 @@ module.exports = {
     addProduct,
     updateProduct,
     removeProduct,
+    setVoucher,
     makePayment
 }

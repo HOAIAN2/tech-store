@@ -12,8 +12,19 @@ const {
 } = require('./user')
 const { products, initializeProduct, findProduct, createProduct } = require('./product')
 const { categories, initializeCategory } = require('./category')
-const { orders, initializeOrder, getOrder, addOrder, addOrderDetail, updateOrderDetail, paidOrder, removeOrderDetail } = require('./order')
+const {
+    orders,
+    initializeOrder,
+    getOrder,
+    addOrder,
+    addOrderDetail,
+    updateOrderDetail,
+    paidOrder,
+    removeOrderDetail,
+    addVoucher
+} = require('./order')
 const { suppliers, initializeSupplier } = require('./supplier')
+const { vouchers, initializeVoucher } = require('./voucher')
 
 async function initializeData() {
     console.log('\x1b[1m%s\x1b[0m', 'Initializing data...')
@@ -24,7 +35,8 @@ async function initializeData() {
             initializeProduct(),
             initializeCategory(),
             initializeOrder(),
-            initializeSupplier()
+            initializeSupplier(),
+            initializeVoucher()
         ])
         results.forEach(promise => {
             if (promise.status === 'rejected') throw new Error('Fail to initialize data')
@@ -32,7 +44,6 @@ async function initializeData() {
         console.log('\x1b[32m%s\x1b[0m', 'Initialized data')
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)
-        // uncomment this line on production or have database
         throw new Error(`Fail to initialize data: ${error.message}`)
     }
 }
@@ -50,6 +61,7 @@ module.exports = {
     addOrder,
     addOrderDetail,
     updateOrderDetail,
+    addVoucher,
     paidOrder,
     removeOrderDetail,
     pool,
@@ -58,5 +70,6 @@ module.exports = {
     categories,
     suppliers,
     orders,
+    vouchers,
     refreshTokens,
 }

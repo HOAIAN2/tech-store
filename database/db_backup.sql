@@ -112,7 +112,11 @@ UNLOCK TABLES;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `before_order_detail_insert` BEFORE INSERT ON `order_details` FOR EACH ROW UPDATE products
 
+
+
 SET unit_in_order = unit_in_order + NEW.quantity
+
+
 
 WHERE NEW.product_id = products.product_id */;;
 DELIMITER ;
@@ -131,15 +135,27 @@ DELIMITER ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `before_order_detail_update` BEFORE UPDATE ON `order_details` FOR EACH ROW BEGIN
 
+
+
       IF (NEW.quantity <> OLD.quantity) THEN
+
+
 
             UPDATE products
 
+
+
             SET unit_in_order = unit_in_order + (NEW.quantity - OLD.quantity)
+
+
 
             WHERE NEW.product_id = products.product_id AND NEW.quantity <> OLD.quantity;
 
+
+
       END IF;
+
+
 
     END */;;
 DELIMITER ;
@@ -158,7 +174,11 @@ DELIMITER ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `before_order_detail_delete` BEFORE DELETE ON `order_details` FOR EACH ROW UPDATE products
 
+
+
 SET unit_in_order = unit_in_order - OLD.quantity
+
+
 
 WHERE OLD.product_id = products.product_id */;;
 DELIMITER ;
@@ -208,19 +228,27 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `before_orders_update` BEFORE UPDATE ON `orders` FOR EACH ROW UPDATE products JOIN order_details ON products.product_id = order_details.product_id
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `before_orders_update` BEFORE UPDATE ON `orders` FOR EACH ROW BEGIN
 
-JOIN orders ON order_details.order_id = NEW.order_id
+      IF (NEW.paid = 1) THEN
 
-SET products.quantity = products.quantity - order_details.quantity,
+            UPDATE products JOIN order_details ON products.product_id = order_details.product_id
 
-unit_in_order = unit_in_order - order_details.quantity,
+			JOIN orders ON order_details.order_id = NEW.order_id
 
-order_details.price = products.price,
+			SET products.quantity = products.quantity - order_details.quantity,
 
-order_details.discount = products.discount
+			unit_in_order = unit_in_order - order_details.quantity,
 
-WHERE products.product_id = order_details.product_id */;;
+			order_details.price = products.price,
+
+			order_details.discount = products.discount
+
+			WHERE products.product_id = order_details.product_id;
+
+      END IF;
+
+    END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -454,4 +482,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-01  8:49:00
+-- Dump completed on 2023-04-05 19:07:32
