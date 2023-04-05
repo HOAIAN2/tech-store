@@ -298,8 +298,56 @@
                     }
                 }
 
+                .popup_cart-shopping {
+                    position: absolute;
+                    width: 433px;
+                    height: 322px;
+                    top: 112%;
+                    background-color: #fff;
+                    right: 4px;
+                    z-index: 1;
+                    display: none;
+                    transform-origin: 95% top;
+                    animation: showpopup ease 0.5s;
+                    border-radius: 4px;
+                    align-items: center;
+                    justify-content: center;
+                    box-shadow: 0 1px 3.125rem 0 rgba(0, 0, 0, .2);
+
+                    img {
+                        width: 100px;
+                        height: 100px;
+                    }
+
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        right: 10px;
+                        top: 0;
+                        border-top: 3px solid transparent;
+                        border-right: 10px solid transparent;
+                        border-left: 10px solid transparent;
+                        border-bottom: 10px solid #fff;
+                        transform: translateY(-100%);
+                    }
+
+                    &::before {
+                        content: "";
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        width: 30%;
+                        height: 20px;
+                        transform: translateY(-100%);
+                    }
+                }
+
                 &:hover {
                     cursor: pointer;
+
+                    .popup_cart-shopping {
+                        display: flex;
+                    }
                 }
             }
         }
@@ -372,5 +420,18 @@
             }
         }
 
+    }
+}
+
+
+@keyframes showpopup {
+    from {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
     }
 }
