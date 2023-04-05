@@ -1,3 +1,4 @@
+import { Await } from 'react-router-dom'
 import request from '../api-config'
 
 async function login(username = '', password = '') {
@@ -159,6 +160,35 @@ async function reGetToken() {
     }
 }
 
+async function getorder() {
+    // try {
+    //     const token = JSON.parse(localStorage.getItem('token'))
+    //     const rs = await request.get("/order", 'all', {
+    //         headers: {
+    //             Authorization: `Bearer ${token.accessToken}`
+    //         }
+    //     })
+    //     return rs
+    // } catch (error) {
+    //     throw new Error(error)
+    // }
+    const token = JSON.parse(localStorage.getItem('token'))
+    if (!token) return []
+    try {
+        const res = await request.get('/order', {
+            headers: {
+                Authorization: `Bearer ${token.accessToken}`
+            },
+            params: {
+                type: 'all',
+            }
+        })
+        return res.data
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
 export {
     login,
     logout,
@@ -168,4 +198,5 @@ export {
     reGetToken,
     uploadImage,
     editProfile,
+    getorder,
 }
