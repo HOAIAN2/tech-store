@@ -3,7 +3,7 @@
 .product-rating {
     position: relative;
     width: 90px;
-    height: 25px;
+    height: 100%;
 
     & div {
         position: absolute;
@@ -14,7 +14,7 @@
         }
 
         &:last-child {
-            height: 25px;
+            height: 18px;
             // width: attr(rate-percent);
             width: var(--rate-percent);
             color: colors.$color-red;

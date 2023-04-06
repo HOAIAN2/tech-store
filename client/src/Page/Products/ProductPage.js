@@ -8,27 +8,33 @@ import Header from '../../components/header/Header'
 import Footer from '../../components/footer/Footer'
 import ProductRating from './ProductRating'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCartShopping } from '@fortawesome/free-solid-svg-icons'
+import { faCartShopping, faTruck } from '@fortawesome/free-solid-svg-icons'
+import { getAVGrate, getNumberRate, getNumberpaid } from "../../utils/Product/index"
+import { useUserData } from "../../Context"
+import { Link } from 'react-router-dom'
 
 function ProductPage() {
+    const [user,] = useUserData()
     function formatPrice(price) {
         return `${price.toLocaleString('vi')} đ`
     }
     const [product, setProduct] = useState({})
     const [notFound, setNotFound] = useState(false)
     const [quantity, setQuantity] = useState(1)
+    const [rate, setrate] = useState('0')
+    const [numberrate, setnumberrate] = useState('0')
+    const [numberpaid, setnumberpaid] = useState('0')
     const { id } = useParams()
     useEffect(() => {
         getProductByID(id)
             .then(data => {
-                console.log(data)
                 setProduct({
                     ...data,
                     images: data.images.map(image => {
                         return `${baseIMG}/products/${image}`
                     }),
-                    discount: data.discount * 100 || null,
-                    rate: 3.5
+                    // discount: data.discount * 100 || null,
+                    discount: 0.2
                 })
                 document.title = data.productName
                 setQuantity(1)
@@ -38,8 +44,20 @@ function ProductPage() {
             })
         document.querySelector('.App').scrollTo(0, 0)
         // eslint-disable-next-line react-hooks/exhaustive-deps
+        getAVGrate(id)
+            .then((rs) => {
+                if (rs) setrate(rs)
+            })
+        getNumberRate(id)
+            .then((rs) => {
+                setnumberrate(rs)
+            })
+        getNumberpaid(id)
+            .then((rs) => {
+                setnumberpaid(rs)
+            })
     }, [id])
-    console.log(product)
+
     /// Alot of bugs, fix
     function handleSetQuantity(e) {
         if (e.target.className === 'decrease') {
@@ -54,18 +72,45 @@ function ProductPage() {
             <div className='product-page'>
                 <div className='product-page-content'>
                     <div className='product-page-images'>
-                        {product.images && product.images.map((image, index) => {
-                            return <img key={index} src={image} alt={product.productName} />
-                        })}
+                        <div className='wrap_product-page-image'>
+                            {product.images && product.images.map((image, index) => {
+                                return <img key={index} src={image} alt={product.productName} />
+                            })}
+                        </div>
                     </div>
                     <div className='product-page-data'>
                         <div className='product-name'>{product.productName}</div>
-                        <ProductRating rate={product.rate} />
-                        <div className="product-price">
-                            <span className="price">{formatPrice(product.price * (1 - product.discount))}</span>
-                            {product.discount && <span className="discount">{formatPrice(product.price)}</span>}
+                        <div className='action' style={{ marginTop: "10px", display: "flex" }}>
+                            <div className='action_item'>
+                                <div className='valuerating' style={{ marginRight: "5px" }}>{rate.slice(0, 3)}</div>
+                                <ProductRating rate={rate} />
+                            </div>
+                            <div className='action_item'>
+                                <div className='Evaluate1'>{numberrate}</div>
+                                <div className='Evaluate2'>Đánh Giá</div>
+                            </div>
+                            <div className='action_item'>
+                                <div className='bought1'>{numberpaid}</div>
+                                <div className='bought2'>Đã Mua</div>
+                            </div>
                         </div>
+                        <div className="product-price" style={{ display: "flex", alignItems: "center" }}>
+                            {product.discount && <span className="discount">{formatPrice(product.price)}</span>}
+                            <span className="price">{formatPrice(product.price * (1 - product.discount))}</span>
+                        </div>
+                        {user ?
+                            <div className='transport'>
+                                <div>
+                                    <FontAwesomeIcon icon={faTruck} />
+                                    <span className='title'>Vận Chuyển Đến</span>
+                                </div>
+                                <div className='address'>{user.address}</div>
+                            </div>
+                            :
+                            <></>
+                        }
                         <div className='product-action'>
+                            <span className='title'>Số Lượng</span>
                             <div className='quantity'>
                                 <button className='decrease' onClick={handleSetQuantity}>-</button>
                                 <input value={quantity} type="number" min="1" readOnly />
@@ -76,6 +121,10 @@ function ProductPage() {
                             <button>
                                 <span>Thêm vào giỏ hàng</span>
                                 <FontAwesomeIcon icon={faCartShopping} />
+                            </button>
+                            <button>
+                                <span>Mua Ngay</span>
+                                <Link to={"/"}></Link>
                             </button>
                         </div>
                     </div>

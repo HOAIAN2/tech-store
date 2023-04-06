@@ -5,6 +5,7 @@ const fs = require('fs')
 const path = require("path")
 const productErrors = require('./productErrors.json')
 const { time } = require('console')
+const { getAVGrate, getNumberRate } = require("../cache")
 
 // [GET home]
 function index(req, res) {
@@ -192,17 +193,6 @@ async function addProduct(req, res) {
 }
 
 
-
-
-// [GET supplier and category]
-// async function getSuppliersCategories(req, res) {
-//     const data = {
-//         categories: categories.map(category => category.categoryName),
-//         suppliers: suppliers.map(supplier => supplier.supplierName)
-//     }
-//     res.json(data)
-// }
-// [GET hot-product]
 async function getHotProducts(req, res) {
     let errorMessages = productErrors.en
     const language = req.headers["accept-language"]
@@ -213,6 +203,23 @@ async function getHotProducts(req, res) {
         return product.ignoreProps('unitInOrder', 'quantity', 'description', 'supplier', 'category')
     }))
 }
+
+async function getavgrate(req, res) {
+    const idproduct = req.query.idproduct;
+    if (!idproduct || !checkNumber(idproduct)) return res.sendStatus(400)
+    const rs = await getAVGrate(parseInt(idproduct))
+    if (!rs[0]['AVG(rate)']) return res.sendStatus(400)
+    return res.status(200).json(rs[0]['AVG(rate)'])
+}
+
+async function getratenumber(req, res) {
+    const idproduct = req.query.idproduct;
+    if (!idproduct || !checkNumber(idproduct)) return res.sendStatus(400)
+    const rs = await getNumberRate(idproduct)
+    return res.status(200).json(rs[0]['count(product_id)'])
+}
+
+
 // Middlewares, etc
 function formatData(data = {}) {
     const newData = { ...data }
@@ -246,4 +253,6 @@ module.exports = {
     // getSuppliersCategories,
     addProduct,
     getHotProducts,
+    getavgrate,
+    getratenumber
 }

@@ -16,7 +16,6 @@ import ProductPage from './Page/Products/ProductPage'
 function App() {
   const [, dispatchUser] = useUserData()
   const [isFirstLoad, setIsFirstLoad] = useState(true)
-
   useEffect(() => {
     fetchUserData()
       .then(data => {
