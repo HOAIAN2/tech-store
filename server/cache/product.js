@@ -139,10 +139,38 @@ async function createProduct(data) {
         return null
     }
 }
+async function getAVGrate(id) {
+    try {
+        const querystring = [
+            'SELECT AVG(rate)',
+            'FROM ratings',
+            'WHERE product_id = ?;'
+        ].join(' ')
+        const [rows] = await pool.query(querystring, [id])
+        return rows
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+async function getNumberRate(id) {
+    try {
+        const querystring = [
+            'select count(product_id) from ratings',
+            'where product_id = ?'
+        ].join(' ')
+        const [rows] = await pool.query(querystring, [id])
+        return rows
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
 
 module.exports = {
     initializeProduct,
     findProduct,
     createProduct,
+    getAVGrate,
+    getNumberRate,
     products,
 }

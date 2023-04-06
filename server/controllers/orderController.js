@@ -188,6 +188,22 @@ async function makePayment(req, res) {
     return res.sendStatus(400)
 }
 
+async function getnumberpaid(req, res) {
+    const idproduct = req.query.idproduct;
+    if (!idproduct || !checkNumber(idproduct)) return res.sendStatus(400)
+    const rs = orders.reduce((a, item) => {
+        if (item.paid === true) {
+            item.products.map((item) => {
+                if (item.productID === idproduct) {
+                    return a + 1
+                }
+            })
+        }
+    }, 0)
+    return res.status(200).json(rs)
+}
+
+
 // middleware,..
 function isValidData(data) {
     const result = Object.keys(data).every((item) => {
@@ -197,6 +213,13 @@ function isValidData(data) {
     return result
 }
 
+function checkNumber(number) {
+    let i = 0
+    for (i; i < number.length; i++) {
+        if (isNaN(parseInt(number[i]))) return false
+    }
+    return true
+}
 
 module.exports = {
     getOrder,
@@ -205,5 +228,6 @@ module.exports = {
     updateProduct,
     removeProduct,
     setVoucher,
-    makePayment
+    makePayment,
+    getnumberpaid
 }

@@ -10,67 +10,75 @@
         overflow: hidden;
         position: absolute;
         left: 50%;
-        top: 5%;
+        top: 3%;
         transform: translateX(-50%);
         display: flex;
         justify-content: space-between;
-        // border: 1px solid red;
-        width: 85%;
+        width: 1257px;
 
         & .product-page-images {
             img {
-                width: 360px;
+                width: 100%;
+                position: absolute;
+                height: 100%;
+                top: 0;
+                left: 0;
             }
         }
 
 
         & .product-page-data {
-            width: 60%;
-            height: 100%;
+            padding: 0 30px;
 
             & .product-name {
-                height: 100px;
-                margin-top: 20px;
-                font-size: 24px;
-                font-weight: bold;
+                margin-top: 10px;
+                font-size: 22px;
+                font-weight: 500;
             }
 
             & .product-price {
-                margin-top: 10px;
+                margin-top: 30px;
 
                 & .price {
-                    font-size: 22px;
-                    color: colors.$color-red;
-                    font-weight: bold;
-                    // margin-left: 5px;
+                    font-size: 31px;
+                    color: #d41138;
+                    font-weight: 500;
                 }
 
                 & .discount {
-                    font-size: 22px;
-                    margin-left: 20px;
+                    font-size: 21px;
                     text-decoration: line-through;
-                    color: colors.$color-shadow;
+                    margin-right: 10px;
+                    color: #848787;
                 }
             }
 
             & .product-action {
-                margin-top: 20px;
-                height: 50px;
+                margin-top: 30px;
+                height: max-content;
+                display: flex;
+                align-items: center;
+
+                .title {
+                    // margin-left: 10px;
+                    margin-right: 20px;
+                    color: #686868;
+                }
 
                 .quantity {
                     width: 104px;
-                    height: 100%;
+                    height: 33px;
                     position: relative;
-                    border: 2px solid black;
+                    border: 1px solid rgba(0, 0, 0, 0.4);
 
                     & button {
-                        // background-color: white;
-                        background-color: rgb(245, 245, 245);
+                        background-color: #fff;
                         font-size: 22px;
                         outline: none;
                         border: none;
                         height: 100%;
                         width: 30px;
+                        color: rgba(0, 0, 0, 0.7);
                         position: absolute;
                         cursor: pointer;
                     }
@@ -85,7 +93,9 @@
                         text-align: center;
                         margin-left: 30px;
                         position: absolute;
-                        font-size: 28px;
+                        font-size: 19px;
+                        border-left: 1px solid rgba(0, 0, 0, 0.4);
+                        border-right: 1px solid rgba(0, 0, 0, 0.4);
                         width: 40px;
                         height: 100%;
 
@@ -100,27 +110,103 @@
             }
 
             & .product-function {
-                margin-top: 20px;
-                // border: 1px solid red;
-                height: 100px;
+                margin-top: 30px;
+                height: max-content;
 
                 & button {
-                    background-color: colors.$color-red;
-                    border: none;
+                    background-color: rgba(208, 1, 27, .08);
                     outline: none;
-                    border-radius: 5px;
-                    color: white;
-                    font-size: 24px;
-                    width: 300px;
-                    height: 75px;
+                    border-radius: 2px;
+                    color: colors.$color-red;
+                    border: 1px solid;
+                    font-size: 19px;
+                    width: 250px;
+                    height: 55px;
                     cursor: pointer;
 
                     & span {
-                        margin-right: 30px;
+                        margin-right: 20px;
                     }
+
+                    &:last-child {
+                        background-color: colors.$color-red;
+                        color: #fff;
+                        width: 173px;
+                        position: relative;
+                        margin-left: 20px;
+                        border-radius: 2px;
+
+                        span {
+                            margin: 0;
+                        }
+
+                        a {
+                            height: 100%;
+                            position: absolute;
+                            width: 100%;
+                            top: 0;
+                            left: 0;
+                            z-index: 1;
+                        }
+                    }
+                }
+            }
+
+
+            .action_item {
+                display: flex;
+                padding: 0 15px;
+                align-items: center;
+                font-size: 18px;
+
+                .valuerating {
+                    margin-right: 5px;
+                    font-size: 20px;
+                    border-bottom: 1px solid;
+                    color: colors.$color-red;
+                    transform: translateY(1px);
+                }
+
+                .Evaluate1 {
+                    margin-right: 5px;
+                    border-bottom: 1px solid;
+                }
+
+                .bought1 {
+                    margin-right: 5px;
+                    border-bottom: 1px solid;
+                }
+
+                &:first-child {
+                    padding-left: 0;
+                }
+
+                &:nth-child(2) {
+                    border-left: 1px solid #a3a3a3;
+                    border-right: 1px solid #a3a3a3;
+                }
+            }
+
+            .transport {
+                display: flex;
+                align-items: center;
+                margin-top: 20px;
+
+                .title {
+                    margin-left: 10px;
+                    margin-right: 20px;
+                    color: #686868;
                 }
             }
         }
     }
 
+}
+
+
+.wrap_product-page-image {
+    width: 450px;
+    height: 0;
+    padding-top: 100%;
+    position: relative;
 }

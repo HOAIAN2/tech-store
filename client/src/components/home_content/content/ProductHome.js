@@ -35,7 +35,7 @@ function ProductHome() {
         <div className="producthome">
             <div className="wrapproducthome">
                 {products.map((item, index) => {
-                    return <div key={index} style={{ backgroundColor: "#fff" }}>
+                    return <div key={index} style={{ backgroundColor: "#fff", padding: "1px", marginBottom: "30px" }}>
                         <h2 style={{ padding: "10px 20px 30px 20px", fontSize: "35px", fontWeight: "500" }}>{item.title}</h2>
                         {item.products.map((item, index) => {
                             return (
@@ -47,24 +47,7 @@ function ProductHome() {
                             )
                         })}
                     </div>
-
-                    // return (
-                    //     <div key={index} style={{ display: "flex", justifyContent: "space-around", marginBottom: "30px" }}>
-                    //         {item.map((item) => {
-                    //             return <ProductItem key={item.productID} data={item} />
-                    //         })}
-                    //     </div>
-                    // )
                 })}
-
-                {/* <div style={{ display: "flex", justifyContent: "space-around" }}>
-                    <ProductItem data={products.length != 0 ? products[0][0] : []} />
-                    <ProductItem data={products.length != 0 ? products[0][0] : []} />
-                    <ProductItem data={products.length != 0 ? products[0][0] : []} />
-                    <ProductItem data={products.length != 0 ? products[0][0] : []} />
-
-
-                </div> */}
             </div>
         </div>
     )

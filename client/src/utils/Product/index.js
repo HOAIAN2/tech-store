@@ -58,10 +58,52 @@ async function getHomeProduct() {
     }
 }
 
+async function getAVGrate(idproduct) {
+    try {
+        const rs = await request.get('/products/getavgrate', {
+            params: {
+                idproduct: idproduct
+            }
+        })
+        return rs.data
+    } catch (error) {
+        return 0
+    }
+}
+
+async function getNumberRate(idproduct) {
+    try {
+        const rs = await request.get("/products/getratenumber", {
+            params: {
+                idproduct: idproduct,
+            }
+        })
+        return rs.data
+    } catch (error) {
+        return 0
+    }
+}
+
+async function getNumberpaid(idproduct) {
+    try {
+        const rs = await request.get("/order/getnumberpaid", {
+            params: {
+                idproduct: idproduct
+            }
+        })
+        return rs.data
+    } catch (error) {
+        return 0
+    }
+}
+
 export {
     searchProduct,
     getProductByID,
     getHotProducts,
     getCategories,
-    getHomeProduct
+    getHomeProduct,
+    getNumberpaid,
+    getAVGrate,
+    getNumberRate
 }
