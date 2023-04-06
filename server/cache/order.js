@@ -1,5 +1,6 @@
 const { Order } = require('../models')
 const { pool } = require('./database')
+const { vouchers } = require('./voucher')
 
 const orders = []
 
@@ -7,7 +8,7 @@ async function initializeOrder() {
     console.log('\x1b[1m%s\x1b[0m', 'Initializing orders data...')
     try {
         const queryString = [
-            'SELECT order_id, user_id, order_date, payment_methods.name AS paid_method, paid',
+            'SELECT order_id, user_id, order_date, payment_methods.name AS paid_method, paid, voucher_id',
             'FROM orders LEFT JOIN payment_methods ON orders.paid_method_id = payment_methods.method_id'
         ].join(' ')
         const queryString1 = [
@@ -21,6 +22,7 @@ async function initializeOrder() {
             const userID = row['user_id']
             const orderDate = row['order_date']
             const paidMethod = row['paid_method']
+            const voucherID = row['voucher_id']
             const paid = row['paid']
             const order = new Order(orderID, userID, orderDate, paidMethod, paid)
             const [rows] = await pool.query(queryString1, [orderID])
@@ -32,6 +34,7 @@ async function initializeOrder() {
                 const discount = row['discount']
                 order.addProduct(productID, productName, quantity, price, discount)
             })
+            if (voucherID) order.setVoucher(vouchers.find(item => item.voucherID === voucherID))
             if (order.paid) order.paidOrder(paidMethod, orderDate)
             orders.push(order)
         })
@@ -48,7 +51,7 @@ function findOrder(orderID) {
 async function getOrder(orderID) {
     try {
         const queryString = [
-            'SELECT order_id, user_id, order_date, payment_methods.name AS paid_method, paid',
+            'SELECT order_id, user_id, order_date, payment_methods.name AS paid_method, paid, voucher_id',
             'FROM orders LEFT JOIN payment_methods ON orders.paid_method_id = payment_methods.method_id',
             'WHERE order_id = ?'
         ].join(' ')
@@ -62,6 +65,7 @@ async function getOrder(orderID) {
         const userID = rows[0]['user_id']
         const orderDate = rows[0]['order_date']
         const paidMethod = rows[0]['paid_method']
+        const voucherID = rows[0]['voucher_id']
         const paid = rows[0]['paid']
         const order = new Order(orderID1, userID, orderDate, paidMethod, paid)
         const products = await pool.query(queryString1, [orderID])
@@ -73,6 +77,7 @@ async function getOrder(orderID) {
             const discount = row['discount']
             order.addProduct(productID, productName, quantity, price, discount)
         })
+        if (voucherID) order.setVoucher(vouchers.find(item => item.voucherID === voucherID))
         if (order.paid) order.paidOrder(paidMethod, orderDate)
         orders.splice(findOrder(orderID), 1)
         orders.push(order)
@@ -90,8 +95,8 @@ async function addVoucher(orderID, voucherID) {
             'WHERE order_id = ?'
         ].join(' ')
         await pool.query(queryString, [voucherID, orderID])
-        const order = await getOrder(orderID)
-        return order
+        // const order = await getOrder(orderID)
+        // return order
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)
         throw new Error(error.message)

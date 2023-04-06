@@ -143,7 +143,6 @@ async function setVoucher(req, res) {
     if (language === 'vi') errorMessages = orderErrors.vi
     const token = req.headers['authorization'].split(' ')[1]
     const user = readAccessToken(token)
-    if (!isValidData(data)) return res.status(400).json({ message: errorMessages.invalidDataType })
     const latestOrder = orders.findLast(order => {
         return order.userID === user.id
     })
@@ -153,8 +152,9 @@ async function setVoucher(req, res) {
     if (!voucher) return res.status(400).json({ message: errorMessages.voucherInvalid })
     if (latestOrder && !latestOrder.paid) {
         try {
-            const order = await addVoucher(latestOrder.orderID, data.voucherID)
-            return res.json(order)
+            await addVoucher(latestOrder.orderID, data.voucherID)
+            latestOrder.setVoucher(voucher)
+            return res.json(latestOrder)
         } catch (error) {
             console.log('\x1b[31m%s\x1b[0m', error.message)
             return res.status(500).json({ message: 'error' })
