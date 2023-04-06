@@ -34,9 +34,9 @@ async function initializeData() {
             initializeUser(),
             initializeProduct(),
             initializeCategory(),
-            initializeOrder(),
             initializeSupplier(),
-            initializeVoucher()
+            initializeVoucher(),
+            initializeOrder()
         ])
         results.forEach(promise => {
             if (promise.status === 'rejected') throw new Error('Fail to initialize data')
