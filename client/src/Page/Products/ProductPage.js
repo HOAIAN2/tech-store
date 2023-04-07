@@ -9,7 +9,7 @@ import Footer from '../../components/footer/Footer'
 import ProductRating from './ProductRating'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartShopping, faTruck } from '@fortawesome/free-solid-svg-icons'
-import { getAVGrate, getNumberRate, getNumberpaid } from "../../utils/Product/index"
+import { getAVGrate, getNumberRate, getSoldQuantity } from "../../utils/Product/index"
 import { useUserData } from "../../Context"
 import { Link } from 'react-router-dom'
 
@@ -21,9 +21,9 @@ function ProductPage() {
     const [product, setProduct] = useState({})
     const [notFound, setNotFound] = useState(false)
     const [quantity, setQuantity] = useState(1)
-    const [rate, setrate] = useState('0')
-    const [numberrate, setnumberrate] = useState('0')
-    const [numberpaid, setnumberpaid] = useState('0')
+    const [rating, setRating] = useState('0')
+    const [totalRating, setTotalRating] = useState('0')
+    const [soldQuantity, setSoldQuantity] = useState('0')
     const { id } = useParams()
     useEffect(() => {
         getProductByID(id)
@@ -46,15 +46,15 @@ function ProductPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         getAVGrate(id)
             .then((rs) => {
-                if (rs) setrate(rs)
+                if (rs) setRating(rs)
             })
         getNumberRate(id)
             .then((rs) => {
-                setnumberrate(rs)
+                setTotalRating(rs)
             })
-        getNumberpaid(id)
+        getSoldQuantity(id)
             .then((rs) => {
-                setnumberpaid(rs)
+                setSoldQuantity(rs)
             })
     }, [id])
 
@@ -82,15 +82,15 @@ function ProductPage() {
                         <div className='product-name'>{product.productName}</div>
                         <div className='action' style={{ marginTop: "10px", display: "flex" }}>
                             <div className='action_item'>
-                                <div className='valuerating' style={{ marginRight: "5px" }}>{rate.slice(0, 3)}</div>
-                                <ProductRating rate={rate} />
+                                <div className='valuerating' style={{ marginRight: "5px" }}>{rating.slice(0, 3)}</div>
+                                <ProductRating rate={rating} />
                             </div>
                             <div className='action_item'>
-                                <div className='Evaluate1'>{numberrate}</div>
+                                <div className='Evaluate1'>{totalRating}</div>
                                 <div className='Evaluate2'>Đánh Giá</div>
                             </div>
                             <div className='action_item'>
-                                <div className='bought1'>{numberpaid}</div>
+                                <div className='bought1'>{soldQuantity}</div>
                                 <div className='bought2'>Đã Mua</div>
                             </div>
                         </div>

@@ -1,11 +1,11 @@
-const { refreshTokens, products, categories, suppliers, findProduct, findUser, createProduct } = require('../cache')
+const { products, categories, suppliers, findProduct, findUser, createProduct, getAVGrate } = require('../cache')
 const Product = require("../models/product")
 const { readAccessToken } = require("./authController")
 const fs = require('fs')
 const path = require("path")
 const productErrors = require('./productErrors.json')
 const { time } = require('console')
-const { getAVGrate, getNumberRate } = require("../cache")
+const { getNumberRate } = require("../cache")
 
 // [GET home]
 function index(req, res) {
@@ -204,18 +204,18 @@ async function getHotProducts(req, res) {
     }))
 }
 
-async function getavgrate(req, res) {
-    const idproduct = req.query.idproduct;
-    if (!idproduct || !checkNumber(idproduct)) return res.sendStatus(400)
-    const rs = await getAVGrate(parseInt(idproduct))
-    if (!rs[0]['AVG(rate)']) return res.sendStatus(400)
+async function getTotalRating(req, res) {
+    const productID = req.query.productID;
+    if (!productID || !checkNumber(productID)) return res.sendStatus(400)
+    const rs = await getAVGrate(parseInt(productID))
+    if (!rs[0]['AVG(rate)']) return res.sendStatus(404)
     return res.status(200).json(rs[0]['AVG(rate)'])
 }
 
-async function getratenumber(req, res) {
-    const idproduct = req.query.idproduct;
-    if (!idproduct || !checkNumber(idproduct)) return res.sendStatus(400)
-    const rs = await getNumberRate(idproduct)
+async function getRatingCount(req, res) {
+    const productID = req.query.productID;
+    if (!productID || !checkNumber(productID)) return res.sendStatus(400)
+    const rs = await getNumberRate(productID)
     return res.status(200).json(rs[0]['count(product_id)'])
 }
 
@@ -253,6 +253,6 @@ module.exports = {
     // getSuppliersCategories,
     addProduct,
     getHotProducts,
-    getavgrate,
-    getratenumber
+    getTotalRating,
+    getRatingCount
 }

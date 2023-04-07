@@ -187,14 +187,14 @@ async function makePayment(req, res) {
     }
     return res.sendStatus(400)
 }
-
-async function getnumberpaid(req, res) {
-    const idproduct = req.query.idproduct;
-    if (!idproduct || !checkNumber(idproduct)) return res.sendStatus(400)
+// [GET sold-quantity]
+async function getSoldQuantity(req, res) {
+    const productID = req.query.productID;
+    if (!productID || !checkNumber(productID)) return res.sendStatus(400)
     const rs = orders.reduce((a, item) => {
         if (item.paid === true) {
             item.products.map((item) => {
-                if (item.productID === idproduct) {
+                if (item.productID === productID) {
                     return a + 1
                 }
             })
@@ -202,7 +202,6 @@ async function getnumberpaid(req, res) {
     }, 0)
     return res.status(200).json(rs)
 }
-
 
 // middleware,..
 function isValidData(data) {
@@ -229,5 +228,5 @@ module.exports = {
     removeProduct,
     setVoucher,
     makePayment,
-    getnumberpaid
+    getSoldQuantity
 }
