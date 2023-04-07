@@ -58,11 +58,11 @@ async function getHomeProduct() {
     }
 }
 
-async function getAVGrate(idproduct) {
+async function getAVGrate(productID) {
     try {
-        const rs = await request.get('/products/getavgrate', {
+        const rs = await request.get('/products/total-ratings', {
             params: {
-                idproduct: idproduct
+                productID: productID
             }
         })
         return rs.data
@@ -71,11 +71,11 @@ async function getAVGrate(idproduct) {
     }
 }
 
-async function getNumberRate(idproduct) {
+async function getNumberRate(productID) {
     try {
-        const rs = await request.get("/products/getratenumber", {
+        const rs = await request.get("/products/rating-count", {
             params: {
-                idproduct: idproduct,
+                productID: productID,
             }
         })
         return rs.data
@@ -84,11 +84,11 @@ async function getNumberRate(idproduct) {
     }
 }
 
-async function getNumberpaid(idproduct) {
+async function getSoldQuantity(productID) {
     try {
-        const rs = await request.get("/order/getnumberpaid", {
+        const rs = await request.get("/order/sold-quantity", {
             params: {
-                idproduct: idproduct
+                productID: productID
             }
         })
         return rs.data
@@ -103,7 +103,7 @@ export {
     getHotProducts,
     getCategories,
     getHomeProduct,
-    getNumberpaid,
+    getSoldQuantity,
     getAVGrate,
     getNumberRate
 }
