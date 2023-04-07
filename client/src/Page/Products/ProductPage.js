@@ -8,7 +8,7 @@ import Header from '../../components/header/Header'
 import Footer from '../../components/footer/Footer'
 import ProductRating from './ProductRating'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCartShopping, faTruck } from '@fortawesome/free-solid-svg-icons'
+import { faCartShopping, faTruck, faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import { getAVGrate, getNumberRate, getSoldQuantity } from "../../utils/Product/index"
 import { useUserData } from "../../Context"
 import { Link } from 'react-router-dom'
@@ -24,6 +24,7 @@ function ProductPage() {
     const [rating, setRating] = useState('0')
     const [totalRating, setTotalRating] = useState('0')
     const [soldQuantity, setSoldQuantity] = useState('0')
+    const [idimage, setidimage] = useState(1)
     const { id } = useParams()
     useEffect(() => {
         getProductByID(id)
@@ -33,8 +34,7 @@ function ProductPage() {
                     images: data.images.map(image => {
                         return `${baseIMG}/products/${image}`
                     }),
-                    // discount: data.discount * 100 || null,
-                    discount: 0.2
+                    discount: data.discount * 100 || null,
                 })
                 document.title = data.productName
                 setQuantity(1)
@@ -57,7 +57,7 @@ function ProductPage() {
                 setSoldQuantity(rs)
             })
     }, [id])
-
+    // console.log(product)
     /// Alot of bugs, fix
     function handleSetQuantity(e) {
         if (e.target.className === 'decrease') {
@@ -65,6 +65,16 @@ function ProductPage() {
         }
         else setQuantity(quantity + 1)
     }
+    function handleSetidimage(e) {
+        if (product.images) {
+            if (e.target.className === 'prive') {
+                idimage === 1 ? setidimage(product.images.length) : setidimage(idimage - 1)
+            } else {
+                idimage === product.images.length ? setidimage(1) : setidimage(idimage + 1)
+            }
+        }
+    }
+    console.log(idimage)
     if (notFound) return <NotFound />
     return (
         <>
@@ -74,9 +84,17 @@ function ProductPage() {
                     <div className='product-page-images'>
                         <div className='wrap_product-page-image'>
                             {product.images && product.images.map((image, index) => {
-                                return <img key={index} src={image} alt={product.productName} />
+                                return <img key={index} src={image} alt={product.productName} style={{ display: `${index + 1 === idimage ? "block" : "none"}` }} />
                             })}
+                            <div className='product-page-image-item'>
+                                {product.images && product.images.map((item, index) => {
+                                    return <li id={index + 1} className={index + 1 === idimage ? 'active' : 'hiden'}></li>
+                                })}
+                            </div>
+                            <div className='nextbtn' onClick={handleSetidimage}><FontAwesomeIcon icon={faChevronRight} /></div>
+                            <div className='privebtn' onClick={handleSetidimage} ><FontAwesomeIcon icon={faChevronLeft} /></div>
                         </div>
+
                     </div>
                     <div className='product-page-data'>
                         <div className='product-name'>{product.productName}</div>
