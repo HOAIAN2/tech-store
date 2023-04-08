@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { getProductByID } from '../../utils/Product'
 import NotFound from '../errors/NotFound'
 import { baseIMG } from '../../utils/api-config'
 import './ProductPage.scss'
@@ -9,7 +8,7 @@ import Footer from '../../components/footer/Footer'
 import ProductRating from './ProductRating'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartShopping, faTruck, faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons'
-import { getAVGrate, getNumberRate, getSoldQuantity } from "../../utils/Product/index"
+import { getProductByID, getSoldQuantity } from "../../utils/Product/index"
 import { useUserData } from "../../Context"
 import { Link } from 'react-router-dom'
 
@@ -21,10 +20,8 @@ function ProductPage() {
     const [product, setProduct] = useState({})
     const [notFound, setNotFound] = useState(false)
     const [quantity, setQuantity] = useState(1)
-    const [rating, setRating] = useState('0')
-    const [totalRating, setTotalRating] = useState('0')
     const [soldQuantity, setSoldQuantity] = useState('0')
-    const [idimage, setidimage] = useState(1)
+    const [imageID, setImageID] = useState(1)
     const { id } = useParams()
     useEffect(() => {
         getProductByID(id)
@@ -44,14 +41,6 @@ function ProductPage() {
             })
         document.querySelector('.App').scrollTo(0, 0)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        getAVGrate(id)
-            .then((rs) => {
-                if (rs) setRating(rs)
-            })
-        getNumberRate(id)
-            .then((rs) => {
-                setTotalRating(rs)
-            })
         getSoldQuantity(id)
             .then((rs) => {
                 setSoldQuantity(rs)
@@ -65,16 +54,17 @@ function ProductPage() {
         }
         else setQuantity(quantity + 1)
     }
-    function handleSetidimage(e) {
+    function handlesetImageID(e) {
         if (product.images) {
             if (e.target.className === 'prive') {
-                idimage === 1 ? setidimage(product.images.length) : setidimage(idimage - 1)
+                imageID === 1 ? setImageID(product.images.length) : setImageID(imageID - 1)
             } else {
-                idimage === product.images.length ? setidimage(1) : setidimage(idimage + 1)
+                imageID === product.images.length ? setImageID(1) : setImageID(imageID + 1)
             }
         }
     }
-    console.log(idimage)
+    console.log(imageID)
+    console.log(product)
     if (notFound) return <NotFound />
     return (
         <>
@@ -84,15 +74,15 @@ function ProductPage() {
                     <div className='product-page-images'>
                         <div className='wrap_product-page-image'>
                             {product.images && product.images.map((image, index) => {
-                                return <img key={index} src={image} alt={product.productName} style={{ display: `${index + 1 === idimage ? "block" : "none"}` }} />
+                                return <img key={index} src={image} alt={product.productName} style={{ display: `${index + 1 === imageID ? "block" : "none"}` }} />
                             })}
                             <div className='product-page-image-item'>
                                 {product.images && product.images.map((item, index) => {
-                                    return <li id={index + 1} className={index + 1 === idimage ? 'active' : 'hiden'}></li>
+                                    return <li id={index + 1} className={index + 1 === imageID ? 'active' : 'hiden'}></li>
                                 })}
                             </div>
-                            <div className='nextbtn' onClick={handleSetidimage}><FontAwesomeIcon icon={faChevronRight} /></div>
-                            <div className='privebtn' onClick={handleSetidimage} ><FontAwesomeIcon icon={faChevronLeft} /></div>
+                            <div className='nextbtn' onClick={handlesetImageID}><FontAwesomeIcon icon={faChevronRight} /></div>
+                            <div className='privebtn' onClick={handlesetImageID} ><FontAwesomeIcon icon={faChevronLeft} /></div>
                         </div>
 
                     </div>
@@ -100,11 +90,11 @@ function ProductPage() {
                         <div className='product-name'>{product.productName}</div>
                         <div className='action' style={{ marginTop: "10px", display: "flex" }}>
                             <div className='action_item'>
-                                <div className='valuerating' style={{ marginRight: "5px" }}>{rating.slice(0, 3)}</div>
-                                <ProductRating rate={rating} />
+                                <div className='valuerating' style={{ marginRight: "5px" }}>{product.rating?.slice(0, 3)}</div>
+                                <ProductRating rate={product.rating} />
                             </div>
                             <div className='action_item'>
-                                <div className='Evaluate1'>{totalRating}</div>
+                                <div className='Evaluate1'>{product.ratingCount}</div>
                                 <div className='Evaluate2'>Đánh Giá</div>
                             </div>
                             <div className='action_item'>

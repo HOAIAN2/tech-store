@@ -1,6 +1,6 @@
 class Product {
     constructor(productID, productName, supplier, category, price, quantity,
-        unitInOrder, discount, images, description) {
+        unitInOrder, discount, images, description, rating, ratingCount) {
         this.productID = productID
         this.productName = productName
         this.supplier = supplier
@@ -11,6 +11,8 @@ class Product {
         this.discount = discount
         this.images = images
         this.description = description
+        this.rating = rating
+        this.ratingCount = ratingCount
     }
     ignoreProps() {
         const object = { ...this }

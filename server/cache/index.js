@@ -10,7 +10,7 @@ const {
     updateUserImage,
     updateProfile
 } = require('./user')
-const { products, initializeProduct, findProduct, createProduct, getNumberRate, getAVGrate } = require('./product')
+const { products, initializeProduct, findProduct, createProduct } = require('./product')
 const { categories, initializeCategory } = require('./category')
 const {
     orders,
@@ -64,8 +64,6 @@ module.exports = {
     addVoucher,
     paidOrder,
     removeOrderDetail,
-    getAVGrate,
-    getNumberRate,
     pool,
     users,
     products,
