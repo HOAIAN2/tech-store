@@ -22,7 +22,9 @@ function ProductItem({ data }) {
                         {data.discount ? <span className="oldprice">{formatPrice(data.price)}</span> : <></>}
                     </div>
                     <div className="home__produt-item-action">
-                        <ProductRating rate={2.5} />
+                        <div style={{ height: "18px" }}>
+                            <ProductRating rate={2.5} />
+                        </div>
                         <Link to={`product/${data.productID}`}>Chi tiết</Link>
                     </div>
                 </div>
