@@ -204,22 +204,6 @@ async function getHotProducts(req, res) {
     }))
 }
 
-async function getTotalRating(req, res) {
-    const productID = req.query.productID;
-    if (!productID || !checkNumber(productID)) return res.sendStatus(400)
-    const rs = await getAVGrate(parseInt(productID))
-    if (!rs[0]['AVG(rate)']) return res.sendStatus(404)
-    return res.status(200).json(rs[0]['AVG(rate)'])
-}
-
-async function getRatingCount(req, res) {
-    const productID = req.query.productID;
-    if (!productID || !checkNumber(productID)) return res.sendStatus(400)
-    const rs = await getNumberRate(productID)
-    return res.status(200).json(rs[0]['count(product_id)'])
-}
-
-
 // Middlewares, etc
 function formatData(data = {}) {
     const newData = { ...data }
@@ -253,6 +237,4 @@ module.exports = {
     // getSuppliersCategories,
     addProduct,
     getHotProducts,
-    getTotalRating,
-    getRatingCount
 }

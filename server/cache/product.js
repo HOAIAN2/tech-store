@@ -7,11 +7,11 @@ async function initializeProduct() {
     console.log('\x1b[1m%s\x1b[0m', 'Initializing products data...')
     try {
         const queryString = [
-            'SELECT product_id, product_name, suppliers.supplier_name, categories.category_name, price, quantity,',
-            'unit_in_order, discount, images, products.description',
+            'SELECT products.product_id, product_name, suppliers.supplier_name, categories.category_name, price, quantity,',
+            'unit_in_order, discount, images, products.description, rates.rating, rates.rating_count',
             'FROM products JOIN suppliers ON products.supplier_id = suppliers.supplier_id',
-            'JOIN categories ON products.category_id = categories.category_id',
-            'ORDER BY unit_in_order DESC'
+            'LEFT JOIN (SELECT ratings.product_id, AVG(rate) AS rating, COUNT(*) AS rating_count FROM ratings GROUP BY ratings.product_id) AS rates ON rates.product_id = products.product_id ',
+            'JOIN categories ON products.category_id = categories.category_id'
         ].join(' ')
         const [rows] = await pool.query(queryString)
         rows.forEach(row => {
@@ -25,7 +25,9 @@ async function initializeProduct() {
             const discount = row['discount']
             const images = row['images'].split(',')
             const description = row['description']
-            const product = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description)
+            const rating = row['rating']
+            const ratingCount = row['rating_count']
+            const product = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description, rating, ratingCount)
             products.push(product)
         })
     } catch (error) {
@@ -106,9 +108,10 @@ async function createProduct(data) {
             'VALUES(?, ?, ?, ?, ?, ?, ?);'
         ].join(' ')
         const queryString1 = [
-            'SELECT product_id, product_name, suppliers.supplier_name, categories.category_name, price, quantity,',
-            'unit_in_order, discount, images, products.description',
+            'SELECT products.product_id, product_name, suppliers.supplier_name, categories.category_name, price, quantity,',
+            'unit_in_order, discount, images, products.description, rates.rating, rates.rating_count',
             'FROM products JOIN suppliers ON products.supplier_id = suppliers.supplier_id',
+            'LEFT JOIN (SELECT ratings.product_id, AVG(rate) AS rating, COUNT(*) AS rating_count FROM ratings GROUP BY ratings.product_id) AS rates ON rates.product_id = products.product_id ',
             'JOIN categories ON products.category_id = categories.category_id',
             'ORDER BY product_id DESC LIMIT 1;'
         ].join(' ')
@@ -132,45 +135,19 @@ async function createProduct(data) {
         const discount = newProduct[0]['discount']
         const images = newProduct[0]['images'].split(',')
         const description = newProduct[0]['description']
-        const product = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description)
+        const rating = row['rating']
+        const ratingCount = row['rating_count']
+        const product = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description, rating, ratingCount)
         return product
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', `Fail to add product: ${error.message}`)
         return null
     }
 }
-async function getAVGrate(id) {
-    try {
-        const querystring = [
-            'SELECT AVG(rate)',
-            'FROM ratings',
-            'WHERE product_id = ?;'
-        ].join(' ')
-        const [rows] = await pool.query(querystring, [id])
-        return rows
-    } catch (error) {
-        throw new Error(error)
-    }
-}
-async function getNumberRate(id) {
-    try {
-        const querystring = [
-            'select count(product_id) from ratings',
-            'where product_id = ?'
-        ].join(' ')
-        const [rows] = await pool.query(querystring, [id])
-        return rows
-    } catch (error) {
-        throw new Error(error)
-    }
-}
-
 
 module.exports = {
     initializeProduct,
     findProduct,
     createProduct,
-    getAVGrate,
-    getNumberRate,
     products,
 }
