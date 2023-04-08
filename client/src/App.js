@@ -12,6 +12,7 @@ import './App.scss';
 import DetailsUserProfile from './Page/Auth/DetailsUser/DetailsUserProfile'
 import DetailsUserPurchase from './Page/Auth/DetailsUser/DetailsUserPurchase'
 import ProductPage from './Page/Products/ProductPage'
+import Search from './Page/search/search'
 
 function App() {
   const [, dispatchUser] = useUserData()
@@ -49,6 +50,7 @@ function App() {
           </Route>
           <Route path='/product/:id' element={<ProductPage />} />
           <Route path='*' element={<NotFound />} />
+          <Route path='/search/:text' element={<Search />} />
         </Routes>
       </div>
     );

@@ -22,7 +22,7 @@ import { getOrder } from "../../utils/Order/index"
 import OrderItem from '../render_item/OrderItem'
 import { baseIMG } from "../../utils/api-config"
 function Header() {
-    const [searchValue, setSearchValue] = useState('')
+    const [searchValue, setSearchValue] = useState(window.location.pathname.split("/").at(-1))
     const [searchData, setSearchData] = useState([])
     const [order, setOrder] = useState([])
     const debounce = useDebounce(searchValue, 200)
@@ -43,6 +43,22 @@ function Header() {
             })
     }, [])
     let language = languages.en
+    function handleinput(e) {
+        const a = document.querySelector(".search-container")
+        setSearchValue(e.target.value)
+        if (a.style.display != "block") {
+            a.style.display = "block"
+            window.addEventListener("mousedown", closepopup)
+        } else {
+            a.style.display = "none"
+        }
+        function closepopup(e) {
+            if (e.target.className != "search_input") {
+                a.style.display = "none"
+                window.removeEventListener("mousedown", closepopup)
+            }
+        }
+    }
     if (navigator.language === 'vi') language = languages.vi
     return (
         <div className="header">
@@ -108,17 +124,17 @@ function Header() {
                             <input placeholder={language.placeHolder}
                                 className='search_input'
                                 value={searchValue}
-                                onInput={(e) => { setSearchValue(e.target.value) }}
+                                onInput={handleinput}
                             ></input>
                         </div>
                         {searchValue && <div className="search_btn">
-                            <div className="wrap_search-btn">
+                            <Link to={`/search/${searchValue}`} className="wrap_search-btn">
                                 <span>
                                     <FontAwesomeIcon icon={faSearch} />
                                 </span>
-                            </div>
+                            </Link>
                         </div>}
-                        {searchValue && <SearchListPopup data={searchData} setSearchValue={setSearchValue} />}
+                        {<SearchListPopup data={searchData} setSearchValue={setSearchValue} />}
                     </div>
                     <div className="cart-shopping">
                         <FontAwesomeIcon icon={faCartShopping} />
