@@ -1,6 +1,7 @@
 const { Order } = require('../models')
 const { pool } = require('./database')
 const { vouchers } = require('./voucher')
+const { products } = require('./product')
 
 const orders = []
 
@@ -148,13 +149,16 @@ async function addOrder(userID) {
     }
 }
 async function addOrderDetail(orderID, productID, quantity) {
+    const product = products.find(item => item.productID === productID)
     const queryString = [
         'INSERT INTO order_details(order_id, product_id, quantity)',
         'VALUE(?, ?, ?)'
     ].join(' ')
     try {
         await pool.query(queryString, [orderID, productID, quantity])
-        const order = await getOrder(orderID)
+        const order = orders.find(item => item.orderID === orderID)
+        order.addProduct(product.productID, product.productName, quantity)
+        products.sort((x, y) => y.unitInOrder - x.unitInOrder)
         return order
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)
@@ -169,7 +173,9 @@ async function updateOrderDetail(orderID, productID, quantity) {
     ].join(' ')
     try {
         await pool.query(queryString, [quantity, orderID, productID])
-        const order = await getOrder(orderID)
+        const order = orders.find(item => item.orderID === orderID)
+        order.setProduct(productID, quantity)
+        products.sort((x, y) => y.unitInOrder - x.unitInOrder)
         return order
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)
@@ -183,7 +189,9 @@ async function removeOrderDetail(orderID, productID) {
     ].join(' ')
     try {
         await pool.query(queryString, [orderID, productID])
-        const order = await getOrder(orderID)
+        const order = orders.find(item => item.orderID === orderID)
+        order.removeProduct(productID)
+        products.sort((x, y) => y.unitInOrder - x.unitInOrder)
         return order
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)

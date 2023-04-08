@@ -5,17 +5,17 @@ class Order {
         this.orderDate = orderDate
         this.paidMethod = paidMethod
         this.paid = paid
-        this.products = [] // {productID, productName, quantity, price?}
+        this.products = []
         this.total = 0
         this.voucher = null
     }
     addProduct(productID, productName, quantity, price, discount) {
         this.products.push({ productID, productName, quantity, price, discount })
     }
-    setProduct(productID, quantity) { // Cái set này để update giá nè, viết sẵn rồi
-        for (let index = 0; index < this.products.length; i++) {
+    setProduct(productID, quantity) {
+        for (let index = 0; index < this.products.length; index++) {
             if (this.products[index].productID === productID) {
-                this.products[index.quantity] = quantity
+                this.products[index].quantity = quantity
                 break
             }
         }
