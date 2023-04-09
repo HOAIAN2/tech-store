@@ -16,7 +16,7 @@ function SearchListPopup({ data, setSearchValue }) {
         return `${price.toLocaleString('vi')} đ`
     }
     return (
-        <div className="search-container" style={{ display: "none" }}>
+        <div className="search-container">
             {renderData.map(product => {
                 return (
                     <div key={product.productID} onClick={() => { setSearchValue('') }}>

@@ -258,6 +258,9 @@
                         align-items: center;
                         color: colors.$color-text;
                         justify-content: center;
+                        border: none;
+                        outline: none;
+                        cursor: pointer;
                     }
 
                     &:hover {

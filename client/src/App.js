@@ -50,7 +50,7 @@ function App() {
           </Route>
           <Route path='/product/:id' element={<ProductPage />} />
           <Route path='*' element={<NotFound />} />
-          <Route path='/search/:text' element={<Search />} />
+          <Route path='/search?' element={<Search />} />
         </Routes>
       </div>
     );
