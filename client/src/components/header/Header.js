@@ -17,12 +17,15 @@ import "./Header.scss"
 import SearchListPopup from '../render_item/SearchListPopup'
 import { searchProduct } from '../../utils/Product'
 import useDebounce from '../../utils/hooks/useDebounce'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import { getOrder } from "../../utils/Order/index"
 import OrderItem from '../render_item/OrderItem'
 import { baseIMG } from "../../utils/api-config"
 function Header() {
-    const [searchValue, setSearchValue] = useState(window.location.pathname.split("/").at(-1))
+    const navigate = useNavigate()
+    const [searchParam] = useSearchParams({ name: '' })
+    const [focus, setFocus] = useState(false)
+    const [searchValue, setSearchValue] = useState(searchParam.get('name'))
     const [searchData, setSearchData] = useState([])
     const [order, setOrder] = useState([])
     const debounce = useDebounce(searchValue, 200)
@@ -43,21 +46,13 @@ function Header() {
             })
     }, [])
     let language = languages.en
-    function handleinput(e) {
-        const a = document.querySelector(".search-container")
+    function handeInput(e) {
+        setFocus(true)
         setSearchValue(e.target.value)
-        if (a.style.display != "block") {
-            a.style.display = "block"
-            window.addEventListener("mousedown", closepopup)
-        } else {
-            a.style.display = "none"
-        }
-        function closepopup(e) {
-            if (e.target.className != "search_input") {
-                a.style.display = "none"
-                window.removeEventListener("mousedown", closepopup)
-            }
-        }
+    }
+    function handleSubmit(e) {
+        e.preventDefault()
+        navigate(`/search?name=${searchValue}`)
     }
     if (navigator.language === 'vi') language = languages.vi
     return (
@@ -119,23 +114,25 @@ function Header() {
                             <h1 className="header_logo_item">STORE</h1>
                         </Link>
                     </div>
-                    <div className="header_search">
+                    <form onSubmit={handleSubmit} className="header_search">
                         <div className='search'>
                             <input placeholder={language.placeHolder}
                                 className='search_input'
                                 value={searchValue}
-                                onInput={handleinput}
+                                onInput={handeInput}
+                                onFocus={() => { setFocus(true) }}
+                                onBlur={() => { setFocus(false) }}
                             ></input>
                         </div>
                         {searchValue && <div className="search_btn">
-                            <Link to={`/search/${searchValue}`} className="wrap_search-btn">
+                            <button className="wrap_search-btn">
                                 <span>
                                     <FontAwesomeIcon icon={faSearch} />
                                 </span>
-                            </Link>
+                            </button>
                         </div>}
-                        {<SearchListPopup data={searchData} setSearchValue={setSearchValue} />}
-                    </div>
+                        {focus && searchValue && <SearchListPopup data={searchData} setSearchValue={setSearchValue} />}
+                    </form>
                     <div className="cart-shopping">
                         <FontAwesomeIcon icon={faCartShopping} />
                         <div className="number-cart">
