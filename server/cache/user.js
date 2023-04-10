@@ -32,7 +32,7 @@ async function initializeUser() {
 
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', `Fail to initialize users data: ${error.message}`)
-        throw new Error(`Line16 user.js: Fail to initialize users data: ${error.message}`)
+        throw new Error(`Fail to initialize users data: ${error.message}`)
     }
 }
 async function findUser(username) {
