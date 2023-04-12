@@ -1,11 +1,14 @@
 import Header from "../../components/header/Header"
-import { useSearchParams } from 'react-router-dom'
+import "./search.scss"
+import Search_content from "../../components/search_content/search_content"
 function Search() {
-    const [searchParam, setSearchParam] = useSearchParams({ name: '' })
-    console.log(searchParam.get('name'))
+
     return (
         <>
             <Header />
+            <div className="search_content">
+                <Search_content />
+            </div>
         </>
     )
 

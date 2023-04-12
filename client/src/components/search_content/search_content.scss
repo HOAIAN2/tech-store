@@ -1,0 +1,144 @@
+@use "../../colors.scss";
+
+.wrapsearch_content {
+    width: 1257px;
+    height: 500px;
+    display: flex;
+    margin-top: 20px;
+
+    .sidebar_search_page {
+        padding-left: 12px;
+        padding-right: 12px;
+        width: 16.6667%;
+        background-color: #fff;
+        height: max-content;
+        border-radius: 5px;
+        overflow: hidden;
+
+        .wrap_sidebar_search_page {
+            background-color: #fff;
+
+            h3 {
+                font-size: 18px;
+                padding: 12px 16px 12px 0px;
+                border-bottom: 2px solid rgb(0, 0, 0, 0.05);
+                margin-top: 0;
+                display: flex;
+                align-items: center;
+
+                svg {
+                    font-size: 14px;
+                    margin-right: 4px;
+                    position: relative;
+                }
+            }
+
+            .list_item_sidebar_search_page {
+                padding: 0 0 8px 0;
+
+                li {
+                    list-style: none;
+                    position: relative;
+                    padding: 0 0px 10px 0px;
+                    margin-bottom: 10px;
+
+                    .title_item_sidebar_list {
+                        text-decoration: none;
+                        color: rgba(0, 0, 0, 0.8);
+                        font-size: 16px;
+                        padding: 8px 16px 8px 0px;
+                        position: relative;
+                        display: block;
+                        transition: right linear 0.1s;
+                        right: 0;
+                    }
+
+                    .wrap_item_sidebar_search_item {
+                        margin-left: 5px;
+                        font-size: 14px;
+                        position: relative;
+
+                        .item_sidebar_search_item {
+                            margin-bottom: 10px;
+                            cursor: pointer;
+                            transition: all ease 0.2s;
+                            position: relative;
+                            display: flex;
+                            align-items: center;
+
+                            svg {
+                                color: colors.$color-red;
+                                margin-right: 5px;
+                            }
+
+                            .svgselect {
+                                margin-right: 5px;
+                                transform: translateX(-500%);
+                                opacity: 0;
+                                transition: all ease 0.3s;
+                            }
+
+                            .svgactive {
+                                transform: none;
+                                opacity: 1;
+                            }
+
+                            .spanactive {
+                                color: colors.$color-red;
+                            }
+
+                            &:hover {
+                                color: colors.$color-red;
+                                transform: translateX(4px);
+                            }
+
+
+                            &::after {
+                                content: '';
+                                position: absolute;
+                                width: 100%;
+                                height: 100%;
+                                top: 0;
+                                left: 0;
+                                z-index: 1;
+                            }
+                        }
+                    }
+
+                    button {
+                        background-color: transparent;
+                        border: none;
+                    }
+
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        width: 100%;
+                        height: 2px;
+                        background-color: rgb(228, 223, 223);
+                        bottom: 0;
+                        left: 50%;
+                        transform: translateX(-50%);
+
+                    }
+
+                    // .wrap_item_sidebar_search_item_star {
+                    //     margin-left: 5px;
+                    //     font-size: 14px;
+                    //     position: relative;
+
+                    //     .item_sidebar_search_item_star {
+                    //         height: 18px;
+                    //         display: flex;
+                    //         margin-bottom: 10px;
+                    //         cursor: pointer;
+                    //         transition: all ease 0.2s;
+                    //         position: relative;
+                    //         align-items: center;
+                    //     }
+                    // }
+                }
+            }
+        }
+    }
+}
