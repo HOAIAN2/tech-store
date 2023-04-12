@@ -10,26 +10,12 @@ function ProductHome() {
             .then((rs) => {
                 const a = rs.data;
                 a.map((item, index) => {
-                    a[index].products = fortmatarr(item.products)
+                    a[index].products = fortmatarr(item.products, 4)
                 })
                 setproducts(a)
             })
     }, [])
-    function fortmatarr(data) {
-        let a = []
-        let b = []
-        data.forEach((item, index) => {
-            if (((index + 1) % 4) === 0) {
-                b.push(item)
-                a.push(b)
-                b = []
-            }
-            else {
-                b.push(item)
-            }
-        })
-        return a
-    }
+
 
     return (
         <div className="producthome">
@@ -51,6 +37,23 @@ function ProductHome() {
             </div>
         </div>
     )
+}
+
+
+export function fortmatarr(data, indextoformat) {
+    let a = []
+    let b = []
+    data.forEach((item, index) => {
+        if (((index + 1) % indextoformat) === 0) {
+            b.push(item)
+            a.push(b)
+            b = []
+        }
+        else {
+            b.push(item)
+        }
+    })
+    return a
 }
 
 export default ProductHome

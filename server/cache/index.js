@@ -23,7 +23,7 @@ const {
     removeOrderDetail,
     addVoucher
 } = require('./order')
-const { suppliers, initializeSupplier } = require('./supplier')
+const { suppliers, initializeSupplier, getaddress, getbrand } = require('./supplier')
 const { vouchers, initializeVoucher } = require('./voucher')
 const { comments, initializeComment } = require('./comment')
 const { ratings, initializeRating, isRatingYet } = require('./rating')
@@ -68,6 +68,8 @@ module.exports = {
     paidOrder,
     removeOrderDetail,
     isRatingYet,
+    getaddress,
+    getbrand,
     pool,
     users,
     products,
