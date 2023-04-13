@@ -10,7 +10,7 @@ import "./SearchContent.scss"
 function SearchContent() {
     const [addDress, setAddress] = useState([])
     const [brands, setBrands] = useState([])
-    const [indextoshowitemsidebar] = useState(5)
+    const [indexToShow] = useState(5)
 
     useEffect(() => {
         getAddress()
@@ -36,16 +36,16 @@ function SearchContent() {
                         <li>
                             <div className="title_item_sidebar_list">Theo Địa Chỉ</div>
                             <div className="wrap_item_sidebar_search_item">
-                                <ItemSidebarSearchPage arr={addDress} index={indextoshowitemsidebar} />
+                                <ItemSidebarSearchPage arr={addDress} index={indexToShow} />
                             </div>
-                            {/* {sidebaraddress.length > indextoshowitemsidebar ? <button onClick={renderitemwhenclickbtnmore}>Xem Thêm</button> : <></>} */}
+                            {/* {sidebaraddress.length > indexToShow ? <button onClick={renderitemwhenclickbtnmore}>Xem Thêm</button> : <></>} */}
                         </li>
                         <li>
                             <div className="title_item_sidebar_list">Theo Thương Hiệu</div>
                             <div className="wrap_item_sidebar_search_item">
-                                <ItemSidebarSearchPage arr={brands} index={indextoshowitemsidebar} numbertoshowwhenclick={5} />
+                                <ItemSidebarSearchPage arr={brands} index={indexToShow} numberToShow={5} />
                             </div>
-                            {/* {brands.length > indextoshowitemsidebar ? <button onClick={renderitemwhenclickbtnmore}>Xem Thêm</button> : <></>} */}
+                            {/* {brands.length > indexToShow ? <button onClick={renderitemwhenclickbtnmore}>Xem Thêm</button> : <></>} */}
                         </li>
                         <li>
                             <div className="title_item_sidebar_list">Theo Đánh Giá</div>

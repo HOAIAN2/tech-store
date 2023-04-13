@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons"
 import { faStar } from "@fortawesome/free-solid-svg-icons"
 
-function ItemSidebarSearchPage({ arr = [], index, numbertoshowwhenclick, star = false }) {
+function ItemSidebarSearchPage({ arr = [], index, numberToShow, star = false }) {
     const [brands, setBrands] = useState([])
     const [arraySelect, setArraySelect] = useState([])
     const [hideShowButton, setHideShowButton] = useState(false)
@@ -51,13 +51,13 @@ function ItemSidebarSearchPage({ arr = [], index, numbertoshowwhenclick, star = 
     useEffect(() => {
         if (arr.length != 0) {
             const b = arr.slice(index)
-            const a = fortmatarr(b, numbertoshowwhenclick)
+            const a = fortmatarr(b, numberToShow)
             setBrands(a)
         }
     }, [arr])
 
 
-    if (arr?.length != 0 && arr?.length > index) {
+    if (arr?.length !== 0 && arr?.length > index) {
         return (
             <>
                 <div className="wrap_item_sidebar_search_item">
