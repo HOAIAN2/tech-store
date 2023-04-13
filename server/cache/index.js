@@ -25,8 +25,8 @@ const {
 } = require('./order')
 const { suppliers, initializeSupplier, getaddress, getbrand } = require('./supplier')
 const { vouchers, initializeVoucher } = require('./voucher')
-const { comments, initializeComment } = require('./comment')
-const { ratings, initializeRating, isRatingYet } = require('./rating')
+const { } = require('./comment')
+const { isRatingYet } = require('./rating')
 async function initializeData() {
     console.log('\x1b[1m%s\x1b[0m', 'Initializing data...')
     try {
@@ -38,8 +38,6 @@ async function initializeData() {
             initializeSupplier(),
             initializeVoucher(),
             initializeOrder(),
-            initializeComment(),
-            initializeRating()
         ])
         results.forEach(promise => {
             if (promise.status === 'rejected') throw new Error('Fail to initialize data')
@@ -77,7 +75,7 @@ module.exports = {
     suppliers,
     orders,
     vouchers,
-    comments,
-    ratings,
+    // comments,
+    // ratings,
     refreshTokens,
 }

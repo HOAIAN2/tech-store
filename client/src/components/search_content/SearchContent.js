@@ -1,31 +1,31 @@
 import { useEffect, useState } from "react"
-import "./search_content.scss"
-import { getaddressforsidbar, getbrand } from "../../utils/supplier/index"
-import Itemsidebarsearchpage from "../render_item/Itemsearchsidebar"
+import { getAddress, getBrands } from "../../utils/supplier/index"
+import ItemSidebarSearchPage from "../render_item/ItemSidebarSearchPage"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faList } from "@fortawesome/free-solid-svg-icons"
+import "./SearchContent.scss"
 
 
 
-function Search_content() {
-    const [sidebaraddress, setsidebaraddress] = useState([])
-    const [sidebarbrand, setsidebarbrand] = useState([])
+function SearchContent() {
+    const [addDress, setAddress] = useState([])
+    const [brands, setBrands] = useState([])
     const [indextoshowitemsidebar] = useState(5)
 
     useEffect(() => {
-        getaddressforsidbar()
+        getAddress()
             .then((rs) => {
-                setsidebaraddress(rs)
+                setAddress(rs)
             })
-        getbrand()
+        getBrands()
             .then((rs) => {
-                setsidebarbrand(rs)
+                setBrands(rs)
             })
     }, [])
 
 
     return (
-        <div className="wrapsearch_content">
+        <div className="wrap_search_content">
             <div className="sidebar_search_page">
                 <nav className="wrap_sidebar_search_page">
                     <h3>
@@ -36,21 +36,21 @@ function Search_content() {
                         <li>
                             <div className="title_item_sidebar_list">Theo Địa Chỉ</div>
                             <div className="wrap_item_sidebar_search_item">
-                                <Itemsidebarsearchpage arr={sidebaraddress} index={indextoshowitemsidebar} />
+                                <ItemSidebarSearchPage arr={addDress} index={indextoshowitemsidebar} />
                             </div>
                             {/* {sidebaraddress.length > indextoshowitemsidebar ? <button onClick={renderitemwhenclickbtnmore}>Xem Thêm</button> : <></>} */}
                         </li>
                         <li>
                             <div className="title_item_sidebar_list">Theo Thương Hiệu</div>
                             <div className="wrap_item_sidebar_search_item">
-                                <Itemsidebarsearchpage arr={sidebarbrand} index={indextoshowitemsidebar} numbertoshowwhenclick={5} />
+                                <ItemSidebarSearchPage arr={brands} index={indextoshowitemsidebar} numbertoshowwhenclick={5} />
                             </div>
-                            {/* {sidebarbrand.length > indextoshowitemsidebar ? <button onClick={renderitemwhenclickbtnmore}>Xem Thêm</button> : <></>} */}
+                            {/* {brands.length > indextoshowitemsidebar ? <button onClick={renderitemwhenclickbtnmore}>Xem Thêm</button> : <></>} */}
                         </li>
                         <li>
                             <div className="title_item_sidebar_list">Theo Đánh Giá</div>
                             <div className="wrap_item_sidebar_search_item">
-                                <Itemsidebarsearchpage star={true} />
+                                <ItemSidebarSearchPage star={true} />
                             </div>
                         </li>
                     </ul>
@@ -62,4 +62,4 @@ function Search_content() {
 }
 
 
-export default Search_content
+export default SearchContent

@@ -27,29 +27,7 @@ async function initializeSupplier() {
 }
 
 
-async function getaddress() {
-    try {
-        const queryString = "SELECT address FROM store.suppliers group by address;"
-        const [rows] = await pool.query(queryString)
-        return rows
-    } catch (error) {
-        throw new Error(error)
-    }
-}
-
-async function getbrand() {
-    try {
-        const queryString = "SELECT supplier_name FROM store.suppliers group by supplier_name;"
-        const [rows] = await pool.query(queryString)
-        return rows
-    } catch (error) {
-        throw new Error(error)
-    }
-}
-
 module.exports = {
     initializeSupplier,
-    getaddress,
-    getbrand,
     suppliers
 }
