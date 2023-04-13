@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react"
-import { fortmatarr } from "../../components/home_content/content/ProductHome"
+import { fortmatarr } from "../home_content/content/ProductHome"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons"
 import { faStar } from "@fortawesome/free-solid-svg-icons"
 
-function Itemsidebarsearchpage({ arr = [], index, numbertoshowwhenclick, star = false }) {
-    const [arrbrandaffterformat, setarrbrandaffterformat] = useState([])
-    const [arrselect, setarrselect] = useState([])
-    const [hiddenofshowbtn, sethiddenofshowbtn] = useState(false)
-    function renderitemofitemsidebarsearchpage(e) {
-        sethiddenofshowbtn(true)
+function ItemSidebarSearchPage({ arr = [], index, numbertoshowwhenclick, star = false }) {
+    const [brands, setBrands] = useState([])
+    const [arraySelect, setArraySelect] = useState([])
+    const [hideShowButton, setHideShowButton] = useState(false)
+    function renderItems(e) {
+        setHideShowButton(true)
         const a = e.target.parentElement.children
         for (let index = 0; index < a.length; index++) {
             if (a[index].style.display === 'none') {
@@ -18,8 +18,8 @@ function Itemsidebarsearchpage({ arr = [], index, numbertoshowwhenclick, star = 
             }
         }
     }
-    function hiddenlistitemwhenclick(e) {
-        sethiddenofshowbtn(false)
+    function hideListItem(e) {
+        setHideShowButton(false)
         const a = e.target.parentElement.children
         for (let index = 1; index < a.length; index++) {
             if (a[index].style.display === 'block') {
@@ -28,7 +28,7 @@ function Itemsidebarsearchpage({ arr = [], index, numbertoshowwhenclick, star = 
         }
     }
 
-    function selectitem(e) {
+    function selectItem(e) {
         for (let index = 0; index < e.target.children.length; index++) {
             if (e.target.children[index].className.baseVal && e.target.children[index].className.baseVal.includes('svgactive')) {
                 e.target.children[index].classList.remove('svgactive')
@@ -41,9 +41,9 @@ function Itemsidebarsearchpage({ arr = [], index, numbertoshowwhenclick, star = 
                 }
             }
         }
-        // e.target.attributes[1]?.textContent ? setarrselect(addintoarrselect(e.target.attributes[1].textContent)) : setarrselect(addintoarrselect(e.target.children[1].textContent))
-        // function addintoarrselect(value) {
-        //     const a = [...arrselect, value]
+        // e.target.attributes[1]?.textContent ? setArraySelect(addintoarraySelect(e.target.attributes[1].textContent)) : setArraySelect(addintoarraySelect(e.target.children[1].textContent))
+        // function addintoarraySelect(value) {
+        //     const a = [...arraySelect, value]
         //     return a.filter((item, index) => a.indexOf(item) === index);
         // }
     }
@@ -52,7 +52,7 @@ function Itemsidebarsearchpage({ arr = [], index, numbertoshowwhenclick, star = 
         if (arr.length != 0) {
             const b = arr.slice(index)
             const a = fortmatarr(b, numbertoshowwhenclick)
-            setarrbrandaffterformat(a)
+            setBrands(a)
         }
     }, [arr])
 
@@ -65,7 +65,7 @@ function Itemsidebarsearchpage({ arr = [], index, numbertoshowwhenclick, star = 
                         arr.map((item, index1) => {
                             if (index1 < index) {
                                 return (
-                                    <div key={index1} className="item_sidebar_search_item" onClick={selectitem}>
+                                    <div key={index1} className="item_sidebar_search_item" onClick={selectItem}>
                                         <FontAwesomeIcon icon={faCaretRight} className="svgselect" />
                                         {/* <input type="checkbox"></input> */}
                                         <span>{item}</span>
@@ -75,13 +75,13 @@ function Itemsidebarsearchpage({ arr = [], index, numbertoshowwhenclick, star = 
                         })
                     }
                 </div>
-                {arrbrandaffterformat.map((item, index) => {
+                {brands.map((item, index) => {
                     return (
                         <div key={index} className="wrap_item_sidebar_search_item" style={{ display: "none" }}>
                             {
                                 item.map((item, index) => {
                                     return (
-                                        <div key={index} className="item_sidebar_search_item" onClick={selectitem}>
+                                        <div key={index} className="item_sidebar_search_item" onClick={selectItem}>
                                             {/* <input type="checkbox"></input> */}
                                             <FontAwesomeIcon icon={faCaretRight} className="svgselect" />
                                             <span>{item}</span>
@@ -95,14 +95,14 @@ function Itemsidebarsearchpage({ arr = [], index, numbertoshowwhenclick, star = 
 
 
 
-                <button onClick={renderitemofitemsidebarsearchpage} style={{ marginRight: "40px" }} >Xem Thêm</button>
-                <button onClick={hiddenlistitemwhenclick} style={{ display: `${hiddenofshowbtn ? 'inline-block' : 'none'}` }} >Ẩn Bớt</button>
+                <button onClick={renderItems} style={{ marginRight: "40px" }} >Xem Thêm</button>
+                <button onClick={hideListItem} style={{ display: `${hideShowButton ? 'inline-block' : 'none'}` }} >Ẩn Bớt</button>
             </>
         )
     } else if (star) {
         return (
             <>
-                <div className="item_sidebar_search_item" onClick={selectitem} value={'star5'}>
+                <div className="item_sidebar_search_item" onClick={selectItem} value={'star5'}>
                     <FontAwesomeIcon icon={faCaretRight} className="svgselect" />
                     <div className="wrapstar">
                         <FontAwesomeIcon icon={faStar} />
@@ -112,7 +112,7 @@ function Itemsidebarsearchpage({ arr = [], index, numbertoshowwhenclick, star = 
                         <FontAwesomeIcon icon={faStar} />
                     </div>
                 </div>
-                <div className="item_sidebar_search_item" onClick={selectitem} value={'star4'}>
+                <div className="item_sidebar_search_item" onClick={selectItem} value={'star4'}>
                     <FontAwesomeIcon icon={faCaretRight} className="svgselect" />
                     <div className="wrapstar">
                         <FontAwesomeIcon icon={faStar} />
@@ -120,20 +120,20 @@ function Itemsidebarsearchpage({ arr = [], index, numbertoshowwhenclick, star = 
                         <FontAwesomeIcon icon={faStar} />
                         <FontAwesomeIcon icon={faStar} />
                     </div>
-                </div><div className="item_sidebar_search_item" onClick={selectitem} value={'star3'}>
+                </div><div className="item_sidebar_search_item" onClick={selectItem} value={'star3'}>
                     <FontAwesomeIcon icon={faCaretRight} className="svgselect" />
                     <div className="wrapstar">
                         <FontAwesomeIcon icon={faStar} />
                         <FontAwesomeIcon icon={faStar} />
                         <FontAwesomeIcon icon={faStar} />
                     </div>
-                </div><div className="item_sidebar_search_item" onClick={selectitem} value={'star2'}>
+                </div><div className="item_sidebar_search_item" onClick={selectItem} value={'star2'}>
                     <FontAwesomeIcon icon={faCaretRight} className="svgselect" />
                     <div className="wrapstar">
                         <FontAwesomeIcon icon={faStar} />
                         <FontAwesomeIcon icon={faStar} />
                     </div>
-                </div><div className="item_sidebar_search_item" onClick={selectitem} value={'star1'}>
+                </div><div className="item_sidebar_search_item" onClick={selectItem} value={'star1'}>
                     <FontAwesomeIcon icon={faCaretRight} className="svgselect" />
                     <div className="wrapstar">
                         <FontAwesomeIcon icon={faStar} />
@@ -145,7 +145,7 @@ function Itemsidebarsearchpage({ arr = [], index, numbertoshowwhenclick, star = 
         return (
             arr.map((item, index3) => {
                 return (
-                    <div key={index3} className="item_sidebar_search_item" onClick={selectitem}>
+                    <div key={index3} className="item_sidebar_search_item" onClick={selectItem}>
                         {/* <input type="checkbox"></input> */}
                         <FontAwesomeIcon icon={faCaretRight} className="svgselect" />
                         <span>{item}</span>
@@ -157,4 +157,4 @@ function Itemsidebarsearchpage({ arr = [], index, numbertoshowwhenclick, star = 
 }
 
 
-export default Itemsidebarsearchpage
+export default ItemSidebarSearchPage

@@ -1,18 +1,18 @@
 import request from '../api-config'
 
 
-async function getaddressforsidbar() {
+async function getAddress() {
     try {
-        const rs = await request.get('/supplier/getaddress')
+        const rs = await request.get('/supplier/address')
         return rs.data
     } catch (error) {
         return []
     }
 }
 
-async function getbrand() {
+async function getBrands() {
     try {
-        const rs = await request.get("/supplier/getbrand")
+        const rs = await request.get("/supplier/brand")
         return rs.data
     } catch (error) {
         return []
@@ -20,6 +20,6 @@ async function getbrand() {
 }
 
 export {
-    getaddressforsidbar,
-    getbrand,
+    getAddress,
+    getBrands,
 }
