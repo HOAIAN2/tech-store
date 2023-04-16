@@ -1,9 +1,11 @@
 class Comment {
-    constructor(commentID, userID, productID, comment) {
+    constructor(commentID, userFirstName, userLastName, productID, comment, commentDate) {
         this.commentID = commentID
-        this.userID = userID
+        this.userFirstName = userFirstName
+        this.userLastName = userLastName
         this.productID = productID
         this.comment = comment
+        this.commentDate = new Date(commentDate)
     }
 }
 

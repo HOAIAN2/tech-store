@@ -1,8 +1,6 @@
 const { Rating } = require('../models')
 const { pool } = require('./database')
 
-const ratings = []
-
 // async function initializeRating() {
 //     console.log('\x1b[1m%s\x1b[0m', 'Initializing ratings data...')
 //     try {
@@ -38,7 +36,5 @@ async function isRatingYet(userID, productID) {
     }
 }
 module.exports = {
-    // initializeRating,
     isRatingYet,
-    ratings
 }

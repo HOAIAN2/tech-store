@@ -68,6 +68,7 @@ CREATE TABLE comments(
 	user_id INT NOT NULL,
 	product_id INT NOT NULL,
 	comment VARCHAR(255),
+    comment_date DATE NOT NULL,
     PRIMARY KEY (comment_id),
 	FOREIGN KEY (user_id) REFERENCES users(user_id),
 	FOREIGN KEY (product_id) REFERENCES products(product_id)

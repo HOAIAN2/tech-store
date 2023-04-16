@@ -54,6 +54,7 @@ CREATE TABLE `comments` (
   `user_id` int NOT NULL,
   `product_id` int NOT NULL,
   `comment` varchar(255) DEFAULT NULL,
+  `comment_date` date NOT NULL,
   PRIMARY KEY (`comment_id`),
   KEY `user_id` (`user_id`),
   KEY `product_id` (`product_id`),
@@ -114,7 +115,15 @@ DELIMITER ;;
 
 
 
+
+
+
+
 SET unit_in_order = unit_in_order + NEW.quantity
+
+
+
+
 
 
 
@@ -137,7 +146,15 @@ DELIMITER ;;
 
 
 
+
+
+
+
       IF (NEW.quantity <> OLD.quantity) THEN
+
+
+
+
 
 
 
@@ -145,7 +162,15 @@ DELIMITER ;;
 
 
 
+
+
+
+
             SET unit_in_order = unit_in_order + (NEW.quantity - OLD.quantity)
+
+
+
+
 
 
 
@@ -153,7 +178,15 @@ DELIMITER ;;
 
 
 
+
+
+
+
       END IF;
+
+
+
+
 
 
 
@@ -176,7 +209,15 @@ DELIMITER ;;
 
 
 
+
+
+
+
 SET unit_in_order = unit_in_order - OLD.quantity
+
+
+
+
 
 
 
@@ -230,23 +271,43 @@ UNLOCK TABLES;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `before_orders_update` BEFORE UPDATE ON `orders` FOR EACH ROW BEGIN
 
+
+
       IF (NEW.paid = 1) THEN
+
+
 
             UPDATE products JOIN order_details ON products.product_id = order_details.product_id
 
+
+
 			JOIN orders ON order_details.order_id = NEW.order_id
+
+
 
 			SET products.quantity = products.quantity - order_details.quantity,
 
+
+
 			unit_in_order = unit_in_order - order_details.quantity,
+
+
 
 			order_details.price = products.price,
 
+
+
 			order_details.discount = products.discount
+
+
 
 			WHERE products.product_id = order_details.product_id;
 
+
+
       END IF;
+
+
 
     END */;;
 DELIMITER ;
@@ -482,4 +543,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-05 19:07:32
+-- Dump completed on 2023-04-16 16:52:15
