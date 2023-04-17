@@ -9,4 +9,5 @@ router.get('/search', productController.searchProduct)
 router.post('/add-product', authController.authenticateToken, productController.addProduct)
 router.get('/hot', productController.getHotProducts)
 router.get('/', productController.index)
+router.get('/searchProductSidebar', productController.searchProductSidebar)
 module.exports = router
