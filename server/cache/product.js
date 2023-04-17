@@ -7,7 +7,7 @@ async function initializeProduct() {
     console.log('\x1b[1m%s\x1b[0m', 'Initializing products data...')
     try {
         const queryString = [
-            'SELECT products.product_id, product_name, suppliers.supplier_name, categories.category_name, price, quantity,',
+            'SELECT products.product_id, product_name, suppliers.supplier_name, products.supplier_id, categories.category_name, price, quantity,',
             'unit_in_order, discount, images, products.description, rates.rating, rates.rating_count',
             'FROM products JOIN suppliers ON products.supplier_id = suppliers.supplier_id',
             'LEFT JOIN (SELECT ratings.product_id, AVG(rate) AS rating, COUNT(*) AS rating_count FROM ratings GROUP BY ratings.product_id) AS rates ON rates.product_id = products.product_id ',
@@ -27,7 +27,8 @@ async function initializeProduct() {
             const description = row['description']
             const rating = row['rating']
             const ratingCount = row['rating_count']
-            const product = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description, rating, ratingCount)
+            const supplierID = row['supplier_id']
+            const product = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description, rating, ratingCount, supplierID)
             products.push(product)
         })
     } catch (error) {
