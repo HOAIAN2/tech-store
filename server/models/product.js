@@ -1,9 +1,10 @@
 class Product {
     constructor(productID, productName, supplier, category, price, quantity,
-        unitInOrder, discount, images, description, rating, ratingCount) {
+        unitInOrder, discount, images, description, rating, ratingCount, supplierID) {
         this.productID = productID
         this.productName = productName
         this.supplier = supplier
+        this.supplierID = supplierID
         this.category = category
         this.price = price
         this.quantity = quantity
@@ -11,7 +12,7 @@ class Product {
         this.discount = discount
         this.images = images
         this.description = description
-        this.rating = rating
+        this.rating = parseFloat(rating)
         this.ratingCount = ratingCount
     }
     ignoreProps() {
