@@ -6,6 +6,8 @@ const path = require("path")
 const productErrors = require('./productErrors.json')
 const { time } = require('console')
 const { getNumberRate } = require("../cache")
+const supplierErorrs = require("./supplierErrors.json")
+const { executionAsyncResource } = require('async_hooks')
 
 // [GET home]
 function index(req, res) {
@@ -123,8 +125,206 @@ async function searchProduct(req, res) {
         }
         return []
     }
-    return res.json([])
+    return res.json(result)
+
+
 }
+
+
+async function searchProductSidebar(req, res) {
+
+    // fetch(http://localhost:4000/api/products/searchProductSidebar?brand=dell&brand=asus&address=ph%C3%BA%20y%C3%AAn&address=kh%C3%A1nh%20h%C3%B2a&sortby=price&sortmode=desc&index=0&star=5)
+
+    const sortBys = ['price', 'hot', 'top-sell']
+    const sortModes = ['asc', 'desc']
+    const brands = suppliers.map(supplier => supplier.supplierName.toUpperCase())
+
+    let data = {
+        brand: req.query.brand ? Array.isArray(req.query.brand) ? req.query.brand.map(item => item.toUpperCase()) : [req.query.brand.toUpperCase()] : [],
+        address: req.query.address ? Array.isArray(req.query.address) ? req.query.address : [req.query.address] : [],
+        star: req.query.star,
+        sortBy: req.query.sortby,
+        sortMode: req.query.sortmode ? req.query.sortmode : 'desc',
+        indextostart: req.query.index
+    }
+    console.log(data)
+
+    if (!checkprops("brand", data.brand)) return res.status(400).json(productErrors.en.invalidQuery)
+    if (!checkprops("address", data.address)) return res.status(400).json(productErrors.en.invalidQuery)
+    if (data.star && !checkNumber(data.star)) return res.status(400).json(productErrors.en.invalidQuery)
+    if (data.sortBy && !sortBys.includes(data.sortBy)) return res.status(400).json(productErrors.en.invalidQuery)
+    if (data.sortMode && !sortModes.includes(data.sortMode)) return res.status(400).json(productErrors.en.invalidQuery)
+    if (!checkNumber(data.indextostart)) data.indextostart = 0
+    const result = { data: [], index: parseInt(data.indextostart) }
+
+    while (result.index < products.length && result.data.length != 40) {
+        // console.log(Math.random())
+        const a = handlesort(result.index, (40 - result.data.length))
+        result.data = result.data.concat(a.product)
+        result.index = a.indextostart
+    }
+
+    if (data.sortBy) {
+        switch (data.sortBy) {
+            case "price":
+                if (data.sortMode === 'desc') {
+                    result.data = result.data.sort((a, b) => {
+                        return a.price - b.price
+                    })
+                } else {
+                    result.data = result.data.sort((a, b) => {
+                        return b.price - a.price
+                    })
+                }
+                break;
+            case "hot":
+                if (data.sortMode === 'desc') {
+                    result.data = result.data.sort((a, b) => {
+                        return a.unitInOrder - b.unitInOrder
+                    })
+                } else {
+                    result.data = result.data.sort((a, b) => {
+                        return b.unitInOrder - a.unitInOrder
+                    })
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    return res.json(result)
+
+    function handlesort(index = 0, numberItemFound = 40) {
+        let rs = []
+        let indextostart = products.length;
+        if (data.brand.length != 0) {
+            for (index; index < products.length; index++) {
+                if (rs.length >= numberItemFound) break;
+                if (data.brand.includes(products[index].supplier.toUpperCase())) {
+                    rs.push(products[index]);
+                }
+            }
+            indextostart = index
+        }
+        if (data.address != 0) {
+            if (rs.length != 0) {
+                const b = rs.map((item) => {
+                    for (let index = 0; index < suppliers.length; index++) {
+                        if (item.supplierID === suppliers[index].supplierId && !checkaddress(suppliers[index].address)) {
+                            return item
+                        }
+                    }
+                })
+                rs = b.filter(item => item)
+            } else {
+                for (index; index < products.length; index++) {
+                    if (rs.length >= numberItemFound) break;
+                    for (let index1 = 0; index1 < suppliers.length; index1++) {
+                        if (suppliers[index1].supplierId === products[index].supplierID) {
+                            if (!checkaddress(suppliers[index1].address)) {
+                                rs.push(products[index])
+                                break;
+                            }
+                        }
+                    }
+                    indextostart = index
+                }
+            }
+        }
+        // sort theo star
+        return { product: rs, indextostart: indextostart }
+    }
+
+    function checkaddress(addr) {
+        return data.address.every((item4, index) => {
+            if (addr.toUpperCase().includes(item4.toUpperCase().trim())) {
+                return false
+            }
+            return true
+        })
+    }
+    function checkprops(typecheck, arr) {
+        if (!Array.isArray(arr)) return false
+        if (typecheck === 'brand') {
+            return arr.every((item) => {
+                if (!brands.includes(item.toUpperCase())) return false
+                return true
+            })
+        } else if (typecheck === 'address') {
+            return arr.every((item) => {
+                if (!supplierErorrs.address.includes(item.toUpperCase().trim())) return false
+                return true
+            })
+        }
+    }
+
+
+    // if (data.address && !supplierErorrs.address.includes(data.address?.toUpperCase())) return res.status(400).json(productErrors.en.invalidQuery)
+    // if (data.brand && !brands.includes(data.brand?.toUpperCase())) return res.status(400).json(productErrors.en.invalidQuery)
+    // if (data.sortBy && !sortBys.includes(data.sortBy)) return res.status(400).json(productErrors.en.invalidQuery)
+    // if (data.sortMode && !sortModes.includes(data.sortMode)) return res.status(400).json(productErrors.en.invalidQuery)
+    // const checkstar = checkNumber(data.star)
+    // if (!checkstar || parseInt(data.star) > 5 || parseInt(data.star) < 1) return res.status(400).json(productErrors.en.invalidQuery)
+
+    // const rs = []
+
+    // lay 40 san pham theo brand
+    // products.every((item) => {
+    //     if (item.supplier.toUpperCase() === data.brand.toUpperCase()) {
+    //         rs.push(item)
+    //         return true
+    //     }
+    //     if (rs.length >= 40) return false
+    //     return true
+    // })
+    //lay san pham theo address tu rs
+    // const a = []
+    // rs.map((item, index) => {
+    //     suppliers.every((item1) => {
+    //         if (item1.supplierId === item.supplierID && item1.address.toUpperCase().includes(data.address.toUpperCase())) {
+    //             a.push(item)
+    //             return false
+    //         }
+    //         return true
+    //     })
+    // })
+    // console.log(a)
+
+    // Object.keys(data).map((key, index) => {
+    //     if (data[key]) {
+    //         //lay 40 san pham theo brand
+    //         if (index === 0) {
+    //             products.every((item) => {
+    //                 if (item.supplier.toUpperCase() === data[key].toUpperCase()) {
+    //                     rs.push(item)
+    //                     return true
+    //                 }
+    //                 if (rs.length >= 40) return false
+    //                 return true
+    //             })
+    //         }
+    //         // lay san pham theo address tu rs
+    //         else {
+    //             const a = []
+    //             rs.map((item, index) => {
+    //                 suppliers.every((item1) => {
+    //                     if (item1.supplierId === item.supplierID && item1.address.toUpperCase().includes(data.address.toUpperCase())) {
+    //                         a.push(item)
+    //                         return false
+    //                     }
+    //                     return true
+    //                 })
+    //             })
+    //             console.log(a)
+    //         }
+    //     }
+    // })
+    // console.log(rs.length)
+}
+
+
+
 // [POST addProduct]
 async function addProduct(req, res) {
     let errorMessages = productErrors.en
@@ -237,4 +437,5 @@ module.exports = {
     // getSuppliersCategories,
     addProduct,
     getHotProducts,
+    searchProductSidebar,
 }

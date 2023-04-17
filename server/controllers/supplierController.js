@@ -7,7 +7,6 @@ function getAddress(req, res) {
     suppliers.forEach(supplier => {
         result.add(supplier.address)
     })
-    console.log(result)
     result = Array.from(result).map((item) => {
         if (item.toUpperCase().includes("HÀ NỘI")) {
             return "Hà Nội"
@@ -23,7 +22,6 @@ function getAddress(req, res) {
         })
         return a.toString().split(',').join('')
     })
-    console.log(result)
     return res.json(result)
 }
 
