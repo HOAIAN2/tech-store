@@ -31,7 +31,7 @@ function Header() {
     const debounce = useDebounce(searchValue, 200)
     useEffect(() => {
         if (!debounce) return
-        searchProduct(debounce, 'less')
+        searchProduct(debounce)
             .then(res => {
                 setSearchData(res)
             })

@@ -57,111 +57,44 @@ function getProductByID(req, res) {
 }
 // [GET search]
 async function searchProduct(req, res) {
-    const options = ['less', 'more']
-    const sortBys = ['price', 'hot', 'top-sell']
-    const sortModes = ['asc', 'desc']
-    const text = req.query.name?.trim()
-    const option = req.query.option?.trim()
-    const sortBy = req.query.sortBy?.trim()
-    const sortMode = req.query.sortMode?.trim()
-    const brand = req.query.brand?.trim()
-    let indexToStart = parseInt(req.query.nextindex)
-    if (!text) return res.json([])
-    if (text === "") return res.json([])
-    if (!options.includes(option)) return res.sendStatus(400)
-    if (sortBy && !sortBys.includes(sortBy)) return res.sendStatus(400)
-    if (sortMode && !sortModes.includes(sortMode)) return res.sendStatus(400)
-    if (!indexToStart) indexToStart = 0
-
-    const result = await findProduct(text, option, brand, indexToStart)
-    if (result) {
-        // /api/products/search?name=...&option=less , co nhieu tra nhieu
-        if (option === 'less') {
-            return res.json(result.data.map((product) => { return product.ignoreProps('unitInOrder', 'quantity', 'description', 'supplier', 'category') }))
-        }
-        // /api/products/search?name=...&option=more , tra 40 product ngau nhien
-        // /api/products/search?name=...&option=more&brand=... , lay product theo brand
-        if (option === 'more') {
-            const rs = { indexNext: false }
-            if (result.data.length >= 41) {
-                result.data.pop()
-                rs.indexNext = result.index
-            }
-            // /api/products/search?name=...&option=more&brand=...&sortBy=price/hot&sortMode=asc/desc
-            if (sortBy === 'price') {
-                const resultsort = handleSort(result.data, sortMode, sortBy)
-                const data = resultsort.map((product) => { return product.ignoreProps('unitInOrder', 'quantity') })
-                rs.data = data
-                return res.json(rs)
-            }
-            if (sortBy === 'hot') {
-                const resultsort = handleSort(result.data, sortMode, sortBy)
-                const data = resultsort.map((product) => { return product.ignoreProps('unitInOrder', 'quantity') })
-                rs.data = data
-                return res.json(rs)
-            }
-            // sort theo top sell lam gio hang xong roi lam
-            // return res.json(result.map((product) => { return product.ignoreProps('unitInOrder', 'quantity') }))
-            const data = result.data.map((product) => { return product.ignoreProps('unitInOrder', 'quantity') })
-            rs.data = data
-            return res.json(rs)
-        }
-    }
-
-    function handleSort(data, sortMode, sortBy) {
-        if (sortMode === 'asc') {
-            const resultsortasc = data.sort((product1, product2) => {
-                if (sortBy === 'price') return product1.price - product2.price
-                if (sortBy === 'hot') return product1.unitInOrder - product2.unitInOrder
-            })
-            return resultsortasc
-        }
-        if (sortMode === 'desc') {
-            const resultsortdesc = data.sort((product1, product2) => {
-                if (sortBy === 'price') return product2.price - product1.price
-                if (sortBy === 'hot') return product2.unitInOrder - product1.unitInOrder
-            })
-            return resultsortdesc
-        }
-        return []
-    }
+    const name = req.query.name?.trim()
+    if (!name) return res.sendStatus(400)
+    if (name === "") return res.sendStatus(400)
+    const result = products.filter(product => {
+        return product.productName.includes(name)
+    }).slice(0, 5)
     return res.json(result)
-
-
 }
-
-
-async function searchProductSidebar(req, res) {
-
-    // fetch(http://localhost:4000/api/products/searchProductSidebar?brand=dell&brand=asus&address=ph%C3%BA%20y%C3%AAn&address=kh%C3%A1nh%20h%C3%B2a&sortby=price&sortmode=desc&index=0&star=5)
-
+// [GET search-more]
+async function searchProductMore(req, res) {
+    // fetch(http://localhost:4000/api/products/search-more?brand=dell&brand=asus&address=ph%C3%BA%20y%C3%AAn&address=kh%C3%A1nh%20h%C3%B2a&sortby=price&sortmode=desc&index=0&star=5)
     const sortBys = ['price', 'hot', 'top-sell']
     const sortModes = ['asc', 'desc']
     const brands = suppliers.map(supplier => supplier.supplierName.toUpperCase())
-
     let data = {
+        name: req.query.name,
         brand: req.query.brand ? Array.isArray(req.query.brand) ? req.query.brand.map(item => item.toUpperCase()) : [req.query.brand.toUpperCase()] : [],
         address: req.query.address ? Array.isArray(req.query.address) ? req.query.address : [req.query.address] : [],
         star: req.query.star,
         sortBy: req.query.sortby,
         sortMode: req.query.sortmode ? req.query.sortmode : 'desc',
-        indextostart: req.query.index
+        indexToStart: req.query.index
     }
     console.log(data)
 
-    if (!checkprops("brand", data.brand)) return res.status(400).json(productErrors.en.invalidQuery)
-    if (!checkprops("address", data.address)) return res.status(400).json(productErrors.en.invalidQuery)
+    if (!isValidProps("brand", data.brand)) return res.status(400).json(productErrors.en.invalidQuery)
+    if (!isValidProps("address", data.address)) return res.status(400).json(productErrors.en.invalidQuery)
     if (data.star && !checkNumber(data.star)) return res.status(400).json(productErrors.en.invalidQuery)
     if (data.sortBy && !sortBys.includes(data.sortBy)) return res.status(400).json(productErrors.en.invalidQuery)
     if (data.sortMode && !sortModes.includes(data.sortMode)) return res.status(400).json(productErrors.en.invalidQuery)
-    if (!checkNumber(data.indextostart)) data.indextostart = 0
-    const result = { data: [], index: parseInt(data.indextostart) }
+    if (!checkNumber(data.indexToStart)) data.indexToStart = 0
+    const result = { data: [], index: parseInt(data.indexToStart) }
 
     while (result.index < products.length && result.data.length != 40) {
         // console.log(Math.random())
-        const a = handlesort(result.index, (40 - result.data.length))
+        const a = handleSort(result.index, (40 - result.data.length))
         result.data = result.data.concat(a.product)
-        result.index = a.indextostart
+        result.index = a.indexToStart
     }
 
     if (data.sortBy) {
@@ -195,9 +128,9 @@ async function searchProductSidebar(req, res) {
 
     return res.json(result)
 
-    function handlesort(index = 0, numberItemFound = 40) {
+    function handleSort(index = 0, numberItemFound = 40) {
         let rs = []
-        let indextostart = products.length;
+        let indexToStart = products.length;
         if (data.brand.length != 0) {
             for (index; index < products.length; index++) {
                 if (rs.length >= numberItemFound) break;
@@ -205,13 +138,13 @@ async function searchProductSidebar(req, res) {
                     rs.push(products[index]);
                 }
             }
-            indextostart = index
+            indexToStart = index
         }
         if (data.address != 0) {
             if (rs.length != 0) {
                 const b = rs.map((item) => {
                     for (let index = 0; index < suppliers.length; index++) {
-                        if (item.supplierID === suppliers[index].supplierId && !checkaddress(suppliers[index].address)) {
+                        if (item.supplierID === suppliers[index].supplierId && !isValidAddress(suppliers[index].address)) {
                             return item
                         }
                     }
@@ -222,21 +155,21 @@ async function searchProductSidebar(req, res) {
                     if (rs.length >= numberItemFound) break;
                     for (let index1 = 0; index1 < suppliers.length; index1++) {
                         if (suppliers[index1].supplierId === products[index].supplierID) {
-                            if (!checkaddress(suppliers[index1].address)) {
+                            if (!isValidAddress(suppliers[index1].address)) {
                                 rs.push(products[index])
                                 break;
                             }
                         }
                     }
-                    indextostart = index
+                    indexToStart = index
                 }
             }
         }
         // sort theo star
-        return { product: rs, indextostart: indextostart }
+        return { product: rs, indexToStart: indexToStart }
     }
 
-    function checkaddress(addr) {
+    function isValidAddress(addr) {
         return data.address.every((item4, index) => {
             if (addr.toUpperCase().includes(item4.toUpperCase().trim())) {
                 return false
@@ -244,7 +177,7 @@ async function searchProductSidebar(req, res) {
             return true
         })
     }
-    function checkprops(typecheck, arr) {
+    function isValidProps(typecheck, arr) {
         if (!Array.isArray(arr)) return false
         if (typecheck === 'brand') {
             return arr.every((item) => {
@@ -437,5 +370,5 @@ module.exports = {
     // getSuppliersCategories,
     addProduct,
     getHotProducts,
-    searchProductSidebar,
+    searchProductMore,
 }

@@ -113,19 +113,7 @@ UNLOCK TABLES;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `before_order_detail_insert` BEFORE INSERT ON `order_details` FOR EACH ROW UPDATE products
 
-
-
-
-
-
-
 SET unit_in_order = unit_in_order + NEW.quantity
-
-
-
-
-
-
 
 WHERE NEW.product_id = products.product_id */;;
 DELIMITER ;
@@ -144,51 +132,15 @@ DELIMITER ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `before_order_detail_update` BEFORE UPDATE ON `order_details` FOR EACH ROW BEGIN
 
-
-
-
-
-
-
       IF (NEW.quantity <> OLD.quantity) THEN
-
-
-
-
-
-
 
             UPDATE products
 
-
-
-
-
-
-
             SET unit_in_order = unit_in_order + (NEW.quantity - OLD.quantity)
-
-
-
-
-
-
 
             WHERE NEW.product_id = products.product_id AND NEW.quantity <> OLD.quantity;
 
-
-
-
-
-
-
       END IF;
-
-
-
-
-
-
 
     END */;;
 DELIMITER ;
@@ -207,19 +159,7 @@ DELIMITER ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `before_order_detail_delete` BEFORE DELETE ON `order_details` FOR EACH ROW UPDATE products
 
-
-
-
-
-
-
 SET unit_in_order = unit_in_order - OLD.quantity
-
-
-
-
-
-
 
 WHERE OLD.product_id = products.product_id */;;
 DELIMITER ;
@@ -271,43 +211,23 @@ UNLOCK TABLES;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `before_orders_update` BEFORE UPDATE ON `orders` FOR EACH ROW BEGIN
 
-
-
       IF (NEW.paid = 1) THEN
-
-
 
             UPDATE products JOIN order_details ON products.product_id = order_details.product_id
 
-
-
 			JOIN orders ON order_details.order_id = NEW.order_id
-
-
 
 			SET products.quantity = products.quantity - order_details.quantity,
 
-
-
 			unit_in_order = unit_in_order - order_details.quantity,
-
-
 
 			order_details.price = products.price,
 
-
-
 			order_details.discount = products.discount
-
-
 
 			WHERE products.product_id = order_details.product_id;
 
-
-
       END IF;
-
-
 
     END */;;
 DELIMITER ;
@@ -459,7 +379,7 @@ CREATE TABLE `suppliers` (
 
 LOCK TABLES `suppliers` WRITE;
 /*!40000 ALTER TABLE `suppliers` DISABLE KEYS */;
-INSERT INTO `suppliers` VALUES (1,'MSI','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(2,'Acer','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(3,'Asus','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(4,'HP','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(5,'Lenovo','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(6,'MSmart','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(7,'Gigabyte','Thành phố Hồ Chí Minh, Việt Nam',NULL,NULL),(8,'Dell','Thành phố Hồ Chí Minh, Việt Nam',NULL,NULL),(9,'Colorful','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(10,'Apple','Thành phố Đà Đẵng, Việt Nam',NULL,NULL),(11,'Hyper','Thành phố Đà Đẵng, Việt Nam',NULL,NULL),(12,'HyperDrive','Thành phố Hồ Chí Minh, Việt Nam',NULL,NULL),(13,'Innostyle','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(14,'UGREEN','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(15,'WIWU','Thành phố Đà Đẵng, Việt Nam',NULL,NULL),(16,'Samsung','Thành phố Đà Đẵng, Việt Nam',NULL,NULL),(17,'OPPO','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(18,'Xiaomi','Thành phố Đà Đẵng, Việt Nam',NULL,NULL),(19,'Tecno','Thành phố Hồ Chí Minh, Việt Nam',NULL,NULL),(20,'Nokia','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(21,'Itel','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(22,'Vivo','Thành phố Hồ Chí Minh, Việt Nam',NULL,NULL),(23,'Realme','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(24,'CAVARA','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(25,'Helios','Thành phố Đà Đẵng, Việt Nam',NULL,NULL),(26,'Vinaphone','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(27,'Tamayoko','Thành phố Đà Đẵng, Việt Nam',NULL,NULL),(28,'Yesido Just For You','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(29,'RAVPower','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(30,'PKCB','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(31,'SeaSy','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(32,'Logitech','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(33,'Hoco','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(34,'Mobifone','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(35,'Memo','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(36,'Selfiecom','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(37,'HXSJ','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(38,'Remax','Thành phố Đà Đẵng, Việt Nam',NULL,NULL),(39,'Sony','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(40,'Canon','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(41,'OEM','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(42,'Fujifilm','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(43,'Godox','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(44,'POLAROID','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(45,'Tamron','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(46,'EOS','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(47,'ASRock','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(48,'Aorus - Gigabyte','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(49,'Aorus','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(50,'Skyworth','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(51,'LG','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(52,'TOMKO','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(53,'AOC','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(54,'K vision','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(55,'Viewsonic','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(56,'Provision','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(57,'Huawei','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(58,'VSP','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(59,'MCC','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(60,'Philips','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(61,'LC-POWER','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(62,'VSPTECH','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(63,'Afox','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(64,'ECS','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(65,'Coolman','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(66,'GiGaBye','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(67,'AMD','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(68,'GSkill','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(69,'KingMax','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(70,'Asgard','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(71,'Kingston','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(72,'G.Skill','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(73,'KingSpec','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(74,'Pioneer','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(75,'T-FORCE','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(76,'TEAM GROUP','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(77,'Corsair','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(78,'Hynix','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(79,'Crucial','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(80,'ADATA','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(81,'Patriot','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(82,'TEAM','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(83,'Silicon Power','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(84,'Intel','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(85,'nVIDIA','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(86,'ZOTAC','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(87,'GALAX','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(88,'QUADRO','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(89,'Inno3D','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(90,'Palit','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(91,'AMA','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(92,'Fitbit','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(93,'SANDA','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(94,'DOHORA VN','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(95,'Garmin','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(96,'AMAZFIT','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(97,'Tagobee','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(98,'SoundPEATS','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(99,'VINETTEAM','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(100,'LivWell','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(101,'Lykry','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(102,'HAYLOU','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(103,'ANNCOE','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(104,'COLMI','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(105,'Mibro','Thủ đô Hà Nội, Việt Nam',NULL,NULL);
+INSERT INTO `suppliers` VALUES (1,'MSI','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(2,'Acer','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(3,'Asus','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(4,'HP','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(5,'Lenovo','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(6,'MSmart','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(7,'Gigabyte','Thành phố Hồ Chí Minh, Việt Nam',NULL,NULL),(8,'Dell','Thành phố Hồ Chí Minh, Việt Nam',NULL,NULL),(9,'Colorful','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(10,'Apple','Thành phố Đà Nẵng, Việt Nam',NULL,NULL),(11,'Hyper','Thành phố Đà Nẵng, Việt Nam',NULL,NULL),(12,'HyperDrive','Thành phố Hồ Chí Minh, Việt Nam',NULL,NULL),(13,'Innostyle','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(14,'UGREEN','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(15,'WIWU','Thành phố Đà Nẵng, Việt Nam',NULL,NULL),(16,'Samsung','Thành phố Đà Nẵng, Việt Nam',NULL,NULL),(17,'OPPO','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(18,'Xiaomi','Thành phố Đà Nẵng, Việt Nam',NULL,NULL),(19,'Tecno','Thành phố Hồ Chí Minh, Việt Nam',NULL,NULL),(20,'Nokia','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(21,'Itel','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(22,'Vivo','Thành phố Hồ Chí Minh, Việt Nam',NULL,NULL),(23,'Realme','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(24,'CAVARA','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(25,'Helios','Thành phố Đà Nẵng, Việt Nam',NULL,NULL),(26,'Vinaphone','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(27,'Tamayoko','Thành phố Đà Nẵng, Việt Nam',NULL,NULL),(28,'Yesido Just For You','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(29,'RAVPower','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(30,'PKCB','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(31,'SeaSy','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(32,'Logitech','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(33,'Hoco','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(34,'Mobifone','Thành Phố Nha Trang, Khánh Hòa, Việt Nam',NULL,NULL),(35,'Memo','Thành phố Tuy Hòa, Phú Yên, Việt Nam',NULL,NULL),(36,'Selfiecom','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(37,'HXSJ','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(38,'Remax','Thành phố Đà Nẵng, Việt Nam',NULL,NULL),(39,'Sony','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(40,'Canon','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(41,'OEM','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(42,'Fujifilm','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(43,'Godox','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(44,'POLAROID','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(45,'Tamron','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(46,'EOS','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(47,'ASRock','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(48,'Aorus - Gigabyte','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(49,'Aorus','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(50,'Skyworth','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(51,'LG','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(52,'TOMKO','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(53,'AOC','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(54,'K vision','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(55,'Viewsonic','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(56,'Provision','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(57,'Huawei','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(58,'VSP','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(59,'MCC','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(60,'Philips','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(61,'LC-POWER','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(62,'VSPTECH','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(63,'Afox','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(64,'ECS','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(65,'Coolman','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(66,'GiGaBye','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(67,'AMD','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(68,'GSkill','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(69,'KingMax','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(70,'Asgard','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(71,'Kingston','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(72,'G.Skill','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(73,'KingSpec','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(74,'Pioneer','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(75,'T-FORCE','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(76,'TEAM GROUP','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(77,'Corsair','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(78,'Hynix','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(79,'Crucial','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(80,'ADATA','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(81,'Patriot','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(82,'TEAM','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(83,'Silicon Power','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(84,'Intel','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(85,'nVIDIA','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(86,'ZOTAC','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(87,'GALAX','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(88,'QUADRO','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(89,'Inno3D','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(90,'Palit','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(91,'AMA','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(92,'Fitbit','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(93,'SANDA','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(94,'DOHORA VN','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(95,'Garmin','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(96,'AMAZFIT','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(97,'Tagobee','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(98,'SoundPEATS','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(99,'VINETTEAM','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(100,'LivWell','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(101,'Lykry','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(102,'HAYLOU','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(103,'ANNCOE','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(104,'COLMI','Thủ đô Hà Nội, Việt Nam',NULL,NULL),(105,'Mibro','Thủ đô Hà Nội, Việt Nam',NULL,NULL);
 /*!40000 ALTER TABLE `suppliers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -543,4 +463,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-16 16:52:15
+-- Dump completed on 2023-04-18  8:22:04
