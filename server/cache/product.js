@@ -77,29 +77,29 @@ async function initializeProduct() {
 // }
 
 
-async function findProduct(text, option, brand, indexToStart = 0) {
-    const result = { index: 0, data: [] }
-    products.every((product, index) => {
-        if (!brand) {
-            if (product.productName.toLocaleLowerCase().includes(text.toLocaleLowerCase()) && index + 1 > indexToStart) {
-                result.data.push(product)
-            }
-        } else {
-            if (product.productName.toLocaleLowerCase().includes(text.toLocaleLowerCase()) && product.supplier === brand && index + 1 > indexToStart) {
-                result.data.push(product)
-            }
-        }
-        if (result.data.length === 5 && option === 'less') return false
-        if (result.data.length === 41) {
-            result.index = index - 1
-            return false
-        }
-        return true
-    })
+// async function findProduct(text, option, brand, indexToStart = 0) {
+//     const result = { index: 0, data: [] }
+//     products.every((product, index) => {
+//         if (!brand) {
+//             if (product.productName.toLocaleLowerCase().includes(text.toLocaleLowerCase()) && index + 1 > indexToStart) {
+//                 result.data.push(product)
+//             }
+//         } else {
+//             if (product.productName.toLocaleLowerCase().includes(text.toLocaleLowerCase()) && product.supplier === brand && index + 1 > indexToStart) {
+//                 result.data.push(product)
+//             }
+//         }
+//         if (result.data.length === 5 && option === 'less') return false
+//         if (result.data.length === 41) {
+//             result.index = index - 1
+//             return false
+//         }
+//         return true
+//     })
 
 
-    return result
-}
+//     return result
+// }
 
 
 async function createProduct(data) {
@@ -148,7 +148,7 @@ async function createProduct(data) {
 
 module.exports = {
     initializeProduct,
-    findProduct,
+    // findProduct,
     createProduct,
     products,
 }
