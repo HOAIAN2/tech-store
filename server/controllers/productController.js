@@ -78,7 +78,7 @@ async function searchProductMore(req, res) {
         star: req.query.star,
         sortBy: req.query.sortby,
         sortMode: req.query.sortmode ? req.query.sortmode : 'desc',
-        indexToStart: req.query.index
+        indexToStart: checkNumber(req.query.index) ? parseInt(req.query.index) : 0
     }
     console.log(data)
 
@@ -87,7 +87,7 @@ async function searchProductMore(req, res) {
     if (data.star && !checkNumber(data.star)) return res.status(400).json(productErrors.en.invalidQuery)
     if (data.sortBy && !sortBys.includes(data.sortBy)) return res.status(400).json(productErrors.en.invalidQuery)
     if (data.sortMode && !sortModes.includes(data.sortMode)) return res.status(400).json(productErrors.en.invalidQuery)
-    if (!checkNumber(data.indexToStart)) data.indexToStart = 0
+    // if (data.indexToStart && !checkNumber(data.indexToStart)) data.indexToStart = 0
     const result = { data: [], index: parseInt(data.indexToStart) }
 
     while (result.index < products.length && result.data.length != 40) {
@@ -357,6 +357,7 @@ function formatData(data = {}) {
     return newData
 }
 function checkNumber(number) {
+    if (!number) return false
     let i = 0
     for (i; i < number.length; i++) {
         if (isNaN(parseInt(number[i]))) return false
