@@ -78,7 +78,8 @@ async function searchProductMore(req, res) {
         star: req.query.star,
         sortBy: req.query.sortby,
         sortMode: req.query.sortmode ? req.query.sortmode : 'desc',
-        indexToStart: checkNumber(req.query.index) ? parseInt(req.query.index) : 0
+        indexToStart: checkNumber(req.query.index) ? parseInt(req.query.index) : 0,
+        checkgetdata: true, // check no muon lay theo brand hay theo address
     }
     console.log(data)
 
@@ -87,6 +88,7 @@ async function searchProductMore(req, res) {
     if (data.star && !checkNumber(data.star)) return res.status(400).json(productErrors.en.invalidQuery)
     if (data.sortBy && !sortBys.includes(data.sortBy)) return res.status(400).json(productErrors.en.invalidQuery)
     if (data.sortMode && !sortModes.includes(data.sortMode)) return res.status(400).json(productErrors.en.invalidQuery)
+    if (!data.name) return res.status(400).json(productErrors.en.invalidQuery)
     // if (data.indexToStart && !checkNumber(data.indexToStart)) data.indexToStart = 0
     const result = { data: [], index: parseInt(data.indexToStart) }
 
@@ -126,6 +128,7 @@ async function searchProductMore(req, res) {
         }
     }
 
+    result.index >= products.length ? result.index = false : ""
     return res.json(result)
 
     function handleSort(index = 0, numberItemFound = 40) {
@@ -134,11 +137,12 @@ async function searchProductMore(req, res) {
         if (data.brand.length != 0) {
             for (index; index < products.length; index++) {
                 if (rs.length >= numberItemFound) break;
-                if (data.brand.includes(products[index].supplier.toUpperCase())) {
+                if (data.brand.includes(products[index].supplier.toUpperCase()) && products[index].productName.toUpperCase().includes(data.name.toUpperCase())) {
                     rs.push(products[index]);
                 }
             }
             indexToStart = index
+            data.checkgetdata = false;
         }
         if (data.address != 0) {
             if (rs.length != 0) {
@@ -150,22 +154,24 @@ async function searchProductMore(req, res) {
                     }
                 })
                 rs = b.filter(item => item)
-            } else {
+            } else if (data.checkgetdata) {
                 for (index; index < products.length; index++) {
                     if (rs.length >= numberItemFound) break;
                     for (let index1 = 0; index1 < suppliers.length; index1++) {
-                        if (suppliers[index1].supplierId === products[index].supplierID) {
+                        if (suppliers[index1].supplierId === products[index].supplierID && products[index].productName.toUpperCase().includes(data.name.toUpperCase())) {
                             if (!isValidAddress(suppliers[index1].address)) {
                                 rs.push(products[index])
                                 break;
                             }
                         }
                     }
-                    indexToStart = index
                 }
+                indexToStart = index
+                data.checkgetdata = false
             }
         }
         // sort theo star
+        data.checkgetdata = true
         return { product: rs, indexToStart: indexToStart }
     }
 
