@@ -2,19 +2,20 @@
 
 .product-page {
     width: 100%;
-    height: 100%;
+    height: fit-content;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
 
     &-content {
         background-color: white;
         overflow: hidden;
-        position: absolute;
-        left: 50%;
-        top: 3%;
-        transform: translateX(-50%);
         display: flex;
         justify-content: space-between;
         width: 1257px;
+        margin-top: 20px;
 
         & .product-page-images {
             img {
@@ -199,6 +200,21 @@
                 }
             }
         }
+    }
+
+    &-comments {
+        background-color: white;
+        overflow: hidden;
+        // position: absolute;
+        // left: 50%;
+        // top: 63%;
+        // transform: translateX(-50%);
+        display: flex;
+        justify-content: space-between;
+        border: 1px solid red;
+        width: 1257px;
+        height: 500px;
+        margin-top: 20px;
     }
 
 }

@@ -8,7 +8,7 @@ async function getComments(req, res) {
         startIndex: req.query.startIndex,
         sortMode: req.query.sortMode
     }
-    if (!checkNumber(data.productID) || !checkNumber(data.startIndex)) return res.sendStatus(400)
+    if (!checkNumber(data.productID)) return res.sendStatus(400)
     if (!sortModes.includes(data.sortMode)) return res.sendStatus(400)
     try {
         const comments = await queryComments(data.productID, data.startIndex, data.sortMode)
@@ -21,6 +21,7 @@ async function getComments(req, res) {
 
 // Middleware,..
 function checkNumber(number) {
+    if (!number) return false
     let i = 0
     for (i; i < number.length; i++) {
         if (isNaN(parseInt(number[i]))) return false

@@ -28,7 +28,7 @@ async function queryComments(productID, startIndex, sortMode) {
     if (sortMode === 'DESC') replace = '<'
     const comments = []
     try {
-        const queryString = [
+        let queryString = [
             'SELECT comment_id, users.avatar, first_name, last_name, comments.product_id, comment, rate, comment_date FROM comments',
             'JOIN users ON users.user_id = comments.user_id',
             'JOIN ratings ON ratings.user_id = comments.user_id AND ratings.product_id = comments.product_id',
@@ -36,6 +36,7 @@ async function queryComments(productID, startIndex, sortMode) {
             `ORDER BY comment_id ${sortMode}`,
             'LIMIT 10'
         ].join(' ')
+        if (!startIndex) queryString = queryString.replace(`AND comment_id ${replace} ?`, '')
         const [rows] = await pool.query(queryString, [productID, startIndex])
         rows.forEach(row => {
             const commentID = row['comment_id']
