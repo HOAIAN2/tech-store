@@ -9,8 +9,10 @@ import ProductRating from './ProductRating'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartShopping, faTruck, faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import { getProductByID, getSoldQuantity } from "../../utils/Product/index"
+import { getComments } from '../../utils/Comment'
 import { useUserData } from "../../Context"
 import { Link } from 'react-router-dom'
+import CommentItem from '../../components/render_item/CommentItem'
 
 function ProductPage() {
     const [user,] = useUserData()
@@ -18,6 +20,7 @@ function ProductPage() {
         return `${price.toLocaleString('vi')} đ`
     }
     const [product, setProduct] = useState({})
+    const [comments, setComments] = useState([])
     const [notFound, setNotFound] = useState(false)
     const [quantity, setQuantity] = useState(1)
     const [soldQuantity, setSoldQuantity] = useState('0')
@@ -45,6 +48,10 @@ function ProductPage() {
             .then((rs) => {
                 setSoldQuantity(rs)
             })
+        getComments(id, 'DESC')
+            .then(result => {
+                setComments(result)
+            })
     }, [id])
     // console.log(product)
     /// Alot of bugs, fix
@@ -63,7 +70,6 @@ function ProductPage() {
             }
         }
     }
-    console.log(imageID)
     console.log(product)
     if (notFound) return <NotFound />
     return (
@@ -90,7 +96,7 @@ function ProductPage() {
                         <div className='product-name'>{product.productName}</div>
                         <div className='action' style={{ marginTop: "10px", display: "flex" }}>
                             <div className='action_item'>
-                                <div className='valuerating' style={{ marginRight: "5px" }}>{product.rating?.slice(0, 3)}</div>
+                                <div className='valuerating' style={{ marginRight: "5px" }}>{product.rating}</div>
                                 <ProductRating rate={product.rating} />
                             </div>
                             <div className='action_item'>
@@ -136,6 +142,11 @@ function ProductPage() {
                             </button>
                         </div>
                     </div>
+                </div>
+                <div className='product-page-comments'>
+                    {comments.map(comment => {
+                        return <CommentItem key={comment.commentID} data={comment} />
+                    })}
                 </div>
             </div>
             <Footer />

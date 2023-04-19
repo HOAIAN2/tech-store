@@ -1,0 +1,53 @@
+@use '../../colors';
+
+.comment-item {
+    background-color: white;
+    width: 500px;
+    height: fit-content;
+    min-height: 100px;
+    border: 1px solid red;
+    display: flex;
+    border-radius: 5px;
+
+    & .content-left {
+        width: 65px;
+        // position: absolute;
+        height: 500%;
+
+        img {
+            margin-top: 5px;
+            margin-left: 5px;
+            border-radius: 50%;
+        }
+    }
+
+    & .content-right {
+        width: calc(500px - 155px);
+        height: fit-content;
+        margin-left: 5px;
+
+        & .content-title {
+            width: inherit;
+
+            & .name {
+                font-weight: bold;
+            }
+
+            & .product-rating {
+                display: inline-block;
+                margin-left: 10px;
+                height: 20px;
+            }
+
+            & .date {
+                font-size: small;
+                opacity: 0.5;
+            }
+        }
+
+        & .content-data {
+            width: inherit;
+            overflow: hidden;
+        }
+    }
+}
