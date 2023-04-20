@@ -62,12 +62,12 @@ async function searchProduct(req, res) {
     if (name === "") return res.sendStatus(400)
     const result = products.filter(product => {
         return product.productName.includes(name)
-    }).slice(0, 5)
+    }).slice(0, 5).map(product => product.ignoreProps('unitInOrder', 'quantity'))
     return res.json(result)
 }
 // [GET search-more]
 async function searchProductMore(req, res) {
-    // fetch(http://localhost:4000/api/products/search-more?brand=dell&brand=asus&address=ph%C3%BA%20y%C3%AAn&address=kh%C3%A1nh%20h%C3%B2a&sortby=price&sortmode=desc&index=0&star=5)
+    // http://localhost:4000/api/products/search-more?name=d&brand=dell&brand=asus&address=ph%C3%BA%20y%C3%AAn&address=kh%C3%A1nh%20h%C3%B2a&sortby=price&sortmode=desc&index=0&star=5
     const sortBys = ['price', 'hot', 'top-sell']
     const sortModes = ['asc', 'desc']
     const brands = suppliers.map(supplier => supplier.supplierName.toUpperCase())
@@ -79,7 +79,7 @@ async function searchProductMore(req, res) {
         sortBy: req.query.sortby,
         sortMode: req.query.sortmode ? req.query.sortmode : 'desc',
         indexToStart: checkNumber(req.query.index) ? parseInt(req.query.index) : 0,
-        checkgetdata: true, // check no muon lay theo brand hay theo address
+        checkGetData: true, // check no muon lay theo brand hay theo address
     }
     console.log(data)
 
@@ -129,7 +129,7 @@ async function searchProductMore(req, res) {
     }
 
     result.index >= products.length ? result.index = false : ""
-    return res.json(result)
+    return res.json({ ...result, data: result.data.map(product => product.ignoreProps('unitInOrder', 'quantity')) })
 
     function handleSort(index = 0, numberItemFound = 40) {
         let rs = []
@@ -142,7 +142,7 @@ async function searchProductMore(req, res) {
                 }
             }
             indexToStart = index
-            data.checkgetdata = false;
+            data.checkGetData = false;
         }
         if (data.address != 0) {
             if (rs.length != 0) {
@@ -154,7 +154,7 @@ async function searchProductMore(req, res) {
                     }
                 })
                 rs = b.filter(item => item)
-            } else if (data.checkgetdata) {
+            } else if (data.checkGetData) {
                 for (index; index < products.length; index++) {
                     if (rs.length >= numberItemFound) break;
                     for (let index1 = 0; index1 < suppliers.length; index1++) {
@@ -167,11 +167,11 @@ async function searchProductMore(req, res) {
                     }
                 }
                 indexToStart = index
-                data.checkgetdata = false
+                data.checkGetData = false
             }
         }
         // sort theo star
-        data.checkgetdata = true
+        data.checkGetData = true
         return { product: rs, indexToStart: indexToStart }
     }
 

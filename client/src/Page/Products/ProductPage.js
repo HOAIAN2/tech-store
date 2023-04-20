@@ -144,9 +144,12 @@ function ProductPage() {
                     </div>
                 </div>
                 <div className='product-page-comments'>
-                    {comments.map(comment => {
-                        return <CommentItem key={comment.commentID} data={comment} />
-                    })}
+                    <div className='comment-writter'> chỗ viết cooment ở đây</div>
+                    <div className='comment-list'>
+                        {comments.map(comment => {
+                            return <CommentItem key={comment.commentID} data={comment} />
+                        })}
+                    </div>
                 </div>
             </div>
             <Footer />
