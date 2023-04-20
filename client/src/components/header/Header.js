@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCaretDown } from "@fortawesome/free-solid-svg-icons"
+import { faCaretDown, faL } from "@fortawesome/free-solid-svg-icons"
 import { faBell } from "@fortawesome/free-solid-svg-icons"
 import { faSquareYoutube } from "@fortawesome/free-brands-svg-icons"
 import { faFacebookF } from "@fortawesome/free-brands-svg-icons"
@@ -30,6 +30,10 @@ function Header() {
     const [order, setOrder] = useState([])
     const debounce = useDebounce(searchValue, 200)
     useEffect(() => {
+        document.addEventListener('click', (e) => {
+            if (e.target.className === 'search_input') return
+            if (e.target.className !== 'search-container') setFocus(false)
+        })
         if (!debounce) return
         searchProduct(debounce)
             .then(res => {
@@ -121,7 +125,6 @@ function Header() {
                                 value={searchValue}
                                 onInput={handeInput}
                                 onFocus={() => { setFocus(true) }}
-                                onBlur={() => { setFocus(false) }}
                             ></input>
                         </div>
                         {searchValue && <div className="search_btn">
@@ -131,7 +134,7 @@ function Header() {
                                 </span>
                             </button>
                         </div>}
-                        {focus && searchValue && <SearchListPopup data={searchData} setSearchValue={setSearchValue} />}
+                        {searchValue && focus && <SearchListPopup data={searchData} setSearchValue={setSearchValue} />}
                     </form>
                     <div className="cart-shopping">
                         <FontAwesomeIcon icon={faCartShopping} />

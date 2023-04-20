@@ -204,18 +204,31 @@
 
     &-comments {
         background-color: white;
-        overflow: scroll;
-        // position: absolute;
-        // left: 50%;
-        // top: 63%;
-        // transform: translateX(-50%);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        border: 1px solid red;
+        // overflow: scroll;
+        // // position: absolute;
+        // // left: 50%;
+        // // top: 63%;
+        // // transform: translateX(-50%);
+        // display: flex;
+        // flex-direction: column;
+        // justify-content: space-between;
+        // border: 1px solid red;
         width: 1257px;
-        height: 500px;
+        height: fit-content;
+        min-height: 500px;
         margin-top: 20px;
+
+        & .comment-writter {
+            min-height: 150px;
+            border: 1px solid red;
+        }
+
+        & .comment-list {
+            padding-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
     }
 
 }
