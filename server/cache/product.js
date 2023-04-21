@@ -8,10 +8,12 @@ async function initializeProduct() {
     try {
         const queryString = [
             'SELECT products.product_id, product_name, suppliers.supplier_name, products.supplier_id, categories.category_name, price, quantity,',
-            'unit_in_order, discount, images, products.description, rates.rating, rates.rating_count',
+            'unit_in_order, discount, images, products.description, rates.rating, rates.rating_count, comments.comment_count',
             'FROM products JOIN suppliers ON products.supplier_id = suppliers.supplier_id',
             'LEFT JOIN (SELECT ratings.product_id, AVG(rate) AS rating, COUNT(*) AS rating_count FROM ratings GROUP BY ratings.product_id) AS rates ON rates.product_id = products.product_id ',
-            'JOIN categories ON products.category_id = categories.category_id'
+            'LEFT JOIN (SELECT comments.product_id, COUNT(*) AS comment_count FROM comments GROUP BY comments.product_id) AS comments ON comments.product_id = products.product_id ',
+            'JOIN categories ON products.category_id = categories.category_id',
+            'ORDER BY products.unit_in_order DESC'
         ].join(' ')
         const [rows] = await pool.query(queryString)
         rows.forEach(row => {
@@ -28,7 +30,8 @@ async function initializeProduct() {
             const rating = row['rating']
             const ratingCount = row['rating_count']
             const supplierID = row['supplier_id']
-            const product = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description, rating, ratingCount, supplierID)
+            const commentCount = row['comment_count']
+            const product = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description, rating, ratingCount, supplierID, commentCount)
             products.push(product)
         })
     } catch (error) {
@@ -37,71 +40,6 @@ async function initializeProduct() {
     }
 }
 
-// async function findProduct(name) {
-//     const result = []
-//     products.forEach((product) => {
-//         if (product.productName.includes(name)) result.push(product)
-//     })
-//     if (result.length === 0) return result
-//     else {
-//         const queryString = [
-//             'SELECT product_id, product_name, suppliers.supplier_name, categories.category_name, price, quantity,',
-//             'unit_in_order, discount, images, products.description',
-//             'FROM products JOIN suppliers ON products.supplier_id = suppliers.supplier_id',
-//             'JOIN categories ON products.category_id = categories.category_id',
-//             'WHERE product_name LIKE "%"?"%"'
-//         ].join(' ')
-//         try {
-//             const [rows] = await pool.query(queryString, [name, name, name])
-//             rows.forEach(row => {
-//                 const productID = row['product_id']
-//                 const productName = row['product_name']
-//                 const supplier = row['supplier_name']
-//                 const category = row['category_name']
-//                 const price = row['price']
-//                 const quantity = row['quantity']
-//                 const unitInOrder = row['unit_in_order']
-//                 const discount = row['discount']
-//                 const images = row['images']
-//                 const description = row['description']
-//                 const product = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description)
-//                 products.push(product)
-//                 result.push(product)
-//             })
-//             return result
-//         } catch (error) {
-//             console.log('\x1b[31m%s\x1b[0m', error.message)
-//             return []
-//         }
-//     }
-// }
-
-
-// async function findProduct(text, option, brand, indexToStart = 0) {
-//     const result = { index: 0, data: [] }
-//     products.every((product, index) => {
-//         if (!brand) {
-//             if (product.productName.toLocaleLowerCase().includes(text.toLocaleLowerCase()) && index + 1 > indexToStart) {
-//                 result.data.push(product)
-//             }
-//         } else {
-//             if (product.productName.toLocaleLowerCase().includes(text.toLocaleLowerCase()) && product.supplier === brand && index + 1 > indexToStart) {
-//                 result.data.push(product)
-//             }
-//         }
-//         if (result.data.length === 5 && option === 'less') return false
-//         if (result.data.length === 41) {
-//             result.index = index - 1
-//             return false
-//         }
-//         return true
-//     })
-
-
-//     return result
-// }
-
-
 async function createProduct(data) {
     try {
         const queryString = [
@@ -109,10 +47,11 @@ async function createProduct(data) {
             'VALUES(?, ?, ?, ?, ?, ?, ?);'
         ].join(' ')
         const queryString1 = [
-            'SELECT products.product_id, product_name, suppliers.supplier_name, categories.category_name, price, quantity,',
-            'unit_in_order, discount, images, products.description, rates.rating, rates.rating_count',
+            'SELECT products.product_id, product_name, suppliers.supplier_name, products.supplier_id, categories.category_name, price, quantity,',
+            'unit_in_order, discount, images, products.description, rates.rating, rates.rating_count, comments.comment_count',
             'FROM products JOIN suppliers ON products.supplier_id = suppliers.supplier_id',
             'LEFT JOIN (SELECT ratings.product_id, AVG(rate) AS rating, COUNT(*) AS rating_count FROM ratings GROUP BY ratings.product_id) AS rates ON rates.product_id = products.product_id ',
+            'LEFT JOIN (SELECT comments.product_id, COUNT(*) AS comment_count FROM comments GROUP BY comments.product_id) AS comments ON comments.product_id = products.product_id ',
             'JOIN categories ON products.category_id = categories.category_id',
             'ORDER BY product_id DESC LIMIT 1;'
         ].join(' ')
@@ -138,7 +77,9 @@ async function createProduct(data) {
         const description = newProduct[0]['description']
         const rating = row['rating']
         const ratingCount = row['rating_count']
-        const product = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description, rating, ratingCount)
+        const supplierID = row['supplier_id']
+        const commentCount = row['comment_count']
+        const product = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description, rating, ratingCount, supplierID, commentCount)
         return product
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', `Fail to add product: ${error.message}`)
@@ -148,7 +89,6 @@ async function createProduct(data) {
 
 module.exports = {
     initializeProduct,
-    // findProduct,
     createProduct,
     products,
 }
