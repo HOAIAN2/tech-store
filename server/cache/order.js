@@ -112,6 +112,12 @@ async function paidOrder(orderID, paymentMethodID) {
         ].join(' ')
         await pool.query(queryString, [paymentMethodID, orderID])
         const order = await getOrder(orderID)
+        order.products.forEach(product => {
+            const delta = product.quantity * -1
+            const tempProduct = products.find(item => item.productID === product.productID)
+            tempProduct.updateUnitInOrder(delta)
+            tempProduct.updateQuantity(delta)
+        })
         return order
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)
@@ -158,6 +164,7 @@ async function addOrderDetail(orderID, productID, quantity) {
         await pool.query(queryString, [orderID, productID, quantity])
         const order = orders.find(item => item.orderID === orderID)
         order.addProduct(product.productID, product.productName, quantity)
+        product.updateUnitInOrder(quantity)
         products.sort((x, y) => y.unitInOrder - x.unitInOrder)
         return order
     } catch (error) {
@@ -166,6 +173,7 @@ async function addOrderDetail(orderID, productID, quantity) {
     }
 }
 async function updateOrderDetail(orderID, productID, quantity) {
+    const product = products.find(item => item.productID === productID)
     const queryString = [
         'UPDATE order_details',
         'SET quantity = ?',
@@ -174,7 +182,15 @@ async function updateOrderDetail(orderID, productID, quantity) {
     try {
         await pool.query(queryString, [quantity, orderID, productID])
         const order = orders.find(item => item.orderID === orderID)
+        let delta = 0
+        for (let index = 0; index < order.products.length; index++) {
+            if (order.products[index].productID === productID) {
+                delta = quantity - order.products[index].quantity
+                break
+            }
+        }
         order.setProduct(productID, quantity)
+        product.updateUnitInOrder(delta)
         products.sort((x, y) => y.unitInOrder - x.unitInOrder)
         return order
     } catch (error) {
@@ -183,6 +199,7 @@ async function updateOrderDetail(orderID, productID, quantity) {
     }
 }
 async function removeOrderDetail(orderID, productID) {
+    const product = products.find(item => item.productID === productID)
     const queryString = [
         'DELETE FROM order_details',
         'WHERE order_id = ? AND product_id = ?'
@@ -190,7 +207,15 @@ async function removeOrderDetail(orderID, productID) {
     try {
         await pool.query(queryString, [orderID, productID])
         const order = orders.find(item => item.orderID === orderID)
+        let delta = 0
+        for (let index = 0; index < order.products.length; index++) {
+            if (order.products[index].productID === productID) {
+                delta = order.products[index].quantity * -1
+                break
+            }
+        }
         order.removeProduct(productID)
+        product.updateUnitInOrder(delta)
         products.sort((x, y) => y.unitInOrder - x.unitInOrder)
         return order
     } catch (error) {
