@@ -12,9 +12,9 @@ class Product {
         this.discount = discount
         this.images = images
         this.description = description
-        this.rating = parseFloat(rating)
-        this.ratingCount = ratingCount
-        this.commentCount = commentCount
+        this.rating = parseFloat(rating) || 0
+        this.ratingCount = ratingCount || 0
+        this.commentCount = commentCount || 0
     }
     updateUnitInOrder(delta) {
         this.unitInOrder += delta
