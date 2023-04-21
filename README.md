@@ -14,7 +14,7 @@
 ## API
 ### User routes: /api/user/
 >[GET] /: JWT require
-- Respone
+- Response
 ``` json
 {
     "username": "username",
@@ -36,7 +36,7 @@
     "password": "password"
 }
 ```
-- Respone
+- Response
 ```json
 {
     "accessToken": "string",
@@ -50,7 +50,7 @@
     "refreshToken": "string"
 }
 ```
-- Respone
+- Response
 ```json
 {
     "message": "message"
@@ -65,7 +65,7 @@
     "refreshToken": "string"
 }
 ```
-- Respone
+- Response
 >[POST] register
 - Request
 ```json
@@ -81,7 +81,7 @@
     "password": "password"
 }
 ```
-- Respone
+- Response
 ```json
 {
     "accessToken": "string",
@@ -95,7 +95,7 @@
     "refreshToken": "string"
 }
 ```
-- Respone
+- Response
 ```json
 {
     "message": "message"
@@ -115,13 +115,13 @@
     "phoneNumber": "+84....", // phone number in Vietnam, CHAR(12) NULLABLE
 }
 ```
-- Respone
+- Response
 >[POST] upload
 - Request: formData(file: yourImage) (accept: png, jpeg, jpg)
-- Respone: HTTP status code
+- Response: HTTP status code
 ### Product routes: /api/products/
 >[GET]
-- Respone
+- Response
 ```json
 {
     "category": [
@@ -139,7 +139,7 @@
 }
 ```
 >[GET] product?id=number
-- Respone
+- Response
 ```json
 {
     "productID": 1,
@@ -153,7 +153,7 @@
 }
 ```
 >[GET] suppliers-categories
-- Respone
+- Response
 ```json
 {
     "categories": [
@@ -167,12 +167,7 @@
 >[GET] search
 - Request: query params
   - _name_ : product name
-  - _option_ : less, more
-  - _sortBy_: price, hot, top-sell
-  - _sortMode_: asc, desc
-  - _indexToStart_:
-
-- Respone
+- Response
   - _less_
   ```json
   [
@@ -185,7 +180,14 @@
     }
   ]
   ```
+>[GET] search-more
   - _more_
+  - _sortBy_: price, hot, top-sell
+  - _star_: 1->5
+  - _brand_
+  - _address_
+  - _sortMode_: asc, desc
+  - _indexToStart_:
   ```json
   {
     "index": 5,
@@ -217,7 +219,7 @@
   }
   ```
   - images "files": accept: jpeg, jpg, png, =< 500kbs
-- Respone
+- Response
 ```json
 {
     "productID": 1,
@@ -228,5 +230,135 @@
     "discount": null,
     "images": ["string"],
     "description": null
+}
+```
+### Order routes: /api/order/
+>[POST] create-order: JWT require
+- Request
+- Response
+```json
+{
+    "orderID": 1,
+    "userID": 1,
+    "orderDate": null,
+    "paidMethod": null,
+    "paid": 0,
+    "products": [],
+    "total": 0,
+    "voucher": null
+}
+```
+>[POST] add-product, update-product, remove-product (Same input output) JWT require
+- Request
+```json
+{
+    "productID": 1,
+    "quantity": 2
+}
+```
+- Response
+```json
+{
+    "orderID": 1,
+    "userID": 1,
+    "orderDate": null,
+    "paidMethod": null,
+    "paid": 0,
+    "products": [
+        {
+            "productID": 3,
+            "productName": "Laptop Lenovo IdeaPad Gaming 3 15IHU6 82K100FBVN (Core i7-11370H/8GB RAM/512GB SSD/15.6-in - Hàng chính hãng",
+            "quantity": 6
+        },
+        {
+            "productID": 4,
+            "productName": "Laptop Acer Nitro 5 AN515-45-R6EV R5-5600H |8GB|512GB|GTX 1650 4GB|156 FHD 144Hz|Win 11 Hàng chính hãng",
+            "quantity": 3
+        },
+        {
+            "productID": 7,
+            "productName": "Laptop Lenovo Legion 5 15IAH7 82RC003WVN |i5-12500H|8GB|512GB|RTX 3050 Ti|Win11- Hàng chính hãng",
+            "quantity": 3
+        }
+    ],
+    "total": 0,
+    "voucher": null
+}
+```
+>[POST] make-payment: JWT require
+- Request
+```json
+{
+    "paymentMethod": 1
+}
+```
+- Response
+```json
+{
+    "orderID": 1,
+    "userID": 1,
+    "orderDate": "2023-04-21T11:28:22.000Z",
+    "paidMethod": "Electronic bank transfers",
+    "paid": true,
+    "products": [
+        {
+            "productID": 4,
+            "productName": "Laptop Acer Nitro 5 AN515-45-R6EV R5-5600H |8GB|512GB|GTX 1650 4GB|156 FHD 144Hz|Win 11 Hàng chính hãng",
+            "quantity": 3,
+            "price": 18790000,
+            "discount": null
+        },
+        {
+            "productID": 7,
+            "productName": "Laptop Lenovo Legion 5 15IAH7 82RC003WVN |i5-12500H|8GB|512GB|RTX 3050 Ti|Win11- Hàng chính hãng",
+            "quantity": 3,
+            "price": 32150400,
+            "discount": null
+        }
+    ],
+    "total": 152821200,
+    "voucher": null
+}
+```
+>[POST] set-voucher JWT require
+- Request
+```json
+{
+    "voucherID": "string"
+}
+```
+- Response
+```json
+{
+    "orderID": 1,
+    "userID": 1,
+    "orderDate": null,
+    "paidMethod": null,
+    "paid": 0,
+    "products": [
+        {
+            "productID": 3,
+            "productName": "Laptop Lenovo IdeaPad Gaming 3 15IHU6 82K100FBVN (Core i7-11370H/8GB RAM/512GB SSD/15.6-in - Hàng chính hãng",
+            "quantity": 6
+        },
+        {
+            "productID": 4,
+            "productName": "Laptop Acer Nitro 5 AN515-45-R6EV R5-5600H |8GB|512GB|GTX 1650 4GB|156 FHD 144Hz|Win 11 Hàng chính hãng",
+            "quantity": 3
+        },
+        {
+            "productID": 7,
+            "productName": "Laptop Lenovo Legion 5 15IAH7 82RC003WVN |i5-12500H|8GB|512GB|RTX 3050 Ti|Win11- Hàng chính hãng",
+            "quantity": 3
+        }
+    ],
+    "total": 0,
+    "voucher": {
+        "voucherID": "string",
+        "voucherName": "string",
+        "voucherDiscount": 0.2,
+        "expiryDate": "date time",
+        "description": "date"
+    }
 }
 ```
