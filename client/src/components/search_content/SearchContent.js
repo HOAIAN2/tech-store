@@ -1,16 +1,22 @@
 import { useEffect, useState } from "react"
 import { getAddress, getBrands } from "../../utils/supplier/index"
+import { getProductSearchPage } from "../../utils/Product/index"
 import ItemSidebarSearchPage from "../render_item/ItemSidebarSearchPage"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faList } from "@fortawesome/free-solid-svg-icons"
+import { faList, faChevronDown } from "@fortawesome/free-solid-svg-icons"
 import "./SearchContent.scss"
+import { useSearchParams } from "react-router-dom"
+import ProductItem from "../render_item/ProductItem"
+import { fortmatarr } from "../home_content/content/ProductHome"
 
 
 
 function SearchContent() {
+    const [searchParam] = useSearchParams()
     const [addDress, setAddress] = useState([])
     const [brands, setBrands] = useState([])
     const [indexToShow] = useState(5)
+    const [products, setproducts] = useState([])
 
     useEffect(() => {
         getAddress()
@@ -23,7 +29,12 @@ function SearchContent() {
             })
     }, [])
 
-
+    useEffect(() => {
+        getProductSearchPage(searchParam.get('name'))
+            .then((rs => {
+                setproducts(rs)
+            }))
+    }, [searchParam])
     return (
         <div className="wrap_search_content">
             <div className="sidebar_search_page">
@@ -56,7 +67,41 @@ function SearchContent() {
                     </ul>
                 </nav>
             </div>
-            <div className="main_search_page"></div>
+            <div className="main_search_page">
+                <div className="sort">
+                    {/* <div className="sortitem"> */}
+                    <span className="titlesort">Sắp Xếp Theo</span>
+                    {/* </div> */}
+                    <div className="sortitem">
+                        <span className="sortnew">Mới Nhất</span>
+                    </div>
+                    <div className="sortitem">
+                        <span className="sorthot">Bán Chạy</span>
+                    </div>
+                    <div className="sortitem">
+                        <span className="sortprice">Giá</span>
+                        <FontAwesomeIcon icon={faChevronDown} />
+                        <div className="sortprice_item">
+                            <span>Giá Thấp Đến Cao</span>
+                            <span>Giá Cao Đến Thấp</span>
+                        </div>
+                    </div>
+                </div>
+                <div className="product-search-page">
+                    {
+                        products.data ?
+                            fortmatarr(products.data, 4).map((item, index) => {
+                                return (
+                                    <div key={index} className="product-search-page-item">
+                                        {item.map((item, index) => {
+                                            return <div key={index}><ProductItem data={item} type="search" /></div>
+                                        })}
+                                    </div>
+                                )
+                            }) : <></>
+                    }
+                </div>
+            </div>
         </div >
     )
 }

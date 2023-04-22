@@ -122,22 +122,89 @@
 
                     }
 
-                    // .wrap_item_sidebar_search_item_star {
-                    //     margin-left: 5px;
-                    //     font-size: 14px;
-                    //     position: relative;
-
-                    //     .item_sidebar_search_item_star {
-                    //         height: 18px;
-                    //         display: flex;
-                    //         margin-bottom: 10px;
-                    //         cursor: pointer;
-                    //         transition: all ease 0.2s;
-                    //         position: relative;
-                    //         align-items: center;
-                    //     }
-                    // }
                 }
+            }
+        }
+    }
+
+    .main_search_page {
+        flex: 1;
+        margin-left: 15px;
+        border-radius: 3px;
+
+        .sort {
+            display: flex;
+            padding: 10px;
+            background-color: #d9d9d9;
+            align-items: center;
+
+            .titlesort {
+                margin: 0 20px;
+            }
+
+            .sortitem {
+                padding: 10px 20px;
+                margin-right: 10px;
+                background-color: #fff;
+                border-radius: 3px;
+
+                .sortprice {
+                    margin-right: 115px;
+                }
+
+                &:nth-child(4) {
+                    position: relative;
+
+                    &:hover {
+                        .sortprice_item {
+                            display: block;
+                        }
+                    }
+                }
+
+                .sortprice_item {
+                    position: absolute;
+                    left: 0;
+                    width: 100%;
+                    top: 120%;
+                    background-color: #fff;
+                    box-shadow: 0px 0px 1px #000;
+                    border-radius: 3px;
+                    display: none;
+                    z-index: 1;
+
+                    span {
+                        display: inline-block;
+                        margin: 10px 20px;
+                        cursor: pointer;
+
+                        &:hover {
+                            color: colors.$color-red;
+                        }
+                    }
+
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        width: 100%;
+                        height: 30px;
+                        z-index: 0;
+                        left: 0;
+                        top: 0;
+                        transform: translateY(-70%);
+                    }
+                }
+            }
+        }
+
+        .product-search-page {
+            margin-top: 20px;
+
+            .product-search-page-item {
+                display: inline-flex;
+                justify-content: space-between;
+                margin-bottom: 30px;
+                width: 100%;
             }
         }
     }
