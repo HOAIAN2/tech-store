@@ -68,6 +68,15 @@ async function getSoldQuantity(productID) {
     }
 }
 
+async function getProductSearchPage(name) {
+    try {
+        const rs = await request.get(`/products/search-more?name=${name}`)
+        return rs.data
+    } catch (error) {
+        return []
+    }
+}
+
 export {
     searchProduct,
     getProductByID,
@@ -75,4 +84,5 @@ export {
     getCategories,
     getHomeProduct,
     getSoldQuantity,
+    getProductSearchPage
 }

@@ -2,14 +2,27 @@ import ProductRating from "../../Page/Products/ProductRating"
 import { baseIMG } from "../../utils/api-config"
 import { Link } from "react-router-dom"
 import './ProductItem.scss'
+import { getSoldQuantity } from "../../utils/Product/index"
+import { useEffect, useState } from "react"
 
-function ProductItem({ data }) {
+
+
+function ProductItem({ data, type = "home" }) {
     // console.log(data)
     // data.discount = 0.2
+    const [countbuy, setcountbuy] = useState('0')
     function formatPrice(price) {
         return `${price.toLocaleString('vi')} ₫`
     }
-    if (data.length !== 0) {
+    useEffect(() => {
+        getSoldQuantity(data.productID)
+            .then((rs) => {
+                setcountbuy(rs)
+            })
+    }, [])
+
+    // if (data.length !== 0) {
+    if (type === 'home') {
         return (
             <div className="producthome_item">
                 <div className="contentitem">
@@ -31,6 +44,33 @@ function ProductItem({ data }) {
             </div>
         )
     }
+    else if (type === 'search') {
+        return (
+            <div className="productsearch_item">
+                <div className="contentitemsearch">
+                    <div className="search-product-item-img" style={{ backgroundImage: `url('${baseIMG}products/${data.images[0]}')` }}></div>
+                    <div className="search__produt-item-name">{data.productName}</div>
+                    <div className="search__produt-item-gia">
+                        <div className="wrap-price" style={{ background: `linear-gradient(to right, #d41138 ${data.discount ? 100 - (100 * data.discount) : 100}%, #ef8573 0%)` }}>
+                            <span className="price">{formatPrice(data.price * (1 - data.discount))}</span>
+                        </div>
+                        {data.discount ? <span className="oldprice">{formatPrice(data.price)}</span> : <></>}
+                    </div>
+                    <div className="search__produt-item-action">
+                        <div style={{ height: "18px" }}>
+                            <ProductRating rate={data.rating} />
+                        </div>
+                        <div className="count-Buy">{`đã bán ${countbuy}`}</div>
+                        {/* <Link to={`product/${data.productID}`}>Chi tiết</Link> */}
+                    </div>
+                    {/* <div className="discount">
+                            <span>Giảm</span>
+                        </div> */}
+                </div>
+            </div>
+        )
+    }
+    // }
 }
 
 export default ProductItem

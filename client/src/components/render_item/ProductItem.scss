@@ -99,3 +99,105 @@
         transform: scale(1.03);
     }
 }
+
+
+.productsearch_item {
+    width: 247px;
+    padding: 0 12px;
+
+    .contentitemsearch {
+        position: relative;
+        border-radius: 3px;
+        background-color: #fff;
+        box-shadow: 0px 0px 6px;
+        // overflow: hidden;
+        transition: transform linear 0.1s;
+
+        .search-product-item-img {
+            padding-top: 100%;
+            transition: transform linear 0.2s;
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
+            // background-image: url('http://localhost:4000/images/products/c2e7398856394743517f89ff2bf15f4e.jpg');
+        }
+
+        .search__produt-item-name {
+            font-size: 17px;
+            line-height: 22px;
+            margin: 10px 10px 6px 10px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+        }
+
+        .search__produt-item-gia {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 10px 6px 10px;
+
+            .wrap-price {
+                padding: 3px 18px;
+                border-radius: 17px;
+                // background-color: colors.$color-red;
+
+                .price {
+                    font-size: 17px;
+                    color: #fff;
+                }
+            }
+
+            .oldprice {
+                position: absolute;
+                background-color: colors.$color-red;
+                top: 57%;
+                padding: 2px 12px;
+                border-radius: 12px;
+                color: #fff;
+                text-decoration: line-through;
+            }
+        }
+
+        .search__produt-item-action {
+            display: flex;
+            padding: 0px 10px 10px 10px;
+            align-items: center;
+            position: relative;
+
+            .count-Buy {
+                margin-left: 10px;
+                transform: translateY(2px);
+            }
+        }
+
+        &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 0px 6px colors.$color-red;
+
+        }
+
+        // .discount {
+        //     position: absolute;
+        //     top: 11px;
+        //     left: -11px;
+        //     background-color: colors.$color-red;
+        //     padding: 5px 4px;
+        //     font-size: 13px;
+        //     color: #fff;
+
+        //     &::after {
+        //         content: "";
+        //         position: absolute;
+        //         top: 100%;
+        //         z-index: -1;
+        //         left: 0;
+        //         border-left: 6px solid transparent;
+        //         border-top: 6px solid colors.$color-red;
+        //         border-right: 6px solid colors.$color-red;
+        //         border-bottom: 6px solid transparent;
+
+        //     }
+        // }
+    }
+}

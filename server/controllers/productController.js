@@ -63,6 +63,7 @@ async function searchProduct(req, res) {
     const result = products.filter(product => {
         return product.productName.includes(name)
     }).slice(0, 5).map(product => product.ignoreProps('unitInOrder', 'quantity'))
+    // console.log(result)
     return res.json(result)
 }
 // [GET search-more]
@@ -134,15 +135,32 @@ async function searchProductMore(req, res) {
     function handleSort(index = 0, numberItemFound = 40) {
         let rs = []
         let indexToStart = products.length;
-        if (data.brand.length != 0) {
-            for (index; index < products.length; index++) {
-                if (rs.length >= numberItemFound) break;
-                if (data.brand.includes(products[index].supplier.toUpperCase()) && products[index].productName.toUpperCase().includes(data.name.toUpperCase())) {
-                    rs.push(products[index]);
-                }
+
+        for (index; index < products.length; index++) {
+            if (rs.length >= numberItemFound) break;
+            if (products[index].productName.toUpperCase().includes(data.name.toUpperCase())) {
+                rs.push(products[index])
             }
-            indexToStart = index
-            data.checkGetData = false;
+        }
+        indexToStart = index
+        // data.checkGetData = false;
+
+        if (data.brand.length != 0) {
+            // for (let index = 0; index < rs.length; index++) {
+            //     if (data.brand.includes(rs[index].supplier.toUpperCase())) {
+            //         rs.push(products[index]);
+            //     }
+            // }
+            if (rs.length != 0) {
+                const a = rs.map((item, index) => {
+                    if (data.brand.includes(item.supplier.toUpperCase())) {
+                        return item
+                    }
+                })
+                rs = a.filter(item => item)
+            }
+            // indexToStart = index
+            // data.checkGetData = false;
         }
         if (data.address != 0) {
             if (rs.length != 0) {
@@ -154,24 +172,25 @@ async function searchProductMore(req, res) {
                     }
                 })
                 rs = b.filter(item => item)
-            } else if (data.checkGetData) {
-                for (index; index < products.length; index++) {
-                    if (rs.length >= numberItemFound) break;
-                    for (let index1 = 0; index1 < suppliers.length; index1++) {
-                        if (suppliers[index1].supplierId === products[index].supplierID && products[index].productName.toUpperCase().includes(data.name.toUpperCase())) {
-                            if (!isValidAddress(suppliers[index1].address)) {
-                                rs.push(products[index])
-                                break;
-                            }
-                        }
-                    }
-                }
-                indexToStart = index
-                data.checkGetData = false
             }
+            // else if (data.checkGetData) {
+            //     for (index; index < products.length; index++) {
+            //         if (rs.length >= numberItemFound) break;
+            //         for (let index1 = 0; index1 < suppliers.length; index1++) {
+            //             if (suppliers[index1].supplierId === products[index].supplierID && products[index].productName.toUpperCase().includes(data.name.toUpperCase())) {
+            //                 if (!isValidAddress(suppliers[index1].address)) {
+            //                     rs.push(products[index])
+            //                     break;
+            //                 }
+            //             }
+            //         }
+            //     }
+            //     indexToStart = index
+            //     data.checkGetData = false
+            // }
         }
         // sort theo star
-        data.checkGetData = true
+        // data.checkGetData = true
         return { product: rs, indexToStart: indexToStart }
     }
 
