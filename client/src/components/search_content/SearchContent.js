@@ -7,13 +7,13 @@ import { faList, faChevronDown } from "@fortawesome/free-solid-svg-icons"
 import "./SearchContent.scss"
 import { useSearchParams } from "react-router-dom"
 import ProductItem from "../render_item/ProductItem"
-import { fortmatarr } from "../home_content/content/ProductHome"
+import { formatArray } from "../home_content/content/ProductHome"
 
 
 
 function SearchContent() {
     const [searchParam] = useSearchParams()
-    const [addDress, setAddress] = useState([])
+    const [address, setAddress] = useState([])
     const [brands, setBrands] = useState([])
     const [indexToShow] = useState(5)
     const [products, setproducts] = useState([])
@@ -47,7 +47,7 @@ function SearchContent() {
                         <li>
                             <div className="title_item_sidebar_list">Theo Địa Chỉ</div>
                             <div className="wrap_item_sidebar_search_item">
-                                <ItemSidebarSearchPage arr={addDress} index={indexToShow} />
+                                <ItemSidebarSearchPage arr={address} index={indexToShow} />
                             </div>
                             {/* {sidebaraddress.length > indexToShow ? <button onClick={renderitemwhenclickbtnmore}>Xem Thêm</button> : <></>} */}
                         </li>
@@ -90,7 +90,7 @@ function SearchContent() {
                 <div className="product-search-page">
                     {
                         products.data ?
-                            fortmatarr(products.data, 4).map((item, index) => {
+                            formatArray(products.data, 4).map((item, index) => {
                                 return (
                                     <div key={index} className="product-search-page-item">
                                         {item.map((item, index) => {

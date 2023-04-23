@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { fortmatarr } from "../home_content/content/ProductHome"
+import { formatArray } from "../home_content/content/ProductHome"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons"
 import { faStar } from "@fortawesome/free-solid-svg-icons"
@@ -51,7 +51,7 @@ function ItemSidebarSearchPage({ arr = [], index, numberToShow, star = false }) 
     useEffect(() => {
         if (arr.length != 0) {
             const b = arr.slice(index)
-            const a = fortmatarr(b, numberToShow)
+            const a = formatArray(b, numberToShow)
             setBrands(a)
         }
     }, [arr])

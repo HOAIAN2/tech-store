@@ -4,15 +4,15 @@ import { getHomeProduct } from "../../../utils/Product"
 import { useEffect, useState } from "react"
 
 function ProductHome() {
-    const [products, setproducts] = useState([])
+    const [products, setProducts] = useState([])
     useEffect(() => {
         getHomeProduct()
             .then((rs) => {
                 const a = rs.data;
                 a.map((item, index) => {
-                    a[index].products = fortmatarr(item.products, 4)
+                    a[index].products = formatArray(item.products, 4)
                 })
-                setproducts(a)
+                setProducts(a)
             })
     }, [])
 
@@ -40,11 +40,11 @@ function ProductHome() {
 }
 
 
-export function fortmatarr(data, indextoformat) {
+export function formatArray(data, indexToFormat) {
     let a = []
     let b = []
     data.forEach((item, index) => {
-        if (((index + 1) % indextoformat) === 0) {
+        if (((index + 1) % indexToFormat) === 0) {
             b.push(item)
             a.push(b)
             b = []
