@@ -70,7 +70,11 @@ async function getSoldQuantity(productID) {
 
 async function getProductSearchPage(name) {
     try {
-        const rs = await request.get(`/products/search-more?name=${name}`)
+        const rs = await request.get('/products/search-more', {
+            params: {
+                name: name
+            }
+        })
         return rs.data
     } catch (error) {
         return []

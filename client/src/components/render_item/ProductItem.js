@@ -1,6 +1,6 @@
 import ProductRating from "../../Page/Products/ProductRating"
 import { baseIMG } from "../../utils/api-config"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import './ProductItem.scss'
 import { getSoldQuantity } from "../../utils/Product/index"
 import { useEffect, useState } from "react"
@@ -10,14 +10,15 @@ import { useEffect, useState } from "react"
 function ProductItem({ data, type = "home" }) {
     // console.log(data)
     // data.discount = 0.2
-    const [countbuy, setcountbuy] = useState('0')
+    const [countBought, setCountBought] = useState('0')
+    const navigate = useNavigate()
     function formatPrice(price) {
         return `${price.toLocaleString('vi')} ₫`
     }
     useEffect(() => {
         getSoldQuantity(data.productID)
             .then((rs) => {
-                setcountbuy(rs)
+                setCountBought(rs)
             })
     }, [])
 
@@ -46,7 +47,7 @@ function ProductItem({ data, type = "home" }) {
     }
     else if (type === 'search') {
         return (
-            <div className="productsearch_item">
+            <div onClick={() => { navigate(`/product/${data.productID}`) }} className="productsearch_item">
                 <div className="contentitemsearch">
                     <div className="search-product-item-img" style={{ backgroundImage: `url('${baseIMG}products/${data.images[0]}')` }}></div>
                     <div className="search__produt-item-name">{data.productName}</div>
@@ -60,8 +61,8 @@ function ProductItem({ data, type = "home" }) {
                         <div style={{ height: "18px" }}>
                             <ProductRating rate={data.rating} />
                         </div>
-                        <div className="count-Buy">{`đã bán ${countbuy}`}</div>
-                        {/* <Link to={`product/${data.productID}`}>Chi tiết</Link> */}
+                        {/* <Link to={`/product/${data.productID}`}>Chi tiết</Link> */}
+                        <div className="count-Buy">{`đã bán ${countBought}`}</div>
                     </div>
                     {/* <div className="discount">
                             <span>Giảm</span>
