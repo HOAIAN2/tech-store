@@ -7,7 +7,7 @@ async function initializeProduct() {
     console.log('\x1b[1m%s\x1b[0m', 'Initializing products data...')
     try {
         const queryString = [
-            'SELECT products.product_id, product_name, suppliers.supplier_name, products.supplier_id, categories.category_name, price, quantity,',
+            'SELECT products.product_id, product_name, suppliers.supplier_name, products.supplier_id, categories.category_name, price, quantity, sold_quantity,',
             'unit_in_order, discount, images, products.description, rates.rating, rates.rating_count, comments.comment_count',
             'FROM products JOIN suppliers ON products.supplier_id = suppliers.supplier_id',
             'LEFT JOIN (SELECT ratings.product_id, AVG(rate) AS rating, COUNT(*) AS rating_count FROM ratings GROUP BY ratings.product_id) AS rates ON rates.product_id = products.product_id ',
@@ -23,6 +23,7 @@ async function initializeProduct() {
             const category = row['category_name']
             const price = row['price']
             const quantity = row['quantity']
+            const soldQuantity = row['sold_quantity']
             const unitInOrder = row['unit_in_order']
             const discount = row['discount']
             const images = row['images'].split(',')
@@ -31,7 +32,7 @@ async function initializeProduct() {
             const ratingCount = row['rating_count']
             const supplierID = row['supplier_id']
             const commentCount = row['comment_count']
-            const product = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description, rating, ratingCount, supplierID, commentCount)
+            const product = new Product(productID, productName, supplier, category, price, quantity, soldQuantity, unitInOrder, discount, images, description, rating, ratingCount, supplierID, commentCount)
             products.push(product)
         })
     } catch (error) {
@@ -47,7 +48,7 @@ async function createProduct(data) {
             'VALUES(?, ?, ?, ?, ?, ?, ?);'
         ].join(' ')
         const queryString1 = [
-            'SELECT products.product_id, product_name, suppliers.supplier_name, products.supplier_id, categories.category_name, price, quantity,',
+            'SELECT products.product_id, product_name, suppliers.supplier_name, products.supplier_id, categories.category_name, price, quantity, sold_quantity,',
             'unit_in_order, discount, images, products.description, rates.rating, rates.rating_count, comments.comment_count',
             'FROM products JOIN suppliers ON products.supplier_id = suppliers.supplier_id',
             'LEFT JOIN (SELECT ratings.product_id, AVG(rate) AS rating, COUNT(*) AS rating_count FROM ratings GROUP BY ratings.product_id) AS rates ON rates.product_id = products.product_id ',
@@ -71,6 +72,7 @@ async function createProduct(data) {
         const category = newProduct[0]['category_name']
         const price = newProduct[0]['price']
         const quantity = newProduct[0]['quantity']
+        const soldQuantity = newProduct[0]['sold_quantity']
         const unitInOrder = newProduct[0]['unit_in_order']
         const discount = newProduct[0]['discount']
         const images = newProduct[0]['images'].split(',')
@@ -79,7 +81,7 @@ async function createProduct(data) {
         const ratingCount = row['rating_count']
         const supplierID = row['supplier_id']
         const commentCount = row['comment_count']
-        const product = new Product(productID, productName, supplier, category, price, quantity, unitInOrder, discount, images, description, rating, ratingCount, supplierID, commentCount)
+        const product = new Product(productID, productName, supplier, category, price, quantity, soldQuantity, unitInOrder, discount, images, description, rating, ratingCount, supplierID, commentCount)
         return product
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', `Fail to add product: ${error.message}`)

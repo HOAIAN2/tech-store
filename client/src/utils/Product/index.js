@@ -55,18 +55,6 @@ async function getHomeProduct() {
     }
 }
 
-async function getSoldQuantity(productID) {
-    try {
-        const rs = await request.get("/order/sold-quantity", {
-            params: {
-                productID: productID
-            }
-        })
-        return rs.data
-    } catch (error) {
-        return 0
-    }
-}
 
 async function getProductSearchPage(name) {
     try {
@@ -87,6 +75,5 @@ export {
     getHotProducts,
     getCategories,
     getHomeProduct,
-    getSoldQuantity,
     getProductSearchPage
 }

@@ -52,6 +52,7 @@ CREATE TABLE products (
     category_id INT NOT NULL,
     price INT UNSIGNED NOT NULL,
     quantity INT UNSIGNED NOT NULL DEFAULT 0,
+    sold_quantity INT UNSIGNED NOT NULL DEFAULT 0,
     unit_in_order INT UNSIGNED NOT NULL DEFAULT 0,
     discount DOUBLE,
     images VARCHAR(500),
@@ -155,6 +156,7 @@ DELIMITER $$
             UPDATE products JOIN order_details ON products.product_id = order_details.product_id
 			JOIN orders ON order_details.order_id = NEW.order_id
 			SET products.quantity = products.quantity - order_details.quantity,
+            products.sold_quantity = products.sold_quantity + order_details.quantity,
 			unit_in_order = unit_in_order - order_details.quantity,
 			order_details.price = products.price,
 			order_details.discount = products.discount

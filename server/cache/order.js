@@ -117,6 +117,7 @@ async function paidOrder(orderID, paymentMethodID) {
             const tempProduct = products.find(item => item.productID === product.productID)
             tempProduct.updateUnitInOrder(delta)
             tempProduct.updateQuantity(delta)
+            tempProduct.updateSoldQuantity(product.quantity)
         })
         return order
     } catch (error) {

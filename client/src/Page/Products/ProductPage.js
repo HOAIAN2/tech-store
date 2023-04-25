@@ -8,7 +8,7 @@ import Footer from '../../components/footer/Footer'
 import ProductRating from './ProductRating'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartShopping, faTruck, faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons'
-import { getProductByID, getSoldQuantity } from "../../utils/Product/index"
+import { getProductByID } from "../../utils/Product/index"
 import { getComments } from '../../utils/Comment'
 import { useUserData } from "../../Context"
 import { Link } from 'react-router-dom'
@@ -23,7 +23,6 @@ function ProductPage() {
     const [comments, setComments] = useState([])
     const [notFound, setNotFound] = useState(false)
     const [quantity, setQuantity] = useState(1)
-    const [soldQuantity, setSoldQuantity] = useState('0')
     const [imageID, setImageID] = useState(1)
     const { id } = useParams()
     useEffect(() => {
@@ -44,10 +43,6 @@ function ProductPage() {
             })
         document.querySelector('.App').scrollTo(0, 0)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        getSoldQuantity(id)
-            .then((rs) => {
-                setSoldQuantity(rs)
-            })
         getComments(id, 'DESC')
             .then(result => {
                 setComments(result)
@@ -104,7 +99,7 @@ function ProductPage() {
                                 <div className='Evaluate2'>Đánh Giá</div>
                             </div>
                             <div className='action_item'>
-                                <div className='bought1'>{soldQuantity}</div>
+                                <div className='bought1'>{product.soldQuantity}</div>
                                 <div className='bought2'>Đã Mua</div>
                             </div>
                         </div>
