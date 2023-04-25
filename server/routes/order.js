@@ -8,7 +8,6 @@ router.post('/update-product', authController.authenticateToken, orderController
 router.post('/remove-product', authController.authenticateToken, orderController.removeProduct)
 router.post('/make-payment', authController.authenticateToken, orderController.makePayment)
 router.post('/set-voucher', authController.authenticateToken, orderController.setVoucher)
-router.get('/sold-quantity', orderController.getSoldQuantity)
 router.get('/', authController.authenticateToken, orderController.getOrder)
 
 module.exports = router

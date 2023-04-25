@@ -1,5 +1,5 @@
 class Product {
-    constructor(productID, productName, supplier, category, price, quantity,
+    constructor(productID, productName, supplier, category, price, quantity, soldQuantity,
         unitInOrder, discount, images, description, rating, ratingCount, supplierID, commentCount) {
         this.productID = productID
         this.productName = productName
@@ -8,6 +8,7 @@ class Product {
         this.category = category
         this.price = price
         this.quantity = quantity
+        this.soldQuantity = soldQuantity
         this.unitInOrder = unitInOrder
         this.discount = discount
         this.images = images
@@ -21,6 +22,9 @@ class Product {
     }
     updateQuantity(delta) {
         this.quantity += delta
+    }
+    updateSoldQuantity(quantity) {
+        this.soldQuantity += quantity
     }
     ignoreProps() {
         const object = { ...this }
