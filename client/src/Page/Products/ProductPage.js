@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import NotFound from '../errors/NotFound'
 import { baseIMG } from '../../utils/api-config'
 import './ProductPage.scss'
@@ -19,11 +19,14 @@ function ProductPage() {
     function formatPrice(price) {
         return `${price.toLocaleString('vi')} đ`
     }
+    const [comment, setComment] = useState('')
     const [product, setProduct] = useState({})
     const [comments, setComments] = useState([])
     const [notFound, setNotFound] = useState(false)
     const [quantity, setQuantity] = useState(1)
     const [imageID, setImageID] = useState(1)
+    const navigate = useNavigate()
+    const location = useLocation()
     const { id } = useParams()
     useEffect(() => {
         getProductByID(id)
@@ -79,7 +82,7 @@ function ProductPage() {
                             })}
                             <div className='product-page-image-item'>
                                 {product.images && product.images.map((item, index) => {
-                                    return <li id={index + 1} className={index + 1 === imageID ? 'active' : 'hiden'}></li>
+                                    return <li key={index} id={index + 1} className={index + 1 === imageID ? 'active' : 'hiden'}></li>
                                 })}
                             </div>
                             <div className='nextbtn' onClick={handlesetImageID}><FontAwesomeIcon icon={faChevronRight} /></div>
@@ -139,7 +142,23 @@ function ProductPage() {
                     </div>
                 </div>
                 <div className='product-page-comments'>
-                    <div className='comment-writter'> chỗ viết cooment ở đây</div>
+                    <div className='comment-count'>Bình luận ({product.commentCount})</div>
+                    <div className='comment-writter'>
+                        <div className='left'>
+                            <div className='avatar'>
+                                {user === null ? <img src={`${baseIMG}avatar/user.png`} alt='' /> : <img src={user.avatar} alt='' />}
+                            </div>
+                        </div>
+                        <div className='right'>
+                            <textarea
+                                value={comment}
+                                onFocus={() => {
+                                    if (!user) navigate('/login', { replace: true, state: { from: location } })
+                                }}
+                                onInput={(e) => { setComment(e.target.value) }}
+                                maxLength='255'></textarea>
+                        </div>
+                    </div>
                     <div className='comment-list'>
                         {comments.map(comment => {
                             return <CommentItem key={comment.commentID} data={comment} />

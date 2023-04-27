@@ -31,7 +31,7 @@ async function queryComments(productID, startIndex, sortMode) {
         let queryString = [
             'SELECT comment_id, users.avatar, first_name, last_name, comments.product_id, comment, rate, comment_date FROM comments',
             'JOIN users ON users.user_id = comments.user_id',
-            'JOIN ratings ON ratings.user_id = comments.user_id AND ratings.product_id = comments.product_id',
+            'LEFT JOIN ratings ON ratings.user_id = comments.user_id AND ratings.product_id = comments.product_id',
             `WHERE comments.product_id = ? AND comment_id ${replace} ?`,
             `ORDER BY comment_id ${sortMode}`,
             'LIMIT 10'
