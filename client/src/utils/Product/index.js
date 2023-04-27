@@ -56,11 +56,14 @@ async function getHomeProduct() {
 }
 
 
-async function getProductSearchPage(name) {
+async function getProductSearchPage(name, brand, address, index = 0) {
     try {
         const rs = await request.get('/products/search-more', {
             params: {
-                name: name
+                name: name,
+                brand: brand,
+                address: address,
+                index: index
             }
         })
         return rs.data
@@ -69,11 +72,25 @@ async function getProductSearchPage(name) {
     }
 }
 
+// async function getProductSort(data) {
+//     try {
+//         const rs = await request.get('/products/search-more', {
+//             params: {
+//                 brand: data.brand ? data.brand : [],
+//                 address: data.address ? data.address : []
+//             }
+//         })
+//     } catch (error) {
+//         return []
+//     }
+// }
+
 export {
     searchProduct,
     getProductByID,
     getHotProducts,
     getCategories,
     getHomeProduct,
-    getProductSearchPage
+    getProductSearchPage,
+    // getProductSort
 }

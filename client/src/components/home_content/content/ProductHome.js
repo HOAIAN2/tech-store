@@ -53,6 +53,7 @@ export function formatArray(data, indexToFormat) {
             b.push(item)
         }
     })
+    if (b.length != 0) a = [...a, b]
     return a
 }
 
