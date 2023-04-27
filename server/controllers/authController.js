@@ -181,7 +181,7 @@ async function uploadImage(req, res) {
         let newpath = path.join('./static/images/avatar', fileName)
         file.mv(newpath)
         await updateUserImage(fileName, tokenData.username)
-        if (user.avatar) fs.unlinkSync(`./static/images/avatar/${user.avatar}`, () => { console.log(123) })
+        if (user.avatar && user.avatar !== 'user.png') fs.unlinkSync(`./static/images/avatar/${user.avatar}`, () => { console.log(123) })
         user.setAvatar(fileName)
         return res.sendStatus(200)
     } catch (error) {
