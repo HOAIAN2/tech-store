@@ -1,13 +1,20 @@
 import { useEffect, useState } from "react"
+import { useSearchParams } from 'react-router-dom'
 import { formatArray } from "../home_content/content/ProductHome"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCaretRight } from "@fortawesome/free-solid-svg-icons"
 import { faStar } from "@fortawesome/free-solid-svg-icons"
+import { usePropData, PROP_ACTION } from '../../Context'
 
-function ItemSidebarSearchPage({ arr = [], index, numberToShow, star = false }) {
+
+function ItemSidebarSearchPage({ arr = [], typeprop, index, numberToShow, star = false }) {
     const [brands, setBrands] = useState([])
-    const [arraySelect, setArraySelect] = useState([])
+    const [fetchjust1time, setfetchjust1time] = useState(true)
     const [hideShowButton, setHideShowButton] = useState(false)
+
+    const [, dispatchProp] = usePropData()
+
+
     function renderItems(e) {
         setHideShowButton(true)
         const a = e.target.parentElement.children
@@ -28,24 +35,25 @@ function ItemSidebarSearchPage({ arr = [], index, numberToShow, star = false }) 
         }
     }
 
-    function selectItem(e) {
-        for (let index = 0; index < e.target.children.length; index++) {
-            if (e.target.children[index].className.baseVal && e.target.children[index].className.baseVal.includes('svgactive')) {
-                e.target.children[index].classList.remove('svgactive')
-            } else if (typeof (e.target.children[index].className) === 'string' && e.target.children[index].className.includes('spanactive')) {
-                e.target.children[index].classList.remove('spanactive')
-            } else {
-                if ((index + 1) % 2 === 0) {
-                    e.target.children[0].classList.add('svgactive')
-                    e.target.children[1].classList.add('spanactive')
+    function selectItem(prop) {
+        return (e) => {
+            for (let index = 0; index < e.target.children.length; index++) {
+                if (e.target.children[index].className.baseVal && e.target.children[index].className.baseVal.includes('svgactive')) {
+                    e.target.children[index].classList.remove('svgactive')
+                } else if (typeof (e.target.children[index].className) === 'string' && e.target.children[index].className.includes('spanactive')) {
+                    e.target.children[index].classList.remove('spanactive')
+                } else {
+                    if ((index + 1) % 2 === 0) {
+                        e.target.children[0].classList.add('svgactive')
+                        e.target.children[1].classList.add('spanactive')
+                    }
                 }
             }
+            if (prop === 'TP. Hồ Chí Minh') prop = 'Hồ Chí Minh'
+            if (typeprop === 'address') dispatchProp({ type: PROP_ACTION.SETPROPADDRESS, payload: prop })
+            if (typeprop === 'brand') dispatchProp({ type: PROP_ACTION.SETPROPBRAND, payload: prop })
+
         }
-        // e.target.attributes[1]?.textContent ? setArraySelect(addintoarraySelect(e.target.attributes[1].textContent)) : setArraySelect(addintoarraySelect(e.target.children[1].textContent))
-        // function addintoarraySelect(value) {
-        //     const a = [...arraySelect, value]
-        //     return a.filter((item, index) => a.indexOf(item) === index);
-        // }
     }
 
     useEffect(() => {
@@ -65,7 +73,7 @@ function ItemSidebarSearchPage({ arr = [], index, numberToShow, star = false }) 
                         arr.map((item, index1) => {
                             if (index1 < index) {
                                 return (
-                                    <div key={index1} className="item_sidebar_search_item" onClick={selectItem}>
+                                    <div key={index1} className="item_sidebar_search_item" onClick={selectItem(item)}>
                                         <FontAwesomeIcon icon={faCaretRight} className="svgselect" />
                                         {/* <input type="checkbox"></input> */}
                                         <span>{item}</span>
@@ -81,7 +89,7 @@ function ItemSidebarSearchPage({ arr = [], index, numberToShow, star = false }) 
                             {
                                 item.map((item, index) => {
                                     return (
-                                        <div key={index} className="item_sidebar_search_item" onClick={selectItem}>
+                                        <div key={index} className="item_sidebar_search_item" onClick={selectItem(item)}>
                                             {/* <input type="checkbox"></input> */}
                                             <FontAwesomeIcon icon={faCaretRight} className="svgselect" />
                                             <span>{item}</span>
@@ -102,7 +110,7 @@ function ItemSidebarSearchPage({ arr = [], index, numberToShow, star = false }) 
     } else if (star) {
         return (
             <>
-                <div className="item_sidebar_search_item" onClick={selectItem} value={'star5'}>
+                <div className="item_sidebar_search_item" onClick={selectItem()} value={'star5'}>
                     <FontAwesomeIcon icon={faCaretRight} className="svgselect" />
                     <div className="wrapstar">
                         <FontAwesomeIcon icon={faStar} />
@@ -112,7 +120,7 @@ function ItemSidebarSearchPage({ arr = [], index, numberToShow, star = false }) 
                         <FontAwesomeIcon icon={faStar} />
                     </div>
                 </div>
-                <div className="item_sidebar_search_item" onClick={selectItem} value={'star4'}>
+                <div className="item_sidebar_search_item" onClick={selectItem()} value={'star4'}>
                     <FontAwesomeIcon icon={faCaretRight} className="svgselect" />
                     <div className="wrapstar">
                         <FontAwesomeIcon icon={faStar} />
@@ -120,20 +128,20 @@ function ItemSidebarSearchPage({ arr = [], index, numberToShow, star = false }) 
                         <FontAwesomeIcon icon={faStar} />
                         <FontAwesomeIcon icon={faStar} />
                     </div>
-                </div><div className="item_sidebar_search_item" onClick={selectItem} value={'star3'}>
+                </div><div className="item_sidebar_search_item" onClick={selectItem()} value={'star3'}>
                     <FontAwesomeIcon icon={faCaretRight} className="svgselect" />
                     <div className="wrapstar">
                         <FontAwesomeIcon icon={faStar} />
                         <FontAwesomeIcon icon={faStar} />
                         <FontAwesomeIcon icon={faStar} />
                     </div>
-                </div><div className="item_sidebar_search_item" onClick={selectItem} value={'star2'}>
+                </div><div className="item_sidebar_search_item" onClick={selectItem()} value={'star2'}>
                     <FontAwesomeIcon icon={faCaretRight} className="svgselect" />
                     <div className="wrapstar">
                         <FontAwesomeIcon icon={faStar} />
                         <FontAwesomeIcon icon={faStar} />
                     </div>
-                </div><div className="item_sidebar_search_item" onClick={selectItem} value={'star1'}>
+                </div><div className="item_sidebar_search_item" onClick={selectItem()} value={'star1'}>
                     <FontAwesomeIcon icon={faCaretRight} className="svgselect" />
                     <div className="wrapstar">
                         <FontAwesomeIcon icon={faStar} />
@@ -145,7 +153,7 @@ function ItemSidebarSearchPage({ arr = [], index, numberToShow, star = false }) 
         return (
             arr.map((item, index3) => {
                 return (
-                    <div key={index3} className="item_sidebar_search_item" onClick={selectItem}>
+                    <div key={index3} className="item_sidebar_search_item" onClick={selectItem(item)}>
                         {/* <input type="checkbox"></input> */}
                         <FontAwesomeIcon icon={faCaretRight} className="svgselect" />
                         <span>{item}</span>

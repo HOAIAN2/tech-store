@@ -15,7 +15,8 @@ import ProductPage from './Page/Products/ProductPage'
 import Search from './Page/search/search'
 
 function App() {
-  const [, dispatchUser] = useUserData()
+  const [user, dispatchUser] = useUserData()
+  // console.log(user)
   const [isFirstLoad, setIsFirstLoad] = useState(true)
   useEffect(() => {
     fetchUserData()

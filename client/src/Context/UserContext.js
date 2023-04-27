@@ -12,13 +12,18 @@ function userReducer(state, action) {
         case USER_ACTION.SET:
             const birthDate = new Date(action.payload.birthDate)
             const avatar = `${baseIMG}avatar/${action.payload.avatar}`
-            return { ...action.payload, birthDate: birthDate, avatar: avatar }
+            return {
+                ...action.payload,
+                birthDate: birthDate,
+                avatar: avatar
+            }
         case USER_ACTION.REMOVE:
             return null
         default:
-            break;
+            return state;
     }
 }
+
 
 function UserProvider({ children }) {
     const [user, dispatchUser] = useReducer(userReducer, null)
@@ -31,6 +36,6 @@ function UserProvider({ children }) {
 
 export {
     UserContext,
-    USER_ACTION
+    USER_ACTION,
 }
 export default UserProvider

@@ -69,6 +69,7 @@ async function searchProduct(req, res) {
 // [GET search-more]
 async function searchProductMore(req, res) {
     // http://localhost:4000/api/products/search-more?name=d&brand=dell&brand=asus&address=ph%C3%BA%20y%C3%AAn&address=kh%C3%A1nh%20h%C3%B2a&sortby=price&sortmode=desc&index=0&star=5
+    console.log(req.query)
     const sortBys = ['price', 'hot', 'top-sell']
     const sortModes = ['asc', 'desc']
     const brands = suppliers.map(supplier => supplier.supplierName.toUpperCase())
@@ -130,7 +131,7 @@ async function searchProductMore(req, res) {
     }
 
     result.index >= products.length ? result.index = false : ""
-    return res.json({ ...result, data: result.data.map(product => product.ignoreProps('unitInOrder', 'quantity')) })
+    return res.json({ data: result.data.map(product => product.ignoreProps('unitInOrder', 'quantity')), index: result.index })
 
     function handleSort(index = 0, numberItemFound = 40) {
         let rs = []

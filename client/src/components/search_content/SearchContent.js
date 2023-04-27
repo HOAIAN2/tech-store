@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { getAddress, getBrands } from "../../utils/supplier/index"
-import { getProductSearchPage } from "../../utils/Product/index"
+import { getProductSearchPage, getProductByID } from "../../utils/Product/index"
 import ItemSidebarSearchPage from "../render_item/ItemSidebarSearchPage"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faList, faChevronDown } from "@fortawesome/free-solid-svg-icons"
@@ -8,6 +8,7 @@ import "./SearchContent.scss"
 import { useSearchParams } from "react-router-dom"
 import ProductItem from "../render_item/ProductItem"
 import { formatArray } from "../home_content/content/ProductHome"
+import { usePropData } from "../../Context"
 
 
 
@@ -17,6 +18,14 @@ function SearchContent() {
     const [brands, setBrands] = useState([])
     const [indexToShow] = useState(5)
     const [products, setproducts] = useState([])
+    const [prop] = usePropData()
+
+    function test() {
+        // getProductSearchPage(searchParam.get('name'), prop?.brand, prop?.address)
+        // .then((rs => {
+        //     console.log(rs)
+        // }))
+    }
 
     useEffect(() => {
         getAddress()
@@ -30,11 +39,12 @@ function SearchContent() {
     }, [])
 
     useEffect(() => {
-        getProductSearchPage(searchParam.get('name'))
+        getProductSearchPage(searchParam.get('name'), prop?.brand, prop?.address)
             .then((rs => {
                 setproducts(rs)
             }))
-    }, [searchParam])
+    }, [searchParam, prop])
+    console.log(products)
     return (
         <div className="wrap_search_content">
             <div className="sidebar_search_page">
@@ -45,16 +55,16 @@ function SearchContent() {
                     </h3>
                     <ul className="list_item_sidebar_search_page">
                         <li>
-                            <div className="title_item_sidebar_list">Theo Địa Chỉ</div>
+                            <div className="title_item_sidebar_list" onClick={test}>Theo Địa Chỉ</div>
                             <div className="wrap_item_sidebar_search_item">
-                                <ItemSidebarSearchPage arr={address} index={indexToShow} />
+                                <ItemSidebarSearchPage arr={address} typeprop={'address'} index={indexToShow} />
                             </div>
                             {/* {sidebaraddress.length > indexToShow ? <button onClick={renderitemwhenclickbtnmore}>Xem Thêm</button> : <></>} */}
                         </li>
                         <li>
                             <div className="title_item_sidebar_list">Theo Thương Hiệu</div>
                             <div className="wrap_item_sidebar_search_item">
-                                <ItemSidebarSearchPage arr={brands} index={indexToShow} numberToShow={5} />
+                                <ItemSidebarSearchPage arr={brands} typeprop={'brand'} index={indexToShow} numberToShow={5} />
                             </div>
                             {/* {brands.length > indexToShow ? <button onClick={renderitemwhenclickbtnmore}>Xem Thêm</button> : <></>} */}
                         </li>
