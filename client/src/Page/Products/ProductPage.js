@@ -71,7 +71,9 @@ function ProductPage() {
     function handleSendComment() {
         if (comment === '') return
         addComment(id, comment)
-            .then(() => {
+            .then((result) => {
+                setComments([result, ...comments])
+                setComment('')
                 return getProductByID(id)
             })
             .then(data => {
@@ -82,12 +84,15 @@ function ProductPage() {
                     }),
                     discount: data.discount * 100 || null,
                 })
-                return getComments(id, 'DESC')
-            }).then(result => {
-                setComments(result)
             })
             .catch(error => {
                 console.error(error)
+            })
+    }
+    function handleLoadComments() {
+        getComments(id, 'DESC', comments[comments.length - 1].commentID)
+            .then(result => {
+                setComments([...comments, ...result])
             })
     }
     console.log(product)
@@ -188,6 +193,7 @@ function ProductPage() {
                         {comments.map(comment => {
                             return <CommentItem key={comment.commentID} data={comment} />
                         })}
+                        {comments.length !== product.commentCount ? <button onClick={handleLoadComments}>Xem thêm</button> : null}
                     </div>
                 </div>
             </div>

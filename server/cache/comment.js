@@ -56,12 +56,33 @@ async function queryComments(productID, startIndex, sortMode) {
     }
 }
 async function insertComment(userID, productID, content) {
+    let newComment = null
     try {
         const queryString = [
             'INSERT INTO comments (user_id, product_id, comment, comment_date)',
             'VALUES (?, ?, ?, NOW())'
         ].join(' ')
-        await pool.query(queryString, [userID, productID, content])
+        const queryString1 = [
+            'SELECT comment_id, users.avatar, first_name, last_name, comments.product_id, comment, rate, comment_date FROM comments',
+            'JOIN users ON users.user_id = comments.user_id',
+            'LEFT JOIN ratings ON ratings.user_id = comments.user_id AND ratings.product_id = comments.product_id',
+            `WHERE comment_id = ?`,
+        ].join(' ')
+        const [result] = await pool.query(queryString, [userID, productID, content])
+        const [rows] = await pool.query(queryString1, [result.insertId])
+        rows.forEach(row => {
+            const commentID = row['comment_id']
+            const avatar = row['avatar']
+            const firstName = row['first_name']
+            const lastName = row['last_name']
+            const productID = row['product_id']
+            const commentContent = row['comment']
+            const rate = row['rate']
+            const commentDate = row['comment_date']
+            const comment = new Comment(commentID, avatar, firstName, lastName, productID, commentContent, rate, commentDate)
+            newComment = comment
+        })
+        return newComment
     } catch (error) {
         throw new Error(error.message)
     }
