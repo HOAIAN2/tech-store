@@ -6,7 +6,9 @@
     height: 100%;
 
     & div {
+        height: 20px;
         position: absolute;
+        display: inline;
 
         svg {
             height: 13px;
@@ -14,7 +16,9 @@
         }
 
         &:last-child {
-            height: 100%;
+            display: inline;
+            position: absolute;
+            height: 20px;
             // width: attr(rate-percent);
             width: var(--rate-percent);
             color: colors.$color-red;
@@ -22,6 +26,7 @@
 
             div {
                 width: 90px;
+                height: 100%;
             }
         }
     }

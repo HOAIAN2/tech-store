@@ -55,6 +55,18 @@ async function queryComments(productID, startIndex, sortMode) {
         throw new Error(error.message)
     }
 }
+async function insertComment(userID, productID, content) {
+    try {
+        const queryString = [
+            'INSERT INTO comments (user_id, product_id, comment, comment_date)',
+            'VALUES (?, ?, ?, NOW())'
+        ].join(' ')
+        await pool.query(queryString, [userID, productID, content])
+    } catch (error) {
+        throw new Error(error.message)
+    }
+}
 module.exports = {
-    queryComments
+    queryComments,
+    insertComment
 }
