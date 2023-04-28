@@ -18,13 +18,14 @@ async function getComments(productID, sortMode, startIndex) {
 async function addComment(productID, content) {
     try {
         const token = JSON.parse(localStorage.getItem('token'))
-        await request.post(`/comment/${productID}`, {
+        const newComment = await request.post(`/comment/${productID}`, {
             content: content
         }, {
             headers: {
                 Authorization: `Bearer ${token.accessToken}`
             }
         })
+        return newComment.data
     } catch (error) {
         throw new Error(error)
     }

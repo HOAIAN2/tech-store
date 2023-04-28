@@ -29,10 +29,10 @@ async function addComment(req, res) {
     if (!isValidNumber(data.productID)) return res.sendStatus(400)
     data.productID = parseInt(data.productID)
     try {
-        await insertComment(data.userID, data.productID, data.content)
+        const newComment = await insertComment(data.userID, data.productID, data.content)
         const product = products.find(item => item.productID === data.productID)
         product.updateCommentCount()
-        return res.sendStatus(200)
+        return res.json(newComment)
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)
         return res.status(500).json({ message: 'error' })
