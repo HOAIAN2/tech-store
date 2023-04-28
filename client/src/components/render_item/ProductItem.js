@@ -28,7 +28,7 @@ function ProductItem({ data, type = "home" }) {
                     </div>
                     <div className="home__produt-item-action">
                         <div style={{ height: "18px" }}>
-                            <ProductRating rate={2.5} />
+                            <ProductRating rate={data.rate} />
                         </div>
                         <Link to={`product/${data.productID}`}>Chi tiết</Link>
                     </div>

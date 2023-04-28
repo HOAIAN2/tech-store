@@ -26,6 +26,9 @@ class Product {
     updateSoldQuantity(quantity) {
         this.soldQuantity += quantity
     }
+    updateCommentCount() {
+        this.commentCount += 1
+    }
     ignoreProps() {
         const object = { ...this }
         const ignoreProps = Array.from(arguments)

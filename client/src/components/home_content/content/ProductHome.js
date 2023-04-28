@@ -9,7 +9,7 @@ function ProductHome() {
         getHomeProduct()
             .then((rs) => {
                 const a = rs.data;
-                a.map((item, index) => {
+                a.forEach((item, index) => {
                     a[index].products = formatArray(item.products, 4)
                 })
                 setProducts(a)
@@ -53,7 +53,7 @@ export function formatArray(data, indexToFormat) {
             b.push(item)
         }
     })
-    if (b.length != 0) a = [...a, b]
+    if (b.length !== 0) a = [...a, b]
     return a
 }
 

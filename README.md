@@ -362,3 +362,26 @@
     }
 }
 ```
+### Comment routes: /api/comment/
+>[GET] ?productID=1&sortMode=DESC
+- Respone
+```json
+[
+    {"commentID":1,
+    "avatar":"1682648528080-hoaian_admin.jpeg",
+    "userFirstName":"Hoài Ân",
+    "userLastName":"Lê",
+    "productID":1,
+    "comment":"test comment xem nó hiển thị ra sao\n:))))))))",
+    "rate":null,
+    "commentDate":"2023-04-27T17:00:00.000Z"
+    }
+]
+```
+>[POST] /:id JWT require
+- Request
+```json
+{
+    "content": "string"
+}
+```

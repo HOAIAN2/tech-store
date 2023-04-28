@@ -9,7 +9,7 @@ import ProductRating from './ProductRating'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartShopping, faTruck, faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import { getProductByID } from "../../utils/Product/index"
-import { getComments } from '../../utils/Comment'
+import { getComments, addComment } from '../../utils/Comment'
 import { useUserData } from "../../Context"
 import { Link } from 'react-router-dom'
 import CommentItem from '../../components/render_item/CommentItem'
@@ -67,6 +67,28 @@ function ProductPage() {
                 imageID === product.images.length ? setImageID(1) : setImageID(imageID + 1)
             }
         }
+    }
+    function handleSendComment() {
+        if (comment === '') return
+        addComment(id, comment)
+            .then(() => {
+                return getProductByID(id)
+            })
+            .then(data => {
+                setProduct({
+                    ...data,
+                    images: data.images.map(image => {
+                        return `${baseIMG}/products/${image}`
+                    }),
+                    discount: data.discount * 100 || null,
+                })
+                return getComments(id, 'DESC')
+            }).then(result => {
+                setComments(result)
+            })
+            .catch(error => {
+                console.error(error)
+            })
     }
     console.log(product)
     if (notFound) return <NotFound />
@@ -153,10 +175,13 @@ function ProductPage() {
                             <textarea
                                 value={comment}
                                 onFocus={() => {
-                                    if (!user) navigate('/login', { replace: true, state: { from: location } })
+                                    if (!user) {
+                                        navigate('/login', { state: { from: location } })
+                                    }
                                 }}
                                 onInput={(e) => { setComment(e.target.value) }}
                                 maxLength='255'></textarea>
+                            <button onClick={handleSendComment} >Gửi</button>
                         </div>
                     </div>
                     <div className='comment-list'>

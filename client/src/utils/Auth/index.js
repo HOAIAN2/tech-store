@@ -23,6 +23,7 @@ async function logout() {
     } catch (error) {
         if (!error.response) throw new Error(error.message)
         const message = error.response.data.message
+        localStorage.removeItem('token')
         throw new Error(message)
     }
 }

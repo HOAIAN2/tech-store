@@ -252,6 +252,7 @@
             }
 
             & .right {
+                margin-left: 5px;
                 height: 150px;
 
                 & textarea {
@@ -263,6 +264,18 @@
                     resize: none;
                     outline: none;
                     font-family: 'Times New Roman', Times, serif;
+                }
+
+                & button {
+                    background-color: colors.$color-red;
+                    color: white;
+                    outline: none;
+                    border: none;
+                    border-radius: 5px;
+                    height: 40px;
+                    width: 100px;
+                    cursor: pointer;
+                    font-weight: bold;
                 }
             }
         }
