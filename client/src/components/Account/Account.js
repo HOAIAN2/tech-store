@@ -38,7 +38,7 @@ function Account() {
     )
     else return (
         <div className='header-account'>
-            <Link className='login-btn' to='/login' replace state={{ from: location }}>
+            <Link className='login-btn' to='/login' state={{ from: location }}>
                 <span>{language.login}</span>
             </Link>
             {/* <p>/</p> */}

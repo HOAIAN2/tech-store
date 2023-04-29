@@ -1,0 +1,28 @@
+{
+    "en": {
+        "latest": "Latest",
+        "oldest": "Oldest",
+        "rating": "Ratings",
+        "sold": "Sold",
+        "shipTo": "Ship to",
+        "quantity": "Quantity",
+        "addToCart": "Add to cart",
+        "buyNow": "Buy now",
+        "comments": "Comments",
+        "send": "Send",
+        "loadMore": "Load more"
+    },
+    "vi": {
+        "latest": "Mới nhất",
+        "oldest": "Cũ nhất",
+        "rating": "Đánh giá",
+        "sold": "Đã bán",
+        "shipTo": "Vận chuyển đến",
+        "quantity": "Số lượng",
+        "addToCart": "Thêm vào giỏ hàng",
+        "buyNow": "Mua ngay",
+        "comments": "Bình luận",
+        "send": "Gửi",
+        "loadMore": "Xem thêm"
+    }
+}
