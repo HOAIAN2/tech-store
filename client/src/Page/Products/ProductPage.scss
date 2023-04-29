@@ -220,10 +220,24 @@
         border-radius: 5px;
 
         & .comment-count {
-            height: 40px;
-            margin-left: 10px;
-            font-size: 24px;
-            font-weight: bold;
+            height: 60px;
+            width: 100%;
+
+            & span {
+                height: 40px;
+                margin-left: 10px;
+                font-size: 24px;
+                font-weight: bold;
+            }
+
+            & select {
+                outline: none;
+                margin-top: 10px;
+                margin-left: 965px;
+                width: 100px;
+                height: 40px;
+                font-size: large;
+            }
         }
 
         & .comment-writter {

@@ -3,7 +3,6 @@ import './CommentItem.scss'
 import ProductRating from '../../Page/Products/ProductRating'
 
 function CommentItem({ data }) {
-    console.log(data)
     const renderData = {
         ...data,
         avatar: `${baseIMG}avatar/${data.avatar}`,

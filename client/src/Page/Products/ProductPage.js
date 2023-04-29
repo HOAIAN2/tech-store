@@ -13,8 +13,11 @@ import { getComments, addComment } from '../../utils/Comment'
 import { useUserData } from "../../Context"
 import { Link } from 'react-router-dom'
 import CommentItem from '../../components/render_item/CommentItem'
+import languages from './Languages/ProductPage.json'
 
 function ProductPage() {
+    let language = languages.en
+    if (navigator.language === 'vi') language = languages.vi
     const [user,] = useUserData()
     function formatPrice(price) {
         return `${price.toLocaleString('vi')} đ`
@@ -25,10 +28,13 @@ function ProductPage() {
     const [notFound, setNotFound] = useState(false)
     const [quantity, setQuantity] = useState(1)
     const [imageID, setImageID] = useState(1)
+    const [commentOrder, setCommentOrder] = useState(language.latest)
     const navigate = useNavigate()
     const location = useLocation()
     const { id } = useParams()
     useEffect(() => {
+        let orderMode = 'DESC'
+        if (commentOrder === language.oldest) orderMode = 'ASC'
         getProductByID(id)
             .then(data => {
                 setProduct({
@@ -46,10 +52,11 @@ function ProductPage() {
             })
         document.querySelector('.App').scrollTo(0, 0)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        getComments(id, 'DESC')
+        getComments(id, orderMode)
             .then(result => {
                 setComments(result)
             })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id])
     // console.log(product)
     /// Alot of bugs, fix
@@ -90,12 +97,24 @@ function ProductPage() {
             })
     }
     function handleLoadComments() {
-        getComments(id, 'DESC', comments[comments.length - 1].commentID)
+        let orderMode = 'DESC'
+        if (commentOrder === language.oldest) orderMode = 'ASC'
+        getComments(id, orderMode, comments[comments.length - 1].commentID)
             .then(result => {
                 setComments([...comments, ...result])
             })
     }
+    useEffect(() => {
+        let orderMode = 'DESC'
+        if (commentOrder === language.oldest) orderMode = 'ASC'
+        getComments(id, orderMode)
+            .then(result => {
+                setComments(result)
+            })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [commentOrder])
     console.log(product)
+    console.log(commentOrder)
     if (notFound) return <NotFound />
     return (
         <>
@@ -126,11 +145,11 @@ function ProductPage() {
                             </div>
                             <div className='action_item'>
                                 <div className='Evaluate1'>{product.ratingCount}</div>
-                                <div className='Evaluate2'>Đánh Giá</div>
+                                <div className='Evaluate2'>{language.rating}</div>
                             </div>
                             <div className='action_item'>
                                 <div className='bought1'>{product.soldQuantity}</div>
-                                <div className='bought2'>Đã Mua</div>
+                                <div className='bought2'>{language.sold}</div>
                             </div>
                         </div>
                         <div className="product-price" style={{ display: "flex", alignItems: "center" }}>
@@ -141,7 +160,7 @@ function ProductPage() {
                             <div className='transport'>
                                 <div>
                                     <FontAwesomeIcon icon={faTruck} />
-                                    <span className='title'>Vận Chuyển Đến</span>
+                                    <span className='title'>{language.shipTo}</span>
                                 </div>
                                 <div className='address'>{user.address}</div>
                             </div>
@@ -149,7 +168,7 @@ function ProductPage() {
                             <></>
                         }
                         <div className='product-action'>
-                            <span className='title'>Số Lượng</span>
+                            <span className='title'>{language.quantity}</span>
                             <div className='quantity'>
                                 <button className='decrease' onClick={handleSetQuantity}>-</button>
                                 <input value={quantity} type="number" min="1" readOnly />
@@ -158,18 +177,27 @@ function ProductPage() {
                         </div>
                         <div className='product-function'>
                             <button>
-                                <span>Thêm vào giỏ hàng</span>
+                                <span>{language.addToCart}</span>
                                 <FontAwesomeIcon icon={faCartShopping} />
                             </button>
                             <button>
-                                <span>Mua Ngay</span>
+                                <span>{language.buyNow}</span>
                                 <Link to={"/"}></Link>
                             </button>
                         </div>
                     </div>
                 </div>
                 <div className='product-page-comments'>
-                    <div className='comment-count'>Bình luận ({product.commentCount})</div>
+                    <div className='comment-count'>
+                        <span>{language.comments} ({product.commentCount})</span>
+                        <select value={commentOrder}
+                            onChange={e => {
+                                setCommentOrder(e.target.value)
+                            }}>
+                            <option>{language.latest}</option>
+                            <option>{language.oldest}</option>
+                        </select>
+                    </div>
                     <div className='comment-writter'>
                         <div className='left'>
                             <div className='avatar'>
@@ -186,14 +214,14 @@ function ProductPage() {
                                 }}
                                 onInput={(e) => { setComment(e.target.value) }}
                                 maxLength='255'></textarea>
-                            <button onClick={handleSendComment} >Gửi</button>
+                            <button onClick={handleSendComment} >{language.send}</button>
                         </div>
                     </div>
                     <div className='comment-list'>
                         {comments.map(comment => {
                             return <CommentItem key={comment.commentID} data={comment} />
                         })}
-                        {comments.length !== product.commentCount ? <button onClick={handleLoadComments}>Xem thêm</button> : null}
+                        {comments.length !== product.commentCount ? <button onClick={handleLoadComments}>{language.loadMore}</button> : null}
                     </div>
                 </div>
             </div>
