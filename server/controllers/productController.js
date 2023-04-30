@@ -131,7 +131,7 @@ async function searchProductMore(req, res) {
     }
 
     result.index >= products.length ? result.index = false : ""
-    return res.json({ data: result.data.map(product => product.ignoreProps('unitInOrder', 'quantity')), index: result.index })
+    return res.json({ products: result.data.map(product => product.ignoreProps('unitInOrder', 'quantity')), index: result.index })
 
     function handleSort(index = 0, numberItemFound = 40) {
         let rs = []

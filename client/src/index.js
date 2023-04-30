@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
-import { UserProvider, PropProvider } from './Context'
+import { UserProvider, PropProvider, SortProvider } from './Context'
 import reportWebVitals from './reportWebVitals'
 import './index.scss'
 
@@ -11,7 +11,9 @@ root.render(
   <BrowserRouter>
     <UserProvider>
       <PropProvider>
-        <App />
+        <SortProvider>
+          <App />
+        </SortProvider>
       </PropProvider>
     </UserProvider>
   </BrowserRouter>
