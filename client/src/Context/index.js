@@ -1,19 +1,19 @@
 import UserProvider from './UserContext'
 import PropProvider from './propContext'
-import SortProvider from './sortContext'
+import ProductProvider from './productContext'
 import { USER_ACTION } from './UserContext'
 import { PROP_ACTION } from './propContext'
-import { SORT_ACTION } from './sortContext'
-import { useUserData, usePropData, useSortData } from './hooks'
+import { PRODUCT_ACTION } from './productContext'
+import { useUserData, usePropData, useProductData } from './hooks'
 
 export {
     useUserData,
     usePropData,
-    useSortData,
+    useProductData,
     UserProvider,
     PropProvider,
-    SortProvider,
+    ProductProvider,
     USER_ACTION,
     PROP_ACTION,
-    SORT_ACTION
+    PRODUCT_ACTION
 }

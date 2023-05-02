@@ -3,8 +3,10 @@
 .header {
     background-color: #1c1c1c;
     height: 175px;
+    position: relative;
     flex-direction: column;
     display: flex;
+    z-index: 3;
     border-bottom: 5px solid #d41138;
 
     .header_item1 {
