@@ -17,7 +17,7 @@ function Search() {
             if (product.index) {
                 getProductSearchPage(searchParam.get('name'), prop?.brand, prop?.address, prop?.star, product.index)
                     .then((rs => {
-                        dispatchProduct({ type: PRODUCT_ACTION.SETProduct, payload: rs.products, index: rs.index })
+                        dispatchProduct({ type: PRODUCT_ACTION.SETPRODUCT, payload: rs.products, index: rs.index })
                     }))
             }
         }
