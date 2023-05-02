@@ -8,8 +8,8 @@ import "./SearchContent.scss"
 import { useSearchParams } from "react-router-dom"
 import ProductItem from "../render_item/ProductItem"
 import { formatArray } from "../home_content/content/ProductHome"
-import { usePropData, useSortData } from "../../Context"
-// import { SORT_ACTION } from '../../Context/index'
+import { usePropData, useProductData } from "../../Context"
+import { PRODUCT_ACTION } from '../../Context/index'
 
 
 
@@ -19,12 +19,12 @@ function SearchContent() {
     const [brands, setBrands] = useState([])
     const [indexToShow] = useState(5)
     const [products, setproducts] = useState([])
-    const [productsOrigin, setproductsOrigin] = useState([])
     const [prop] = usePropData()
-    // const [sort, dispatchSort] = useSortData()
+    const [product, dispatchProduct] = useProductData()
 
     function handlesort(typesort) {
         return (e) => {
+
             if (typesort.includes('price')) {
                 let a = document.querySelector('.activesortprice')
                 let b = document.querySelector('.activeSort')
@@ -47,9 +47,9 @@ function SearchContent() {
 
 
             if (typesort === 'default') {
-                setproducts({ products: [...productsOrigin.products] })
+                setproducts({ products: [...product.products] })
             } else if (typesort === 'moinhat') {
-                let a = productsOrigin.products.map((item, index) => {
+                let a = product.products.map((item, index) => {
                     return { ...item }
                 })
                 a = a.sort((a, b) => {
@@ -57,7 +57,7 @@ function SearchContent() {
                 })
                 setproducts({ products: a })
             } else if (typesort === 'hot') {
-                let a = productsOrigin.products.map((item, index) => {
+                let a = product.products.map((item, index) => {
                     return { ...item }
                 })
                 a = a.sort((a, b) => {
@@ -90,12 +90,24 @@ function SearchContent() {
     }, [])
 
     useEffect(() => {
-        getProductSearchPage(searchParam.get('name'), prop?.brand, prop?.address)
+        getProductSearchPage(searchParam.get('name'), prop?.brand, prop?.address, prop?.star)
             .then((rs => {
-                setproducts(rs)
-                setproductsOrigin({ products: [...rs.products], index: rs.index })
+                dispatchProduct({ type: PRODUCT_ACTION.SETPRODUCT, payload: rs.products, index: rs.index })
             }))
-    }, [searchParam, prop])
+    }, [searchParam])
+
+    useEffect(() => {
+        if (prop) {
+            getProductSearchPage(searchParam.get('name'), prop?.brand, prop?.address, prop?.star)
+                .then((rs) => {
+                    dispatchProduct({ type: PRODUCT_ACTION.SETPRODUCT, payload: rs.products, index: rs.index, typeproduce: 'new' })
+                })
+        }
+    }, [prop])
+
+    useEffect(() => {
+        if (product) setproducts({ products: product.products })
+    }, [product])
 
 
     return (
@@ -124,7 +136,7 @@ function SearchContent() {
                         <li>
                             <div className="title_item_sidebar_list">Theo Đánh Giá</div>
                             <div className="wrap_item_sidebar_search_item">
-                                <ItemSidebarSearchPage star={true} />
+                                <ItemSidebarSearchPage star={true} typeprop={'star'} />
                             </div>
                         </li>
                     </ul>

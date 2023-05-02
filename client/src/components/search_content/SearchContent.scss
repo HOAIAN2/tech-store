@@ -2,7 +2,6 @@
 
 .wrap_search_content {
     width: 1257px;
-    height: 500px;
     display: flex;
     margin-top: 20px;
 
@@ -14,6 +13,8 @@
         height: max-content;
         border-radius: 5px;
         overflow: hidden;
+        position: sticky;
+        top: 17px;
 
         .wrap_sidebar_search_page {
             background-color: #fff;
@@ -137,6 +138,9 @@
             padding: 10px;
             background-color: #d9d9d9;
             align-items: center;
+            position: sticky;
+            top: 17px;
+            z-index: 2;
 
             .titlesort {
                 margin: 0 20px;
@@ -239,6 +243,17 @@
                 height: 100%;
                 background-color: colors.$color-red;
                 color: #fff;
+            }
+
+            &::before {
+                content: '';
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                background-color: #ededed;
+                left: 0;
+                transform: translateY(-100%);
             }
         }
 

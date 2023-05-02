@@ -4,18 +4,16 @@ const PROP_ACTION = {
     SETPROPBRAND: 'SETPROP',
     REMOVEPROPBRAND: 'REMOVEPROP',
     SETPROPADDRESS: 'SETPROPADDRESS',
-    REMOVEPROPADDRESS: 'REMOVEPROPADDRESS'
+    REMOVEPROPADDRESS: 'REMOVEPROPADDRESS',
+    SETPROPSTAR: 'SETPROPSTAR',
+    REMOVEPROPSTAR: 'REMOVEPROPSTAR'
 }
 
 const PropContext = createContext()
 
-const proporigin = {
-    brand: [],
-    address: []
-}
 
 
-function PropReducer(state = proporigin, action) {
+function PropReducer(state, action) {
     switch (action.type) {
         case PROP_ACTION.SETPROPBRAND:
             let a = state ? state.brand ? state.brand.filter(item => item) : [] : []
@@ -29,6 +27,12 @@ function PropReducer(state = proporigin, action) {
                 ...state,
                 address: c.includes(action.payload) ? c.filter(item => item != action.payload) : [...c, action.payload]
             };
+        case PROP_ACTION.SETPROPSTAR:
+            let d = state ? state.star ? state.star.filter(item => item) : [] : []
+            return {
+                ...state,
+                star: d.includes(action.payload) ? d.filter(item => item != action.payload) : [...d, action.payload]
+            }
         default:
             return state;
     }

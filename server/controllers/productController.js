@@ -69,7 +69,6 @@ async function searchProduct(req, res) {
 // [GET search-more]
 async function searchProductMore(req, res) {
     // http://localhost:4000/api/products/search-more?name=d&brand=dell&brand=asus&address=ph%C3%BA%20y%C3%AAn&address=kh%C3%A1nh%20h%C3%B2a&sortby=price&sortmode=desc&index=0&star=5
-    console.log(req.query)
     const sortBys = ['price', 'hot', 'top-sell']
     const sortModes = ['asc', 'desc']
     const brands = suppliers.map(supplier => supplier.supplierName.toUpperCase())
@@ -77,9 +76,9 @@ async function searchProductMore(req, res) {
         name: req.query.name,
         brand: req.query.brand ? Array.isArray(req.query.brand) ? req.query.brand.map(item => item.toUpperCase()) : [req.query.brand.toUpperCase()] : [],
         address: req.query.address ? Array.isArray(req.query.address) ? req.query.address : [req.query.address] : [],
-        star: req.query.star,
-        sortBy: req.query.sortby,
-        sortMode: req.query.sortmode ? req.query.sortmode : 'desc',
+        star: req.query.star ? Array.isArray(req.query.star) ? req.query.star : [...req.query.star] : [],
+        // sortBy: req.query.sortby,
+        // sortMode: req.query.sortmode ? req.query.sortmode : 'desc',
         indexToStart: checkNumber(req.query.index) ? parseInt(req.query.index) : 0,
         checkGetData: true, // check no muon lay theo brand hay theo address
     }
@@ -95,40 +94,39 @@ async function searchProductMore(req, res) {
     const result = { data: [], index: parseInt(data.indexToStart) }
 
     while (result.index < products.length && result.data.length != 40) {
-        // console.log(Math.random())
         const a = handleSort(result.index, (40 - result.data.length))
         result.data = result.data.concat(a.product)
         result.index = a.indexToStart
     }
 
-    if (data.sortBy) {
-        switch (data.sortBy) {
-            case "price":
-                if (data.sortMode === 'desc') {
-                    result.data = result.data.sort((a, b) => {
-                        return a.price - b.price
-                    })
-                } else {
-                    result.data = result.data.sort((a, b) => {
-                        return b.price - a.price
-                    })
-                }
-                break;
-            case "hot":
-                if (data.sortMode === 'desc') {
-                    result.data = result.data.sort((a, b) => {
-                        return a.unitInOrder - b.unitInOrder
-                    })
-                } else {
-                    result.data = result.data.sort((a, b) => {
-                        return b.unitInOrder - a.unitInOrder
-                    })
-                }
-                break;
-            default:
-                break;
-        }
-    }
+    // if (data.sortBy) {
+    //     switch (data.sortBy) {
+    //         case "price":
+    //             if (data.sortMode === 'desc') {
+    //                 result.data = result.data.sort((a, b) => {
+    //                     return a.price - b.price
+    //                 })
+    //             } else {
+    //                 result.data = result.data.sort((a, b) => {
+    //                     return b.price - a.price
+    //                 })
+    //             }
+    //             break;
+    //         case "hot":
+    //             if (data.sortMode === 'desc') {
+    //                 result.data = result.data.sort((a, b) => {
+    //                     return a.unitInOrder - b.unitInOrder
+    //                 })
+    //             } else {
+    //                 result.data = result.data.sort((a, b) => {
+    //                     return b.unitInOrder - a.unitInOrder
+    //                 })
+    //             }
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    // }
 
     result.index >= products.length ? result.index = false : ""
     return res.json({ products: result.data.map(product => product.ignoreProps('unitInOrder', 'quantity')), index: result.index })
@@ -144,14 +142,8 @@ async function searchProductMore(req, res) {
             }
         }
         indexToStart = index
-        // data.checkGetData = false;
 
         if (data.brand.length != 0) {
-            // for (let index = 0; index < rs.length; index++) {
-            //     if (data.brand.includes(rs[index].supplier.toUpperCase())) {
-            //         rs.push(products[index]);
-            //     }
-            // }
             if (rs.length != 0) {
                 const a = rs.map((item, index) => {
                     if (data.brand.includes(item.supplier.toUpperCase())) {
@@ -160,10 +152,8 @@ async function searchProductMore(req, res) {
                 })
                 rs = a.filter(item => item)
             }
-            // indexToStart = index
-            // data.checkGetData = false;
         }
-        if (data.address != 0) {
+        if (data.address.length != 0) {
             if (rs.length != 0) {
                 const b = rs.map((item) => {
                     for (let index = 0; index < suppliers.length; index++) {
@@ -174,24 +164,17 @@ async function searchProductMore(req, res) {
                 })
                 rs = b.filter(item => item)
             }
-            // else if (data.checkGetData) {
-            //     for (index; index < products.length; index++) {
-            //         if (rs.length >= numberItemFound) break;
-            //         for (let index1 = 0; index1 < suppliers.length; index1++) {
-            //             if (suppliers[index1].supplierId === products[index].supplierID && products[index].productName.toUpperCase().includes(data.name.toUpperCase())) {
-            //                 if (!isValidAddress(suppliers[index1].address)) {
-            //                     rs.push(products[index])
-            //                     break;
-            //                 }
-            //             }
-            //         }
-            //     }
-            //     indexToStart = index
-            //     data.checkGetData = false
-            // }
         }
-        // sort theo star
-        // data.checkGetData = true
+        if (data.star.length != 0) {
+            if (rs.length != 0) {
+                const c = rs.map((item) => {
+                    if (data.star.includes(Math.floor(item.rating).toString())) {
+                        return item
+                    }
+                })
+                rs = c.filter(item => item)
+            }
+        }
         return { product: rs, indexToStart: indexToStart }
     }
 
@@ -217,69 +200,6 @@ async function searchProductMore(req, res) {
             })
         }
     }
-
-
-    // if (data.address && !supplierErorrs.address.includes(data.address?.toUpperCase())) return res.status(400).json(productErrors.en.invalidQuery)
-    // if (data.brand && !brands.includes(data.brand?.toUpperCase())) return res.status(400).json(productErrors.en.invalidQuery)
-    // if (data.sortBy && !sortBys.includes(data.sortBy)) return res.status(400).json(productErrors.en.invalidQuery)
-    // if (data.sortMode && !sortModes.includes(data.sortMode)) return res.status(400).json(productErrors.en.invalidQuery)
-    // const checkstar = checkNumber(data.star)
-    // if (!checkstar || parseInt(data.star) > 5 || parseInt(data.star) < 1) return res.status(400).json(productErrors.en.invalidQuery)
-
-    // const rs = []
-
-    // lay 40 san pham theo brand
-    // products.every((item) => {
-    //     if (item.supplier.toUpperCase() === data.brand.toUpperCase()) {
-    //         rs.push(item)
-    //         return true
-    //     }
-    //     if (rs.length >= 40) return false
-    //     return true
-    // })
-    //lay san pham theo address tu rs
-    // const a = []
-    // rs.map((item, index) => {
-    //     suppliers.every((item1) => {
-    //         if (item1.supplierId === item.supplierID && item1.address.toUpperCase().includes(data.address.toUpperCase())) {
-    //             a.push(item)
-    //             return false
-    //         }
-    //         return true
-    //     })
-    // })
-    // console.log(a)
-
-    // Object.keys(data).map((key, index) => {
-    //     if (data[key]) {
-    //         //lay 40 san pham theo brand
-    //         if (index === 0) {
-    //             products.every((item) => {
-    //                 if (item.supplier.toUpperCase() === data[key].toUpperCase()) {
-    //                     rs.push(item)
-    //                     return true
-    //                 }
-    //                 if (rs.length >= 40) return false
-    //                 return true
-    //             })
-    //         }
-    //         // lay san pham theo address tu rs
-    //         else {
-    //             const a = []
-    //             rs.map((item, index) => {
-    //                 suppliers.every((item1) => {
-    //                     if (item1.supplierId === item.supplierID && item1.address.toUpperCase().includes(data.address.toUpperCase())) {
-    //                         a.push(item)
-    //                         return false
-    //                     }
-    //                     return true
-    //                 })
-    //             })
-    //             console.log(a)
-    //         }
-    //     }
-    // })
-    // console.log(rs.length)
 }
 
 

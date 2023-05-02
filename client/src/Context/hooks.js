@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { UserContext } from './UserContext'
 import { PropContext } from './propContext'
-import { SortContext } from './sortContext'
+import { ProductContext } from './productContext'
 
 function useUserData() {
     return useContext(UserContext)
@@ -9,12 +9,12 @@ function useUserData() {
 function usePropData() {
     return useContext(PropContext)
 }
-function useSortData() {
-    return useContext(SortContext)
+function useProductData() {
+    return useContext(ProductContext)
 }
 
 export {
     useUserData,
     usePropData,
-    useSortData
+    useProductData
 }

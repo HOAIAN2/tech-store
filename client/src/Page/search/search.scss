@@ -1,4 +1,10 @@
-.search_content {
-    display: flex;
-    justify-content: center;
+.wrapsearch-content {
+    width: 100%;
+    height: 100vh;
+    overflow-y: scroll;
+
+    .search_content {
+        display: flex;
+        justify-content: center;
+    }
 }

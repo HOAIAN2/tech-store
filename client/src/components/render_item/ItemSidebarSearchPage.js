@@ -9,9 +9,7 @@ import { usePropData, PROP_ACTION } from '../../Context'
 
 function ItemSidebarSearchPage({ arr = [], typeprop, index, numberToShow, star = false }) {
     const [brands, setBrands] = useState([])
-    const [fetchjust1time, setfetchjust1time] = useState(true)
     const [hideShowButton, setHideShowButton] = useState(false)
-
     const [, dispatchProp] = usePropData()
 
 
@@ -52,6 +50,7 @@ function ItemSidebarSearchPage({ arr = [], typeprop, index, numberToShow, star =
             if (prop === 'TP. Hồ Chí Minh') prop = 'Hồ Chí Minh'
             if (typeprop === 'address') dispatchProp({ type: PROP_ACTION.SETPROPADDRESS, payload: prop })
             if (typeprop === 'brand') dispatchProp({ type: PROP_ACTION.SETPROPBRAND, payload: prop })
+            if (typeprop === 'star') dispatchProp({ type: PROP_ACTION.SETPROPSTAR, payload: prop })
 
         }
     }
@@ -110,7 +109,7 @@ function ItemSidebarSearchPage({ arr = [], typeprop, index, numberToShow, star =
     } else if (star) {
         return (
             <>
-                <div className="item_sidebar_search_item" onClick={selectItem()} value={'star5'}>
+                <div className="item_sidebar_search_item" onClick={selectItem('5')} value={'star5'}>
                     <FontAwesomeIcon icon={faCaretRight} className="svgselect" />
                     <div className="wrapstar">
                         <FontAwesomeIcon icon={faStar} />
@@ -120,7 +119,7 @@ function ItemSidebarSearchPage({ arr = [], typeprop, index, numberToShow, star =
                         <FontAwesomeIcon icon={faStar} />
                     </div>
                 </div>
-                <div className="item_sidebar_search_item" onClick={selectItem()} value={'star4'}>
+                <div className="item_sidebar_search_item" onClick={selectItem('4')} value={'star4'}>
                     <FontAwesomeIcon icon={faCaretRight} className="svgselect" />
                     <div className="wrapstar">
                         <FontAwesomeIcon icon={faStar} />
@@ -128,20 +127,20 @@ function ItemSidebarSearchPage({ arr = [], typeprop, index, numberToShow, star =
                         <FontAwesomeIcon icon={faStar} />
                         <FontAwesomeIcon icon={faStar} />
                     </div>
-                </div><div className="item_sidebar_search_item" onClick={selectItem()} value={'star3'}>
+                </div><div className="item_sidebar_search_item" onClick={selectItem('3')} value={'star3'}>
                     <FontAwesomeIcon icon={faCaretRight} className="svgselect" />
                     <div className="wrapstar">
                         <FontAwesomeIcon icon={faStar} />
                         <FontAwesomeIcon icon={faStar} />
                         <FontAwesomeIcon icon={faStar} />
                     </div>
-                </div><div className="item_sidebar_search_item" onClick={selectItem()} value={'star2'}>
+                </div><div className="item_sidebar_search_item" onClick={selectItem('2')} value={'star2'}>
                     <FontAwesomeIcon icon={faCaretRight} className="svgselect" />
                     <div className="wrapstar">
                         <FontAwesomeIcon icon={faStar} />
                         <FontAwesomeIcon icon={faStar} />
                     </div>
-                </div><div className="item_sidebar_search_item" onClick={selectItem()} value={'star1'}>
+                </div><div className="item_sidebar_search_item" onClick={selectItem('1')} value={'star1'}>
                     <FontAwesomeIcon icon={faCaretRight} className="svgselect" />
                     <div className="wrapstar">
                         <FontAwesomeIcon icon={faStar} />
