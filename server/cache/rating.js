@@ -21,7 +21,41 @@ const { pool } = require('./database')
 //         throw new Error(`Fail to initialize ratings data: ${error.message}`)
 //     }
 // }
-
+async function selectRating(userID, productID) {
+    try {
+        const queryString = [
+            'SELECT rate FROM ratings',
+            'WHERE user_id = ? AND product_id = ?'
+        ].join(' ')
+        const [rows] = await pool.query(queryString, [userID, productID])
+    } catch (error) {
+        throw new Error(error.message)
+    }
+}
+async function insertRating(userID, productID, rate) {
+    try {
+        const queryString = [
+            'INSERT INTO ratings (user_id, product_id, rate)',
+            'VALUES (?, ?, ?)'
+        ].join(' ')
+        if (await isRatingYet(userID, productID)) throw new Error('User rated this product')
+        await pool.query(queryString, [userID, productID, rate])
+    } catch (error) {
+        throw new Error(error.message)
+    }
+}
+async function updateRating(userID, productID, rate) {
+    try {
+        const queryString = [
+            'UPDATE ratings SET rate = ?',
+            'WHERE user_id = ? AND product_id = ?'
+        ].join(' ')
+        if (!await isRatingYet(userID, productID)) throw new Error('User rated this product')
+        await pool.query(queryString, [rate, userID, productID])
+    } catch (error) {
+        throw new Error(error.message)
+    }
+}
 async function isRatingYet(userID, productID) {
     try {
         const queryString = [
@@ -36,5 +70,7 @@ async function isRatingYet(userID, productID) {
     }
 }
 module.exports = {
-    isRatingYet,
+    selectRating,
+    insertRating,
+    updateRating
 }

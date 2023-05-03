@@ -26,7 +26,7 @@ const {
 const { suppliers, initializeSupplier } = require('./supplier')
 const { vouchers, initializeVoucher } = require('./voucher')
 const { queryComments, insertComment } = require('./comment')
-const { isRatingYet } = require('./rating')
+const { selectRating, insertRating, updateRating } = require('./rating')
 async function initializeData() {
     console.log('\x1b[1m%s\x1b[0m', 'Initializing data...')
     try {
@@ -64,7 +64,9 @@ module.exports = {
     addVoucher,
     paidOrder,
     removeOrderDetail,
-    isRatingYet,
+    selectRating,
+    insertRating,
+    updateRating,
     queryComments,
     insertComment,
     pool,
