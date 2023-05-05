@@ -114,7 +114,7 @@ async function paidOrder(orderID, paymentMethodID) {
         const order = await getOrder(orderID)
         order.products.forEach(product => {
             const delta = product.quantity * -1
-            const tempProduct = products.find(item => item.productID === product.productID)
+            const tempProduct = products.products.find(item => item.productID === product.productID)
             tempProduct.updateUnitInOrder(delta)
             tempProduct.updateQuantity(delta)
             tempProduct.updateSoldQuantity(product.quantity)
@@ -156,7 +156,7 @@ async function addOrder(userID) {
     }
 }
 async function addOrderDetail(orderID, productID, quantity) {
-    const product = products.find(item => item.productID === productID)
+    const product = products.products.find(item => item.productID === productID)
     const queryString = [
         'INSERT INTO order_details(order_id, product_id, quantity)',
         'VALUE(?, ?, ?)'
@@ -166,7 +166,7 @@ async function addOrderDetail(orderID, productID, quantity) {
         const order = orders.find(item => item.orderID === orderID)
         order.addProduct(product.productID, product.productName, quantity)
         product.updateUnitInOrder(quantity)
-        products.sort((x, y) => y.unitInOrder - x.unitInOrder)
+        products.products.sort((x, y) => y.unitInOrder - x.unitInOrder)
         return order
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)
@@ -174,7 +174,7 @@ async function addOrderDetail(orderID, productID, quantity) {
     }
 }
 async function updateOrderDetail(orderID, productID, quantity) {
-    const product = products.find(item => item.productID === productID)
+    const product = products.products.find(item => item.productID === productID)
     const queryString = [
         'UPDATE order_details',
         'SET quantity = ?',
@@ -192,7 +192,7 @@ async function updateOrderDetail(orderID, productID, quantity) {
         }
         order.setProduct(productID, quantity)
         product.updateUnitInOrder(delta)
-        products.sort((x, y) => y.unitInOrder - x.unitInOrder)
+        products.products.sort((x, y) => y.unitInOrder - x.unitInOrder)
         return order
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)
@@ -200,7 +200,7 @@ async function updateOrderDetail(orderID, productID, quantity) {
     }
 }
 async function removeOrderDetail(orderID, productID) {
-    const product = products.find(item => item.productID === productID)
+    const product = products.products.find(item => item.productID === productID)
     const queryString = [
         'DELETE FROM order_details',
         'WHERE order_id = ? AND product_id = ?'
@@ -217,7 +217,7 @@ async function removeOrderDetail(orderID, productID) {
         }
         order.removeProduct(productID)
         product.updateUnitInOrder(delta)
-        products.sort((x, y) => y.unitInOrder - x.unitInOrder)
+        products.products.sort((x, y) => y.unitInOrder - x.unitInOrder)
         return order
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)

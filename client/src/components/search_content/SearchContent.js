@@ -13,7 +13,7 @@ import { PRODUCT_ACTION } from '../../Context/index'
 
 
 
-function SearchContent() {
+function SearchContent({ callbackgettypesort }) {
     const [searchParam] = useSearchParams()
     const [address, setAddress] = useState([])
     const [brands, setBrands] = useState([])
@@ -21,11 +21,11 @@ function SearchContent() {
     const [products, setproducts] = useState([])
     const [prop] = usePropData()
     const [product, dispatchProduct] = useProductData()
+    const [typesort, settypesort] = useState('')
 
     function handlesort(typesort) {
         return (e) => {
-
-            if (typesort.includes('price')) {
+            if (typesort.includes('Price')) {
                 let a = document.querySelector('.activesortprice')
                 let b = document.querySelector('.activeSort')
                 let c = document.querySelector('.sortprice-name')
@@ -45,36 +45,7 @@ function SearchContent() {
                 e.target.classList.add('activeSort')
             }
 
-
-            if (typesort === 'default') {
-                setproducts({ products: [...product.products] })
-            } else if (typesort === 'moinhat') {
-                let a = product.products.map((item, index) => {
-                    return { ...item }
-                })
-                a = a.sort((a, b) => {
-                    return b.productID - a.productID
-                })
-                setproducts({ products: a })
-            } else if (typesort === 'hot') {
-                let a = product.products.map((item, index) => {
-                    return { ...item }
-                })
-                a = a.sort((a, b) => {
-                    return b.soldQuantity - a.soldQuantity
-                })
-                setproducts({ products: a })
-            } else if (typesort === 'priceDESC') {
-                const a = products.products.sort((a, b) => {
-                    return a.price - b.price
-                })
-                setproducts({ products: a })
-            } else if (typesort === 'priceASC') {
-                const a = products.products.sort((a, b) => {
-                    return b.price - a.price
-                })
-                setproducts({ products: a })
-            }
+            settypesort(typesort)
         }
     }
 
@@ -92,7 +63,7 @@ function SearchContent() {
     useEffect(() => {
         getProductSearchPage(searchParam.get('name'), prop?.brand, prop?.address, prop?.star)
             .then((rs => {
-                dispatchProduct({ type: PRODUCT_ACTION.SETPRODUCT, payload: rs.products, index: rs.index })
+                dispatchProduct({ type: PRODUCT_ACTION.SETPRODUCT, payload: rs.data, index: rs.index })
             }))
     }, [searchParam])
 
@@ -100,10 +71,18 @@ function SearchContent() {
         if (prop) {
             getProductSearchPage(searchParam.get('name'), prop?.brand, prop?.address, prop?.star)
                 .then((rs) => {
-                    dispatchProduct({ type: PRODUCT_ACTION.SETPRODUCT, payload: rs.products, index: rs.index, typeproduce: 'new' })
+                    dispatchProduct({ type: PRODUCT_ACTION.SETPRODUCT, payload: rs.data, index: rs.index, typeproduce: 'new' })
                 })
         }
     }, [prop])
+
+    useEffect(() => {
+        callbackgettypesort(typesort)
+        getProductSearchPage(searchParam.get('name'), prop?.brand, prop?.address, prop?.star, typesort)
+            .then((rs) => {
+                dispatchProduct({ type: PRODUCT_ACTION.SETPRODUCT, payload: rs.data, index: rs.index, typeproduce: 'new' })
+            })
+    }, [typesort])
 
     useEffect(() => {
         if (product) setproducts({ products: product.products })
@@ -150,18 +129,18 @@ function SearchContent() {
                     <div className="sortitem activeSort" onClick={handlesort('default')}>
                         <span className="sortnew" >Liên Quan</span>
                     </div>
-                    <div className="sortitem" onClick={handlesort('moinhat')}>
+                    <div className="sortitem" onClick={handlesort('productssortNew')}>
                         <span className="sortnew"  >Mới Nhất</span>
                     </div>
-                    <div className="sortitem" onClick={handlesort('hot')}>
+                    <div className="sortitem" onClick={handlesort('productssorthot')}>
                         <span className="sorthot" >Bán Chạy</span>
                     </div>
                     <div className="sortprice">
                         <span className="sortprice-name">Giá</span>
                         <FontAwesomeIcon icon={faChevronDown} />
                         <div className="sortprice_item">
-                            <span onClick={handlesort('priceDESC')} >Giá Thấp Đến Cao</span>
-                            <span onClick={handlesort('priceASC')}>Giá Cao Đến Thấp</span>
+                            <span onClick={handlesort('productssortPriceDESC')} >Giá Thấp Đến Cao</span>
+                            <span onClick={handlesort('productssortPriceASC')}>Giá Cao Đến Thấp</span>
                         </div>
                     </div>
                 </div>

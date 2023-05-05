@@ -1,7 +1,52 @@
 const { Product } = require('../models')
 const { pool } = require('./database')
 
-const products = []
+const products = {
+    products: [],
+    productssorthot: [],
+    productssortPriceASC: [],
+    productssortNew: [],
+    productssortPriceDESC: []
+}
+
+
+function initializeProductSort() {
+    // const a = products.products.map(item => item)
+    // productssort.productssorthot = a.sort((a, b) => {
+    //     return b.soldQuantity - a.soldQuantity
+    // })
+    // productssort.productssortPriceASC = a.sort((a, b) => {
+    //     return b.price - a.price
+    // })
+    // productssort.productssortPriceDESC = a.sort((a, b) => {
+    //     return a.price - b.price
+    // })
+    // productssort.productssortNew = a.sort((a, b) => {
+    //     return b.productID - a.productID
+    // })
+    Object.keys(products).forEach((key) => {
+        if (key !== 'products') {
+            const a = products.products.map(item => item)
+            if (key === 'productssortPriceDESC') {
+                products[key] = a.sort((a, b) => {
+                    return a.price - b.price
+                })
+            } else if (key === 'productssortPriceASC') {
+                products[key] = a.sort((a, b) => {
+                    return b.price - a.price
+                })
+            } else if (key === 'productssortNew') {
+                products[key] = a.sort((a, b) => {
+                    return b.productID - a.productID
+                })
+            } else if (key === 'productssorthot') {
+                products[key] = a.sort((a, b) => {
+                    return b.soldQuantity - a.soldQuantity
+                })
+            }
+        }
+    })
+}
 
 async function initializeProduct() {
     console.log('\x1b[1m%s\x1b[0m', 'Initializing products data...')
@@ -33,8 +78,9 @@ async function initializeProduct() {
             const supplierID = row['supplier_id']
             const commentCount = row['comment_count']
             const product = new Product(productID, productName, supplier, category, price, quantity, soldQuantity, unitInOrder, discount, images, description, rating, ratingCount, supplierID, commentCount)
-            products.push(product)
+            products.products.push(product)
         })
+        initializeProductSort()
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', `Fail to initialize products data: ${error.message}`)
         throw new Error(`Fail to initialize products data: ${error.message}`)
@@ -93,4 +139,5 @@ module.exports = {
     initializeProduct,
     createProduct,
     products,
+    // productssort,
 }
