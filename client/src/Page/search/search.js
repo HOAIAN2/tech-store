@@ -1,7 +1,7 @@
 import Header from "../../components/header/Header"
 import "./search.scss"
 import SearchContent from "../../components/search_content/SearchContent"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { usePropData, useProductData } from '../../Context'
 import { getProductSearchPage } from '../../utils/Product'
 import { useSearchParams } from "react-router-dom"
@@ -11,13 +11,18 @@ function Search() {
     const [prop] = usePropData()
     const [searchParam] = useSearchParams()
     const [product, dispatchProduct] = useProductData()
+    const [typesort, settypesort] = useState('')
+
+    function callbackGetTypesort(typesort) {
+        settypesort(typesort)
+    }
 
     function handlescrollfetch(e) {
         if (e.target.scrollTop + e.target.offsetHeight === e.target.scrollHeight) {
             if (product.index) {
-                getProductSearchPage(searchParam.get('name'), prop?.brand, prop?.address, prop?.star, product.index)
+                getProductSearchPage(searchParam.get('name'), prop?.brand, prop?.address, prop?.star, typesort, product.index)
                     .then((rs => {
-                        dispatchProduct({ type: PRODUCT_ACTION.SETPRODUCT, payload: rs.products, index: rs.index })
+                        dispatchProduct({ type: PRODUCT_ACTION.SETPRODUCT, payload: rs.data, index: rs.index })
                     }))
             }
         }
@@ -31,7 +36,7 @@ function Search() {
             <div className="wrapsearch-conten-item">
                 <Header />
                 <div className="search_content">
-                    <SearchContent />
+                    <SearchContent callbackgettypesort={callbackGetTypesort} />
                 </div>
             </div>
         </div>

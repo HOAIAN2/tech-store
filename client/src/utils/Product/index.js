@@ -56,7 +56,7 @@ async function getHomeProduct() {
 }
 
 
-async function getProductSearchPage(name, brand, address, star, index = 0) {
+async function getProductSearchPage(name, brand, address, star, sortby, index = 0) {
     try {
         const rs = await request.get('/products/search-more', {
             params: {
@@ -64,6 +64,7 @@ async function getProductSearchPage(name, brand, address, star, index = 0) {
                 brand: brand,
                 address: address,
                 star: star,
+                sortby: sortby,
                 index: index
             }
         })

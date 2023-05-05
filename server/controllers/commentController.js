@@ -30,7 +30,7 @@ async function addComment(req, res) {
     data.productID = parseInt(data.productID)
     try {
         const newComment = await insertComment(data.userID, data.productID, data.content)
-        const product = products.find(item => item.productID === data.productID)
+        const product = products.products.find(item => item.productID === data.productID)
         product.updateCommentCount()
         return res.json(newComment)
     } catch (error) {
