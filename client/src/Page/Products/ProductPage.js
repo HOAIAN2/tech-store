@@ -104,6 +104,11 @@ function ProductPage() {
                 setComments([...comments, ...result])
             })
     }
+    function handleTypeComment(e) {
+        setComment(e.target.value)
+        e.target.style.height = 'auto'
+        e.target.style.height = e.target.scrollHeight + 'px'
+    }
     useEffect(() => {
         let orderMode = 'DESC'
         if (commentOrder === language.oldest) orderMode = 'ASC'
@@ -113,8 +118,6 @@ function ProductPage() {
             })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [commentOrder])
-    console.log(product)
-    console.log(commentOrder)
     if (notFound) return <NotFound />
     return (
         <>
@@ -212,7 +215,7 @@ function ProductPage() {
                                         navigate('/login', { state: { from: location } })
                                     }
                                 }}
-                                onInput={(e) => { setComment(e.target.value) }}
+                                onInput={handleTypeComment}
                                 maxLength='255'></textarea>
                             <button onClick={handleSendComment} >{language.send}</button>
                         </div>

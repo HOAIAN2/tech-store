@@ -241,14 +241,14 @@
         }
 
         & .comment-writter {
-            height: 150px;
+            height: auto;
             // border: 1px solid red;
             display: flex;
 
             & .left {
                 width: 70px;
                 margin-top: 0px;
-                height: 150px;
+                height: auto;
                 margin-left: 15px;
 
                 & .avatar {
@@ -267,20 +267,25 @@
 
             & .right {
                 margin-left: 5px;
-                height: 150px;
+                height: auto;
 
                 & textarea {
+                    display: block;
                     font-size: 16px;
                     padding-top: 10px;
                     padding-left: 10px;
-                    height: 100px;
+                    height: auto;
                     width: 1150px;
+                    border-radius: 5px;
                     resize: none;
                     outline: none;
+                    overflow: hidden;
                     font-family: 'Times New Roman', Times, serif;
                 }
 
                 & button {
+                    font-size: 16px;
+                    margin-top: 5px;
                     background-color: colors.$color-red;
                     color: white;
                     outline: none;
@@ -301,6 +306,7 @@
             align-items: center;
 
             & button {
+                font-size: 16px;
                 margin-top: 15px;
                 background-color: colors.$color-red;
                 color: white;
