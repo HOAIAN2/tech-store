@@ -123,11 +123,12 @@ async function createProduct(data) {
         const discount = newProduct[0]['discount']
         const images = newProduct[0]['images'].split(',')
         const description = newProduct[0]['description']
-        const rating = row['rating']
-        const ratingCount = row['rating_count']
-        const supplierID = row['supplier_id']
-        const commentCount = row['comment_count']
+        const rating = newProduct[0]['rating']
+        const ratingCount = newProduct[0]['rating_count']
+        const supplierID = newProduct[0]['supplier_id']
+        const commentCount = newProduct[0]['comment_count']
         const product = new Product(productID, productName, supplier, category, price, quantity, soldQuantity, unitInOrder, discount, images, description, rating, ratingCount, supplierID, commentCount)
+        products.products.push(product)
         return product
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', `Fail to add product: ${error.message}`)
