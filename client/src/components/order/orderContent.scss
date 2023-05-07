@@ -1,0 +1,18 @@
+.wrapordercontent {
+    width: 1257px;
+    height: 100vh;
+    display: flex;
+    margin: auto;
+
+    .orderoption {
+        width: 19.4%;
+        height: 100px;
+        background-color: aqua;
+    }
+
+    .ordercontent {
+        flex: 1;
+        height: 100%;
+        background-color: black;
+    }
+}
