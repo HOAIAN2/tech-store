@@ -178,6 +178,7 @@ async function makePayment(req, res) {
     })
     if (latestOrder && !latestOrder.paid) {
         try {
+            if (latestOrder.products.length === 0) return res.sendStatus(400)
             const order = await paidOrder(latestOrder.orderID, data.paymentMethod)
             return res.json(order)
         } catch (error) {
@@ -191,7 +192,7 @@ async function makePayment(req, res) {
 // middleware,..
 function isValidData(data) {
     const result = Object.keys(data).every((item) => {
-        if (typeof data[item] === 'number') return true
+        if (typeof data[item] === 'number' && Number.isInteger(data[item] && data[item] > 0)) return true
         return false;
     })
     return result
