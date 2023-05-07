@@ -7,7 +7,7 @@ import Header from '../../components/header/Header'
 import Footer from '../../components/footer/Footer'
 import ProductRating from './ProductRating'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCartShopping, faTruck, faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons'
+import { faCartShopping, faTruck, faChevronRight, faChevronLeft, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import { getProductByID } from "../../utils/Product/index"
 import { getComments, addComment } from '../../utils/Comment'
 import { useUserData } from "../../Context"
@@ -190,7 +190,7 @@ function ProductPage() {
                         </div>
                     </div>
                 </div>
-                <div className='product-page-comments'>
+                < div className='product-page-comments' >
                     <div className='comment-count'>
                         <span>{language.comments} ({product.commentCount})</span>
                         <select value={commentOrder}
@@ -209,6 +209,7 @@ function ProductPage() {
                         </div>
                         <div className='right'>
                             <textarea
+                                placeholder={language.placeHolder}
                                 value={comment}
                                 onFocus={() => {
                                     if (!user) {
@@ -217,7 +218,9 @@ function ProductPage() {
                                 }}
                                 onInput={handleTypeComment}
                                 maxLength='255'></textarea>
-                            <button onClick={handleSendComment} >{language.send}</button>
+                            <button onClick={handleSendComment}>
+                                <FontAwesomeIcon icon={faPaperPlane} />
+                            </button>
                         </div>
                     </div>
                     <div className='comment-list'>
@@ -226,8 +229,8 @@ function ProductPage() {
                         })}
                         {comments.length !== product.commentCount ? <button onClick={handleLoadComments}>{language.loadMore}</button> : null}
                     </div>
-                </div>
-            </div>
+                </ div>
+            </div >
             <Footer />
         </>
     )
