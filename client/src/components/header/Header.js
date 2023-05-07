@@ -136,7 +136,7 @@ function Header() {
                         </div>}
                         {searchValue && focus && <SearchListPopup data={searchData} setSearchValue={setSearchValue} />}
                     </form>
-                    <div className="cart-shopping">
+                    <Link to={'/order'} className="cart-shopping">
                         <FontAwesomeIcon icon={faCartShopping} />
                         <div className="number-cart">
                             <span>1</span>
@@ -150,7 +150,7 @@ function Header() {
                                     <div>Không Có Sản Phẩm</div>
                                 </div>}
                         </div>
-                    </div>
+                    </Link>
                 </div>
             </div>
 

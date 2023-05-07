@@ -1,4 +1,5 @@
 import Header from "../../components/header/Header"
+import Footer from "../../components/footer/Footer"
 import "./search.scss"
 import SearchContent from "../../components/search_content/SearchContent"
 import { useEffect, useState } from "react"
@@ -38,6 +39,7 @@ function Search() {
                 <div className="search_content">
                     <SearchContent callbackgettypesort={callbackGetTypesort} />
                 </div>
+                <Footer />
             </div>
         </div>
     )

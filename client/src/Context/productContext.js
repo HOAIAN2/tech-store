@@ -7,6 +7,7 @@ const PRODUCT_ACTION = {
 }
 
 function productReducer(state, action) {
+    console.log(action)
     switch (action.type) {
         case PRODUCT_ACTION.SETPRODUCT:
             let a = state ? state.products ? state.products.filter(item => item) : [] : []

@@ -13,6 +13,7 @@ import DetailsUserProfile from './Page/Auth/DetailsUser/DetailsUserProfile'
 import DetailsUserPurchase from './Page/Auth/DetailsUser/DetailsUserPurchase'
 import ProductPage from './Page/Products/ProductPage'
 import Search from './Page/search/search'
+import Order from './Page/order/orther'
 
 function App() {
   const [user, dispatchUser] = useUserData()
@@ -52,6 +53,7 @@ function App() {
           <Route path='/product/:id' element={<ProductPage />} />
           <Route path='*' element={<NotFound />} />
           <Route path='/search?' element={<Search />} />
+          <Route path='/order' element={<Order />} />
         </Routes>
       </div>
     );

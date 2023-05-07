@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { logout } from '../../utils/Auth'
 import { useUserData } from '../../Context'
 import './Account.scss'
@@ -8,6 +8,7 @@ import languages from './Languages/Account.json'
 
 function Account() {
     const location = useLocation()
+    const navigate = useNavigate()
     // Fetch user Data when app first load
     let language = languages.en
     if (navigator.language === 'vi') language = languages.vi
@@ -17,6 +18,7 @@ function Account() {
             .then(data => {
                 console.log(data)
                 localStorage.clear()
+                navigate('/')
                 window.location.reload()
             })
             .catch(error => {

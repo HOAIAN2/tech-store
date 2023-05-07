@@ -104,7 +104,16 @@
 .productsearch_item {
     width: 247px;
     padding: 0 12px;
+    position: relative;
     cursor: pointer;
+
+    .wrapproduct-itemlink {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+    }
 
     .contentitemsearch {
         position: relative;

@@ -63,7 +63,7 @@ function SearchContent({ callbackgettypesort }) {
     useEffect(() => {
         getProductSearchPage(searchParam.get('name'), prop?.brand, prop?.address, prop?.star)
             .then((rs => {
-                dispatchProduct({ type: PRODUCT_ACTION.SETPRODUCT, payload: rs.data, index: rs.index })
+                dispatchProduct({ type: PRODUCT_ACTION.SETPRODUCT, payload: rs.data, index: rs.index, typeproduce: 'new' })
             }))
     }, [searchParam])
 
@@ -77,11 +77,13 @@ function SearchContent({ callbackgettypesort }) {
     }, [prop])
 
     useEffect(() => {
-        callbackgettypesort(typesort)
-        getProductSearchPage(searchParam.get('name'), prop?.brand, prop?.address, prop?.star, typesort)
-            .then((rs) => {
-                dispatchProduct({ type: PRODUCT_ACTION.SETPRODUCT, payload: rs.data, index: rs.index, typeproduce: 'new' })
-            })
+        if (typesort != '') {
+            callbackgettypesort(typesort)
+            getProductSearchPage(searchParam.get('name'), prop?.brand, prop?.address, prop?.star, typesort)
+                .then((rs) => {
+                    dispatchProduct({ type: PRODUCT_ACTION.SETPRODUCT, payload: rs.data, index: rs.index, typeproduce: 'new' })
+                })
+        }
     }, [typesort])
 
     useEffect(() => {

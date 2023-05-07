@@ -38,7 +38,7 @@ function ProductItem({ data, type = "home" }) {
     }
     else if (type === 'search') {
         return (
-            <div onClick={() => { navigate(`/product/${data.productID}`) }} className="productsearch_item">
+            <div className="productsearch_item">
                 <div className="contentitemsearch">
                     <div className="search-product-item-img" style={{ backgroundImage: `url('${baseIMG}products/${data.images[0]}')` }}></div>
                     <div className="search__produt-item-name">{data.productName}</div>
@@ -59,6 +59,7 @@ function ProductItem({ data, type = "home" }) {
                             <span>Giảm</span>
                         </div> */}
                 </div>
+                <Link to={`/product/${data.productID}`} className="wrapproduct-itemlink" />
             </div>
         )
     }

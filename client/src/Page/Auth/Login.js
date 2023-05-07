@@ -32,7 +32,7 @@ function Login() {
             .then(data => {
                 dispatchUser({ type: USER_ACTION.SET, payload: data })
                 buttonRef.current.classList.remove('loading')
-                navigate(prePage?.pathname || '/')
+                navigate(prePage?.pathname + prePage?.search || '/')
             })
             .catch(error => {
                 buttonRef.current.classList.remove('loading')
