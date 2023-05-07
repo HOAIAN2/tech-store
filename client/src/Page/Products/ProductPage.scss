@@ -231,9 +231,10 @@
             }
 
             & select {
+                border-radius: 5px;
                 outline: none;
                 margin-top: 10px;
-                margin-left: 965px;
+                margin-left: 970px;
                 width: 100px;
                 height: 40px;
                 font-size: large;
@@ -252,9 +253,9 @@
                 margin-left: 15px;
 
                 & .avatar {
-                    // margin-left: 5px;
-                    width: 60px;
-                    height: 60px;
+                    margin-left: 5px;
+                    width: 55px;
+                    height: 55px;
                     border-radius: 50%;
                     overflow: hidden;
 
@@ -266,35 +267,47 @@
             }
 
             & .right {
+                position: relative;
                 margin-left: 5px;
-                height: auto;
+                height: fit-content;
 
                 & textarea {
                     display: block;
                     font-size: 16px;
-                    padding-top: 10px;
+                    padding-top: 15px;
                     padding-left: 10px;
-                    height: auto;
+                    padding-right: 50px;
+                    height: fit-content;
                     width: 1150px;
                     border-radius: 5px;
                     resize: none;
                     outline: none;
                     overflow: hidden;
+                    border: none;
                     font-family: 'Times New Roman', Times, serif;
+                    background-color: rgb(250, 250, 250);
                 }
 
                 & button {
+                    position: absolute;
                     font-size: 16px;
-                    margin-top: 5px;
+                    // margin-top: -10px;
                     background-color: colors.$color-red;
                     color: white;
                     outline: none;
                     border: none;
-                    border-radius: 5px;
+                    border-radius: 50%;
                     height: 40px;
-                    width: 100px;
+                    width: 40px;
                     cursor: pointer;
                     font-weight: bold;
+                    padding-right: 2px;
+                    right: 10px;
+                    bottom: 5px;
+                }
+
+                & svg {
+                    font-size: 20px;
                 }
             }
         }

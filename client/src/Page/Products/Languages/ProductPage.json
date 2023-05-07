@@ -10,7 +10,9 @@
         "buyNow": "Buy now",
         "comments": "Comments",
         "send": "Send",
-        "loadMore": "Load more"
+        "loadMore": "Load more",
+        "placeHolder": "Write comment",
+        "ratingThisProduct": "Rating this product"
     },
     "vi": {
         "latest": "Mới nhất",
@@ -23,6 +25,8 @@
         "buyNow": "Mua ngay",
         "comments": "Bình luận",
         "send": "Gửi",
-        "loadMore": "Xem thêm"
+        "loadMore": "Xem thêm",
+        "placeHolder": "Viết bình luận",
+        "ratingThisProduct": "Đánh giá sản phẩm này"
     }
 }
