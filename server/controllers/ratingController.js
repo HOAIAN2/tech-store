@@ -1,4 +1,4 @@
-const { selectRating, insertRating, updateRating } = require('../cache')
+const { orders, selectRating, insertRating, updateRating } = require('../cache')
 
 // [GET index]
 async function getRating(req, res) {
@@ -14,6 +14,13 @@ async function editRating(req, res) {
     //
 }
 
+// Midleware,...
+function didUserBought(userID, productID) {
+    const userOrders = orders.filter(order => (order.userID === userID && order.paid === true))
+    return userOrders.some(order => {
+        return order.products.find(product => product.productID === productID) !== null
+    })
+}
 module.exports = {
     getRating,
     addRating,
