@@ -13,7 +13,7 @@ import DetailsUserProfile from './Page/Auth/DetailsUser/DetailsUserProfile'
 import DetailsUserPurchase from './Page/Auth/DetailsUser/DetailsUserPurchase'
 import ProductPage from './Page/Products/ProductPage'
 import Search from './Page/search/search'
-import Order from './Page/order/orther'
+import Order from './Page/order/order.js'
 
 function App() {
   const [user, dispatchUser] = useUserData()
