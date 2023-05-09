@@ -50,7 +50,7 @@ async function updateRating(userID, productID, rate) {
             'UPDATE ratings SET rate = ?',
             'WHERE user_id = ? AND product_id = ?'
         ].join(' ')
-        if (!await isRatingYet(userID, productID)) throw new Error('User rated this product')
+        if (!await isRatingYet(userID, productID)) throw new Error('User didn\'t rated this product')
         await pool.query(queryString, [rate, userID, productID])
     } catch (error) {
         throw new Error(error.message)
