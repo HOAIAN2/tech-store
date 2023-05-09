@@ -9,7 +9,7 @@ import { faTwitter } from "@fortawesome/free-brands-svg-icons"
 import { faSearch } from "@fortawesome/free-solid-svg-icons"
 import Account from "../Account/Account"
 import languages from './Languages/Header.json'
-import "./HeaderOrther.scss"
+import "./HeaderOder.scss"
 import { Link } from 'react-router-dom'
 import { getOrder } from "../../utils/Order/index"
 import { baseIMG } from "../../utils/api-config"
