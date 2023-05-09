@@ -5,7 +5,6 @@ const Product = require('./product')
 const Order = require('./order')
 const Voucher = require('./voucher')
 const Comment = require('./comment')
-const Rating = require('./rating')
 
 module.exports = {
     User: User,
@@ -14,6 +13,5 @@ module.exports = {
     Product: Product,
     Order: Order,
     Voucher: Voucher,
-    Comment: Comment,
-    Rating: Rating
+    Comment: Comment
 }
