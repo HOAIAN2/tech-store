@@ -385,3 +385,27 @@
     "content": "string"
 }
 ```
+### Rating routes: /api/rating/
+>[GET] /:productID JWT require
+- Respone
+```json
+{
+    "rate": 3
+}
+```
+>[POST]  JWT require
+- Request
+```json
+{
+    "productID": 1,
+    "rate": 3
+}
+```
+>[PUT]  JWT require
+- Request
+```json
+{
+    "productID": 1,
+    "rate": 3
+}
+```
