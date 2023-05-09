@@ -28,6 +28,7 @@ async function selectRating(userID, productID) {
             'WHERE user_id = ? AND product_id = ?'
         ].join(' ')
         const [rows] = await pool.query(queryString, [userID, productID])
+        return rows[0]
     } catch (error) {
         throw new Error(error.message)
     }
@@ -62,7 +63,7 @@ async function isRatingYet(userID, productID) {
             'SELECT rating_id FROM ratings',
             'WHERE user_id = ? AND product_id = ?'
         ].join(' ')
-        const [result] = pool.query(queryString, [userID, productID])
+        const [result] = await pool.query(queryString, [userID, productID])
         if (result.length === 0) return false
         else return true
     } catch (error) {
