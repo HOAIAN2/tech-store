@@ -192,7 +192,7 @@ async function makePayment(req, res) {
 // middleware,..
 function isValidData(data) {
     const result = Object.keys(data).every((item) => {
-        if (typeof data[item] === 'number' && Number.isInteger(data[item] && data[item] > 0)) return true
+        if (typeof data[item] === 'number' && Number.isInteger(data[item]) && data[item] > 0) return true
         return false;
     })
     return result
