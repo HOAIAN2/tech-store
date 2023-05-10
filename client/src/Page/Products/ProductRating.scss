@@ -6,7 +6,7 @@
     height: 100%;
 
     & div {
-        height: 20px;
+        height: 100%;
         position: absolute;
         display: inline;
 
@@ -18,7 +18,7 @@
         &:last-child {
             display: inline;
             position: absolute;
-            height: 20px;
+            height: 100%;
             // width: attr(rate-percent);
             width: var(--rate-percent);
             color: colors.$color-red;

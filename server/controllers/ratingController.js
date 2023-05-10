@@ -1,4 +1,4 @@
-const { orders, selectRating, insertRating, updateRating, } = require('../cache')
+const { orders, selectRating, insertRating, updateRating, products } = require('../cache')
 const { readAccessToken } = require('./authController')
 
 // [GET index]
@@ -9,7 +9,7 @@ async function getRating(req, res) {
         userID: tokenData.id,
         productID: req.params.id
     }
-    if (!isValidNumber(data.productID)) return res.sendStatus(400)
+    if (!products.products.find(product => product.productID === data.productID)) return res.sendStatus(404)
     try {
         const result = await selectRating(tokenData.id, data.productID)
         return res.json(result)
@@ -30,7 +30,8 @@ async function addRating(req, res) {
         rate: req.body.rate
     }
     if (typeof data.productID !== 'number' || typeof data.rate !== 'number') return res.sendStatus(400)
-    if (!Number.isInteger(data.productID) || !validRates.includes(data.rate)) return res.sendStatus(400)
+    if (!products.products.find(product => product.productID === data.productID)) return res.sendStatus(404)
+    if (!validRates.includes(data.rate)) return res.sendStatus(400)
     if (!didUserBought(data.userID, data.productID)) return res.sendStatus(400)
     try {
         await insertRating(data.userID, data.productID, data.rate)
@@ -51,7 +52,8 @@ async function editRating(req, res) {
         rate: req.body.rate
     }
     if (typeof data.productID !== 'number' || typeof data.rate !== 'number') return res.sendStatus(400)
-    if (!Number.isInteger(data.productID) || !validRates.includes(data.rate)) return res.sendStatus(400)
+    if (!products.products.find(product => product.productID === data.productID)) return res.sendStatus(404)
+    if (!validRates.includes(data.rate)) return res.sendStatus(400)
     if (!didUserBought(data.userID, data.productID)) return res.sendStatus(400)
     try {
         await updateRating(data.userID, data.productID, data.rate)
