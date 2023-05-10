@@ -29,6 +29,12 @@ class Product {
     updateCommentCount() {
         this.commentCount += 1
     }
+    updateRatingCount() {
+        this.ratingCount += 1
+    }
+    updateRating(rating) {
+        this.rating = rating
+    }
     ignoreProps() {
         const object = { ...this }
         const ignoreProps = Array.from(arguments)

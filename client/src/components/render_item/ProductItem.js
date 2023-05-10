@@ -27,8 +27,8 @@ function ProductItem({ data, type = "home" }) {
                         {data.discount ? <span className="oldprice">{formatPrice(data.price)}</span> : <></>}
                     </div>
                     <div className="home__produt-item-action">
-                        <div style={{ height: "18px" }}>
-                            <ProductRating rate={data.rate} />
+                        <div style={{ height: "20px" }}>
+                            <ProductRating rate={data.rating} />
                         </div>
                         <Link to={`product/${data.productID}`}>Chi tiết</Link>
                     </div>
@@ -49,7 +49,7 @@ function ProductItem({ data, type = "home" }) {
                         {data.discount ? <span className="oldprice">{formatPrice(data.price)}</span> : <></>}
                     </div>
                     <div className="search__produt-item-action">
-                        <div style={{ height: "18px" }}>
+                        <div style={{ height: "20px" }}>
                             <ProductRating rate={data.rating} />
                         </div>
                         {/* <Link to={`/product/${data.productID}`}>Chi tiết</Link> */}
