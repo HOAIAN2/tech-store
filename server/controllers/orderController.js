@@ -50,8 +50,8 @@ async function createOrder(req, res) {
 // [POST add-product]
 async function addProduct(req, res) {
     const data = {
-        productID: req.body.productID,
-        quantity: req.body.quantity
+        productID: parseInt(req.body.productID),
+        quantity: parseInt(req.body.quantity)
     }
     let errorMessages = orderErrors.en
     const language = req.headers["accept-language"]
