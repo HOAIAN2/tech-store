@@ -33,10 +33,6 @@ function OrderItem({ data, gettotalprice }) {
         }
     }
 
-    function getdetailproduct() {
-        navigate('/product/' + product.productID)
-    }
-
     function handleselectclick(e) {
         if (e.target.className.includes('selectbox')) {
             e.target.classList.remove('selectbox')
@@ -86,8 +82,8 @@ function OrderItem({ data, gettotalprice }) {
                     </div>
                 </div>
                 <div className='ordercontent-item2'>
-                    <span className='relatedproducts'>Sản Phẩm Liên Quan</span>
-                    <div className='btndetail' onClick={getdetailproduct}>
+                    <span className='relatedproducts' onClick={() => { navigate('/search?name=' + product.category) }} >Sản Phẩm Liên Quan</span>
+                    <div className='btndetail' onClick={() => { navigate('/product/' + product.productID) }}>
                         <span>Chi Tiết Sản Phẩm</span>
                     </div>
                 </div>
