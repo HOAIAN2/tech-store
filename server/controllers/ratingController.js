@@ -75,7 +75,7 @@ function isValidNumber(number) {
 function didUserBought(userID, productID) {
     const userOrders = orders.filter(order => (order.userID === userID && order.paid === true))
     return userOrders.some(order => {
-        return order.products.find(product => product.productID === productID) !== null
+        return order.products.find(product => product.productID === productID)
     })
 }
 module.exports = {
