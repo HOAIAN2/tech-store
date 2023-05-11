@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { login, fetchUserData } from '../../utils/Auth'
-import { useUserData, USER_ACTION } from '../../Context'
+import { getOrder } from '../../utils/Order'
+import { useUserData, USER_ACTION, useOrderData, ORDER_ACTION } from '../../Context'
 import languages from './Languages/Login.json'
 import './Login.scss'
 
 function Login() {
     const [, dispatchUser] = useUserData()
+    const [, dispatchOrders] = useOrderData()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
@@ -31,6 +33,10 @@ function Login() {
             })
             .then(data => {
                 dispatchUser({ type: USER_ACTION.SET, payload: data })
+                return getOrder()
+            })
+            .then((data) => {
+                dispatchOrders({ type: ORDER_ACTION.SET, payload: data })
                 buttonRef.current.classList.remove('loading')
                 navigate(prePage?.pathname + prePage?.search || '/')
             })

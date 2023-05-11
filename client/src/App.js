@@ -7,7 +7,8 @@ import ChangePassWord from './Page/Auth/ChangePassword'
 import Register from './Page/Auth/Register'
 import DetailsUser from './Page/Auth/DetailsUser/DetailsUser'
 import { fetchUserData } from './utils/Auth'
-import { useUserData, USER_ACTION } from './Context'
+import { getOrder } from './utils/Order'
+import { useUserData, USER_ACTION, useOrderData, ORDER_ACTION } from './Context'
 import './App.scss';
 import DetailsUserProfile from './Page/Auth/DetailsUser/DetailsUserProfile'
 import DetailsUserPurchase from './Page/Auth/DetailsUser/DetailsUserPurchase'
@@ -17,12 +18,17 @@ import Order from './Page/order/order.js'
 
 function App() {
   const [user, dispatchUser] = useUserData()
+  const [orders, dispatchOrders] = useOrderData()
   // console.log(user)
   const [isFirstLoad, setIsFirstLoad] = useState(true)
   useEffect(() => {
     fetchUserData()
       .then(data => {
         dispatchUser({ type: USER_ACTION.SET, payload: data })
+        return getOrder()
+      })
+      .then(data => {
+        dispatchOrders({ type: ORDER_ACTION.SET, payload: data })
         setIsFirstLoad(false)
       })
       .catch(error => {

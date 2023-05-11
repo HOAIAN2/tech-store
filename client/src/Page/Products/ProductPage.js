@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartShopping, faTruck, faChevronRight, faChevronLeft, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import { getProductByID } from "../../utils/Product/index"
 import { getComments, addComment } from '../../utils/Comment'
-import { useUserData } from "../../Context"
+import { useUserData, useOrderData } from "../../Context"
 import { Link } from 'react-router-dom'
 import CommentItem from '../../components/render_item/CommentItem'
 import languages from './Languages/ProductPage.json'
@@ -19,6 +19,7 @@ function ProductPage() {
     let language = languages.en
     if (navigator.language === 'vi') language = languages.vi
     const [user,] = useUserData()
+    const [orders,] = useOrderData()
     function formatPrice(price) {
         return `${price.toLocaleString('vi')} đ`
     }
@@ -56,6 +57,7 @@ function ProductPage() {
             .then(result => {
                 setComments(result)
             })
+        console.log('Bought: ', didUserBought())
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id])
     // console.log(product)
@@ -108,6 +110,11 @@ function ProductPage() {
         setComment(e.target.value)
         e.target.style.height = 'auto'
         e.target.style.height = e.target.scrollHeight + 'px'
+    }
+    function didUserBought() {
+        return orders.some(order => {
+            return order.products.find(product => product.productID === parseInt(id))
+        })
     }
     useEffect(() => {
         let orderMode = 'DESC'
