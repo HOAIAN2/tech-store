@@ -125,11 +125,13 @@
                     }
 
                     .nameproduct {
-                        overflow: hidden;
-                        flex: 1;
+                        flex: 1 1;
+                        height: max-content;
                         display: -webkit-box;
+                        overflow: hidden;
                         -webkit-box-orient: vertical;
                         -webkit-line-clamp: 3;
+                        word-break: break-all;
                     }
                 }
 
@@ -224,6 +226,7 @@
                     padding: 10px 20px;
                     background-color: colors.$color-red;
                     color: #fff;
+                    cursor: pointer;
                     border-radius: 3px;
                 }
             }
@@ -234,6 +237,79 @@
             bottom: 0;
             left: 0;
             width: 100%;
+            border-top: 2px solid #00000017;
+
+            .voucher {
+                padding: 21px 20px;
+                color: colors.$color-red;
+                cursor: pointer;
+                position: relative;
+
+                .wrapvoucher {
+                    position: absolute;
+                    height: 100%;
+                    width: max-content;
+                    top: 0;
+                    display: flex;
+                    align-items: center;
+                    right: 0;
+                    padding-right: 20px;
+                }
+
+                svg {
+                    margin-right: 10px;
+                }
+            }
+
+            .totalprice {
+                padding: 21px 20px;
+                font-size: 26px;
+                position: relative;
+
+                .wraptotalprice {
+                    width: max-content;
+                    position: absolute;
+                    top: 0;
+                    height: 100%;
+                    right: 0;
+                    padding-right: 20px;
+
+                    .title {
+                        margin-right: 10px;
+                    }
+
+                    .price {
+                        color: colors.$color-red;
+                    }
+                }
+            }
+
+            .action {
+                display: flex;
+                padding: 10px 20px;
+                justify-content: space-between;
+
+                .action-item {
+                    display: flex;
+                    align-items: center;
+
+                    span {
+                        margin-right: 10px;
+
+                        &:nth-child(3) {
+                            color: colors.$color-red;
+                            cursor: pointer;
+                        }
+                    }
+                }
+
+                .buy {
+                    padding: 10px 20px;
+                    background-color: colors.$color-red;
+                    color: #fff;
+                    cursor: pointer;
+                }
+            }
         }
     }
 
