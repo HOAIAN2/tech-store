@@ -1,15 +1,18 @@
 import './orderContent.scss'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faList, faCaretRight, faCheck, faTicket } from "@fortawesome/free-solid-svg-icons"
+import { faList, faCaretRight, faCheck, faTicket, faEarthEurope } from "@fortawesome/free-solid-svg-icons"
 import { useEffect, useState, useRef } from 'react'
 import OrderItem from '../render_item/OrderItem'
 import { useOrderData } from '../../Context'
 
-function OderContent() {
+function OrderContent() {
     const [numberproductpay, setnumberproductpay] = useState(0)
     const [order] = useOrderData()
     const [totalpricerender, settotalpricerender] = useState(0)
     const totalprice = useRef(0)
+    const [productAction, setproductAction] = useState([])
+
+
     useEffect(() => {
         if (order) {
             setnumberproductpay(order[0].products.length)
@@ -31,14 +34,64 @@ function OderContent() {
         e.target.parentElement.classList.add('listorderoptionActive')
     }
 
-    function handleselectclick(e) {
+    // function handleselectclick(e) {
+    //     if (e.target.className.includes('selectbox')) {
+    //         e.target.classList.remove('selectbox')
+    //         e.target.classList.add('active')
+    //     } else {
+    //         e.target.classList.remove('active')
+    //         e.target.classList.add('selectbox')
+    //     }
+    // }
+
+
+    function handleselectclick(productID) {
+        return (e) => {
+            if (e.target.className.includes('selectbox')) {
+                e.target.classList.remove('selectbox')
+                e.target.classList.add('active')
+                setproductAction([...productAction, productID])
+            } else {
+                e.target.classList.remove('active')
+                e.target.classList.add('selectbox')
+                const a = productAction.filter((item) => {
+                    return item != productID
+                })
+                setproductAction(a)
+            }
+        }
+    }
+
+    function getAllProductAction(e) {
         if (e.target.className.includes('selectbox')) {
             e.target.classList.remove('selectbox')
             e.target.classList.add('active')
+            const rs = []
+            order[0].products.filter((item) => {
+                return rs.push(item.productID)
+            })
+            setproductAction(rs)
+            const b = document.querySelectorAll('#boxselect')
+            if (b?.length != 0) {
+                Array.from(b).map((item) => {
+                    item.classList.remove('selectbox')
+                    item.classList.add('active')
+                })
+            }
         } else {
             e.target.classList.remove('active')
             e.target.classList.add('selectbox')
+            const b = document.querySelectorAll('#boxselect')
+            if (b?.length != 0) {
+                Array.from(b).map((item) => {
+                    console.log(item)
+                    item.classList.remove('active')
+                    item.classList.add('selectbox')
+                })
+            }
         }
+
+
     }
 
     function formatPrice(price) {
@@ -77,7 +130,7 @@ function OderContent() {
             <div className='ordercontent'>
                 <div className='ordercontent-header'>
                     <div className='wrapselectbox'>
-                        <div className='selectbox' onClick={handleselectclick}>
+                        <div className='selectbox' onClick={getAllProductAction}>
                             <FontAwesomeIcon icon={faCheck} />
                         </div>
                     </div>
@@ -90,7 +143,7 @@ function OderContent() {
                     order ? order[0].products.map((item, index) => {
                         return (
                             <div key={index}>
-                                <OrderItem data={item} gettotalprice={gettotalprice} />
+                                <OrderItem data={item} gettotalprice={gettotalprice} handleselectclick={handleselectclick} />
                             </div>
                         )
                     }) : <></>
@@ -130,4 +183,4 @@ function OderContent() {
 }
 
 
-export default OderContent
+export default OrderContent
