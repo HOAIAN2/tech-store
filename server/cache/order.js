@@ -54,7 +54,8 @@ async function getOrder(orderID) {
         const queryString = [
             'SELECT order_id, user_id, order_date, payment_methods.name AS paid_method, paid, voucher_id',
             'FROM orders LEFT JOIN payment_methods ON orders.paid_method_id = payment_methods.method_id',
-            'WHERE order_id = ?'
+            'WHERE order_id = ?',
+            'ORDER BY order_id ASC'
         ].join(' ')
         const queryString1 = [
             'SELECT order_details.product_id, order_details.quantity, order_details.price, order_details.discount, product_name', // Mấy cái thanh toán rồi thì có price, chỉ handle mấy cái chưa thanh toán
@@ -80,8 +81,7 @@ async function getOrder(orderID) {
         })
         if (voucherID) order.setVoucher(vouchers.find(item => item.voucherID === voucherID))
         if (order.paid) order.paidOrder(paidMethod, orderDate)
-        orders.splice(findOrder(orderID), 1)
-        orders.push(order)
+        orders[findOrder(orderID)] = order
         return order
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)
@@ -135,10 +135,12 @@ async function addOrder(userID) {
         ].join(' ')
         const queryString1 = [
             'SELECT order_id, user_id, order_date, payment_methods.name AS paid_method, paid',
-            'FROM orders LEFT JOIN payment_methods ON orders.paid_method_id = payment_methods.method_id'
+            'FROM orders LEFT JOIN payment_methods ON orders.paid_method_id = payment_methods.method_id',
+            'WHERE user_id = ?',
+            'ORDER BY order_id DESC LIMIT 1'
         ].join(' ')
         await pool.query(queryString, [userID])
-        const [rows] = await pool.query(queryString1)
+        const [rows] = await pool.query(queryString1, [userID])
         rows.forEach(async (row) => {
             const orderID = row['order_id']
             const userID = row['user_id']

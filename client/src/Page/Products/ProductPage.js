@@ -10,7 +10,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartShopping, faTruck, faChevronRight, faChevronLeft, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import { getProductByID } from "../../utils/Product/index"
 import { getComments, addComment } from '../../utils/Comment'
-import { useUserData, useOrderData } from "../../Context"
+import { createOrder, updateProduct, addProduct } from '../../utils/Order'
+import { useUserData, useOrderData, ORDER_ACTION } from "../../Context"
 import { Link } from 'react-router-dom'
 import CommentItem from '../../components/render_item/CommentItem'
 import languages from './Languages/ProductPage.json'
@@ -19,7 +20,7 @@ function ProductPage() {
     let language = languages.en
     if (navigator.language === 'vi') language = languages.vi
     const [user,] = useUserData()
-    const [orders,] = useOrderData()
+    const [orders, dispatchOrders] = useOrderData()
     function formatPrice(price) {
         return `${price.toLocaleString('vi')} đ`
     }
@@ -33,33 +34,6 @@ function ProductPage() {
     const navigate = useNavigate()
     const location = useLocation()
     const { id } = useParams()
-    useEffect(() => {
-        let orderMode = 'DESC'
-        if (commentOrder === language.oldest) orderMode = 'ASC'
-        getProductByID(id)
-            .then(data => {
-                setProduct({
-                    ...data,
-                    images: data.images.map(image => {
-                        return `${baseIMG}/products/${image}`
-                    }),
-                    discount: data.discount * 100 || null,
-                })
-                document.title = data.productName
-                setQuantity(1)
-            })
-            .catch(error => {
-                if (error.message === '404') setNotFound(true)
-            })
-        document.querySelector('.App').scrollTo(0, 0)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        getComments(id, orderMode)
-            .then(result => {
-                setComments(result)
-            })
-        console.log('Bought: ', didUserBought())
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [id])
     // console.log(product)
     /// Alot of bugs, fix
     function handleSetQuantity(e) {
@@ -113,9 +87,70 @@ function ProductPage() {
     }
     function didUserBought() {
         return orders.some(order => {
+            console.log(order)
             return order.products.find(product => product.productID === parseInt(id))
         })
     }
+    function handleAddToCart() {
+        const latestOrder = orders.at(-1)
+        if (!latestOrder || latestOrder.paid) {
+            createOrder(parseInt(id), quantity)
+                .then(data => {
+                    dispatchOrders({ type: ORDER_ACTION.EDIT, payload: data })
+                })
+                .catch(error => {
+                    console.error(error)
+                })
+        }
+        else {
+            if (latestOrder.products.find(product => product.productID === parseInt(id))) {
+                updateProduct(parseInt(id), quantity)
+                    .then(data => {
+                        dispatchOrders({ type: ORDER_ACTION.EDIT, payload: data })
+                    })
+                    .catch(error => {
+                        console.error(error)
+                    })
+            }
+            else {
+                addProduct(parseInt(id), quantity)
+                    .then(data => {
+                        dispatchOrders({ type: ORDER_ACTION.EDIT, payload: data })
+                    })
+                    .catch(error => {
+                        console.error(error)
+                    })
+            }
+        }
+    }
+    useEffect(() => {
+        let orderMode = 'DESC'
+        if (commentOrder === language.oldest) orderMode = 'ASC'
+        getProductByID(id)
+            .then(data => {
+                setProduct({
+                    ...data,
+                    images: data.images.map(image => {
+                        return `${baseIMG}/products/${image}`
+                    }),
+                    discount: data.discount * 100 || null,
+                })
+                document.title = data.productName
+                setQuantity(1)
+            })
+            .catch(error => {
+                if (error.message === '404') setNotFound(true)
+            })
+        document.querySelector('.App').scrollTo(0, 0)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        getComments(id, orderMode)
+            .then(result => {
+                setComments(result)
+            })
+        console.log('Bought: ', didUserBought())
+        console.log(orders)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [id])
     useEffect(() => {
         let orderMode = 'DESC'
         if (commentOrder === language.oldest) orderMode = 'ASC'
@@ -125,6 +160,13 @@ function ProductPage() {
             })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [commentOrder])
+    // useEffect(() => {
+    //     const latestOrder = orders.at(-1)
+    //     if (latestOrder.paid) return
+    //     const product = latestOrder.products.find(product => product.productID === parseInt(id))
+    //     if (product) setQuantity(product.quantity)
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [])
     if (notFound) return <NotFound />
     return (
         <>
@@ -186,13 +228,9 @@ function ProductPage() {
                             </div>
                         </div>
                         <div className='product-function'>
-                            <button>
+                            <button onClick={handleAddToCart}>
                                 <span>{language.addToCart}</span>
                                 <FontAwesomeIcon icon={faCartShopping} />
-                            </button>
-                            <button>
-                                <span>{language.buyNow}</span>
-                                <Link to={"/"}></Link>
                             </button>
                         </div>
                     </div>
