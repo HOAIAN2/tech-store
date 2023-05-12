@@ -81,7 +81,6 @@ async function searchProductMore(req, res) {
         // sortMode: req.query.sortmode ? req.query.sortmode : 'desc',
         indexToStart: checkNumber(req.query.index) ? parseInt(req.query.index) + 1 : 0,
     }
-    console.log(data)
 
     if (!isValidProps("brand", data.brand)) return res.status(400).json(productErrors.en.invalidQuery)
     if (!isValidProps("address", data.address)) return res.status(400).json(productErrors.en.invalidQuery)

@@ -21,7 +21,9 @@ import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import { getOrder } from "../../utils/Order/index"
 import OrderItem from '../render_item/OrderItem'
 import { baseIMG } from "../../utils/api-config"
+import { useUserData } from '../../Context'
 function Header() {
+    const [user] = useUserData()
     const navigate = useNavigate()
     const [searchParam] = useSearchParams({ name: '' })
     const [focus, setFocus] = useState(false)
@@ -136,21 +138,25 @@ function Header() {
                         </div>}
                         {searchValue && focus && <SearchListPopup data={searchData} setSearchValue={setSearchValue} />}
                     </form>
-                    <Link to={'/order'} className="cart-shopping">
-                        <FontAwesomeIcon icon={faCartShopping} />
-                        <div className="number-cart">
-                            <span>1</span>
-                        </div>
-                        <div className='popup_cart-shopping'>
-                            {order.length !== 0 ?
-                                <OrderItem data={order} />
-                                :
-                                <div style={{ textAlign: "center" }}>
-                                    <img src={`${baseIMG}orther/icon-nonorder.png`} alt=''></img>
-                                    <div>Không Có Sản Phẩm</div>
-                                </div>}
-                        </div>
-                    </Link>
+                    {
+                        user ?
+                            <Link to={'/order'} className="cart-shopping">
+                                <FontAwesomeIcon icon={faCartShopping} />
+                                <div className="number-cart">
+                                    <span>1</span>
+                                </div>
+                                <div className='popup_cart-shopping'>
+                                    {order.length !== 0 ?
+                                        <OrderItem data={order} />
+                                        :
+                                        <div style={{ textAlign: "center" }}>
+                                            <img src={`${baseIMG}orther/icon-nonorder.png`} alt=''></img>
+                                            <div>Không Có Sản Phẩm</div>
+                                        </div>}
+                                </div>
+                            </Link> :
+                            <></>
+                    }
                 </div>
             </div>
 

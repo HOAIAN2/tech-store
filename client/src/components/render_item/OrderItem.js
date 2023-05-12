@@ -5,10 +5,12 @@ import { getProductByID } from '../../utils/Product'
 import { baseIMG } from '../../utils/api-config'
 import { useNavigate } from 'react-router-dom'
 
-function OrderItem({ data, gettotalprice }) {
+function OrderItem({ data, gettotalprice, handleselectclick }) {
     const [quantity, setQuantity] = useState(1)
     const [product, setproduct] = useState()
     const navigate = useNavigate()
+    // const [productAction, setproductAction] = useState([])
+
 
     useEffect(() => {
         getProductByID(data.productID)
@@ -33,15 +35,24 @@ function OrderItem({ data, gettotalprice }) {
         }
     }
 
-    function handleselectclick(e) {
-        if (e.target.className.includes('selectbox')) {
-            e.target.classList.remove('selectbox')
-            e.target.classList.add('active')
-        } else {
-            e.target.classList.remove('active')
-            e.target.classList.add('selectbox')
-        }
-    }
+    // function handleselectclick(productID) {
+    //     return (e) => {
+    //         if (e.target.className.includes('selectbox')) {
+    //             e.target.classList.remove('selectbox')
+    //             e.target.classList.add('active')
+    //             setproductAction([...productAction, productID])
+    //         } else {
+    //             e.target.classList.remove('active')
+    //             e.target.classList.add('selectbox')
+    //             const a = productAction.filter((item) => {
+    //                 return item != productID
+    //             })
+    //             setproductAction(a)
+    //         }
+    //     }
+    // }
+
+    // console.log(productAction)
 
     function formatPrice(price) {
         return `${price.toLocaleString('vi')} ₫`
@@ -52,7 +63,7 @@ function OrderItem({ data, gettotalprice }) {
             <div className='ordercontent-item'>
                 <div className='ordercontent-item1'>
                     <div className='wrapselectbox'>
-                        <div className='selectbox' onClick={handleselectclick}>
+                        <div id='boxselect' className='selectbox' onClick={handleselectclick(product.productID)}>
                             <FontAwesomeIcon icon={faCheck} />
                         </div>
                     </div>
