@@ -128,28 +128,6 @@
                     & span {
                         margin-right: 20px;
                     }
-
-                    &:last-child {
-                        background-color: colors.$color-red;
-                        color: #fff;
-                        width: 173px;
-                        position: relative;
-                        margin-left: 20px;
-                        border-radius: 2px;
-
-                        span {
-                            margin: 0;
-                        }
-
-                        a {
-                            height: 100%;
-                            position: absolute;
-                            width: 100%;
-                            top: 0;
-                            left: 0;
-                            z-index: 1;
-                        }
-                    }
                 }
             }
 
