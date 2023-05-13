@@ -45,8 +45,8 @@ async function initializeOrder() {
         throw new Error(`Fail to initialize orders data: ${error.message}`)
     }
 }
-function findOrder(orderID) {
-    orders.findIndex(order => {
+function findOrderIndex(orderID) {
+    return orders.findIndex(order => {
         return order.orderID === orderID
     })
 }
@@ -81,7 +81,7 @@ async function getOrder(orderID) {
         })
         if (voucherID) order.setVoucher(vouchers.find(item => item.voucherID === voucherID))
         if (order.paid) order.paidOrder(paidMethod, orderDate)
-        orders[findOrder(orderID)] = order
+        orders[findOrderIndex(orderID)] = order
         return order
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)
