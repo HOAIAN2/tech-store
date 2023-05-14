@@ -7,7 +7,7 @@ import Header from '../../components/header/Header'
 import Footer from '../../components/footer/Footer'
 import ProductRating from './ProductRating'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCartShopping, faTruck, faChevronRight, faChevronLeft, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
+import { faCartShopping, faTruck, faChevronRight, faChevronLeft, faPaperPlane, faStar } from '@fortawesome/free-solid-svg-icons'
 import { getProductByID } from "../../utils/Product/index"
 import { getComments, addComment } from '../../utils/Comment'
 import { createOrder, updateProduct, addProduct } from '../../utils/Order'
@@ -136,7 +136,6 @@ function ProductPage() {
                     discount: data.discount * 100 || null,
                 })
                 document.title = data.productName
-                setQuantity(1)
             })
             .catch(error => {
                 if (error.message === '404') setNotFound(true)
@@ -160,13 +159,13 @@ function ProductPage() {
             })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [commentOrder])
-    // useEffect(() => {
-    //     const latestOrder = orders.at(-1)
-    //     if (latestOrder.paid) return
-    //     const product = latestOrder.products.find(product => product.productID === parseInt(id))
-    //     if (product) setQuantity(product.quantity)
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [])
+    useEffect(() => {
+        const latestOrder = orders.at(-1)
+        if (latestOrder.paid) return
+        const product = latestOrder.products.find(product => product.productID === parseInt(id))
+        if (product) setQuantity(product.quantity)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [id])
     if (notFound) return <NotFound />
     return (
         <>
@@ -235,6 +234,22 @@ function ProductPage() {
                         </div>
                     </div>
                 </div>
+                {didUserBought() &&
+                    <div className='product-page-rating'>
+                        <div className='title'>{language.ratingThisProduct}</div>
+                        <div className='stars'>
+                            <FontAwesomeIcon icon={faStar} />
+                            <FontAwesomeIcon icon={faStar} />
+                            <FontAwesomeIcon icon={faStar} />
+                            <FontAwesomeIcon icon={faStar} />
+                            <FontAwesomeIcon icon={faStar} />
+                            <FontAwesomeIcon icon={faStar} />
+                        </div>
+                        <div className='submit'>
+                            <button>{language.send}</button>
+                        </div>
+                    </div>
+                }
                 < div className='product-page-comments' >
                     <div className='comment-count'>
                         <span>{language.comments} ({product.commentCount})</span>
