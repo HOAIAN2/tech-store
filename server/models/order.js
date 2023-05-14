@@ -10,15 +10,7 @@ class Order {
         this.voucher = null
     }
     addProduct(productID, productName, quantity, price, discount) {
-        this.products.push({ productID, productName, quantity, price, discount })
-    }
-    setProduct(productID, quantity) {
-        for (let index = 0; index < this.products.length; index++) {
-            if (this.products[index].productID === productID) {
-                this.products[index].quantity = quantity
-                break
-            }
-        }
+        this.products.push(new Detail(productID, productName, quantity, price, discount))
     }
     removeProduct(productID) {
         const index = this.products.findIndex(product => {
@@ -32,7 +24,7 @@ class Order {
     paidOrder(paidMethod, orderDate) {
         this.paidMethod = paidMethod
         this.total = this.products.reduce((sum, product) => {
-            return sum + (product.price * (1 - product.discount) * product.quantity)
+            return sum + product.total()
         }, 0)
         if (this.voucher) {
             this.total = this.total * (1 - this.voucher.voucherDiscount)
@@ -42,4 +34,19 @@ class Order {
     }
 }
 
+class Detail {
+    constructor(productID, productName, quantity, price, discount) {
+        this.productID = productID
+        this.productName = productName
+        this.quantity = quantity
+        this.price = price
+        this.discount = discount
+    }
+    setQuantity(quantity) {
+        this.quantity = quantity
+    }
+    total() {
+        return (1 - this.discount) * (this.price * this.quantity)
+    }
+}
 module.exports = Order

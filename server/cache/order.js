@@ -192,7 +192,7 @@ async function updateOrderDetail(orderID, productID, quantity) {
                 break
             }
         }
-        order.setProduct(productID, quantity)
+        order.products.find(product => product.productID === productID).setQuantity(quantity)
         product.updateUnitInOrder(delta)
         products.products.sort((x, y) => y.unitInOrder - x.unitInOrder)
         return order
