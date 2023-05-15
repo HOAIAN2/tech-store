@@ -4,7 +4,7 @@ class Order {
         this.userID = userID
         this.orderDate = orderDate
         this.paidMethod = paidMethod
-        this.paid = paid
+        this.paid = paid || false
         this.products = []
         this.total = 0
         this.voucher = null

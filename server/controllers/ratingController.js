@@ -37,7 +37,8 @@ async function addRating(req, res) {
     if (!didUserBought(data.userID, data.productID)) return res.sendStatus(400)
     try {
         const result = await selectRating(tokenData.id, data.productID)
-        await insertRating(data.userID, data.productID, data.rate)
+        if (result) await updateRating(data.userID, data.productID, data.rate)
+        else await insertRating(data.userID, data.productID, data.rate)
         return res.sendStatus(200)
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)

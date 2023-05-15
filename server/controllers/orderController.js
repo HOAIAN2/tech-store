@@ -26,11 +26,16 @@ function getOrder(req, res) {
 }
 // [POST create-order]
 async function createOrder(req, res) {
+    const data = {
+        productID: req.body.productID,
+        quantity: req.body.quantity
+    }
     let errorMessages = orderErrors.en
     const language = req.headers["accept-language"]
     if (language === 'vi') errorMessages = orderErrors.vi
     const token = req.headers['authorization'].split(' ')[1]
     const user = readAccessToken(token)
+    if (!isValidData(data)) return res.status(400).json({ message: errorMessages.invalidDataType })
     // kiểm tra cuối order mới nhất thanh toán chưa
     // thanh toán rồi thì tạo mới, không thì bad request.
     const latestOrder = orders.findLast(order => {
@@ -38,7 +43,7 @@ async function createOrder(req, res) {
     })
     if (!latestOrder || latestOrder.paid) {
         try {
-            const order = await addOrder(user.id)
+            const order = await addOrder(user.id, data.productID, data.quantity)
             return res.json(order)
         } catch (error) {
             console.log('\x1b[31m%s\x1b[0m', error.message)

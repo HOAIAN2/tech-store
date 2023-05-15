@@ -12,7 +12,6 @@ import { getProductByID } from "../../utils/Product/index"
 import { getComments, addComment } from '../../utils/Comment'
 import { createOrder, updateProduct, addProduct } from '../../utils/Order'
 import { useUserData, useOrderData, ORDER_ACTION } from "../../Context"
-import { Link } from 'react-router-dom'
 import CommentItem from '../../components/render_item/CommentItem'
 import UserRating from './UserRating'
 import languages from './Languages/ProductPage.json'
@@ -88,8 +87,7 @@ function ProductPage() {
         e.target.style.height = e.target.scrollHeight + 'px'
     }
     function didUserBought() {
-        return orders.some(order => {
-            console.log(order)
+        return orders.filter(order => order.paid === true).some(order => {
             return order.products.find(product => product.productID === parseInt(id))
         })
     }

@@ -19,7 +19,7 @@ async function postRating(productID, rate) {
     const token = JSON.parse(localStorage.getItem('token'))
     if (!token) throw new Error('No Token')
     try {
-        const res = await request.post('rating', {
+        await request.post('rating', {
             productID: productID,
             rate: rate
         }, {
@@ -27,12 +27,12 @@ async function postRating(productID, rate) {
                 Authorization: `Bearer ${token.accessToken}`
             }
         })
-        return res.data
     } catch (error) {
         throw new Error(error)
     }
 }
 
 export {
-    getRating
+    getRating,
+    postRating
 }

@@ -11,7 +11,7 @@ function orderReducer(state, action) {
     switch (action.type) {
         case ORDER_ACTION.SET:
             return [...action.payload].map(order => {
-                return { ...order, orderDate: new Date(order.orderDate) }
+                return { ...order, orderDate: order.orderDate !== null ? new Date(order.orderDate) : null }
             })
         case ORDER_ACTION.EDIT:
             const temp = [...state].splice(-1)

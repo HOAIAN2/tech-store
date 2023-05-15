@@ -242,8 +242,14 @@
     "userID": 1,
     "orderDate": null,
     "paidMethod": null,
-    "paid": 0,
-    "products": [],
+    "paid": false,
+    "products": [
+        {
+            "productID": 3,
+            "productName": "Laptop Lenovo IdeaPad Gaming 3 15IHU6 82K100FBVN (Core i7-11370H/8GB RAM/512GB SSD/15.6-in - Hàng chính hãng",
+            "quantity": 6
+        }
+    ],
     "total": 0,
     "voucher": null
 }
@@ -263,7 +269,7 @@
     "userID": 1,
     "orderDate": null,
     "paidMethod": null,
-    "paid": 0,
+    "paid": false,
     "products": [
         {
             "productID": 3,
@@ -367,14 +373,15 @@
 - Respone
 ```json
 [
-    {"commentID":1,
-    "avatar":"1682648528080-hoaian_admin.jpeg",
-    "userFirstName":"Hoài Ân",
-    "userLastName":"Lê",
-    "productID":1,
-    "comment":"test comment xem nó hiển thị ra sao\n:))))))))",
-    "rate":null,
-    "commentDate":"2023-04-27T17:00:00.000Z"
+    {
+        "commentID":1,
+        "avatar":"1682648528080-hoaian_admin.jpeg",
+        "userFirstName":"Hoài Ân",
+        "userLastName":"Lê",
+        "productID":1,
+        "comment":"test comment xem nó hiển thị ra sao\n:))))))))",
+        "rate":null,
+        "commentDate":"2023-04-27T17:00:00.000Z"
     }
 ]
 ```
@@ -394,14 +401,6 @@
 }
 ```
 >[POST]  JWT require
-- Request
-```json
-{
-    "productID": 1,
-    "rate": 3
-}
-```
->[PUT]  JWT require
 - Request
 ```json
 {
