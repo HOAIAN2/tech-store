@@ -7,13 +7,14 @@ import Header from '../../components/header/Header'
 import Footer from '../../components/footer/Footer'
 import ProductRating from './ProductRating'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCartShopping, faTruck, faChevronRight, faChevronLeft, faPaperPlane, faStar } from '@fortawesome/free-solid-svg-icons'
+import { faCartShopping, faTruck, faChevronRight, faChevronLeft, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import { getProductByID } from "../../utils/Product/index"
 import { getComments, addComment } from '../../utils/Comment'
 import { createOrder, updateProduct, addProduct } from '../../utils/Order'
 import { useUserData, useOrderData, ORDER_ACTION } from "../../Context"
 import { Link } from 'react-router-dom'
 import CommentItem from '../../components/render_item/CommentItem'
+import UserRating from './UserRating'
 import languages from './Languages/ProductPage.json'
 
 function ProductPage() {
@@ -30,6 +31,7 @@ function ProductPage() {
     const [notFound, setNotFound] = useState(false)
     const [quantity, setQuantity] = useState(1)
     const [imageID, setImageID] = useState(1)
+    const [activeRating, setActiveRating] = useState(false)
     const [commentOrder, setCommentOrder] = useState(language.latest)
     const navigate = useNavigate()
     const location = useLocation()
@@ -123,6 +125,9 @@ function ProductPage() {
             }
         }
     }
+    function handleToggleRating(e) {
+        if (e.target.className === 'overlay-rating') setActiveRating(false)
+    }
     useEffect(() => {
         let orderMode = 'DESC'
         if (commentOrder === language.oldest) orderMode = 'ASC'
@@ -161,8 +166,8 @@ function ProductPage() {
     }, [commentOrder])
     useEffect(() => {
         const latestOrder = orders.at(-1)
-        if (latestOrder.paid) return
-        const product = latestOrder.products.find(product => product.productID === parseInt(id))
+        if (latestOrder?.paid) return
+        const product = latestOrder?.products.find(product => product.productID === parseInt(id))
         if (product) setQuantity(product.quantity)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id])
@@ -171,6 +176,11 @@ function ProductPage() {
         <>
             <Header />
             <div className='product-page'>
+                {activeRating &&
+                    <div className='overlay-rating' onClick={handleToggleRating}>
+                        <UserRating />
+                    </div>
+                }
                 <div className='product-page-content'>
                     <div className='product-page-images'>
                         <div className='wrap_product-page-image'>
@@ -201,6 +211,9 @@ function ProductPage() {
                             <div className='action_item'>
                                 <div className='bought1'>{product.soldQuantity}</div>
                                 <div className='bought2'>{language.sold}</div>
+                                {didUserBought() && <button
+                                    onClick={() => { setActiveRating(true) }}>{language.rating}
+                                </button>}
                             </div>
                         </div>
                         <div className="product-price" style={{ display: "flex", alignItems: "center" }}>
@@ -234,22 +247,6 @@ function ProductPage() {
                         </div>
                     </div>
                 </div>
-                {didUserBought() &&
-                    <div className='product-page-rating'>
-                        <div className='title'>{language.ratingThisProduct}</div>
-                        <div className='stars'>
-                            <FontAwesomeIcon icon={faStar} />
-                            <FontAwesomeIcon icon={faStar} />
-                            <FontAwesomeIcon icon={faStar} />
-                            <FontAwesomeIcon icon={faStar} />
-                            <FontAwesomeIcon icon={faStar} />
-                            <FontAwesomeIcon icon={faStar} />
-                        </div>
-                        <div className='submit'>
-                            <button>{language.send}</button>
-                        </div>
-                    </div>
-                }
                 < div className='product-page-comments' >
                     <div className='comment-count'>
                         <span>{language.comments} ({product.commentCount})</span>
