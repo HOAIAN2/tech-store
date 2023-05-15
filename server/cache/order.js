@@ -19,16 +19,16 @@ async function initializeOrder() {
             'WHERE order_id = ?'
         ].join(' ')
         const [rows] = await pool.query(queryString)
-        rows.forEach(async (row) => {
-            const orderID = row['order_id']
-            const userID = row['user_id']
-            const orderDate = row['order_date']
-            const paidMethod = row['paid_method']
-            const voucherID = row['voucher_id']
-            const paid = row['paid']
+        for (let index = 0; index < rows.length; index++) {
+            const orderID = rows[index]['order_id']
+            const userID = rows[index]['user_id']
+            const orderDate = rows[index]['order_date']
+            const paidMethod = rows[index]['paid_method']
+            const voucherID = rows[index]['voucher_id']
+            const paid = rows[index]['paid']
             const order = new Order(orderID, userID, orderDate, paidMethod, paid)
-            const [rows] = await pool.query(queryString1, [orderID])
-            rows.forEach(row => {
+            const [productRows] = await pool.query(queryString1, [orderID])
+            productRows.forEach(row => {
                 const productID = row['product_id']
                 const productName = row['product_name']
                 const quantity = row['quantity']
@@ -39,7 +39,7 @@ async function initializeOrder() {
             if (voucherID) order.setVoucher(vouchers.find(item => item.voucherID === voucherID))
             if (order.paid) order.paidOrder(paidMethod, orderDate)
             orders.push(order)
-        })
+        }
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', `Fail to initialize orders data: ${error.message}`)
         throw new Error(`Fail to initialize orders data: ${error.message}`)
