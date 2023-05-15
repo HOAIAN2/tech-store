@@ -127,7 +127,7 @@ async function paidOrder(orderID, paymentMethodID) {
 }
 
 
-async function addOrder(userID) {
+async function addOrder(userID, productID, quantity) {
     let newOrder = null
     try {
         const queryString = [
@@ -141,16 +141,13 @@ async function addOrder(userID) {
         ].join(' ')
         await pool.query(queryString, [userID])
         const [rows] = await pool.query(queryString1, [userID])
-        rows.forEach(async (row) => {
-            const orderID = row['order_id']
-            const userID = row['user_id']
-            const orderDate = row['order_date']
-            const paidMethod = row['paid_method']
-            const paid = row['paid']
-            const order = new Order(orderID, userID, orderDate, paidMethod, paid)
-            orders.push(order)
-            newOrder = order
-        })
+        const orderID = rows[0]['order_id']
+        const orderDate = rows[0]['order_date']
+        const paidMethod = rows[0]['paid_method']
+        const paid = rows[0]['paid']
+        const order = new Order(orderID, userID, orderDate, paidMethod, paid)
+        orders.push(order)
+        newOrder = await addOrderDetail(order.orderID, productID, quantity)
         return newOrder
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)

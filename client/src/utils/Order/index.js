@@ -21,12 +21,14 @@ async function createOrder(productID, quantity) {
     const token = JSON.parse(localStorage.getItem('token'))
     if (!token) return {}
     try {
-        await request.post('/order/create-order', {}, {
+        const res = await request.post('/order/create-order', {
+            productID: productID,
+            quantity: quantity
+        }, {
             headers: {
                 Authorization: `Bearer ${token.accessToken}`
             }
         })
-        const res = await addProduct(productID, quantity)
         return res.data
     } catch (error) {
         throw new Error(error)

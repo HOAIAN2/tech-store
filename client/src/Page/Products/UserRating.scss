@@ -27,7 +27,11 @@
         justify-content: center;
         align-items: center;
 
-        & svg {
+        & span.true {
+            color: colors.$color-red;
+        }
+
+        svg {
             cursor: pointer;
         }
     }
