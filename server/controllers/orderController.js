@@ -157,6 +157,8 @@ async function setVoucher(req, res) {
     if (!voucher) return res.status(400).json({ message: errorMessages.voucherInvalid })
     if (latestOrder && !latestOrder.paid) {
         try {
+            const today = new Date().setHours(0, 0, 0, 0)
+            if (voucher.expiryDate < today) return res.json({ message: errorMessages.voucherOutdate })
             await addVoucher(latestOrder.orderID, data.voucherID)
             latestOrder.setVoucher(voucher)
             return res.json(latestOrder)
@@ -184,6 +186,8 @@ async function makePayment(req, res) {
     if (latestOrder && !latestOrder.paid) {
         try {
             if (latestOrder.products.length === 0) return res.sendStatus(400)
+            const today = new Date().setHours(0, 0, 0, 0)
+            if (latestOrder.voucher?.expiryDate < today) return res.json({ message: errorMessages.voucherOutdate })
             const order = await paidOrder(latestOrder.orderID, data.paymentMethod)
             return res.json(order)
         } catch (error) {

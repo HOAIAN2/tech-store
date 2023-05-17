@@ -6,7 +6,7 @@ import languages from './Languages/ProductPage.json'
 import './UserRating.scss'
 import { useState } from "react"
 
-function UserRating({ rating, setRating }) {
+function UserRating({ rating, setRating, setActiveRating }) {
     const [rate, setRate] = useState(rating)
     const { id } = useParams()
     let language = languages.en
@@ -23,6 +23,7 @@ function UserRating({ rating, setRating }) {
         postRating(parseInt(id), rate)
             .then(() => {
                 setRating(rate)
+                setActiveRating(false)
             })
             .catch(error => {
                 alert(error)

@@ -2,11 +2,13 @@
     "en": {
         "invalidQuery": "Invalid query",
         "invalidDataType": "Invalid data type",
-        "voucherInvalid": "Invalid voucher"
+        "voucherInvalid": "Invalid voucher",
+        "voucherOutdate": "Voucher outdate"
     },
     "vi": {
         "invalidQuery": "Query không hợp lệ",
         "invalidDataType": "Kiểu dữ liệu không hợp lệ",
-        "voucherInvalid": "Voucher không hợp lệ"
+        "voucherInvalid": "Voucher không hợp lệ",
+        "voucherOutdate": "Voucher đã hết hạn"
     }
 }

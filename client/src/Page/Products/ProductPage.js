@@ -115,23 +115,6 @@ function ProductPage() {
             }
         }
     }
-    function handleToggleRating(e) {
-        if (e.target.className === 'overlay-rating') {
-            setActiveRating(false)
-            getProductByID(id)
-                .then(data => {
-                    handleSetProductData(data)
-                })
-                .catch(error => {
-                    console.error(error)
-                })
-            setComments(comments.map(comment => {
-                if (comment.userID === user.userID) return { ...comment, rate: userRate }
-                else return { ...comment }
-            }))
-            // setComments()
-        }
-    }
     function handleSetProductData(data) {
         setProduct({
             ...data,
@@ -190,14 +173,31 @@ function ProductPage() {
             })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id])
+    useEffect(() => {
+        if (activeRating === true) return
+        getProductByID(id)
+            .then(data => {
+                handleSetProductData(data)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+        setComments(comments.map(comment => {
+            if (comment.userID === user.userID) return { ...comment, rate: userRate }
+            else return { ...comment }
+        }))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [activeRating])
     if (notFound) return <NotFound />
     return (
         <>
             <Header />
             <div className='product-page'>
                 {activeRating &&
-                    <div className='overlay-rating' onClick={handleToggleRating}>
-                        <UserRating rating={userRate} setRating={setUserRate} />
+                    <div className='overlay-rating' onClick={(e) => {
+                        if (e.target.className === 'overlay-rating') setActiveRating(false)
+                    }}>
+                        <UserRating rating={userRate} setRating={setUserRate} setActiveRating={setActiveRating} />
                     </div>
                 }
                 <div className='product-page-content'>
