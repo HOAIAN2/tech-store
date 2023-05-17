@@ -6,11 +6,10 @@ import { baseIMG } from '../../utils/api-config'
 import { useNavigate } from 'react-router-dom'
 
 function OrderItem({ data, gettotalprice, handleselectclick }) {
-    const [quantity, setQuantity] = useState(1)
+    const [quantity, setQuantity] = useState(data.quantity)
     const [product, setproduct] = useState()
     const navigate = useNavigate()
     // const [productAction, setproductAction] = useState([])
-
 
     useEffect(() => {
         getProductByID(data.productID)
