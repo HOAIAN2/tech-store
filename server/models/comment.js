@@ -1,6 +1,7 @@
 class Comment {
-    constructor(commentID, avatar, userFirstName, userLastName, productID, comment, rate, commentDate) {
+    constructor(commentID, userID, avatar, userFirstName, userLastName, productID, comment, rate, commentDate) {
         this.commentID = commentID
+        this.userID = userID
         this.avatar = avatar
         this.userFirstName = userFirstName
         this.userLastName = userLastName

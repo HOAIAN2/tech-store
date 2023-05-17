@@ -29,7 +29,7 @@ async function queryComments(productID, startIndex, sortMode) {
     const comments = []
     try {
         let queryString = [
-            'SELECT comment_id, users.avatar, first_name, last_name, comments.product_id, comment, rate, comment_date FROM comments',
+            'SELECT comment_id, users.user_id, users.avatar, first_name, last_name, comments.product_id, comment, rate, comment_date FROM comments',
             'JOIN users ON users.user_id = comments.user_id',
             'LEFT JOIN ratings ON ratings.user_id = comments.user_id AND ratings.product_id = comments.product_id',
             `WHERE comments.product_id = ? AND comment_id ${replace} ?`,
@@ -40,6 +40,7 @@ async function queryComments(productID, startIndex, sortMode) {
         const [rows] = await pool.query(queryString, [productID, startIndex])
         rows.forEach(row => {
             const commentID = row['comment_id']
+            const userID = row['user_id']
             const avatar = row['avatar']
             const firstName = row['first_name']
             const lastName = row['last_name']
@@ -47,7 +48,7 @@ async function queryComments(productID, startIndex, sortMode) {
             const commentContent = row['comment']
             const rate = row['rate']
             const commentDate = row['comment_date']
-            const comment = new Comment(commentID, avatar, firstName, lastName, productID, commentContent, rate, commentDate)
+            const comment = new Comment(commentID, userID, avatar, firstName, lastName, productID, commentContent, rate, commentDate)
             comments.push(comment)
         })
         return comments

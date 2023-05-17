@@ -14,6 +14,7 @@ async function getRating(req, res) {
     if (!products.products.find(product => product.productID === data.productID)) return res.sendStatus(404)
     try {
         const result = await selectRating(tokenData.id, data.productID)
+        if (!result) return res.json({ rate: 0 })
         return res.json(result)
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)
