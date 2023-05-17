@@ -1,13 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faStar } from "@fortawesome/free-solid-svg-icons"
 import { useParams } from "react-router-dom"
-import { getRating, postRating } from "../../utils/Rating"
+import { postRating } from "../../utils/Rating"
 import languages from './Languages/ProductPage.json'
 import './UserRating.scss'
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
-function UserRating() {
-    const [rate, setRate] = useState(0)
+function UserRating({ rating, setRating }) {
+    const [rate, setRate] = useState(rating)
     const { id } = useParams()
     let language = languages.en
     if (navigator.language === 'vi') language = languages.vi
@@ -21,17 +21,13 @@ function UserRating() {
     }
     function handleRateProduct() {
         postRating(parseInt(id), rate)
+            .then(() => {
+                setRating(rate)
+            })
             .catch(error => {
                 alert(error)
             })
     }
-    useEffect(() => {
-        getRating(parseInt(id))
-            .then(rate => {
-                setRate(rate.rate)
-            })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
     return (
         <div className='user-rating'>
             <div className='title'>{language.ratingThisProduct}</div>

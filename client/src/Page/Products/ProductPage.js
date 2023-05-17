@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import NotFound from '../errors/NotFound'
 import { baseIMG } from '../../utils/api-config'
@@ -13,6 +13,7 @@ import { getComments, addComment } from '../../utils/Comment'
 import { createOrder, updateProduct, addProduct } from '../../utils/Order'
 import { useUserData, useOrderData, ORDER_ACTION } from "../../Context"
 import CommentItem from '../../components/render_item/CommentItem'
+import { getRating } from '../../utils/Rating'
 import UserRating from './UserRating'
 import languages from './Languages/ProductPage.json'
 
@@ -32,9 +33,11 @@ function ProductPage() {
     const [imageID, setImageID] = useState(1)
     const [activeRating, setActiveRating] = useState(false)
     const [commentOrder, setCommentOrder] = useState(language.latest)
+    const [userRate, setUserRate] = useState(0)
     const navigate = useNavigate()
     const location = useLocation()
     const { id } = useParams()
+    const commentRef = useRef()
     // console.log(product)
     /// Alot of bugs, fix
     function handleSetQuantity(e) {
@@ -61,13 +64,7 @@ function ProductPage() {
                 return getProductByID(id)
             })
             .then(data => {
-                setProduct({
-                    ...data,
-                    images: data.images.map(image => {
-                        return `${baseIMG}/products/${image}`
-                    }),
-                    discount: data.discount * 100 || null,
-                })
+                handleSetProductData(data)
             })
             .catch(error => {
                 console.error(error)
@@ -80,11 +77,6 @@ function ProductPage() {
             .then(result => {
                 setComments([...comments, ...result])
             })
-    }
-    function handleTypeComment(e) {
-        setComment(e.target.value)
-        e.target.style.height = 'auto'
-        e.target.style.height = e.target.scrollHeight + 'px'
     }
     function didUserBought() {
         return orders.filter(order => order.paid === true).some(order => {
@@ -124,20 +116,37 @@ function ProductPage() {
         }
     }
     function handleToggleRating(e) {
-        if (e.target.className === 'overlay-rating') setActiveRating(false)
+        if (e.target.className === 'overlay-rating') {
+            setActiveRating(false)
+            getProductByID(id)
+                .then(data => {
+                    handleSetProductData(data)
+                })
+                .catch(error => {
+                    console.error(error)
+                })
+            setComments(comments.map(comment => {
+                if (comment.userID === user.userID) return { ...comment, rate: userRate }
+                else return { ...comment }
+            }))
+            // setComments()
+        }
+    }
+    function handleSetProductData(data) {
+        setProduct({
+            ...data,
+            images: data.images.map(image => {
+                return `${baseIMG}/products/${image}`
+            }),
+            discount: data.discount * 100 || null,
+        })
     }
     useEffect(() => {
         let orderMode = 'DESC'
         if (commentOrder === language.oldest) orderMode = 'ASC'
         getProductByID(id)
             .then(data => {
-                setProduct({
-                    ...data,
-                    images: data.images.map(image => {
-                        return `${baseIMG}/products/${image}`
-                    }),
-                    discount: data.discount * 100 || null,
-                })
+                handleSetProductData(data)
                 document.title = data.productName
             })
             .catch(error => {
@@ -169,6 +178,18 @@ function ProductPage() {
         if (product) setQuantity(product.quantity)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id])
+    useEffect(() => {
+        commentRef.current.style.height = 'auto'
+        commentRef.current.style.height = commentRef.current.scrollHeight + 'px'
+    }, [comment])
+    useEffect(() => {
+        if (!didUserBought()) return
+        getRating(parseInt(id))
+            .then(rate => {
+                setUserRate(rate.rate)
+            })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [id])
     if (notFound) return <NotFound />
     return (
         <>
@@ -176,7 +197,7 @@ function ProductPage() {
             <div className='product-page'>
                 {activeRating &&
                     <div className='overlay-rating' onClick={handleToggleRating}>
-                        <UserRating />
+                        <UserRating rating={userRate} setRating={setUserRate} />
                     </div>
                 }
                 <div className='product-page-content'>
@@ -264,6 +285,7 @@ function ProductPage() {
                         </div>
                         <div className='right'>
                             <textarea
+                                ref={commentRef}
                                 placeholder={language.placeHolder}
                                 value={comment}
                                 onFocus={() => {
@@ -271,7 +293,7 @@ function ProductPage() {
                                         navigate('/login', { state: { from: location } })
                                     }
                                 }}
-                                onInput={handleTypeComment}
+                                onInput={(e) => { setComment(e.target.value) }}
                                 maxLength='255'></textarea>
                             <button onClick={handleSendComment}>
                                 <FontAwesomeIcon icon={faPaperPlane} />
