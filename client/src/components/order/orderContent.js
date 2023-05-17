@@ -12,6 +12,7 @@ function OrderContent() {
     const totalprice = useRef(0)
     const [productAction, setproductAction] = useState([])
 
+    console.log(order)
 
     useEffect(() => {
         if (order) {
@@ -97,6 +98,7 @@ function OrderContent() {
     function formatPrice(price) {
         return `${price.toLocaleString('vi')} ₫`
     }
+
 
     return (
         <div className='wrapordercontent'>

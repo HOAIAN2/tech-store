@@ -14,7 +14,8 @@ function orderReducer(state, action) {
                 return { ...order, orderDate: order.orderDate !== null ? new Date(order.orderDate) : null }
             })
         case ORDER_ACTION.EDIT:
-            const temp = [...state].splice(-1)
+            const temp = [...state]
+            temp.pop()
             temp.push(action.payload)
             return [...temp]
         case ORDER_ACTION.REMOVE:
