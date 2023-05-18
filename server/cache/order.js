@@ -19,6 +19,7 @@ async function initializeOrder() {
         const [rows] = await pool.query(queryString)
         groupOrder()
         function groupOrder() {
+            if (rows.length ===0) return
             let order = null
             let currentID = rows[0]['order_id']
             for (let index = 0; index < rows.length; index++) {
