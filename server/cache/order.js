@@ -199,23 +199,20 @@ async function updateOrderDetail(orderID, productID, quantity) {
     }
 }
 async function removeOrderDetail(orderID, productID) {
-    const product = products.products.find(item => item.productID === productID)
     const queryString = [
         'DELETE FROM order_details',
-        'WHERE order_id = ? AND product_id = ?'
+        'WHERE order_id = ? AND product_id IN (?)'
     ].join(' ')
     try {
         await pool.query(queryString, [orderID, productID])
         const order = orders.find(item => item.orderID === orderID)
-        let delta = 0
-        for (let index = 0; index < order.products.length; index++) {
-            if (order.products[index].productID === productID) {
-                delta = order.products[index].quantity * -1
-                break
-            }
-        }
-        order.removeProduct(productID)
-        product.updateUnitInOrder(delta)
+        productID.forEach(id => {
+            const productInOrder = order.products.find(item => item.productID === id)
+            const delta = productInOrder.quantity * -1
+            order.removeProduct(id)
+            const product = products.products.find(item => item.productID === id)
+            product.updateUnitInOrder(delta)
+        })
         products.products.sort((x, y) => y.unitInOrder - x.unitInOrder)
         return order
     } catch (error) {

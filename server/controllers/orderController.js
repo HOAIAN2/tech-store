@@ -120,13 +120,14 @@ async function removeProduct(req, res) {
     if (language === 'vi') errorMessages = orderErrors.vi
     const token = req.headers['authorization'].split(' ')[1]
     const user = readAccessToken(token)
-    if (!isValidData(data)) return res.status(400).json({ message: errorMessages.invalidDataType })
+    if (!isValidData(data.productID)) return res.status(400).json({ message: errorMessages.invalidDataType })
     const latestOrder = orders.findLast(order => {
         return order.userID === user.id
     })
     if (latestOrder && !latestOrder.paid) {
-        if (!latestOrder.products.find(product => {
-            return product.productID === data.productID
+        if (!latestOrder.products.some(product => {
+            if (!data.productID.includes(product.productID)) return false
+            return true
         })) return res.sendStatus(400)
         try {
             const order = await removeOrderDetail(latestOrder.orderID, data.productID)
@@ -200,11 +201,20 @@ async function makePayment(req, res) {
 
 // middleware,..
 function isValidData(data) {
-    const result = Object.keys(data).every((item) => {
-        if (typeof data[item] === 'number' && Number.isInteger(data[item]) && data[item] > 0) return true
-        return false;
-    })
-    return result
+    if (Array.isArray(data)) {
+        const result = data.every((item) => {
+            if (typeof item === 'number' && Number.isInteger(item) && item > 0) return true
+            return false
+        })
+        return result
+    }
+    else {
+        const result = Object.keys(data).every((item) => {
+            if (typeof data[item] === 'number' && Number.isInteger(data[item]) && data[item] > 0) return true
+            return false;
+        })
+        return result
+    }
 }
 
 function checkNumber(number) {
