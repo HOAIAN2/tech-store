@@ -92,7 +92,7 @@ function OrderContent() {
         removeProduct(productAction)
             .then((rs) => {
                 dispatchOrders({ type: ORDER_ACTION.EDIT, payload: rs })
-                window.location.reload()
+                setproductAction([])
             })
     }
 
@@ -145,7 +145,7 @@ function OrderContent() {
                 {
                     orders ? orders[0]?.products.map((item, index) => {
                         return (
-                            <div key={index} className='wrapitemorder'>
+                            <div key={item.productID} className='wrapitemorder'>
                                 <OrderItem data={item} gettotalprice={gettotalprice} handleselectclick={handleselectclick} />
                             </div>
                         )
