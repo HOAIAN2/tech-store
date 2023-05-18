@@ -165,3 +165,16 @@ DELIMITER $$
     END$$
 
 DELIMITER ;
+CREATE TRIGGER before_ratings_insert
+BEFORE INSERT ON ratings
+FOR EACH ROW
+BEGIN
+	IF ((SELECT  COUNT(*) FROM ratings WHERE user_id = NEW.user_id AND product_id = NEW.product_id) = 1) THEN
+		SIGNAL sqlstate '45001' set message_text = "No way ! You rated this product !";
+	END IF;
+	IF ((SELECT COUNT(*) FROM orders JOIN order_details
+		ON orders.order_id = order_details.order_id
+		WHERE product_id = NEW.product_id AND paid = 1) = 0) THEN
+		SIGNAL sqlstate '45001' set message_text = "No way ! You have to buy this product !";
+	END IF;
+END;
