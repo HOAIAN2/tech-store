@@ -113,11 +113,7 @@ UNLOCK TABLES;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `before_order_detail_insert` BEFORE INSERT ON `order_details` FOR EACH ROW UPDATE products
 
-
-
 SET unit_in_order = unit_in_order + NEW.quantity
-
-
 
 WHERE NEW.product_id = products.product_id */;;
 DELIMITER ;
@@ -136,27 +132,15 @@ DELIMITER ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `before_order_detail_update` BEFORE UPDATE ON `order_details` FOR EACH ROW BEGIN
 
-
-
       IF (NEW.quantity <> OLD.quantity) THEN
-
-
 
             UPDATE products
 
-
-
             SET unit_in_order = unit_in_order + (NEW.quantity - OLD.quantity)
-
-
 
             WHERE NEW.product_id = products.product_id AND NEW.quantity <> OLD.quantity;
 
-
-
       END IF;
-
-
 
     END */;;
 DELIMITER ;
@@ -175,11 +159,7 @@ DELIMITER ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `before_order_detail_delete` BEFORE DELETE ON `order_details` FOR EACH ROW UPDATE products
 
-
-
 SET unit_in_order = unit_in_order - OLD.quantity
-
-
 
 WHERE OLD.product_id = products.product_id */;;
 DELIMITER ;
@@ -351,6 +331,39 @@ LOCK TABLES `ratings` WRITE;
 /*!40000 ALTER TABLE `ratings` DISABLE KEYS */;
 /*!40000 ALTER TABLE `ratings` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `before_ratings_insert` BEFORE INSERT ON `ratings` FOR EACH ROW BEGIN
+
+	IF ((SELECT  COUNT(*) FROM ratings WHERE user_id = NEW.user_id AND product_id = NEW.product_id) = 1) THEN
+
+		SIGNAL sqlstate '45001' set message_text = "No way ! You rated this product !";
+
+	END IF;
+
+	IF ((SELECT COUNT(*) FROM orders JOIN order_details
+
+		ON orders.order_id = order_details.order_id
+
+		WHERE product_id = NEW.product_id AND paid = 1) = 0) THEN
+
+		SIGNAL sqlstate '45001' set message_text = "No way ! You have to buy this product !";
+
+	END IF;
+
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `roles`
@@ -486,4 +499,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-25  9:36:55
+-- Dump completed on 2023-05-18  9:54:37
