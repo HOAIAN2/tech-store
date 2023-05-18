@@ -125,7 +125,7 @@ async function removeProduct(req, res) {
         return order.userID === user.id
     })
     if (latestOrder && !latestOrder.paid) {
-        if (!latestOrder.products.some(product => {
+        if (!latestOrder.products.every(product => {
             if (!data.productID.includes(product.productID)) return false
             return true
         })) return res.sendStatus(400)
