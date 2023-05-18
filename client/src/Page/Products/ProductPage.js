@@ -84,7 +84,7 @@ function ProductPage() {
         })
     }
     function handleAddToCart() {
-        const latestOrder = orders.at(-1)
+        const latestOrder = orders[0]
         if (!latestOrder || latestOrder.paid) {
             createOrder(parseInt(id), quantity)
                 .then(data => {
@@ -155,7 +155,7 @@ function ProductPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [commentOrder])
     useEffect(() => {
-        const latestOrder = orders.at(-1)
+        const latestOrder = orders[0]
         if (latestOrder?.paid) return
         const product = latestOrder?.products.find(product => product.productID === parseInt(id))
         if (product) setQuantity(product.quantity)

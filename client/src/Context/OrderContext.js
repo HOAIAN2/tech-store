@@ -15,8 +15,8 @@ function orderReducer(state, action) {
             })
         case ORDER_ACTION.EDIT:
             const temp = [...state]
-            temp.pop()
-            temp.push(action.payload)
+            temp.shift()
+            temp.unshift(action.payload)
             return [...temp]
         case ORDER_ACTION.REMOVE:
             return []
