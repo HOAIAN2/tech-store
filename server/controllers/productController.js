@@ -4,10 +4,7 @@ const { readAccessToken } = require("./authController")
 const fs = require('fs')
 const path = require("path")
 const productErrors = require('./productErrors.json')
-const { time } = require('console')
-const { getNumberRate } = require("../cache")
 const supplierErorrs = require("./supplierErrors.json")
-const { executionAsyncResource } = require('async_hooks')
 
 // [GET home]
 function index(req, res) {
@@ -54,6 +51,15 @@ function getProductByID(req, res) {
     })
     if (product) return res.json(product.ignoreProps('unitInOrder', 'quantity'))
     else return res.sendStatus(404)
+}
+// [GET suggest]
+function suggest(req, res) {
+    const id = req.query.id?.trim()
+    if (!id) return res.sendStatus(400)
+    if (id === "") return res.sendStatus(400)
+    if (!checkNumber(id)) return res.sendStatus(400)
+    const product = products.products.find(item => item.productID === parseInt(id))
+    if (!product) return res.sendStatus(404)
 }
 // [GET search]
 async function searchProduct(req, res) {
@@ -239,9 +245,6 @@ async function searchProductMore(req, res) {
     // res.json(productssort.productssortPriceDESC)
 }
 
-
-
-
 // [POST addProduct]
 async function addProduct(req, res) {
     let errorMessages = productErrors.en
@@ -309,7 +312,7 @@ async function addProduct(req, res) {
     }
 }
 
-
+//[GET hot]
 async function getHotProducts(req, res) {
     let errorMessages = productErrors.en
     const language = req.headers["accept-language"]

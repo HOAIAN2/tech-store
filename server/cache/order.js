@@ -14,17 +14,17 @@ async function initializeOrder() {
             'FROM orders LEFT JOIN payment_methods ON orders.paid_method_id = payment_methods.method_id',
             'JOIN order_details ON orders.order_id = order_details.order_id',
             'JOIN products ON order_details.product_id = products.product_id',
-            'ORDER BY orders.order_id ASC'
+            'ORDER BY orders.order_id DESC'
         ].join(' ')
         const [rows] = await pool.query(queryString)
         groupOrder()
         function groupOrder() {
-            if (rows.length ===0) return
+            if (rows.length === 0) return
             let order = null
             let currentID = rows[0]['order_id']
             for (let index = 0; index < rows.length; index++) {
                 if (rows[index]['order_id'] === currentID) {
-                    if (currentID == rows[0]['order_id'] && order === null) {
+                    if (currentID === rows[0]['order_id'] && order === null) {
                         const orderID = rows[index]['order_id']
                         const userID = rows[index]['user_id']
                         const orderDate = rows[index]['order_date']
@@ -71,7 +71,6 @@ async function initializeOrder() {
                     orders.push(order)
                 }
             }
-            return orders
         }
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', `Fail to initialize orders data: ${error.message}`)
@@ -174,7 +173,7 @@ async function addOrder(userID, productID, quantity) {
         const paidMethod = rows[0]['paid_method']
         const paid = rows[0]['paid']
         const order = new Order(orderID, userID, orderDate, paidMethod, paid)
-        orders.push(order)
+        orders.unshift(order)
         newOrder = await addOrderDetail(order.orderID, productID, quantity)
         return newOrder
     } catch (error) {

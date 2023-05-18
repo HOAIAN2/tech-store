@@ -13,7 +13,7 @@ function getOrder(req, res) {
     const user = readAccessToken(token)
     if (!queries.includes(query)) return res.status(400).json({ message: errorMessages.invalidQuery })
     if (query === 'latest') {
-        const latestOrder = orders.findLast(order => {
+        const latestOrder = orders.find(order => {
             return order.userID === user.id
         })
         return res.json(latestOrder)
@@ -38,7 +38,7 @@ async function createOrder(req, res) {
     if (!isValidData(data)) return res.status(400).json({ message: errorMessages.invalidDataType })
     // kiểm tra cuối order mới nhất thanh toán chưa
     // thanh toán rồi thì tạo mới, không thì bad request.
-    const latestOrder = orders.findLast(order => {
+    const latestOrder = orders.find(order => {
         return order.userID === user.id
     })
     if (!latestOrder || latestOrder.paid) {
@@ -64,7 +64,7 @@ async function addProduct(req, res) {
     const token = req.headers['authorization'].split(' ')[1]
     const user = readAccessToken(token)
     if (!isValidData(data)) return res.status(400).json({ message: errorMessages.invalidDataType })
-    const latestOrder = orders.findLast(order => {
+    const latestOrder = orders.find(order => {
         return order.userID === user.id
     })
     if (latestOrder && !latestOrder.paid) {
@@ -93,7 +93,7 @@ async function updateProduct(req, res) {
     const token = req.headers['authorization'].split(' ')[1]
     const user = readAccessToken(token)
     if (!isValidData(data)) return res.status(400).json({ message: errorMessages.invalidDataType })
-    const latestOrder = orders.findLast(order => {
+    const latestOrder = orders.find(order => {
         return order.userID === user.id
     })
     if (latestOrder && !latestOrder.paid) {
@@ -121,7 +121,7 @@ async function removeProduct(req, res) {
     const token = req.headers['authorization'].split(' ')[1]
     const user = readAccessToken(token)
     if (!isValidData(data.productID)) return res.status(400).json({ message: errorMessages.invalidDataType })
-    const latestOrder = orders.findLast(order => {
+    const latestOrder = orders.find(order => {
         return order.userID === user.id
     })
     if (latestOrder && !latestOrder.paid) {
@@ -149,7 +149,7 @@ async function setVoucher(req, res) {
     if (language === 'vi') errorMessages = orderErrors.vi
     const token = req.headers['authorization'].split(' ')[1]
     const user = readAccessToken(token)
-    const latestOrder = orders.findLast(order => {
+    const latestOrder = orders.find(order => {
         return order.userID === user.id
     })
     const voucher = vouchers.find(item => {
@@ -181,7 +181,7 @@ async function makePayment(req, res) {
     const token = req.headers['authorization'].split(' ')[1]
     const user = readAccessToken(token)
     if (!isValidData(data)) return res.status(400).json({ message: errorMessages.invalidDataType })
-    const latestOrder = orders.findLast(order => {
+    const latestOrder = orders.find(order => {
         return order.userID === user.id
     })
     if (latestOrder && !latestOrder.paid) {
