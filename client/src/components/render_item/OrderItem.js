@@ -4,12 +4,15 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons"
 import { getProductByID } from '../../utils/Product'
 import { baseIMG } from '../../utils/api-config'
 import { useNavigate } from 'react-router-dom'
+import { useOrderData, ORDER_ACTION } from "../../Context"
+import { createOrder, updateProduct, addProduct } from "../../utils/Order"
 
 function OrderItem({ data, gettotalprice, handleselectclick }) {
     const [quantity, setQuantity] = useState(data.quantity)
     const [product, setproduct] = useState()
     const navigate = useNavigate()
-    // const [productAction, setproductAction] = useState([])
+    const [orders, dispatchOrders] = useOrderData()
+    const [productAction, setproductAction] = useState([])
 
     useEffect(() => {
         getProductByID(data.productID)
@@ -24,15 +27,52 @@ function OrderItem({ data, gettotalprice, handleselectclick }) {
             if (e.target.className === 'decrease') {
                 if (quantity !== 1) {
                     setQuantity(quantity - 1)
+                    handleAddToCart(quantity - 1)
                     gettotalprice((product.discount ? (product.price * (1 - product.discount)) : product.price), type)
                 }
             }
             else {
                 setQuantity(quantity + 1)
+                handleAddToCart(quantity + 1)
                 gettotalprice((product.discount ? (product.price * (1 - product.discount)) : product.price), type)
             }
         }
     }
+
+
+    function handleAddToCart(value) {
+        const latestOrder = orders.at(-1)
+        if (!latestOrder || latestOrder.paid) {
+            createOrder(parseInt(data.productID), value)
+                .then(data => {
+                    dispatchOrders({ type: ORDER_ACTION.EDIT, payload: data })
+                })
+                .catch(error => {
+                    console.error(error)
+                })
+        }
+        else {
+            if (latestOrder.products.find(product => product.productID === parseInt(data.productID))) {
+                updateProduct(parseInt(data.productID), value)
+                    .then(data => {
+                        dispatchOrders({ type: ORDER_ACTION.EDIT, payload: data })
+                    })
+                    .catch(error => {
+                        console.error(error)
+                    })
+            }
+            else {
+                addProduct(parseInt(data.productID), value)
+                    .then(data => {
+                        dispatchOrders({ type: ORDER_ACTION.EDIT, payload: data })
+                    })
+                    .catch(error => {
+                        console.error(error)
+                    })
+            }
+        }
+    }
+
 
     // function handleselectclick(productID) {
     //     return (e) => {
@@ -57,20 +97,27 @@ function OrderItem({ data, gettotalprice, handleselectclick }) {
         return `${price.toLocaleString('vi')} ₫`
     }
 
+
     if (product) {
         return (
             <div className='ordercontent-item'>
                 <div className='ordercontent-item1'>
                     <div className='wrapselectbox'>
-                        <div id='boxselect' className='selectbox' onClick={handleselectclick(product.productID)}>
+                        <div id='boxselect' className='selectbox' onClick={handleselectclick(data.productID)}>
                             <FontAwesomeIcon icon={faCheck} />
                         </div>
                     </div>
                     <div className='product'>
                         <div className='wrapimgproduct'>
                             <img src={`${baseIMG}products/${product.images[0]}`}></img>
+                            {/* {
+                                data?.image ? <img src={`${baseIMG}products/${data.image}`}></img> : <></>
+                                // <img src={`${baseIMG}products/${data.image}`}></img>
+                                // console.log(data)
+                            } */}
+
                         </div>
-                        <div className='nameproduct'>{product.productName}</div>
+                        <div className='nameproduct'>{data.productName}</div>
                     </div>
                     <div className='price'>
                         <span className='oldprice'>{formatPrice(product.price)}</span>

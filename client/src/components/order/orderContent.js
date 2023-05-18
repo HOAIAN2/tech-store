@@ -3,22 +3,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faList, faCaretRight, faCheck, faTicket, faEarthEurope } from "@fortawesome/free-solid-svg-icons"
 import { useEffect, useState, useRef } from 'react'
 import OrderItem from '../render_item/OrderItem'
-import { useOrderData } from '../../Context'
+import { useOrderData, ORDER_ACTION } from '../../Context'
+import { removeProduct } from "../../utils/Order"
+import { getProductByID } from "../../utils/Product"
 
 function OrderContent() {
     const [numberproductpay, setnumberproductpay] = useState(0)
-    const [order] = useOrderData()
+    const [orders, dispatchOrders] = useOrderData()
     const [totalpricerender, settotalpricerender] = useState(0)
     const totalprice = useRef(0)
     const [productAction, setproductAction] = useState([])
-
-    console.log(order)
+    const [orderitem, setorderitem] = useState([])
 
     useEffect(() => {
-        if (order) {
-            setnumberproductpay(order[0].products.length)
+        if (orders) {
+            setnumberproductpay(orders[0].products.length)
+            // setorderitem(orders)
         }
-    }, [order])
+    }, [orders])
 
     function gettotalprice(price, type) {
         if (type === '+') {
@@ -35,18 +37,9 @@ function OrderContent() {
         e.target.parentElement.classList.add('listorderoptionActive')
     }
 
-    // function handleselectclick(e) {
-    //     if (e.target.className.includes('selectbox')) {
-    //         e.target.classList.remove('selectbox')
-    //         e.target.classList.add('active')
-    //     } else {
-    //         e.target.classList.remove('active')
-    //         e.target.classList.add('selectbox')
-    //     }
-    // }
-
 
     function handleselectclick(productID) {
+        console.log(productID)
         return (e) => {
             if (e.target.className.includes('selectbox')) {
                 e.target.classList.remove('selectbox')
@@ -68,7 +61,7 @@ function OrderContent() {
             e.target.classList.remove('selectbox')
             e.target.classList.add('active')
             const rs = []
-            order[0].products.filter((item) => {
+            orders[0].products.filter((item) => {
                 return rs.push(item.productID)
             })
             setproductAction(rs)
@@ -85,14 +78,22 @@ function OrderContent() {
             const b = document.querySelectorAll('#boxselect')
             if (b?.length != 0) {
                 Array.from(b).map((item) => {
-                    console.log(item)
                     item.classList.remove('active')
                     item.classList.add('selectbox')
                 })
+                setproductAction([])
             }
         }
 
 
+    }
+
+    function deleteproduct(e) {
+        removeProduct(productAction)
+            .then((rs) => {
+                dispatchOrders({ type: ORDER_ACTION.EDIT, payload: rs })
+                window.location.reload()
+            })
     }
 
     function formatPrice(price) {
@@ -132,7 +133,7 @@ function OrderContent() {
             <div className='ordercontent'>
                 <div className='ordercontent-header'>
                     <div className='wrapselectbox'>
-                        <div className='selectbox' onClick={getAllProductAction}>
+                        <div id='boxselect' className='selectbox' onClick={getAllProductAction}>
                             <FontAwesomeIcon icon={faCheck} />
                         </div>
                     </div>
@@ -142,9 +143,9 @@ function OrderContent() {
                     <span>Số Tiền</span>
                 </div>
                 {
-                    order ? order[0].products.map((item, index) => {
+                    orders ? orders[0]?.products.map((item, index) => {
                         return (
-                            <div key={index}>
+                            <div key={index} className='wrapitemorder'>
                                 <OrderItem data={item} gettotalprice={gettotalprice} handleselectclick={handleselectclick} />
                             </div>
                         )
@@ -169,14 +170,16 @@ function OrderContent() {
                     <div className='action'>
                         <div className='action-item'>
                             <div className='wrapselectbox'>
-                                <div className='selectbox' onClick={handleselectclick}>
+                                <div id='boxselect' className='selectbox' onClick={getAllProductAction}>
                                     <FontAwesomeIcon icon={faCheck} />
                                 </div>
                             </div>
                             <span>Chọn Tất Cả</span>
                             <span>Xóa</span>
                         </div>
-                        <div className='buy'>Mua Hàng</div>
+                        {
+                            productAction.at(-1) ? <div className='delete' onClick={deleteproduct} >Xóa</div> : <div className='buy'>Mua Hàng</div>
+                        }
                     </div>
                 </div>
             </div>

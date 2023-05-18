@@ -147,13 +147,13 @@ function Header() {
                                     <span>1</span>
                                 </div>
                                 <div className='popup_cart-shopping'>
-                                    {order.length !== 0 ?
+                                    {/* {order.length !== 0 ?
                                         <OrderItem data={order} />
                                         :
                                         <div style={{ textAlign: "center" }}>
                                             <img src={`${baseIMG}orther/icon-nonorder.png`} alt=''></img>
                                             <div>Không Có Sản Phẩm</div>
-                                        </div>}
+                                        </div>} */}
                                 </div>
                             </Link> :
                             <></>
