@@ -352,7 +352,7 @@ DELIMITER ;;
 
 		ON orders.order_id = order_details.order_id
 
-		WHERE product_id = NEW.product_id AND paid = 1) = 0) THEN
+		WHERE product_id = NEW.product_id AND paid = 1 AND user_id = NEW.user_id) = 0) THEN
 
 		SIGNAL sqlstate '45001' set message_text = "No way ! You have to buy this product !";
 
@@ -499,4 +499,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-18  9:54:37
+-- Dump completed on 2023-05-18 10:19:27
