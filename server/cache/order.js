@@ -9,36 +9,68 @@ async function initializeOrder() {
     console.log('\x1b[1m%s\x1b[0m', 'Initializing orders data...')
     try {
         const queryString = [
-            'SELECT order_id, user_id, order_date, payment_methods.name AS paid_method, paid, voucher_id',
+            'SELECT orders.order_id, user_id, order_date, payment_methods.name AS paid_method, paid, voucher_id,',
+            'order_details.product_id, order_details.quantity, order_details.price, order_details.discount, product_name',
             'FROM orders LEFT JOIN payment_methods ON orders.paid_method_id = payment_methods.method_id',
-            'ORDER BY order_id ASC'
-        ].join(' ')
-        const queryString1 = [
-            'SELECT order_details.product_id, order_details.quantity, order_details.price, order_details.discount, product_name', // Mấy cái thanh toán rồi thì có price, chỉ handle mấy cái chưa thanh toán
-            'FROM order_details JOIN products ON order_details.product_id = products.product_id',
-            'WHERE order_id = ?'
+            'JOIN order_details ON orders.order_id = order_details.order_id',
+            'JOIN products ON order_details.product_id = products.product_id',
+            'ORDER BY orders.order_id ASC'
         ].join(' ')
         const [rows] = await pool.query(queryString)
-        for (let index = 0; index < rows.length; index++) {
-            const orderID = rows[index]['order_id']
-            const userID = rows[index]['user_id']
-            const orderDate = rows[index]['order_date']
-            const paidMethod = rows[index]['paid_method']
-            const voucherID = rows[index]['voucher_id']
-            const paid = rows[index]['paid']
-            const order = new Order(orderID, userID, orderDate, paidMethod, paid)
-            const [productRows] = await pool.query(queryString1, [orderID])
-            productRows.forEach(row => {
-                const productID = row['product_id']
-                const productName = row['product_name']
-                const quantity = row['quantity']
-                const price = row['price']
-                const discount = row['discount']
-                order.addProduct(productID, productName, quantity, price, discount)
-            })
-            if (voucherID) order.setVoucher(vouchers.find(item => item.voucherID === voucherID))
-            if (order.paid) order.paidOrder(paidMethod, orderDate)
-            orders.push(order)
+        groupOrder()
+        function groupOrder() {
+            let order = null
+            let currentID = rows[0]['order_id']
+            for (let index = 0; index < rows.length; index++) {
+                if (rows[index]['order_id'] === currentID) {
+                    if (currentID == rows[0]['order_id'] && order === null) {
+                        const orderID = rows[index]['order_id']
+                        const userID = rows[index]['user_id']
+                        const orderDate = rows[index]['order_date']
+                        const paidMethod = rows[index]['paid_method']
+                        const voucherID = rows[index]['voucher_id']
+                        const paid = rows[index]['paid']
+                        order = new Order(orderID, userID, orderDate, paidMethod, paid)
+                        if (voucherID) order.setVoucher(vouchers.find(item => item.voucherID === voucherID))
+                        const productID = rows[index]['product_id']
+                        const productName = rows[index]['product_name']
+                        const quantity = rows[index]['quantity']
+                        const price = rows[index]['price']
+                        const discount = rows[index]['discount']
+                        order.addProduct(productID, productName, quantity, price, discount)
+                        orders.push(order)
+                    }
+                    else {
+                        const productID = rows[index]['product_id']
+                        const productName = rows[index]['product_name']
+                        const quantity = rows[index]['quantity']
+                        const price = rows[index]['price']
+                        const discount = rows[index]['discount']
+                        order.addProduct(productID, productName, quantity, price, discount)
+                        if (index === rows.length - 1) order.paidOrder(order.paidMethod, order.orderDate)
+                    }
+                }
+                else {
+                    if (order.paid) order.paidOrder(order.paidMethod, order.orderDate)
+                    currentID = rows[index]['order_id']
+                    const orderID = rows[index]['order_id']
+                    const userID = rows[index]['user_id']
+                    const orderDate = rows[index]['order_date']
+                    const paidMethod = rows[index]['paid_method']
+                    const voucherID = rows[index]['voucher_id']
+                    const paid = rows[index]['paid']
+                    order = new Order(orderID, userID, orderDate, paidMethod, paid)
+                    if (voucherID) order.setVoucher(vouchers.find(item => item.voucherID === voucherID))
+                    const productID = rows[index]['product_id']
+                    const productName = rows[index]['product_name']
+                    const quantity = rows[index]['quantity']
+                    const price = rows[index]['price']
+                    const discount = rows[index]['discount']
+                    order.addProduct(productID, productName, quantity, price, discount)
+                    orders.push(order)
+                }
+            }
+            return orders
         }
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', `Fail to initialize orders data: ${error.message}`)
@@ -53,14 +85,12 @@ function findOrderIndex(orderID) {
 async function getOrder(orderID) {
     try {
         const queryString = [
-            'SELECT order_id, user_id, order_date, payment_methods.name AS paid_method, paid, voucher_id',
+            'SELECT orders.order_id, user_id, order_date, payment_methods.name AS paid_method, paid, voucher_id,',
+            'order_details.product_id, order_details.quantity, order_details.price, order_details.discount, product_name',
             'FROM orders LEFT JOIN payment_methods ON orders.paid_method_id = payment_methods.method_id',
-            'WHERE order_id = ?'
-        ].join(' ')
-        const queryString1 = [
-            'SELECT order_details.product_id, order_details.quantity, order_details.price, order_details.discount, product_name', // Mấy cái thanh toán rồi thì có price, chỉ handle mấy cái chưa thanh toán
-            'FROM order_details JOIN products ON order_details.product_id = products.product_id',
-            'WHERE order_id = ?'
+            'JOIN order_details ON orders.order_id = order_details.order_id',
+            'JOIN products ON order_details.product_id = products.product_id',
+            'WHERE orders.order_id = ?'
         ].join(' ')
         const [rows] = await pool.query(queryString, [orderID])
         const orderID1 = rows[0]['order_id']
@@ -70,8 +100,7 @@ async function getOrder(orderID) {
         const voucherID = rows[0]['voucher_id']
         const paid = rows[0]['paid']
         const order = new Order(orderID1, userID, orderDate, paidMethod, paid)
-        const products = await pool.query(queryString1, [orderID])
-        products[0].forEach(row => {
+        rows.forEach(row => {
             const productID = row['product_id']
             const productName = row['product_name']
             const quantity = row['quantity']
@@ -96,8 +125,6 @@ async function addVoucher(orderID, voucherID) {
             'WHERE order_id = ?'
         ].join(' ')
         await pool.query(queryString, [voucherID, orderID])
-        // const order = await getOrder(orderID)
-        // return order
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)
         throw new Error(error.message)
