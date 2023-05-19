@@ -48,7 +48,7 @@ async function initializeOrder() {
                         const price = rows[index]['price']
                         const discount = rows[index]['discount']
                         order.addProduct(productID, productName, quantity, price, discount)
-                        if (index === rows.length - 1) order.paidOrder(order.paidMethod, order.orderDate)
+                        if (index === rows.length - 1 && order.paid) order.paidOrder(order.paidMethod, order.orderDate)
                     }
                 }
                 else {
