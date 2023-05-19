@@ -2,18 +2,13 @@ import ProductRating from "../../Page/Products/ProductRating"
 import { baseIMG } from "../../utils/api-config"
 import { Link, useNavigate } from "react-router-dom"
 import './ProductItem.scss'
-import { useEffect, useState } from "react"
 
 
 
 function ProductItem({ data, type = "home" }) {
-    // console.log(data)
-    // data.discount = 0.2
-    const navigate = useNavigate()
     function formatPrice(price) {
         return `${price.toLocaleString('vi')} ₫`
     }
-    // if (data.length !== 0) {
     if (type === 'home') {
         return (
             <div className="producthome_item">
