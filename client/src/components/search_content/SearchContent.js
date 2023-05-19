@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react"
 import { getAddress, getBrands } from "../../utils/supplier/index"
-import { getProductSearchPage, getProductByID } from "../../utils/Product/index"
+import { getProductSearchPage } from "../../utils/Product/index"
 import ItemSidebarSearchPage from "../render_item/ItemSidebarSearchPage"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faList, faChevronDown } from "@fortawesome/free-solid-svg-icons"
@@ -22,9 +22,13 @@ function SearchContent({ callbackgettypesort }) {
     const [prop] = usePropData()
     const [product, dispatchProduct] = useProductData()
     const [typesort, settypesort] = useState('')
+    const [scrolltotop, setscrolltotop] = useState(false)
 
     function handlesort(typesort) {
         return (e) => {
+            setscrolltotop(true)
+            // document.querySelector(".product-search-page").style.display = "none"
+            // document.querySelector(".wrapsearch-content").Top = 0
             if (typesort.includes('Price')) {
                 let a = document.querySelector('.activesortprice')
                 let b = document.querySelector('.activeSort')
@@ -46,6 +50,26 @@ function SearchContent({ callbackgettypesort }) {
             }
 
             settypesort(typesort)
+        }
+    }
+
+
+    function createproductitem() {
+        if (products?.products) {
+            const d = formatArray(products.products, 4).map((item, index) => {
+                const b = <div key={index} className="product-search-page-item">
+                    {item.map((item, index) => {
+                        const a = <div key={item.productID}><ProductItem data={item} type="search" /></div>
+                        return a
+                    })}
+                </div>
+                return b
+            })
+            if (scrolltotop) {
+                document.querySelector(".wrapsearch-content").scrollTop = 0
+                setscrolltotop(false)
+            }
+            return d
         }
     }
 
@@ -147,18 +171,19 @@ function SearchContent({ callbackgettypesort }) {
                     </div>
                 </div>
                 <div className="product-search-page">
-                    {
+                    {/* {
                         products?.products ?
                             formatArray(products.products, 4).map((item, index) => {
-                                return (
-                                    <div key={index} className="product-search-page-item">
-                                        {item.map((item, index) => {
-                                            return <div key={index}><ProductItem data={item} type="search" /></div>
-                                        })}
-                                    </div>
-                                )
+                                const b = <div key={index} className="product-search-page-item">
+                                    {item.map((item, index) => {
+                                        const a = <div key={index}><ProductItem data={item} type="search" /></div>
+                                        return a
+                                    })}
+                                </div>
+                                return b
                             }) : <></>
-                    }
+                    } */}
+                    {createproductitem()}
                 </div>
             </div>
         </div >
