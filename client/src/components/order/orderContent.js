@@ -5,7 +5,7 @@ import { useEffect, useState, useRef } from 'react'
 import OrderItem from '../render_item/OrderItem'
 import { useOrderData, ORDER_ACTION } from '../../Context'
 import { removeProduct } from "../../utils/Order"
-import { getProductByID } from "../../utils/Product"
+import { payorder } from "../../utils/Order"
 
 function OrderContent() {
     const [numberproductpay, setnumberproductpay] = useState(0)
@@ -13,7 +13,7 @@ function OrderContent() {
     const [totalpricerender, settotalpricerender] = useState(0)
     const totalprice = useRef(0)
     const [productAction, setproductAction] = useState([])
-    const [orderitem, setorderitem] = useState([])
+    const [paid_method, setpaid_method] = useState(2)
 
     useEffect(() => {
         if (orders) {
@@ -39,7 +39,6 @@ function OrderContent() {
 
 
     function handleselectclick(productID) {
-        console.log(productID)
         return (e) => {
             if (e.target.className.includes('selectbox')) {
                 e.target.classList.remove('selectbox')
@@ -95,12 +94,20 @@ function OrderContent() {
                 setproductAction([])
             })
     }
+    function buyorder(e) {
+        payorder()
+        .then((rs)=>{
+             if(rs){
+                dispatchOrders({type: ORDER_ACTION.EDIT, payload: rs})
+             }
+        })
+    }
 
     function formatPrice(price) {
         return `${price.toLocaleString('vi')} ₫`
     }
 
-
+console.log(orders)
     return (
         <div className='wrapordercontent'>
 
@@ -126,10 +133,6 @@ function OrderContent() {
                     </ul>
                 </nav>
             </div>
-
-
-
-
             <div className='ordercontent'>
                 <div className='ordercontent-header'>
                     <div className='wrapselectbox'>
@@ -143,17 +146,18 @@ function OrderContent() {
                     <span>Số Tiền</span>
                 </div>
                 {
-                    orders ? orders[0]?.products.map((item, index) => {
-                        return (
-                            <div key={item.productID} className='wrapitemorder'>
-                                <OrderItem data={item} gettotalprice={gettotalprice} handleselectclick={handleselectclick} />
-                            </div>
-                        )
-                    }) : <></>
+                    orders ? orders.map((item)=>{
+                        if(!item.paid){
+                            return item.products.map((item)=>{
+                                return (
+                                    <div key={item.productID} className='wrapitemorder'>
+                                    <OrderItem data={item} gettotalprice={gettotalprice} handleselectclick={handleselectclick} />
+                                </div>
+                            )
+                        })
+                        }
+                    }):<></>
                 }
-
-
-
                 <div className='pay'>
                     <div className='voucher'>
                         <div className='wrapvoucher'>
@@ -177,8 +181,14 @@ function OrderContent() {
                             <span>Chọn Tất Cả</span>
                             <span>Xóa</span>
                         </div>
+                        <div className='paid_method'>
+                            <span>Phương thức thanh toán:</span>
+                            {
+                                paid_method===2?<span>Thanh toán khi nhận hàng</span>:<></>
+                            }
+                        </div>
                         {
-                            productAction.at(-1) ? <div className='delete' onClick={deleteproduct} >Xóa</div> : <div className='buy'>Mua Hàng</div>
+                            productAction.at(-1) ? <div className='delete' onClick={deleteproduct} >Xóa</div> : <div className='buy' onClick={buyorder}>Mua Hàng</div>
                         }
                     </div>
                 </div>

@@ -84,10 +84,27 @@ async function removeProduct(productID) {
         throw new Error(error)
     }
 }
+async function payorder() {
+    const token = JSON.parse(localStorage.getItem('token'))
+    if (!token) return {}
+    try {
+        const res = await request.post('/order/make-payment', {
+            paymentMethod: 2
+        }, {
+            headers: {
+                Authorization: `Bearer ${token.accessToken}`
+            },
+        })
+        return res.data
+    } catch (error) {
+        throw new Error(error)
+    }
+}
 export {
     getOrder,
     createOrder,
     addProduct,
     updateProduct,
-    removeProduct
+    removeProduct,
+    payorder
 }
