@@ -17,23 +17,29 @@ function Search() {
     function callbackGetTypesort(typesort) {
         settypesort(typesort)
     }
-
-    function handlescrollfetch(e) {
-        if (e.target.scrollTop + e.target.offsetHeight === e.target.scrollHeight) {
-            if (product.index) {
-                getProductSearchPage(searchParam.get('name'), prop?.brand, prop?.address, prop?.star, typesort, product.index)
-                    .then((rs => {
-                        dispatchProduct({ type: PRODUCT_ACTION.SETPRODUCT, payload: rs.data, index: rs.index })
-                    }))
+    useEffect(() => {
+        function handleScrollFetch() {
+            if ((window.innerHeight + window.scrollY) >= document.body.scrollHeight) {
+                if (product.index) {
+                    window.removeEventListener('scroll', handleScrollFetch)
+                    getProductSearchPage(searchParam.get('name'), prop?.brand, prop?.address, prop?.star, typesort, product.index)
+                        .then((rs => {
+                            dispatchProduct({ type: PRODUCT_ACTION.SETPRODUCT, payload: rs.data, index: rs.index })
+                        }))
+                }
             }
         }
-    }
-
+        window.addEventListener('scroll', handleScrollFetch)
+        return () => {
+            window.removeEventListener('scroll', handleScrollFetch)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [product])
     useEffect(() => {
         document.title = 'Tìm kiếm sản phẩm'
     })
     return (
-        <div className="wrapsearch-content" onScroll={handlescrollfetch}>
+        <div className="wrapsearch-content">
             <div className="wrapsearch-conten-item">
                 <Header />
                 <div className="search_content">

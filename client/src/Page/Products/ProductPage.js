@@ -135,7 +135,7 @@ function ProductPage() {
             .catch(error => {
                 if (error.message === '404') setNotFound(true)
             })
-        document.querySelector('.App').scrollTo(0, 0)
+        window.scrollTo(0, 0)
         // eslint-disable-next-line react-hooks/exhaustive-deps
         getComments(id, orderMode)
             .then(result => {
