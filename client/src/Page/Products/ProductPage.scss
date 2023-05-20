@@ -130,7 +130,6 @@
                 }
             }
 
-
             .action_item {
                 display: flex;
                 padding: 0 15px;
@@ -204,15 +203,6 @@
 
     &-comments {
         background-color: white;
-        // overflow: scroll;
-        // // position: absolute;
-        // // left: 50%;
-        // // top: 63%;
-        // // transform: translateX(-50%);
-        // display: flex;
-        // flex-direction: column;
-        // justify-content: space-between;
-        // border: 1px solid red;
         width: 1257px;
         height: fit-content;
         min-height: 500px;

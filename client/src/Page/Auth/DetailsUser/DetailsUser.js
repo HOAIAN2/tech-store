@@ -53,7 +53,7 @@ function DetailsUser() {
             </div>
             <div className="sibar-detail-user_item">
               <FontAwesomeIcon icon={faClipboardList} />
-              <Link to={"/"}>{language.myPurchase}</Link>
+              <Link to={"/order"}>{language.myPurchase}</Link>
             </div>
             <div className="sibar-detail-user_item">
               <FontAwesomeIcon icon={faBell} />
