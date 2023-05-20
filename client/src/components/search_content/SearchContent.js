@@ -66,7 +66,7 @@ function SearchContent({ callbackgettypesort }) {
                 return b
             })
             if (scrolltotop) {
-                document.querySelector(".wrapsearch-content").scrollTop = 0
+                window.scrollTo(0, 0)
                 setscrolltotop(false)
             }
             return d
