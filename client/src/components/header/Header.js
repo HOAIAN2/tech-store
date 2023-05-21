@@ -19,8 +19,6 @@ import { searchProduct } from '../../utils/Product'
 import useDebounce from '../../utils/hooks/useDebounce'
 import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import { getOrder } from "../../utils/Order/index"
-import OrderItem from '../render_item/OrderItem'
-import { baseIMG } from "../../utils/api-config"
 import { useUserData, useOrderData } from '../../Context'
 function Header() {
     const [user] = useUserData()

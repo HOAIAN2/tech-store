@@ -60,6 +60,7 @@ function App() {
           <Route path='*' element={<NotFound />} />
           <Route path='/search?' element={<Search />} />
           <Route path='/order' element={<Order />} />
+          <Route path='/order/pay' element={<Order />} />
         </Routes>
       </div>
     );
