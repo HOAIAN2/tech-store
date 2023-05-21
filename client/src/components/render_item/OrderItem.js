@@ -7,12 +7,11 @@ import { useNavigate } from 'react-router-dom'
 import { useOrderData, ORDER_ACTION } from "../../Context"
 import { createOrder, updateProduct, addProduct } from "../../utils/Order"
 
-function OrderItem({ data, gettotalprice, handleselectclick }) {
+function OrderItem({ data, gettotalprice, handleselectclick, typeorder }) {
     const [quantity, setQuantity] = useState(data.quantity)
     const [product, setproduct] = useState()
     const navigate = useNavigate()
     const [orders, dispatchOrders] = useOrderData()
-    const [productAction, setproductAction] = useState([])
 
     useEffect(() => {
         getProductByID(data.productID)
@@ -73,30 +72,9 @@ function OrderItem({ data, gettotalprice, handleselectclick }) {
         }
     }
 
-
-    // function handleselectclick(productID) {
-    //     return (e) => {
-    //         if (e.target.className.includes('selectbox')) {
-    //             e.target.classList.remove('selectbox')
-    //             e.target.classList.add('active')
-    //             setproductAction([...productAction, productID])
-    //         } else {
-    //             e.target.classList.remove('active')
-    //             e.target.classList.add('selectbox')
-    //             const a = productAction.filter((item) => {
-    //                 return item != productID
-    //             })
-    //             setproductAction(a)
-    //         }
-    //     }
-    // }
-
-    // console.log(productAction)
-
     function formatPrice(price) {
         return `${price.toLocaleString('vi')} ₫`
     }
-
 
     if (product) {
         return (
@@ -110,12 +88,6 @@ function OrderItem({ data, gettotalprice, handleselectclick }) {
                     <div className='product'>
                         <div className='wrapimgproduct'>
                             <img src={`${baseIMG}products/${product.images[0]}`}></img>
-                            {/* {
-                                data?.image ? <img src={`${baseIMG}products/${data.image}`}></img> : <></>
-                                // <img src={`${baseIMG}products/${data.image}`}></img>
-                                // console.log(data)
-                            } */}
-
                         </div>
                         <div className='nameproduct'>{data.productName}</div>
                     </div>
@@ -127,11 +99,14 @@ function OrderItem({ data, gettotalprice, handleselectclick }) {
                     </div>
 
                     <div className='wrapquantity'>
-                        <div className='quantity'>
-                            <button className='decrease' onClick={handleSetQuantity('-')}>-</button>
-                            <input value={quantity} type="number" min="1" readOnly />
-                            <button className='increase' onClick={handleSetQuantity('+')}>+</button>
-                        </div>
+                        {
+                            typeorder !== "pay" ?
+                                <div className='quantity'>
+                                    <button className='decrease' onClick={handleSetQuantity('-')}>-</button>
+                                    <input value={quantity} type="number" min="1" readOnly />
+                                    <button className='increase' onClick={handleSetQuantity('+')}>+</button>
+                                </div> : product.soldQuantity
+                        }
                     </div>
 
                     <div className='totalprice'>
@@ -141,7 +116,9 @@ function OrderItem({ data, gettotalprice, handleselectclick }) {
                 <div className='ordercontent-item2'>
                     <span className='relatedproducts' onClick={() => { navigate('/search?name=' + product.category) }} >Sản Phẩm Liên Quan</span>
                     <div className='btndetail' onClick={() => { navigate('/product/' + product.productID) }}>
-                        <span>Chi Tiết Sản Phẩm</span>
+                        {
+                            typeorder !== "pay" ? <span>Chi Tiết Sản Phẩm</span> : <span>Mua Lại</span>
+                        }
                     </div>
                 </div>
             </div>
