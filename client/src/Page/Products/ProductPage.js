@@ -16,6 +16,7 @@ import CommentItem from '../../components/render_item/CommentItem'
 import { getRating } from '../../utils/Rating'
 import UserRating from './UserRating'
 import languages from './Languages/ProductPage.json'
+import PopupSuccess from '../../components/order/PopupSuccess'
 
 function ProductPage() {
     let language = languages.en
@@ -34,6 +35,7 @@ function ProductPage() {
     const [activeRating, setActiveRating] = useState(false)
     const [commentOrder, setCommentOrder] = useState(language.latest)
     const [userRate, setUserRate] = useState(0)
+    const [showPopup, setShowPopup] = useState(false)
     const navigate = useNavigate()
     const location = useLocation()
     const { id } = useParams()
@@ -89,6 +91,7 @@ function ProductPage() {
             createOrder(parseInt(id), quantity)
                 .then(data => {
                     dispatchOrders({ type: ORDER_ACTION.EDIT, payload: data })
+                    setShowPopup(true)
                 })
                 .catch(error => {
                     console.error(error)
@@ -99,6 +102,7 @@ function ProductPage() {
                 updateProduct(parseInt(id), quantity)
                     .then(data => {
                         dispatchOrders({ type: ORDER_ACTION.EDIT, payload: data })
+                        setShowPopup(true)
                     })
                     .catch(error => {
                         console.error(error)
@@ -108,6 +112,7 @@ function ProductPage() {
                 addProduct(parseInt(id), quantity)
                     .then(data => {
                         dispatchOrders({ type: ORDER_ACTION.EDIT, payload: data })
+                        setShowPopup(true)
                     })
                     .catch(error => {
                         console.error(error)
@@ -192,6 +197,7 @@ function ProductPage() {
     return (
         <>
             <Header />
+            {showPopup && <PopupSuccess message={language.success} setShowPopup={setShowPopup} />}
             <div className='product-page'>
                 {activeRating &&
                     <div className='overlay-rating' onClick={(e) => {

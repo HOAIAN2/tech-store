@@ -6,6 +6,7 @@ import OrderItem from '../render_item/OrderItem'
 import { useOrderData, ORDER_ACTION } from '../../Context'
 import { removeProduct } from "../../utils/Order"
 import { payorder } from "../../utils/Order"
+import PopupSuccess from './PopupSuccess'
 
 function OrderContent() {
     const [numberproductpay, setnumberproductpay] = useState(0)
@@ -13,9 +14,9 @@ function OrderContent() {
     const [totalpricerender, settotalpricerender] = useState(0)
     const totalprice = useRef(0)
     const [productAction, setproductAction] = useState([])
-    const [paid_method, setpaid_method] = useState(2)
+    const [paidMethod, setPaidMethod] = useState(2)
     const [typeorder, settypeorder] = useState('order')
-
+    const [showPopup, setShowPopup] = useState(false)
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -58,7 +59,7 @@ function OrderContent() {
                     e.target.classList.remove('active')
                     e.target.classList.add('selectbox')
                     const a = productAction.filter((item) => {
-                        return item != productID
+                        return item !== productID
                     })
                     setproductAction(a)
                 }
@@ -77,7 +78,7 @@ function OrderContent() {
                 })
                 setproductAction(rs)
                 const b = document.querySelectorAll('#boxselect')
-                if (b?.length != 0) {
+                if (b?.length !== 0) {
                     Array.from(b).map((item) => {
                         item.classList.remove('selectbox')
                         item.classList.add('active')
@@ -87,7 +88,7 @@ function OrderContent() {
                 e.target.classList.remove('active')
                 e.target.classList.add('selectbox')
                 const b = document.querySelectorAll('#boxselect')
-                if (b?.length != 0) {
+                if (b?.length !== 0) {
                     Array.from(b).map((item) => {
                         item.classList.remove('active')
                         item.classList.add('selectbox')
@@ -105,7 +106,7 @@ function OrderContent() {
                 setproductAction([])
             })
     }
-    function buyorder(e) {
+    function makePayment(e) {
         if (!orders[0].paid && orders[0]?.products.length !== 0) {
             payorder()
                 .then((rs) => {
@@ -113,16 +114,11 @@ function OrderContent() {
                         dispatchOrders({ type: ORDER_ACTION.EDIT, payload: rs })
                         setnumberproductpay(0)
                         settotalpricerender(0)
-                        document.querySelector(".popuppaysuccess").style.display = "block"
+                        setShowPopup(true)
                     }
                 })
         }
     }
-
-    function successclick() {
-        document.querySelector(".popuppaysuccess").style.display = "none"
-    }
-
     function formatPrice(price) {
         return `${price.toLocaleString('vi')} ₫`
     }
@@ -214,36 +210,20 @@ function OrderContent() {
                                     <span>Chọn Tất Cả</span>
                                     <span>Xóa</span>
                                 </div>
-                                <div className='paid_method'>
+                                <div className='paidMethod'>
                                     <span>Phương thức thanh toán:</span>
                                     {
-                                        paid_method === 2 ? <span>Thanh toán khi nhận hàng</span> : <></>
+                                        paidMethod === 2 ? <span>Thanh toán khi nhận hàng</span> : <></>
                                     }
                                 </div>
                                 {
-                                    productAction.at(-1) ? <div className='delete' onClick={deleteproduct} >Xóa</div> : <div className='buy' onClick={buyorder}>Mua Hàng</div>
+                                    productAction.at(-1) ? <div className='delete' onClick={deleteproduct} >Xóa</div> : <div className='buy' onClick={makePayment}>Mua Hàng</div>
                                 }
                             </div>
                         </div> : <></>
                 }
             </div>
-
-            <div className='popuppaysuccess'>
-                <div className="popup">
-                    <div className="popup-content">
-                        <div className="imgbox">
-                            <img src='http://localhost:4000/images/orther/checked.png' className="img"></img>
-                        </div>
-                        <div className="title">
-                            <h3>Success!</h3>
-                        </div>
-                        <p className="para">Cảm ơn bạn đã mua hàng tại Tech Store</p>
-                        <form action="">
-                            <a href="#" onClick={successclick}>OKAY</a>
-                        </form>
-                    </div>
-                </div>
-            </div>
+            {showPopup && <PopupSuccess message='Cảm ơn bạn đã mua hàng tại Tech Store' setShowPopup={setShowPopup} />}
         </div>
     )
     // }
