@@ -8,7 +8,7 @@ function CategoryItem({ data }) {
             <div className="category_item">
                 <div className="category_item_icon">
                     <Link className="wrapicon" to={`/search?name=${data.categoryName}`} >
-                        <img src={`${baseIMG}orther/${data.icon}`} alt=""></img>
+                        <img src={`${baseIMG}other/${data.icon}`} alt=""></img>
                     </Link>
                 </div>
                 <div className="category_name">
