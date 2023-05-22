@@ -1,20 +1,25 @@
 import { baseIMG } from "../../utils/api-config"
 import './PopupSuccess.scss'
 
-function PopupSuccess({ message, setShowPopup }) {
+function PopupSuccess({ type, message, setShowPopup }) {
+    let url = ''
+    if (type === 'error') url = `${baseIMG}other/cancel.png`
+    else url = `${baseIMG}other/checked.png`
     return (
         <div className='popup-succcess'>
             <div className="popup">
                 <div className="popup-content">
                     <div className="imgbox">
-                        <img src={`${baseIMG}orther/checked.png`} className="img" alt=""></img>
+                        <img src={url} alt=""></img>
                     </div>
-                    <div className="title">
-                        <h3>Success!</h3>
+                    <div className={type === 'error' ? 'title error' : 'title'}>
+                        <h3>{type === 'error' ? 'Error!' : 'Success!'}</h3>
                     </div>
                     <p className="para">{message}</p>
-                    <div action="">
-                        <button onClick={() => { setShowPopup(false) }}>OKAY</button>
+                    <div>
+                        <button
+                            className={type === 'error' ? 'error' : 'success'}
+                            onClick={() => { setShowPopup(false) }}>OKAY</button>
                     </div>
                 </div>
             </div>
