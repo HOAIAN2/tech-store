@@ -36,6 +36,7 @@ function ProductPage() {
     const [commentOrder, setCommentOrder] = useState(language.latest)
     const [userRate, setUserRate] = useState(0)
     const [showPopup, setShowPopup] = useState(false)
+    const [error, setError] = useState(false)
     const navigate = useNavigate()
     const location = useLocation()
     const { id } = useParams()
@@ -95,29 +96,21 @@ function ProductPage() {
                 })
                 .catch(error => {
                     console.error(error)
+                    setError(true)
+                    setShowPopup(true)
                 })
         }
         else {
-            if (latestOrder.products.find(product => product.productID === parseInt(id))) {
-                updateProduct(parseInt(id), quantity)
-                    .then(data => {
-                        dispatchOrders({ type: ORDER_ACTION.EDIT, payload: data })
-                        setShowPopup(true)
-                    })
-                    .catch(error => {
-                        console.error(error)
-                    })
-            }
-            else {
-                addProduct(parseInt(id), quantity)
-                    .then(data => {
-                        dispatchOrders({ type: ORDER_ACTION.EDIT, payload: data })
-                        setShowPopup(true)
-                    })
-                    .catch(error => {
-                        console.error(error)
-                    })
-            }
+            addProduct(parseInt(id), quantity)
+                .then(data => {
+                    dispatchOrders({ type: ORDER_ACTION.EDIT, payload: data })
+                    setShowPopup(true)
+                })
+                .catch(error => {
+                    console.error(error)
+                    setError(true)
+                    setShowPopup(true)
+                })
         }
     }
     function handleSetProductData(data) {
@@ -197,7 +190,8 @@ function ProductPage() {
     return (
         <>
             <Header />
-            {showPopup && <PopupSuccess message={language.success} setShowPopup={setShowPopup} />}
+            {error && showPopup && <PopupSuccess type='error' message={language.error} setShowPopup={setShowPopup} />}
+            {!error && showPopup && <PopupSuccess message={language.success} setShowPopup={setShowPopup} />}
             <div className='product-page'>
                 {activeRating &&
                     <div className='overlay-rating' onClick={(e) => {

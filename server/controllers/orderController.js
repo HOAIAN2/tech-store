@@ -13,15 +13,11 @@ function getOrder(req, res) {
     const user = readAccessToken(token)
     if (!queries.includes(query)) return res.status(400).json({ message: errorMessages.invalidQuery })
     if (query === 'latest') {
-        const latestOrder = orders.find(order => {
-            return order.userID === user.id
-        })
+        const latestOrder = orders.findLatest(user.id)
         return res.json(latestOrder)
     }
     else {
-        return res.json(orders.filter(order => {
-            return order.userID === user.id
-        }))
+        return res.json(orders.filter(user.id))
     }
 }
 // [POST create-order]
@@ -38,9 +34,7 @@ async function createOrder(req, res) {
     if (!isValidData(data)) return res.status(400).json({ message: errorMessages.invalidDataType })
     // kiểm tra cuối order mới nhất thanh toán chưa
     // thanh toán rồi thì tạo mới, không thì bad request.
-    const latestOrder = orders.find(order => {
-        return order.userID === user.id
-    })
+    const latestOrder = orders.findLatest(user.id)
     if (!latestOrder || latestOrder.paid) {
         try {
             const order = await addOrder(user.id, data.productID, data.quantity)
@@ -64,44 +58,16 @@ async function addProduct(req, res) {
     const token = req.headers['authorization'].split(' ')[1]
     const user = readAccessToken(token)
     if (!isValidData(data)) return res.status(400).json({ message: errorMessages.invalidDataType })
-    const latestOrder = orders.find(order => {
-        return order.userID === user.id
-    })
+    const latestOrder = orders.findLatest(user.id)
     if (latestOrder && !latestOrder.paid) {
+        let onOrder = false
         if (latestOrder.products.find(product => {
             return product.productID === data.productID
-        })) return res.sendStatus(400)
+        })) onOrder = true
         try {
-            const order = await addOrderDetail(latestOrder.orderID, data.productID, data.quantity)
-            return res.json(order)
-        } catch (error) {
-            console.log('\x1b[31m%s\x1b[0m', error.message)
-            return res.status(500).json({ message: 'error' })
-        }
-    }
-    return res.sendStatus(400)
-}
-// [POST update-product]
-async function updateProduct(req, res) {
-    const data = {
-        productID: req.body.productID,
-        quantity: req.body.quantity
-    }
-    let errorMessages = orderErrors.en
-    const language = req.headers["accept-language"]
-    if (language === 'vi') errorMessages = orderErrors.vi
-    const token = req.headers['authorization'].split(' ')[1]
-    const user = readAccessToken(token)
-    if (!isValidData(data)) return res.status(400).json({ message: errorMessages.invalidDataType })
-    const latestOrder = orders.find(order => {
-        return order.userID === user.id
-    })
-    if (latestOrder && !latestOrder.paid) {
-        if (!latestOrder.products.find(product => {
-            return product.productID === data.productID
-        })) return res.sendStatus(400)
-        try {
-            const order = await updateOrderDetail(latestOrder.orderID, data.productID, data.quantity)
+            let order = null
+            if (onOrder) order = await updateOrderDetail(latestOrder.orderID, data.productID, data.quantity)
+            else order = await addOrderDetail(latestOrder.orderID, data.productID, data.quantity)
             return res.json(order)
         } catch (error) {
             console.log('\x1b[31m%s\x1b[0m', error.message)
@@ -121,12 +87,10 @@ async function removeProduct(req, res) {
     const token = req.headers['authorization'].split(' ')[1]
     const user = readAccessToken(token)
     if (!isValidData(data.productID)) return res.status(400).json({ message: errorMessages.invalidDataType })
-    const latestOrder = orders.find(order => {
-        return order.userID === user.id
-    })
+    const latestOrder = orders.findLatest(user.id)
     if (latestOrder && !latestOrder.paid) {
         if (!data.productID.every(id => {
-            if (!latestOrder.products.find(product=>product.productID===id)) return false
+            if (!latestOrder.products.find(product => product.productID === id)) return false
             return true
         })) return res.sendStatus(400)
         try {
@@ -149,9 +113,7 @@ async function setVoucher(req, res) {
     if (language === 'vi') errorMessages = orderErrors.vi
     const token = req.headers['authorization'].split(' ')[1]
     const user = readAccessToken(token)
-    const latestOrder = orders.find(order => {
-        return order.userID === user.id
-    })
+    const latestOrder = orders.findLatest(user.id)
     const voucher = vouchers.find(item => {
         return (item.voucherID === data.voucherID && item.expiryDate > new Date())
     })
@@ -181,9 +143,7 @@ async function makePayment(req, res) {
     const token = req.headers['authorization'].split(' ')[1]
     const user = readAccessToken(token)
     if (!isValidData(data)) return res.status(400).json({ message: errorMessages.invalidDataType })
-    const latestOrder = orders.find(order => {
-        return order.userID === user.id
-    })
+    const latestOrder = orders.findLatest(user.id)
     if (latestOrder && !latestOrder.paid) {
         try {
             if (latestOrder.products.length === 0) return res.sendStatus(400)
@@ -229,7 +189,6 @@ module.exports = {
     getOrder,
     createOrder,
     addProduct,
-    updateProduct,
     removeProduct,
     setVoucher,
     makePayment

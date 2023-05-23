@@ -15,7 +15,6 @@ const { categories, initializeCategory } = require('./category')
 const {
     orders,
     initializeOrder,
-    getOrder,
     addOrder,
     addOrderDetail,
     updateOrderDetail,
@@ -57,7 +56,6 @@ module.exports = {
     updatePassword,
     updateUserImage,
     createProduct,
-    getOrder,
     addOrder,
     addOrderDetail,
     updateOrderDetail,
