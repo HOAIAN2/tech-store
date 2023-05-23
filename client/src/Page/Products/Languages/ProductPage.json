@@ -13,7 +13,8 @@
         "loadMore": "Load more",
         "placeHolder": "Write comment",
         "ratingThisProduct": "Rating this product",
-        "success": "Add product success"
+        "success": "Add product success",
+        "error": "Something error"
     },
     "vi": {
         "latest": "Mới nhất",
@@ -29,6 +30,7 @@
         "loadMore": "Xem thêm",
         "placeHolder": "Viết bình luận",
         "ratingThisProduct": "Đánh giá sản phẩm này",
-        "success": "Thêm sản phẩm thành công"
+        "success": "Thêm sản phẩm thành công",
+        "error": "Có lỗi trong quá trình xử lý"
     }
 }

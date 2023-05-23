@@ -5,6 +5,7 @@ const Product = require('./product')
 const Order = require('./order')
 const Voucher = require('./voucher')
 const Comment = require('./comment')
+const { Cache, OrderCache } = require('./cache')
 
 module.exports = {
     User: User,
@@ -13,5 +14,7 @@ module.exports = {
     Product: Product,
     Order: Order,
     Voucher: Voucher,
-    Comment: Comment
+    Comment: Comment,
+    Cache: Cache,
+    OrderCache: OrderCache
 }

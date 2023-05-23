@@ -254,7 +254,7 @@
     "voucher": null
 }
 ```
->[POST] add-product, update-product, remove-product (Same input output) JWT require
+>[POST] add-product, remove-product (Same input output) JWT require
 - Request
 ```json
 {

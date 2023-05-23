@@ -51,23 +51,6 @@ async function addProduct(productID, quantity) {
         throw new Error(error)
     }
 }
-async function updateProduct(productID, quantity) {
-    const token = JSON.parse(localStorage.getItem('token'))
-    if (!token) return {}
-    try {
-        const res = await request.post('/order/update-product', {
-            productID: productID,
-            quantity: quantity
-        }, {
-            headers: {
-                Authorization: `Bearer ${token.accessToken}`
-            },
-        })
-        return res.data
-    } catch (error) {
-        throw new Error(error)
-    }
-}
 async function removeProduct(productID) {
     const token = JSON.parse(localStorage.getItem('token'))
     if (!token) return {}
@@ -104,7 +87,6 @@ export {
     getOrder,
     createOrder,
     addProduct,
-    updateProduct,
     removeProduct,
     payorder
 }

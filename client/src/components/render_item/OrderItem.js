@@ -5,7 +5,7 @@ import { getProductByID } from '../../utils/Product'
 import { baseIMG } from '../../utils/api-config'
 import { useNavigate } from 'react-router-dom'
 import { useOrderData, ORDER_ACTION } from "../../Context"
-import { createOrder, updateProduct, addProduct } from "../../utils/Order"
+import { createOrder, addProduct } from "../../utils/Order"
 
 function OrderItem({ data, gettotalprice, handleselectclick, typeorder }) {
     const [quantity, setQuantity] = useState(data.quantity)
@@ -51,24 +51,13 @@ function OrderItem({ data, gettotalprice, handleselectclick, typeorder }) {
                 })
         }
         else {
-            if (latestOrder.products.find(product => product.productID === parseInt(data.productID))) {
-                updateProduct(parseInt(data.productID), value)
-                    .then(data => {
-                        dispatchOrders({ type: ORDER_ACTION.EDIT, payload: data })
-                    })
-                    .catch(error => {
-                        console.error(error)
-                    })
-            }
-            else {
-                addProduct(parseInt(data.productID), value)
-                    .then(data => {
-                        dispatchOrders({ type: ORDER_ACTION.EDIT, payload: data })
-                    })
-                    .catch(error => {
-                        console.error(error)
-                    })
-            }
+            addProduct(parseInt(data.productID), value)
+                .then(data => {
+                    dispatchOrders({ type: ORDER_ACTION.EDIT, payload: data })
+                })
+                .catch(error => {
+                    console.error(error)
+                })
         }
     }
 
