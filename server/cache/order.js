@@ -17,7 +17,7 @@ async function initializeOrder() {
             "JOIN orders ON orders.order_id = order_details.order_id",
             "LEFT JOIN payment_methods ON orders.paid_method_id = payment_methods.method_id",
             "GROUP BY orders.order_id",
-            // "ORDER BY orders.order_id DESC"
+            "ORDER BY orders.order_id DESC"
         ].join(' ')
         const [rows] = await pool.query(queryString)
         rows.forEach(item => {
@@ -38,7 +38,7 @@ async function initializeOrder() {
                 order.addProduct(productID, productName, quantity, price, discount)
             })
             if (paid) order.paidOrder(paidMethod, orderDate)
-            orders.add(order)
+            orders.addLast(order)
         })
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', `Fail to initialize orders data: ${error.message}`)

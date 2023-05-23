@@ -9,6 +9,10 @@ class Cache {
         if (this.data.length === this.limit) this.data.pop()
         this.data.unshift(item)
     }
+    addLast(item) {
+        if (this.data.length === this.limit) this.data.shift()
+        this.data.push(item)
+    }
     find(value) {
         return this.data.find(item => {
             return item[this.#key] === value
