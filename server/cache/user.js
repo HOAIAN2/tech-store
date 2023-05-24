@@ -1,8 +1,11 @@
 const { User } = require('../models')
 const { pool } = require('./database')
+const fs = require('fs')
 
+
+if (!fs.existsSync('./tokens.json')) fs.writeFileSync('./tokens.json', '[]')
 const users = []
-const refreshTokens = []
+const refreshTokens = require('../tokens.json')
 
 async function initializeUser() {
     console.log('\x1b[1m%s\x1b[0m', 'Initializing users data...')
@@ -29,7 +32,6 @@ async function initializeUser() {
             const user = new User(userID, role, username, firstName, lastName, birthDate, sex, address, email, phoneNumber, avatar, hashedPassword)
             users.push(user)
         })
-
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', `Fail to initialize users data: ${error.message}`)
         throw new Error(`Fail to initialize users data: ${error.message}`)

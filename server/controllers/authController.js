@@ -24,6 +24,7 @@ async function login(req, res) {
         if (isCorrectPassword(data.password, user.hashedPassword)) {
             const token = createToken(user)
             refreshTokens.push(token.refreshToken)
+            fs.writeFileSync('./tokens.json', JSON.stringify(refreshTokens))
             res.json(token)
         }
         else res.status(400).json({ message: errorMessages.incorrectPassword })
@@ -38,6 +39,7 @@ function logout(req, res) {
     const index = refreshTokens.indexOf(refreshToken)
     if (index !== -1) {
         refreshTokens.splice(index, 1)
+        fs.writeFileSync('./tokens.json', JSON.stringify(refreshTokens))
         res.json({ message: 'success' })
     }
     else {
@@ -81,6 +83,7 @@ async function changePassword(req, res) {
             await updatePassword(data.username, hashedPassword)
             user.setPassword(hashedPassword)
             refreshTokens.splice(index, 1)
+            fs.writeFileSync('./tokens.json', JSON.stringify(refreshTokens))
             return res.sendStatus(200)
         } catch (error) {
             console.log('\x1b[31m%s\x1b[0m', error.message)
@@ -135,6 +138,7 @@ async function register(req, res) {
             const user = await findUser(data.username)
             const token = createToken(user)
             refreshTokens.push(token.refreshToken)
+            fs.writeFileSync('./tokens.json', JSON.stringify(refreshTokens))
             return res.json(token)
         } catch (error) {
             console.log('\x1b[31m%s\x1b[0m', error.message)
