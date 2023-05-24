@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartShopping, faTruck, faChevronRight, faChevronLeft, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import { getProductByID } from "../../utils/Product/index"
 import { getComments, addComment } from '../../utils/Comment'
-import { createOrder, updateProduct, addProduct } from '../../utils/Order'
+import { createOrder, addProduct } from '../../utils/Order'
 import { useUserData, useOrderData, ORDER_ACTION } from "../../Context"
 import CommentItem from '../../components/render_item/CommentItem'
 import { getRating } from '../../utils/Rating'
@@ -139,8 +139,6 @@ function ProductPage() {
             .then(result => {
                 setComments(result)
             })
-        console.log('Bought: ', didUserBought())
-        console.log(orders)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id])
     useEffect(() => {

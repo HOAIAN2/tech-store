@@ -21,11 +21,12 @@
             border-radius: 25px;
 
             .imgbox {
+                height: 50%;
                 text-align: center;
 
-                img {
-                    width: 112px;
-                    margin-top: 40px;
+                svg {
+                    scale: 0.4;
+                    // width: 30%;
                 }
             }
 
