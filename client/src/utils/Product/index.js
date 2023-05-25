@@ -73,6 +73,18 @@ async function getProductSearchPage(name, brand, address, star, sortby, index = 
         return []
     }
 }
+async function getproductssuggest(id) {
+    try {
+        const rs = await request.get('/products/suggest', {
+            params: {
+                id: id
+            }
+        })
+        return rs.data
+    } catch (error) {
+        return []
+    }
+}
 
 // async function getProductSort(data) {
 //     try {
@@ -94,5 +106,6 @@ export {
     getCategories,
     getHomeProduct,
     getProductSearchPage,
+    getproductssuggest
     // getProductSort
 }

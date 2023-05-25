@@ -1,7 +1,7 @@
 @use '../../colors';
 
 .hot-item {
-    width: 33.333%;
+    // width: 33.333%;
     display: flex;
     position: absolute;
     justify-content: center;
@@ -48,10 +48,11 @@
                     width: max-content;
                 }
 
-                a {
+                .btn {
                     position: absolute;
                     left: 50%;
                     bottom: 5%;
+                    cursor: pointer;
                     transform: translateX(-50%);
                     padding: 10px 20px;
                     background-color: colors.$color-red;

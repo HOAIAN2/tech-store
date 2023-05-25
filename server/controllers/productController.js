@@ -60,6 +60,14 @@ function suggest(req, res) {
     if (!checkNumber(id)) return res.sendStatus(400)
     const product = products.products.find(item => item.productID === parseInt(id))
     if (!product) return res.sendStatus(404)
+    const productfilter = products.products.filter(item => item.category === product.category)
+    let setMap = new Set()
+    while (setMap.size != 8) {
+        setMap.add(productfilter[Math.floor(Math.random() * productfilter.length)])
+    }
+    setMap = Array.from(setMap).map(item => item.ignoreProps('unitInOrder', 'quantity'))
+    res.json(setMap)
+
 }
 // [GET search]
 async function searchProduct(req, res) {
@@ -359,4 +367,5 @@ module.exports = {
     addProduct,
     getHotProducts,
     searchProductMore,
+    suggest
 }
