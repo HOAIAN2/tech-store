@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useParams, useNavigate, useLocation } from 'react-router-dom'
+import { useParams, useNavigate, useLocation, Link } from 'react-router-dom'
 import NotFound from '../errors/NotFound'
 import { baseIMG } from '../../utils/api-config'
 import './ProductPage.scss'
@@ -8,7 +8,7 @@ import Footer from '../../components/footer/Footer'
 import ProductRating from './ProductRating'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartShopping, faTruck, faChevronRight, faChevronLeft, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
-import { getProductByID } from "../../utils/Product/index"
+import { getProductByID, getproductssuggest } from "../../utils/Product/index"
 import { getComments, addComment } from '../../utils/Comment'
 import { createOrder, addProduct } from '../../utils/Order'
 import { useUserData, useOrderData, ORDER_ACTION } from "../../Context"
@@ -17,6 +17,9 @@ import { getRating } from '../../utils/Rating'
 import UserRating from './UserRating'
 import languages from './Languages/ProductPage.json'
 import PopupSuccess from '../../components/order/PopupSuccess'
+import SliceProductItem from '../../components/render_item/SliceProductItem'
+import '../../components/render_item/SliceProductItem.scss'
+import PackageSlice from '@danghung_dung/slice_item2'
 
 function ProductPage() {
     let language = languages.en
@@ -41,6 +44,8 @@ function ProductPage() {
     const location = useLocation()
     const { id } = useParams()
     const commentRef = useRef()
+    const container = useRef()
+    const [suggest, setsuggest] = useState([])
     // console.log(product)
     /// Alot of bugs, fix
     function handleSetQuantity(e) {
@@ -184,6 +189,27 @@ function ProductPage() {
         }))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeRating])
+
+    useEffect(() => {
+        getproductssuggest(id)
+            .then((rs) => {
+                setsuggest(rs.map(product => {
+                    return {
+                        ...product,
+                        images: product.images.map(image => {
+                            return `${baseIMG}/products/${image}`
+                        }),
+                        discount: product.discount * 100 || null,
+                        price: formatPrice(product.price)
+                    }
+                }))
+            })
+
+    }, [id])
+    useEffect(() => {
+        PackageSlice(container.current, 4, 5, 0.7, 'ease')
+    }, [suggest])
+
     if (notFound) return <NotFound />
     return (
         <>
@@ -263,6 +289,14 @@ function ProductPage() {
                             </button>
                         </div>
                     </div>
+                </div>
+                <div className='product-page-suggest'>
+                    <div ref={container} className="suggest_products_slice">
+                        {suggest.map(product => {
+                            return <SliceProductItem key={product.productID} data={product} width={"25%"} />
+                        })}
+                    </div>
+
                 </div>
                 < div className='product-page-comments' >
                     <div className='comment-count'>

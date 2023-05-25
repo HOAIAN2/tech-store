@@ -324,6 +324,19 @@
         }
     }
 
+    &-suggest {
+        width: 1257px;
+        height: 250px;
+        margin: 20px 0;
+
+        .suggest_products_slice {
+            height: 100%;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+    }
+
 }
 
 

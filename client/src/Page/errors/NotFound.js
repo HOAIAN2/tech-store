@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import Header from '../../components/header/Header'
 import './NotFound.scss'
 import languages from './Languages/NotFound.json'
-import HotProducts from '../../components/home_content/content/HotProducts'
+import SliceProducts from '../../components/home_content/content/SliceProducts'
 function NotFound() {
     let language = languages.en
     if (navigator.language === 'vi') language = languages.vi
@@ -19,7 +19,7 @@ function NotFound() {
                 <div>{language.content}</div>
                 <div><Link to='/'>{language.button}</Link></div>
             </div>
-            <HotProducts />
+            <SliceProducts />
         </div>
     )
 }
