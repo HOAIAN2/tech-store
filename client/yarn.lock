@@ -1186,10 +1186,10 @@
   resolved "https://registry.npmjs.org/@csstools/selector-specificity/-/selector-specificity-2.0.2.tgz"
   integrity sha512-IkpVW/ehM1hWKln4fCA3NzJU8KwD+kIOvPZA4cqxoJHtE21CCzjyp+Kxbu0i5I4tBNOlXPL9mjwnWlL0VEG4Fg==
 
-"@danghung_dung/slice_item2@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/@danghung_dung/slice_item2/-/slice_item2-1.0.0.tgz"
-  integrity sha512-DTyK874M9hFjuAwdsW6oSnohp/0MrMbpN7IM6AMo8J7b1iWoYRcN7D4OjWuk5SQAIEMcF1qi5XOSUNbwIAldnw==
+"@danghung_dung/slice_item2@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.npmjs.org/@danghung_dung/slice_item2/-/slice_item2-3.0.0.tgz"
+  integrity sha512-4l1/WTck4kb2M7d65mdG4MxfMKPGl9T8CIoI3wlEbPOp+j0iR/qXFplRY5vRDjyjYATkcs1REn7GAnsy6ll9+A==
 
 "@eslint/eslintrc@^1.4.1":
   version "1.4.1"
