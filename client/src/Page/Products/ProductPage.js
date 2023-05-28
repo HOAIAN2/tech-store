@@ -106,7 +106,7 @@ function ProductPage() {
                 })
         }
         else {
-            addProduct(parseInt(id), quantity)
+            addProduct(latestOrder.orderID, parseInt(id), quantity)
                 .then(data => {
                     dispatchOrders({ type: ORDER_ACTION.EDIT, payload: data })
                     setShowPopup(true)

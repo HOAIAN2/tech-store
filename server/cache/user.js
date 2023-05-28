@@ -1,10 +1,11 @@
 const { User } = require('../models')
 const { pool } = require('./database')
+const Cache = require('js-simple-cache')
 const fs = require('fs')
 
 
 if (!fs.existsSync('./tokens.json')) fs.writeFileSync('./tokens.json', '[]')
-const users = []
+const users = new Cache('username', 10000)
 const refreshTokens = require('../tokens.json')
 
 async function initializeUser() {
@@ -30,7 +31,7 @@ async function initializeUser() {
             const hashedPassword = row['hashed_password']
             // push to cache array
             const user = new User(userID, role, username, firstName, lastName, birthDate, sex, address, email, phoneNumber, avatar, hashedPassword)
-            users.push(user)
+            users.set(user)
         })
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', `Fail to initialize users data: ${error.message}`)
@@ -38,7 +39,7 @@ async function initializeUser() {
     }
 }
 async function findUser(username) {
-    let user = users.find(user => user.username === username)
+    let user = users.get(username)
     if (!user) {
         try {
             // Preventing SQL injection in Node.js with placeholder
@@ -62,7 +63,7 @@ async function findUser(username) {
                 const avatar = rows[0]['avatar']
                 const hashedPassword = rows[0]['hashed_password']
                 user = new User(userID, role, username, firstName, lastName, birthDate, sex, address, email, phoneNumber, avatar, hashedPassword)
-                users.push(user)
+                users.set(user)
                 return user
             }
             return null

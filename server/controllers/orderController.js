@@ -12,12 +12,13 @@ function getOrder(req, res) {
     const token = req.headers['authorization'].split(' ')[1]
     const user = readAccessToken(token)
     if (!queries.includes(query)) return res.status(400).json({ message: errorMessages.invalidQuery })
+    const userOrders = orders.filter(order => order.userID === user.id)
+    userOrders.sort((a, b) => b.orderID - a.orderID)
     if (query === 'latest') {
-        const latestOrder = orders.findLatest(user.id)
-        return res.json(latestOrder)
+        return res.json(userOrders[0])
     }
     else {
-        return res.json(orders.filter(user.id))
+        return res.json(userOrders)
     }
 }
 // [POST create-order]
@@ -34,8 +35,9 @@ async function createOrder(req, res) {
     if (!isValidData(data)) return res.status(400).json({ message: errorMessages.invalidDataType })
     // kiểm tra cuối order mới nhất thanh toán chưa
     // thanh toán rồi thì tạo mới, không thì bad request.
-    const latestOrder = orders.findLatest(user.id)
-    if (!latestOrder || latestOrder.paid) {
+    const userOrders = orders.filter(order => order.userID === user.id)
+    userOrders.sort((a, b) => b.orderID - a.orderID)
+    if (!userOrders[0] || userOrders[0].paid) {
         try {
             const order = await addOrder(user.id, data.productID, data.quantity)
             return res.json(order)
@@ -49,6 +51,7 @@ async function createOrder(req, res) {
 // [POST add-product]
 async function addProduct(req, res) {
     const data = {
+        orderID: req.body.orderID,
         productID: req.body.productID,
         quantity: req.body.quantity
     }
@@ -58,16 +61,17 @@ async function addProduct(req, res) {
     const token = req.headers['authorization'].split(' ')[1]
     const user = readAccessToken(token)
     if (!isValidData(data)) return res.status(400).json({ message: errorMessages.invalidDataType })
-    const latestOrder = orders.findLatest(user.id)
-    if (latestOrder && !latestOrder.paid) {
+    const order = orders.get(data.orderID)
+    if (order?.userID !== user.id) return res.sendStatus(401)
+    if (order && !order.paid) {
         let onOrder = false
-        if (latestOrder.products.find(product => {
+        if (order.products.find(product => {
             return product.productID === data.productID
         })) onOrder = true
         try {
             let order = null
-            if (onOrder) order = await updateOrderDetail(latestOrder.orderID, data.productID, data.quantity)
-            else order = await addOrderDetail(latestOrder.orderID, data.productID, data.quantity)
+            if (onOrder) order = await updateOrderDetail(data.orderID, data.productID, data.quantity)
+            else order = await addOrderDetail(data.orderID, data.productID, data.quantity)
             return res.json(order)
         } catch (error) {
             console.log('\x1b[31m%s\x1b[0m', error.message)
@@ -79,6 +83,7 @@ async function addProduct(req, res) {
 // [POST remove-product]
 async function removeProduct(req, res) {
     const data = {
+        orderID: req.body.orderID,
         productID: req.body.productID
     }
     let errorMessages = orderErrors.en
@@ -87,14 +92,16 @@ async function removeProduct(req, res) {
     const token = req.headers['authorization'].split(' ')[1]
     const user = readAccessToken(token)
     if (!isValidData(data.productID)) return res.status(400).json({ message: errorMessages.invalidDataType })
-    const latestOrder = orders.findLatest(user.id)
-    if (latestOrder && !latestOrder.paid) {
+    if (!Array.isArray(data.productID)) return res.status(400).json({ message: errorMessages.invalidDataType })
+    const order = orders.get(data.orderID)
+    if (order?.userID !== user.id) return res.sendStatus(401)
+    if (order && !order.paid) {
         if (!data.productID.every(id => {
-            if (!latestOrder.products.find(product => product.productID === id)) return false
+            if (!order.products.find(product => product.productID === id)) return false
             return true
         })) return res.sendStatus(400)
         try {
-            const order = await removeOrderDetail(latestOrder.orderID, data.productID)
+            const order = await removeOrderDetail(data.orderID, data.productID)
             return res.json(order)
         } catch (error) {
             console.log('\x1b[31m%s\x1b[0m', error.message)
@@ -106,6 +113,7 @@ async function removeProduct(req, res) {
 // [POST set-voucher]
 async function setVoucher(req, res) {
     const data = {
+        orderID: req.body.orderID,
         voucherID: req.body.voucherID
     }
     let errorMessages = orderErrors.en
@@ -113,18 +121,18 @@ async function setVoucher(req, res) {
     if (language === 'vi') errorMessages = orderErrors.vi
     const token = req.headers['authorization'].split(' ')[1]
     const user = readAccessToken(token)
-    const latestOrder = orders.findLatest(user.id)
-    const voucher = vouchers.find(item => {
-        return (item.voucherID === data.voucherID && item.expiryDate > new Date())
-    })
+    if (!checkNumber(data.orderID)) return res.status(400).json({ message: errorMessages.invalidDataType })
+    const order = orders.get(data.orderID)
+    if (order?.userID !== user.id) return res.sendStatus(401)
+    const voucher = vouchers.get(data.voucherID)
     if (!voucher) return res.status(400).json({ message: errorMessages.voucherInvalid })
-    if (latestOrder && !latestOrder.paid) {
+    if (order && !order.paid) {
         try {
             const today = new Date().setHours(0, 0, 0, 0)
             if (voucher.expiryDate < today) return res.json({ message: errorMessages.voucherOutdate })
-            await addVoucher(latestOrder.orderID, data.voucherID)
-            latestOrder.setVoucher(voucher)
-            return res.json(latestOrder)
+            await addVoucher(data.orderID, data.voucherID)
+            order.setVoucher(voucher)
+            return res.json(order)
         } catch (error) {
             console.log('\x1b[31m%s\x1b[0m', error.message)
             return res.status(500).json({ message: 'error' })
@@ -135,6 +143,7 @@ async function setVoucher(req, res) {
 // [POST make-payment]
 async function makePayment(req, res) {
     const data = {
+        orderID: req.body.orderID,
         paymentMethod: req.body.paymentMethod
     }
     let errorMessages = orderErrors.en
@@ -143,13 +152,14 @@ async function makePayment(req, res) {
     const token = req.headers['authorization'].split(' ')[1]
     const user = readAccessToken(token)
     if (!isValidData(data)) return res.status(400).json({ message: errorMessages.invalidDataType })
-    const latestOrder = orders.findLatest(user.id)
-    if (latestOrder && !latestOrder.paid) {
+    let order = orders.get(data.orderID)
+    if (order?.userID !== user.id) return res.sendStatus(401)
+    if (order && !order.paid) {
         try {
-            if (latestOrder.products.length === 0) return res.sendStatus(400)
+            if (order.products.length === 0) return res.sendStatus(400)
             const today = new Date().setHours(0, 0, 0, 0)
-            if (latestOrder.voucher?.expiryDate < today) return res.json({ message: errorMessages.voucherOutdate })
-            const order = await paidOrder(latestOrder.orderID, data.paymentMethod)
+            if (order.voucher?.expiryDate < today) return res.json({ message: errorMessages.voucherOutdate })
+            order = await paidOrder(order.orderID, data.paymentMethod)
             return res.json(order)
         } catch (error) {
             console.log('\x1b[31m%s\x1b[0m', error.message)

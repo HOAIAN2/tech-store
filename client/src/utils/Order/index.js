@@ -34,11 +34,12 @@ async function createOrder(productID, quantity) {
         throw new Error(error)
     }
 }
-async function addProduct(productID, quantity) {
+async function addProduct(orderID, productID, quantity) {
     const token = JSON.parse(localStorage.getItem('token'))
     if (!token) return {}
     try {
         const res = await request.post('/order/add-product', {
+            orderID: orderID,
             productID: productID,
             quantity: quantity
         }, {
@@ -51,11 +52,12 @@ async function addProduct(productID, quantity) {
         throw new Error(error)
     }
 }
-async function removeProduct(productID) {
+async function removeProduct(orderID, productID) {
     const token = JSON.parse(localStorage.getItem('token'))
     if (!token) return {}
     try {
         const res = await request.post('/order/remove-product', {
+            orderID: orderID,
             productID: productID
         }, {
             headers: {
@@ -67,11 +69,12 @@ async function removeProduct(productID) {
         throw new Error(error)
     }
 }
-async function payorder() {
+async function payOrder(orderID) {
     const token = JSON.parse(localStorage.getItem('token'))
     if (!token) return {}
     try {
         const res = await request.post('/order/make-payment', {
+            orderID: orderID,
             paymentMethod: 2
         }, {
             headers: {
@@ -88,5 +91,5 @@ export {
     createOrder,
     addProduct,
     removeProduct,
-    payorder
+    payOrder
 }

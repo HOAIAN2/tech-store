@@ -1,10 +1,11 @@
-const { Order, OrderCache } = require('../models')
+const { Order } = require('../models')
+const Cache = require('js-simple-cache')
 const { pool } = require('./database')
 const { vouchers } = require('./voucher')
 const { products } = require('./product')
 
 // const orders = []
-const orders = new OrderCache('orderID', 10000)
+const orders = new Cache('orderID', 10000)
 
 async function initializeOrder() {
     console.log('\x1b[1m%s\x1b[0m', 'Initializing orders data...')
@@ -38,7 +39,7 @@ async function initializeOrder() {
                 order.addProduct(productID, productName, quantity, price, discount)
             })
             if (paid) order.paidOrder(paidMethod, orderDate)
-            orders.addLast(order)
+            orders.set(order)
         })
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', `Fail to initialize orders data: ${error.message}`)
@@ -108,7 +109,7 @@ async function paidOrder(orderID, paymentMethodID) {
             tempProduct.updateQuantity(delta)
             tempProduct.updateSoldQuantity(product.quantity)
         })
-        orders.replace(order)
+        orders.set(order)
         return order
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)
@@ -136,7 +137,7 @@ async function addOrder(userID, productID, quantity) {
         const paidMethod = rows[0]['paid_method']
         const paid = rows[0]['paid']
         const order = new Order(orderID, userID, orderDate, paidMethod, paid)
-        orders.add(order)
+        orders.set(order)
         newOrder = await addOrderDetail(order.orderID, productID, quantity)
         return newOrder
     } catch (error) {
@@ -152,7 +153,7 @@ async function addOrderDetail(orderID, productID, quantity) {
     ].join(' ')
     try {
         await pool.query(queryString, [orderID, productID, quantity])
-        const order = orders.find(orderID)
+        const order = orders.get(orderID)
         order.addProduct(product.productID, product.productName, quantity)
         product.updateUnitInOrder(quantity)
         products.products.sort((x, y) => y.unitInOrder - x.unitInOrder)
@@ -171,7 +172,7 @@ async function updateOrderDetail(orderID, productID, quantity) {
     ].join(' ')
     try {
         await pool.query(queryString, [quantity, orderID, productID])
-        const order = orders.find(orderID)
+        const order = orders.get(orderID)
         let delta = 0
         for (let index = 0; index < order.products.length; index++) {
             if (order.products[index].productID === productID) {
@@ -195,7 +196,7 @@ async function removeOrderDetail(orderID, productID) {
     ].join(' ')
     try {
         await pool.query(queryString, [orderID, productID])
-        const order = orders.find(orderID)
+        const order = orders.get(orderID)
         productID.forEach(id => {
             const productInOrder = order.products.find(item => item.productID === id)
             const delta = productInOrder.quantity * -1
