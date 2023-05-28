@@ -40,7 +40,7 @@ function OrderItem({ data, gettotalprice, handleselectclick, typeorder }) {
 
 
     function handleAddToCart(value) {
-        const latestOrder = orders.at(-1)
+        const latestOrder = orders[0]
         if (!latestOrder || latestOrder.paid) {
             createOrder(parseInt(data.productID), value)
                 .then(data => {
@@ -51,7 +51,7 @@ function OrderItem({ data, gettotalprice, handleselectclick, typeorder }) {
                 })
         }
         else {
-            addProduct(parseInt(data.productID), value)
+            addProduct(latestOrder.orderID, parseInt(data.productID), value)
                 .then(data => {
                     dispatchOrders({ type: ORDER_ACTION.EDIT, payload: data })
                 })
@@ -76,7 +76,7 @@ function OrderItem({ data, gettotalprice, handleselectclick, typeorder }) {
                     </div>
                     <div className='product'>
                         <div className='wrapimgproduct'>
-                            <img src={`${baseIMG}products/${product.images[0]}`}></img>
+                            <img src={`${baseIMG}products/${product.images[0]}`} alt=''></img>
                         </div>
                         <div className='nameproduct'>{data.productName}</div>
                     </div>

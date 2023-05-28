@@ -4,8 +4,7 @@ import { faList, faCaretRight, faCheck, faTicket } from "@fortawesome/free-solid
 import { useEffect, useState, useRef } from 'react'
 import OrderItem from '../render_item/OrderItem'
 import { useOrderData, ORDER_ACTION } from '../../Context'
-import { removeProduct } from "../../utils/Order"
-import { payorder } from "../../utils/Order"
+import { removeProduct, payOrder } from "../../utils/Order"
 import PopupSuccess from './PopupSuccess'
 
 function OrderContent() {
@@ -100,7 +99,7 @@ function OrderContent() {
     }
 
     function deleteproduct(e) {
-        removeProduct(productAction)
+        removeProduct(orders[0].orderID, productAction)
             .then((rs) => {
                 dispatchOrders({ type: ORDER_ACTION.EDIT, payload: rs })
                 setproductAction([])
@@ -108,7 +107,7 @@ function OrderContent() {
     }
     function makePayment(e) {
         if (!orders[0].paid && orders[0]?.products.length !== 0) {
-            payorder()
+            payOrder(orders[0].orderID)
                 .then((rs) => {
                     if (rs) {
                         dispatchOrders({ type: ORDER_ACTION.EDIT, payload: rs })
@@ -223,7 +222,7 @@ function OrderContent() {
                         </div> : <></>
                 }
             </div>
-            {showPopup && <PopupSuccess message='Cảm ơn bạn đã mua hàng tại Tech Store' setShowPopup={setShowPopup} />}
+            {showPopup && <PopupSuccess message='Cảm ơn bạn đã mua hàng' setShowPopup={setShowPopup} />}
         </div>
     )
     // }

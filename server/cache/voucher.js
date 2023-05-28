@@ -1,7 +1,8 @@
+const Cache = require('js-simple-cache')
 const { Voucher } = require('../models')
 const { pool } = require('./database')
 
-const vouchers = []
+const vouchers = new Cache('voucherID', 100000)
 
 async function initializeVoucher() {
     console.log('\x1b[1m%s\x1b[0m', 'Initializing vouchers data...')
@@ -17,7 +18,7 @@ async function initializeVoucher() {
             const expiryDate = row['expiry_date']
             const description = row['description']
             const voucher = new Voucher(voucherID, voucherName, voucherDiscount, expiryDate, description)
-            vouchers.push(voucher)
+            vouchers.set(voucher)
         })
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', `Fail to initialize vouchers data: ${error.message}`)
