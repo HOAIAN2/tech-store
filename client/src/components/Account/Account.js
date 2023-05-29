@@ -14,13 +14,13 @@ function Account() {
     const [user] = useUserData()
     function handleLogout() {
         logout()
-            .then(data => {
-                console.log(data)
+            .then(() => {
                 localStorage.clear()
                 window.location.pathname = '/'
             })
             .catch(error => {
-                alert(error.message)
+                localStorage.clear()
+                window.location.pathname = '/'
             })
     }
     if (user) return (
