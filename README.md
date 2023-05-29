@@ -393,6 +393,9 @@
     "content": "string"
 }
 ```
+>[DELETE] / JWT require
+- Request: ?commentID?productID
+- Respone: HTTP status code
 ### Rating routes: /api/rating/
 >[GET] /:productID JWT require
 - Respone
