@@ -73,7 +73,7 @@ async function getProductSearchPage(name, brand, address, star, sortby, index = 
         return []
     }
 }
-async function getproductssuggest(id) {
+async function getSuggest(id) {
     try {
         const rs = await request.get('/products/suggest', {
             params: {
@@ -106,6 +106,6 @@ export {
     getCategories,
     getHomeProduct,
     getProductSearchPage,
-    getproductssuggest
+    getSuggest
     // getProductSort
 }

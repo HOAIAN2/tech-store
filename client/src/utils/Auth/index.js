@@ -16,10 +16,9 @@ async function login(username = '', password = '') {
 async function logout() {
     try {
         const refreshToken = JSON.parse(localStorage.getItem('token')).refreshToken
-        const res = await request.post('/auth/logout', {
+        await request.post('/auth/logout', {
             refreshToken: refreshToken
         })
-        return res.data
     } catch (error) {
         if (!error.response) throw new Error(error.message)
         const message = error.response.data.message

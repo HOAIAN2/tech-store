@@ -8,7 +8,7 @@ import Footer from '../../components/footer/Footer'
 import ProductRating from './ProductRating'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCartShopping, faTruck, faChevronRight, faChevronLeft, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
-import { getProductByID, getproductssuggest } from "../../utils/Product/index"
+import { getProductByID, getSuggest } from "../../utils/Product/index"
 import { getComments, addComment } from '../../utils/Comment'
 import { createOrder, addProduct } from '../../utils/Order'
 import { useUserData, useOrderData, ORDER_ACTION } from "../../Context"
@@ -160,6 +160,7 @@ function ProductPage() {
         if (latestOrder?.paid) return
         const product = latestOrder?.products.find(product => product.productID === parseInt(id))
         if (product) setQuantity(product.quantity)
+        else setQuantity(1)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id])
     useEffect(() => {
@@ -191,7 +192,7 @@ function ProductPage() {
     }, [activeRating])
 
     useEffect(() => {
-        getproductssuggest(id)
+        getSuggest(id)
             .then((rs) => {
                 setsuggest(rs.map(product => {
                     return {

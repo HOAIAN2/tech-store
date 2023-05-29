@@ -40,7 +40,7 @@ function logout(req, res) {
     if (index !== -1) {
         refreshTokens.splice(index, 1)
         fs.writeFileSync('./tokens.json', JSON.stringify(refreshTokens))
-        res.json({ message: 'success' })
+        res.sendStatus(200)
     }
     else {
         res.status(400).json({ message: errorMessages.invalidToken })
