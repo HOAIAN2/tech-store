@@ -4,7 +4,7 @@
   "description": "simple setup for express API server",
   "main": "index.js",
   "scripts": {
-    "start": "node --watch .",
+    "start": "node --watch ./index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

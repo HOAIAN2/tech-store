@@ -1,4 +1,4 @@
-const { queryComments, insertComment, products } = require('../cache')
+const { queryComments, insertComment, products, deleteComment } = require('../cache')
 const { readAccessToken } = require('../controllers/authController')
 // [GET comments]
 async function getComments(req, res) {
@@ -18,6 +18,7 @@ async function getComments(req, res) {
         return res.status(500).json({ message: 'error' })
     }
 }
+// [POST /:id]
 async function addComment(req, res) {
     const token = req.headers['authorization'].split(' ')[1]
     const data = {
@@ -31,7 +32,7 @@ async function addComment(req, res) {
     try {
         const newComment = await insertComment(data.userID, data.productID, data.content)
         const product = products.products.find(item => item.productID === data.productID)
-        product.updateCommentCount()
+        product.updateCommentCount(1)
         return res.json(newComment)
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', error.message)
@@ -39,6 +40,27 @@ async function addComment(req, res) {
     }
 }
 
+// [DELETE /]
+async function removeComment(req, res) {
+    const token = req.headers['authorization'].split(' ')[1]
+    const data = {
+        userID: readAccessToken(token).id,
+        commentID: req.query.commentID,
+        productID: req.query.productID
+    }
+    if (!isValidNumber(data.commentID) || !isValidNumber(data.productID)) return res.sendStatus(400)
+    data.commentID = parseInt(data.commentID)
+    data.productID = parseInt(data.productID)
+    try {
+        await deleteComment(data.commentID, data.userID)
+        const product = products.products.find(item => item.productID === data.productID)
+        product.updateCommentCount(-1)
+        return res.sendStatus(200)
+    } catch (error) {
+        console.log('\x1b[31m%s\x1b[0m', error.message)
+        return res.status(500).json({ message: 'error' })
+    }
+}
 // Middleware,..
 function isValidNumber(number) {
     if (!number) return false
@@ -50,5 +72,6 @@ function isValidNumber(number) {
 }
 module.exports = {
     getComments,
-    addComment
+    addComment,
+    removeComment
 }

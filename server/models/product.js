@@ -26,8 +26,8 @@ class Product {
     updateSoldQuantity(quantity) {
         this.soldQuantity += quantity
     }
-    updateCommentCount() {
-        this.commentCount += 1
+    updateCommentCount(increase) {
+        this.commentCount += increase
     }
     updateRatingCount() {
         this.ratingCount += 1

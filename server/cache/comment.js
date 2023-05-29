@@ -89,7 +89,20 @@ async function insertComment(userID, productID, content) {
         throw new Error(error.message)
     }
 }
+async function deleteComment(commentID, userID) {
+    try {
+        const queryString = [
+            'DELETE FROM comments',
+            'WHERE comment_id = ? AND user_id = ?'
+        ].join(' ')
+        const [result] = await pool.query(queryString, [commentID, userID])
+        if (result.affectedRows === 0) throw new Error('No comments were deleted')
+    } catch (error) {
+        throw new Error(error.message)
+    }
+}
 module.exports = {
     queryComments,
-    insertComment
+    insertComment,
+    deleteComment
 }
