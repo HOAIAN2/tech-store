@@ -1,4 +1,4 @@
-const Cache = require('js-simple-cache')
+const { Cache } = require('js-simple-cache')
 const { Voucher } = require('../models')
 const { pool } = require('./database')
 

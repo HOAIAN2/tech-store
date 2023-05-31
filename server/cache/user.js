@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const { User } = require('../models')
 const { pool } = require('./database')
-const Cache = require('js-simple-cache')
+const { Cache } = require('js-simple-cache')
 const fs = require('fs')
 
 
