@@ -18,7 +18,7 @@ import SearchListPopup from '../render_item/SearchListPopup'
 import { searchProduct } from '../../utils/Product'
 import useDebounce from '../../utils/hooks/useDebounce'
 import { Link, useSearchParams, useNavigate } from 'react-router-dom'
-import { getOrder } from "../../utils/Order/index"
+// import { getOrder } from "../../utils/Order/index"
 import { useUserData, useOrderData } from '../../Context'
 function Header() {
     const [user] = useUserData()
@@ -28,7 +28,8 @@ function Header() {
     const [focus, setFocus] = useState(false)
     const [searchValue, setSearchValue] = useState(searchParam.get('name'))
     const [searchData, setSearchData] = useState([])
-    const [order, setOrder] = useState([])
+    // const [productCount, setProductCount] = [orders[0].products.length]
+    // const [order, setOrder] = useState([])
     const debounce = useDebounce(searchValue, 200)
     useEffect(() => {
         document.addEventListener('click', (e) => {
@@ -44,12 +45,12 @@ function Header() {
                 console.error(error)
             })
     }, [debounce])
-    useEffect(() => {
-        getOrder()
-            .then((rs) => {
-                setOrder(rs)
-            })
-    }, [])
+    // useEffect(() => {
+    //     getOrder()
+    //         .then((rs) => {
+    //             setOrder(rs)
+    //         })
+    // }, [])
     let language = languages.en
     function handeInput(e) {
         setFocus(true)
@@ -65,9 +66,6 @@ function Header() {
             <div className="header_item1">
                 <div className="wrap-header-item1">
                     <div className="header_item1-1">
-                        {/* <div className="header_item_1-1_btn">
-                            <span>Kênh Người Bán</span>
-                        </div> */}
                         <div className="header_item_1-1_btn">
                             <span>{language.download}</span>
                         </div>
@@ -138,21 +136,23 @@ function Header() {
                         {searchValue && focus && <SearchListPopup data={searchData} setSearchValue={setSearchValue} />}
                     </form>
                     {
-                        user && orders.at(-1) ?
+                        user ?
                             <Link to={'/order'} className="cart-shopping">
                                 <FontAwesomeIcon icon={faCartShopping} />
-                                <div className="number-cart">
-                                    <span>1</span>
-                                </div>
-                                <div className='popup_cart-shopping'>
-                                    {/* {order.length !== 0 ?
+                                {!orders[0].paid && orders[0].products.length !== 0 ?
+                                    <div className="number-cart">
+                                        <span>{orders[0].products.length}</span>
+                                    </div>
+                                    : null}
+                                {/* <div className='popup_cart-shopping'>
+                                    {order.length !== 0 ?
                                         <OrderItem data={order} />
                                         :
                                         <div style={{ textAlign: "center" }}>
                                             <img src={`${baseIMG}orther/icon-nonorder.png`} alt=''></img>
                                             <div>Không Có Sản Phẩm</div>
-                                        </div>} */}
-                                </div>
+                                        </div>}
+                                </div> */}
                             </Link> :
                             <></>
                     }

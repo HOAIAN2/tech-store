@@ -250,8 +250,6 @@ async function editProfile(req, res) {
     }
 }
 
-
-
 /// Middlewares, etc...
 function formatData(data = {}) {
     const newData = { ...data }
