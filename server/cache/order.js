@@ -1,5 +1,5 @@
 const { Order } = require('../models')
-const Cache = require('js-simple-cache')
+const { Cache } = require('js-simple-cache')
 const { pool } = require('./database')
 const { vouchers } = require('./voucher')
 const { products } = require('./product')
