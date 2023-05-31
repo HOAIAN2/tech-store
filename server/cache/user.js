@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken')
 const { User } = require('../models')
 const { pool } = require('./database')
 const Cache = require('js-simple-cache')
@@ -7,7 +8,15 @@ const fs = require('fs')
 if (!fs.existsSync('./tokens.json')) fs.writeFileSync('./tokens.json', '[]')
 const users = new Cache('username', 10000)
 const refreshTokens = require('../tokens.json')
-
+function invalidDateToken() {
+    const today = new Date()
+    const newTokens = refreshTokens.filter(item => {
+        const tokenDate = new Date(jwt.decode(item).iat * 1000)
+        const diff = Math.round((today - tokenDate) / (24 * 60 * 60 * 1000))
+        if (diff < 100) return item
+    })
+    if (!fs.existsSync('./tokens.json')) fs.writeFileSync('./tokens.json', JSON.stringify(newTokens))
+}
 async function initializeUser() {
     console.log('\x1b[1m%s\x1b[0m', 'Initializing users data...')
     try {
@@ -33,6 +42,7 @@ async function initializeUser() {
             const user = new User(userID, role, username, firstName, lastName, birthDate, sex, address, email, phoneNumber, avatar, hashedPassword)
             users.set(user)
         })
+        invalidDateToken()
     } catch (error) {
         console.log('\x1b[31m%s\x1b[0m', `Fail to initialize users data: ${error.message}`)
         throw new Error(`Fail to initialize users data: ${error.message}`)
