@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { useOrderData, ORDER_ACTION } from "../../Context"
 import { createOrder, addProduct } from "../../utils/Order"
 
-function OrderItem({ data, gettotalprice, handleselectclick, typeorder }) {
+function OrderItem({ data, gettotalprice, handleselectclick, typeorder, getlistprice }) {
     const [quantity, setQuantity] = useState(data.quantity)
     const [product, setproduct] = useState()
     const navigate = useNavigate()
@@ -17,9 +17,14 @@ function OrderItem({ data, gettotalprice, handleselectclick, typeorder }) {
         getProductByID(data.productID)
             .then((rs) => {
                 setproduct(rs)
-                gettotalprice(rs.discount ? (rs.price * (1 - rs.discount)) * quantity : rs.price * quantity, '+')
+                if (typeorder !== "pay") {
+                    // gettotalprice(rs.discount ? (rs.price * (1 - rs.discount)) * quantity : rs.price * quantity, '+')
+                    getlistprice(rs.discount ? (rs.price * (1 - rs.discount)) * quantity : rs.price * quantity)
+                } else {
+                    getlistprice({}, true)
+                }
             })
-    }, [])
+    }, [orders[0]?.products.length])
 
     function handleSetQuantity(type) {
         return (e) => {

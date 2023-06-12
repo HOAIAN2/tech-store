@@ -139,9 +139,9 @@ function Header() {
                         user ?
                             <Link to={'/order'} className="cart-shopping">
                                 <FontAwesomeIcon icon={faCartShopping} />
-                                {!orders[0].paid && orders[0].products.length !== 0 ?
+                                {!orders[0]?.paid && orders[0]?.products.length !== 0 ?
                                     <div className="number-cart">
-                                        <span>{orders[0].products.length}</span>
+                                        <span>{orders[0]?.products.length}</span>
                                     </div>
                                     : null}
                                 {/* <div className='popup_cart-shopping'>
