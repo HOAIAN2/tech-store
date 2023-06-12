@@ -16,6 +16,7 @@ function OrderContent() {
     const [paidMethod, setPaidMethod] = useState(2)
     const [typeorder, settypeorder] = useState('order')
     const [showPopup, setShowPopup] = useState(false)
+    const [listprice, setlistprice] = useState([])
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -23,20 +24,45 @@ function OrderContent() {
 
     useEffect(() => {
         if (!orders[0]?.paid) {
-            setnumberproductpay(orders[0].products.length)
+            setnumberproductpay(orders[0]?.products.length)
             // setorderitem(orders)
         }
     }, [orders])
 
     function gettotalprice(price, type) {
         if (type === '+') {
-            totalprice.current = totalprice.current + price;
+            totalprice.current = price + totalpricerender;
         } else {
-            totalprice.current = totalprice.current - price;
+            totalprice.current = totalpricerender - price;
         }
-        settotalpricerender(formatPrice(totalprice.current))
+        settotalpricerender(totalprice.current)
     }
 
+    function getlistpriceorderitem(data, resetarr = false) {
+        if (resetarr) return setlistprice([])
+        listprice.push(data)
+        setlistprice([listprice])
+    }
+
+    useEffect(() => {
+        let lengthorordernotpaid
+        orders.every((item) => {
+            if (!item.paid) {
+                lengthorordernotpaid = item.products.length
+                return false
+            } else return true
+        })
+        if (lengthorordernotpaid === listprice[0]?.length) {
+            if (listprice[0]) {
+                const rs = listprice[0].reduce((a, b) => {
+                    return a + b
+                }, 0)
+                settotalpricerender(rs)
+            }
+        } else {
+            settotalpricerender(0)
+        }
+    }, [listprice, orders[0]?.products.length])
 
     function handleselect(data) {
         return (e) => {
@@ -97,12 +123,12 @@ function OrderContent() {
             }
         }
     }
-
     function deleteproduct(e) {
         removeProduct(orders[0].orderID, productAction)
             .then((rs) => {
                 dispatchOrders({ type: ORDER_ACTION.EDIT, payload: rs })
                 setproductAction([])
+                setlistprice([])
             })
     }
     function makePayment(e) {
@@ -166,7 +192,7 @@ function OrderContent() {
                                 return item.products.map((item) => {
                                     return (
                                         <div key={item.productID} className='wrapitemorder'>
-                                            <OrderItem data={item} gettotalprice={gettotalprice} handleselectclick={handleselectclick} />
+                                            <OrderItem data={item} getlistprice={getlistpriceorderitem} gettotalprice={gettotalprice} handleselectclick={handleselectclick} />
                                         </div>
                                     )
                                 })
@@ -174,7 +200,7 @@ function OrderContent() {
                                 return item.products.map((item) => {
                                     return (
                                         <div key={item.productID} className='wrapitemorder'>
-                                            <OrderItem data={item} gettotalprice={gettotalprice} handleselectclick={handleselectclick} typeorder={"pay"} />
+                                            <OrderItem data={item} getlistprice={getlistpriceorderitem} gettotalprice={gettotalprice} handleselectclick={handleselectclick} typeorder={"pay"} />
                                         </div>
                                     )
                                 })
@@ -196,7 +222,7 @@ function OrderContent() {
                             <div className='totalprice'>
                                 <div className='wraptotalprice'>
                                     <span className='title'>{`Tổng thanh toán (${numberproductpay} Sản phẩm):`}</span>
-                                    <span className='price'>{totalpricerender}</span>
+                                    <span className='price'>{formatPrice(totalpricerender)}</span>
                                 </div>
                             </div>
                             <div className='action'>
